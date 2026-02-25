@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 5TGI
+Pedagogi: Affirmative and corrective feedback
+Tipe Kognitif: TGI – Text, Global, Impulsive
+
+1. Deskripsi
+User memiliki karakter responsif terhadap feedback, khususnya ketika umpan balik disampaikan secara ringkas, jelas, dan langsung menyoroti poin-poin penting. User mampu dengan cepat menangkap inti permasalahan, memahami kekurangan secara umum, serta menunjukkan motivasi yang tinggi untuk segera melakukan perbaikan. Selain itu, user memiliki sikap terbuka terhadap evaluasi, kemauan belajar yang baik, dan kecenderungan untuk meningkatkan pemahaman setelah menerima arahan. Pendekatan pembelajaran yang terstruktur dengan feedback sederhana dan penguatan positif sangat sesuai untuk mendukung perkembangan user secara berkelanjutan.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Affirmative and corrective feedback.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

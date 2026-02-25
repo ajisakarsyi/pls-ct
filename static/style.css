@@ -1,0 +1,284 @@
+/* =====================================================================
+   CSIPBLLM — Personalized Learning System
+   ===================================================================== */
+
+/* ---------------- GLOBAL ---------------- */
+:root {
+  --brand:        #1e2a5e;
+  --brand-dark:   #17214d;
+  --brand-light:  #cfd8ff;
+  --accent-green: #2d882d;
+  --accent-red:   #d42b2b;
+  --bg:           #f5f7fa;
+  --fg:           #222;
+  --muted:        #555;
+  --line:         #ddd;
+  --bubble-user:  #cfd8ff;
+  --bubble-bot:   #e9f7ef;
+  --bubble-status:#eee;
+}
+
+/* ---------------- RESET ---------------- */
+* { box-sizing: border-box; }
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg);
+  color: var(--fg);
+  margin: 0; padding: 0;
+  line-height: 1.6;
+}
+
+/* ---------------- CONTAINER ---------------- */
+.container {
+  max-width: 740px;
+  background: #fff;
+  margin: 40px auto;
+  padding: 32px 40px;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+/* ---------------- HEADER ---------------- */
+h1 { text-align: center; color: var(--brand); }
+.subtitle { text-align: center; color: var(--muted); margin-top: -8px; }
+
+/* ---------------- FORM ELEMENTS ---------------- */
+section { margin-top: 28px; }
+input, textarea, select {
+  width: 100%; padding: 10px;
+  border: 1px solid #ccc; border-radius: 8px;
+  font-size: 15px; margin-top: 6px;
+  background-color: #fff;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--brand-light);
+  box-shadow: 0 0 0 3px rgba(182,195,255,0.35);
+  outline: none;
+}
+textarea { resize: vertical; }
+.note { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+.cognitive-wrapper { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 10px; }
+.cognitive-field label { font-weight: 600; }
+.cognitive-field select { margin-top: 4px; }
+
+/* ---------------- BUTTONS ---------------- */
+button {
+  background-color: var(--brand); color: #fff;
+  border: none; border-radius: 8px;
+  padding: 10px 18px; font-size: 15px;
+  margin-top: 10px; cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+button:hover { background-color: var(--brand-dark); }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ---------------- CHAT BOX ---------------- */
+#chatBox {
+  background-color: #f9fafb;
+  border-radius: 12px; padding: 15px;
+  border: 1px solid #ddd;
+  min-height: 100px; max-height: 500px;
+  overflow-y: auto;
+}
+#chatBox::-webkit-scrollbar { width: 6px; }
+#chatBox::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
+
+/* ---------------- CHAT BUBBLES ---------------- */
+.bubble {
+  padding: 12px 16px; border-radius: 10px;
+  margin: 8px 0; max-width: 98%;
+  animation: fadeIn 0.3s ease;
+  overflow-x: auto;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.bubble-user   { background-color: var(--bubble-user); }
+.bubble-bot    { background-color: var(--bubble-bot); }
+.bubble-status { background-color: var(--bubble-status); font-style: italic; }
+
+/* ---------------- EVALUASI ---------------- */
+.eval-result {
+  margin-top: 12px; padding: 14px 16px;
+  border-radius: 10px; font-size: 15px;
+  background: #f9fafb; border: 1px solid #ddd;
+  overflow-x: auto;
+}
+.eval-result.correct  { border-color: #a3d9a5; background-color: #f0fff2; color: var(--accent-green); }
+.eval-result.incorrect{ border-color: #f5b8b8; background-color: #fff5f5; color: var(--accent-red); }
+
+.hint-badge {
+  display: inline-block;
+  background: #fff3cd; border: 1px solid #ffc107;
+  color: #7a5800; border-radius: 6px;
+  padding: 2px 10px; font-size: 13px; font-weight: 600;
+  margin: 6px 0 10px 0;
+}
+
+.feedback-body {
+  margin-top: 10px;
+  color: var(--fg); font-weight: normal;
+  overflow-x: auto;
+}
+
+/* ---------------- HISTORY ---------------- */
+.history-section { margin-top: 20px; }
+.history-section button { margin-right: 8px; }
+
+/* ============================================================
+   FOLLOW-UP SECTION — setiap pertanyaan adalah kartu terpisah
+   ============================================================ */
+.followup-section {
+  margin-top: 24px;
+}
+.followup-section h3 {
+  margin-bottom: 12px;
+}
+
+/* Container tempat kartu-kartu ditambahkan */
+#followupContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Satu kartu pertanyaan lanjutan */
+.followup-card {
+  background-color: #eef3ff;
+  border-left: 4px solid var(--brand);
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px rgba(30,42,94,0.08);
+  animation: fadeIn 0.3s ease;
+  overflow-x: auto;
+}
+
+/* Badge nomor pertanyaan */
+.followup-badge {
+  display: inline-block;
+  background: var(--brand);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+/* Teks pertanyaan */
+.followup-body {
+  margin: 0;
+  color: var(--brand);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+/* ---------------- FOOTER ---------------- */
+footer {
+  text-align: center; font-size: 13px;
+  color: #888; margin-top: 28px;
+  border-top: 1px solid var(--line); padding-top: 10px;
+}
+
+/* =====================================================================
+   MARKDOWN RENDERING
+   ===================================================================== */
+.bubble p, .feedback-body p, .followup-body p { margin: 6px 0; }
+
+.bubble strong, .bubble b,
+.feedback-body strong, .feedback-body b,
+.followup-body strong, .followup-body b { font-weight: 700; color: #1b255a; }
+
+.bubble em, .bubble i,
+.feedback-body em, .feedback-body i,
+.followup-body em, .followup-body i { font-style: italic; }
+
+.bubble ul, .bubble ol,
+.feedback-body ul, .feedback-body ol,
+.followup-body ul, .followup-body ol { margin: 6px 0 6px 24px; padding-left: 18px; }
+
+.bubble ul li, .feedback-body ul li, .followup-body ul li { list-style-type: disc; }
+.bubble ol li, .feedback-body ol li, .followup-body ol li { list-style-type: decimal; }
+
+.bubble blockquote, .feedback-body blockquote, .followup-body blockquote {
+  margin: 8px 0; padding: 8px 12px;
+  border-left: 4px solid #9fa9d3;
+  background-color: #f6f7fb;
+  border-radius: 6px; color: #333; font-style: italic;
+}
+
+.bubble code, .feedback-body code, .followup-body code {
+  background-color: #f3f4f6; border-radius: 4px;
+  padding: 2px 5px;
+  font-family: "Consolas","Courier New",monospace;
+  font-size: 14px; color: #2b2b2b;
+}
+.bubble pre, .feedback-body pre, .followup-body pre {
+  background-color: #f3f4f6; border-radius: 8px;
+  padding: 10px 14px; overflow-x: auto;
+  font-family: "Consolas","Courier New",monospace;
+  font-size: 14px; border: 1px solid #ddd;
+}
+.bubble pre code, .feedback-body pre code, .followup-body pre code {
+  background: none; padding: 0; color: #1f1f1f;
+}
+
+.bubble table, .feedback-body table, .followup-body table {
+  width: 100%; border-collapse: collapse; margin: 8px 0;
+}
+.bubble th, .bubble td,
+.feedback-body th, .feedback-body td,
+.followup-body th, .followup-body td { border: 1px solid #ccc; padding: 6px 8px; }
+.bubble th, .feedback-body th, .followup-body th { background-color: #f1f2f7; font-weight: bold; }
+
+.bubble a, .feedback-body a, .followup-body a { color: #1740c2; text-decoration: underline; }
+.bubble a:hover, .feedback-body a:hover, .followup-body a:hover { color: #0d2b88; }
+
+.bubble hr, .feedback-body hr, .followup-body hr { border: none; border-top: 1px solid #ccc; margin: 10px 0; }
+
+.bubble h1, .bubble h2, .bubble h3, .bubble h4, .bubble h5, .bubble h6,
+.feedback-body h1, .feedback-body h2, .feedback-body h3,
+.feedback-body h4, .feedback-body h5, .feedback-body h6,
+.followup-body h1, .followup-body h2, .followup-body h3,
+.followup-body h4, .followup-body h5, .followup-body h6 {
+  font-weight: 700; color: #1e2a5e; margin: 8px 0 6px 0;
+}
+.bubble h1, .feedback-body h1, .followup-body h1 { font-size: 20px; }
+.bubble h2, .feedback-body h2, .followup-body h2 { font-size: 18px; }
+.bubble h3, .feedback-body h3, .followup-body h3 { font-size: 16px; }
+.bubble h4, .feedback-body h4, .followup-body h4 { font-size: 15px; }
+.bubble h5, .feedback-body h5, .followup-body h5 { font-size: 14px; }
+.bubble h6, .feedback-body h6, .followup-body h6 { font-size: 13px; color: #444; }
+
+/* =====================================================================
+   MATHJAX — tampilan rapi untuk persamaan blok dan inline
+   ===================================================================== */
+
+/* Persamaan blok — beri ruang vertikal dan bisa scroll horizontal */
+mjx-container[display="true"],
+.MathJax_Display {
+  display: block !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 0;
+  margin: 6px 0;
+  text-align: center;
+}
+
+/* Persamaan inline — jangan pecah di tengah baris */
+mjx-container:not([display="true"]) {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Pastikan kontainer induk tidak memotong persamaan panjang */
+.bubble, .feedback-body, .followup-body, .eval-result, .followup-card {
+  overflow-x: auto;
+  word-break: break-word;
+}
