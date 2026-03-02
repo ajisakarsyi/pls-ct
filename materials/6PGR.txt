@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 6PGR
+Pedagogi: Opportunity to practise & review
+Tipe Kognitif: PGR – Pictorial, Global, Reflective
+
+1. Deskripsi
+User menunjukkan sikap reflektif ketika mengerjakan latihan yang disajikan dalam bentuk visual. User tidak langsung menjawab, tetapi terlebih dahulu merenungkan hubungan antar elemen yang ditampilkan untuk memahami keterkaitan informasi secara menyeluruh. Proses ini mencerminkan kemampuan berpikir konseptual, ketelitian dalam menginterpretasikan visual, serta upaya untuk menghasilkan jawaban yang tepat berdasarkan pemahaman yang matang. Pendekatan latihan visual yang mendorong refleksi sangat efektif dalam memperdalam pemahaman user terhadap materi.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Opportunity to practise & review.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

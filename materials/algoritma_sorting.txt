@@ -1,0 +1,15 @@
+Algoritma Pengurutan (Sorting)
+
+Pengurutan adalah proses menata elemen data dalam urutan tertentu (misalnya, naik atau turun). Ada banyak algoritma pengurutan, yang paling umum adalah:
+
+**1. Bubble Sort:** Berulang kali menukar elemen yang berdekatan jika urutannya salah. Sederhana, tetapi sangat tidak efisien untuk data besar ($O(n^2)$).
+
+**2. Insertion Sort:** Membangun *list* terurut akhir satu per satu. Efisien untuk *list* kecil atau hampir terurut ($O(n^2)$).
+
+**3. Merge Sort:** Algoritma Divide and Conquer. Membagi list menjadi dua, mengurutkan masing-masing secara rekursif, lalu menggabungkan hasilnya.
+-   **Kecepatan:** Stabil dan cepat ($O(n \log n)$).
+
+**4. Quick Sort:** Algoritma Divide and Conquer lainnya. Memilih 'pivot' dan mempartisi *array* di sekitarnya.
+-   **Kecepatan:** Rata-rata sangat cepat ($O(n \log n)$), tetapi bisa menjadi $O(n^2)$ di kasus terburuk.
+
+Pilihan algoritma sangat bergantung pada ukuran data, tingkat keterurutan, dan kebutuhan memori.

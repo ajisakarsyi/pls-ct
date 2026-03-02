@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 4TAI
+Pedagogi: Check for understanding
+Tipe Kognitif: TAI
+
+1. Deskripsi
+User menunjukkan kecepatan dan ketepatan dalam merespons pertanyaan spesifik berbasis teks untuk memeriksa pemahaman rinci. User fokus pada detail penting yang menjadi indikator pemahaman.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Check for understanding.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

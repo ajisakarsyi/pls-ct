@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 3TAR
+Pedagogi: Chunk and sequence learning
+Tipe Kognitif: TAR
+
+1. Deskripsi
+User menunjukkan pemikiran sistematis dan analitis ketika materi rinci dipecah melalui teks. User menelaah tiap bagian secara mendalam serta mempertimbangkan keterkaitannya dengan keseluruhan materi.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Chunk and sequence learning.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

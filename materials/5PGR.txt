@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 5PGR
+Pedagogi: Affirmative and corrective feedback
+Tipe Kognitif: PGR – Pictorial, Global, Reflective
+
+1. Deskripsi
+User menunjukkan sikap reflektif ketika menerima feedback visual yang menekankan gambaran umum. Penyajian visual membantu user memahami konteks kesalahan secara menyeluruh, sehingga user dapat merenungkan kekeliruan yang terjadi serta mempertimbangkan langkah-langkah perbaikan yang tepat. Proses ini menunjukkan kemampuan berpikir mendalam, keterbukaan terhadap evaluasi, serta kemauan untuk meningkatkan pemahaman secara bertahap. Pendekatan feedback visual yang berfokus pada gambaran besar sangat efektif dalam mendukung proses refleksi dan perbaikan pemahaman user.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Affirmative and corrective feedback.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

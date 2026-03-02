@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Secrets
+.env
+
+# Logs & generated data
+logs/history/*.json
+logs/history/*.csv
+logs/eval_results/
+
+# IDE
+.vscode/
+.idea/
+*.swp

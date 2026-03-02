@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 2TAI
+Pedagogi: Connect learning
+Tipe Kognitif: TAI
+
+1. Deskripsi
+User menunjukkan kepekaan tinggi terhadap perbedaan dan detail penting saat hubungan rinci antara materi lama dan baru dijelaskan melalui teks. User merespons cepat terhadap informasi spesifik yang membedakan kedua materi.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Connect learning.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: Visual Picture -> P -> visual tapi lebih ke arah gambar/tulisan tapi yang minim/chart/ilustrasi
