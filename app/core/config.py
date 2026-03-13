@@ -13,7 +13,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    # ── OpenAI ────────────────────────────────────────────────────────────
+    # ── OpenAI / ChatAnywhere (used for chat completions) ─────────────────
     openai_api_key: str = "YOUR_GPT_API_KEY_HERE"
     openai_api_base: str = "https://api.openai.com/v1"
     chat_model: str = "gpt-3.5-turbo"
@@ -21,6 +21,13 @@ class Settings(BaseSettings):
     chat_temperature: float = 0.7
     chat_retries: int = 3
     chat_retry_delay: int = 2
+
+    # ── Embedding provider ────────────────────────────────────────────────
+    # EMBEDDING_PROVIDER=ollama  → use local Ollama (avoids ChatAnywhere 200/day limit)
+    # EMBEDDING_PROVIDER=openai  → use OpenAI/ChatAnywhere embedding API
+    embedding_provider: str = "ollama"
+    ollama_base_url: str = "http://localhost:11434"
+    ollama_embed_model: str = "nomic-embed-text"
 
     # ── RAG ───────────────────────────────────────────────────────────────
     rag_chunk_max_chars: int = 400
