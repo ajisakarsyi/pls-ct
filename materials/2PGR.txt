@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 2PGR
+Pedagogi: Connect learning
+Tipe Kognitif: PGR
+
+1. Deskripsi
+User menunjukkan kecenderungan reflektif ketika hubungan materi divisualisasikan. User mengamati visual secara menyeluruh dan merenungkan bagaimana topik baru terhubung dengan konteks atau kerangka besar yang telah dipahami.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Connect learning.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: Impulsive -> I -> pengambilan keputusan cepat

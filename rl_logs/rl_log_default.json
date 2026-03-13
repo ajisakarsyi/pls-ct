@@ -1,0 +1,73 @@
+[
+  {
+    "step_num": 1,
+    "timestamp": "2026-03-13T23:55:38.301730",
+    "session_id": "default",
+    "phase": "seeding",
+    "seeding_remaining": 9,
+    "total_selections": 1,
+    "learning_type": "TAI",
+    "mastery_code": "5TAI",
+    "mastery_level": 5,
+    "mastery_label": "Near mastery",
+    "mastery_score": 0.88,
+    "performance": 0.0,
+    "performance_label": "Selalu salah",
+    "engagement": 0.7931197709507413,
+    "engagement_label": "High",
+    "t_answer": 37.23844122886658,
+    "t_expected": 180.0,
+    "n_attempt": 5,
+    "is_correct": false,
+    "delta_m": 0.5800000000000001,
+    "delta_p": -0.4,
+    "reward": 0.3832164332739513,
+    "td_error": 0.37581531255783474,
+    "q_pred": 0.007401120716116547,
+    "q_values_after": {
+      "PAR": 0.007098,
+      "TAR": 0.012156,
+      "PAI": 0.007194,
+      "TAI": 0.019431,
+      "TGR": 0.007704,
+      "TGI": 0.002483,
+      "PGR": 0.00909,
+      "PGI": 0.005047
+    },
+    "epsilon": 0.199,
+    "current_recommendation": "TAI",
+    "lt_changed": true,
+    "lt_change_detail": {
+      "change_index": 1,
+      "step_num": 1,
+      "timestamp": "2026-03-13T23:55:38.301730",
+      "phase": "seeding",
+      "from_lt": null,
+      "to_lt": "TAI",
+      "q_values": {
+        "PAR": 0.007098,
+        "TAR": 0.012156,
+        "PAI": 0.007194,
+        "TAI": 0.019431,
+        "TGR": 0.007704,
+        "TGI": 0.002483,
+        "PGR": 0.00909,
+        "PGI": 0.005047
+      },
+      "mastery_levels": {
+        "PAR": 1,
+        "TAR": 1,
+        "PAI": 1,
+        "TAI": 5,
+        "TGR": 1,
+        "TGI": 1,
+        "PGR": 1,
+        "PGI": 1
+      },
+      "epsilon": 0.199,
+      "trigger": "TD"
+    },
+    "mlr_refitted": false,
+    "mlr_weights": null
+  }
+]

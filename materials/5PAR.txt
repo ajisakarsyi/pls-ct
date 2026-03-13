@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 5PAR
+Pedagogi: Affirmative and corrective feedback
+Tipe Kognitif: PAR – Pictorial, Analytic, Reflective
+
+1. Deskripsi
+User menunjukkan kemampuan analitis yang kuat ketika menerima feedback rinci yang divisualisasikan. Melalui penyajian visual yang jelas dan terperinci, user mampu mengidentifikasi kesalahan secara spesifik, menganalisis penyebabnya, serta mempertimbangkan strategi perbaikan yang paling tepat sebelum mengambil tindakan. Proses ini mencerminkan sikap reflektif, kehati-hatian dalam belajar, serta kemampuan berpikir sistematis. Pendekatan feedback visual yang detail sangat efektif dalam membantu user membuat keputusan perbaikan yang lebih akurat dan terarah.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Affirmative and corrective feedback.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

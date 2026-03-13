@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 6PAR
+Pedagogi: Opportunity to practise & review
+Tipe Kognitif: PAR – Pictorial, Analytic, Reflective
+
+1. Deskripsi
+User menunjukkan pendekatan yang cermat dan analitis ketika mengerjakan latihan rinci yang divisualisasikan. User tidak langsung memberikan jawaban, melainkan terlebih dahulu mengamati dan menganalisis seluruh detail yang terdapat dalam visual secara menyeluruh sebelum menyelesaikan latihan. Proses ini mencerminkan ketelitian, kemampuan berpikir sistematis, serta kesadaran untuk memastikan setiap informasi penting telah dipahami dengan baik. Pendekatan latihan visual yang terperinci sangat mendukung pendalaman pemahaman dan ketepatan hasil belajar user.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Opportunity to practise & review.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

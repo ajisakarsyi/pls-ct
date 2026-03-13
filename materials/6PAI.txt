@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 6PAI
+Pedagogi: Opportunity to practise & review
+Tipe Kognitif: PAI – Pictorial, Analytic, Impulsive
+
+1. Deskripsi
+User menunjukkan respons yang cepat dan fokus ketika mengerjakan latihan rinci yang disajikan dalam bentuk visual. User mampu dengan segera mengenali detail-detail penting dari visual yang ditampilkan serta menggunakannya sebagai dasar dalam menjawab pertanyaan. Hal ini mencerminkan ketajaman observasi, kemampuan memproses informasi visual secara efisien, serta ketepatan dalam menangkap unsur-unsur spesifik yang relevan. Pendekatan latihan visual yang terperinci efektif dalam memperkuat pemahaman dan akurasi jawaban user.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Opportunity to practise & review.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

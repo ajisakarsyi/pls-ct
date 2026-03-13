@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 4PAR
+Pedagogi: Check for understanding
+Tipe Kognitif: PAR
+
+1. Deskripsi
+User menunjukkan pendekatan analitis dan sangat cermat saat memeriksa detail materi melalui ilustrasi rinci. User tidak langsung memberikan jawaban, melainkan mengamati, menganalisis, dan mempertimbangkan hubungan setiap elemen visual secara menyeluruh sebelum menyimpulkan tingkat pemahaman dengan akurat.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Check for understanding.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

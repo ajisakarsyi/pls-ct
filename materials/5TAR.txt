@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 5TAR
+Pedagogi: Affirmative and corrective feedback
+Tipe Kognitif: TAR – Text, Analytic, Reflective
+
+1. Deskripsi
+User menunjukkan kemampuan analitis yang baik ketika menerima feedback rinci yang disampaikan melalui teks. User tidak hanya mengidentifikasi kesalahan yang ada, tetapi juga menganalisis penyebabnya serta mempertimbangkan berbagai kemungkinan perbaikan secara menyeluruh. Proses ini mencerminkan sikap reflektif, keterbukaan terhadap evaluasi, serta kemauan belajar yang tinggi. Dengan adanya umpan balik yang spesifik dan terperinci, user mampu memperdalam pemahaman dan melakukan perbaikan secara lebih terarah dan berkelanjutan.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Affirmative and corrective feedback.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

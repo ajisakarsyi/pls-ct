@@ -1,0 +1,25 @@
+# CSIPBLLM — Combined RAG + RL requirements
+fastapi
+uvicorn[standard]
+pydantic
+python-multipart
+
+# LLM / Embeddings
+openai
+
+# RAG
+faiss-cpu
+numpy
+
+# Session history
+langchain
+langchain-community
+
+# RL / Simulation plots
+matplotlib
+scipy
+pandas
+scikit-learn
+
+# Requests (for rag_evaluator.py test runner)
+requests
