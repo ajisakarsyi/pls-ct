@@ -1,7 +1,6 @@
 # CSIPBLLM — Personalized Learning System for Computational Thinking
 
 > **Pengembangan Sistem Pembelajaran Terpersonalisasi Mata Kuliah CT Menggunakan Chatbot Berbasis LLM dan RAG**
-> Muhammad Ajisaka Arsyi Taj (G6401221090)
 
 An adaptive AI tutor powered by **FastAPI**, **OpenAI GPT**, **FAISS**, and **RAG** that personalises explanations and evaluations based on a student's cognitive profile across **48 cognitive type combinations**.
 
