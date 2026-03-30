@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Question Bank</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f5f6fa;
+    color: #1a1a2e;
+    min-height: 100vh;
+  }
+
+  /* ── Layout ── */
+  .sidebar {
+    position: fixed; top: 0; left: 0;
+    width: 220px; height: 100vh;
+    background: #1a1a2e;
+    padding: 24px 16px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .sidebar h2 { color: #fff; font-size: 14px; text-transform: uppercase;
+                letter-spacing: 1px; padding: 0 8px; margin-bottom: 8px; }
+  .nav-btn {
+    display: block; width: 100%; padding: 10px 12px; border: none;
+    border-radius: 8px; background: transparent; color: #a0aec0;
+    text-align: left; cursor: pointer; font-size: 14px; transition: all .15s;
+  }
+  .nav-btn:hover, .nav-btn.active { background: #2d2d4e; color: #fff; }
+  .main { margin-left: 220px; padding: 32px; }
+
+  /* ── Header ── */
+  .page-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .page-header h1 { font-size: 22px; font-weight: 700; }
+
+  /* ── Stats bar ── */
+  .stats { display: flex; gap: 16px; margin-bottom: 28px; }
+  .stat-card {
+    flex: 1; background: #fff; border-radius: 12px; padding: 16px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .stat-card .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: .5px; }
+  .stat-card .value { font-size: 28px; font-weight: 700; margin-top: 4px; }
+  .stat-card.pending  .value { color: #e6a817; }
+  .stat-card.approved .value { color: #22c55e; }
+  .stat-card.rejected .value { color: #ef4444; }
+  .stat-card.total    .value { color: #6366f1; }
+
+  /* ── Generate button ── */
+  .btn-generate {
+    padding: 10px 20px; background: #6366f1; color: #fff; border: none;
+    border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px; transition: background .15s;
+  }
+  .btn-generate:hover { background: #4f46e5; }
+  .btn-generate:disabled { background: #a5b4fc; cursor: not-allowed; }
+
+  /* ── Filter bar ── */
+  .filter-bar {
+    display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;
+  }
+  .filter-bar select, .filter-bar input {
+    padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px;
+    font-size: 13px; background: #fff; color: #1a1a2e;
+  }
+
+  /* ── Question cards ── */
+  .question-list { display: flex; flex-direction: column; gap: 16px; }
+  .q-card {
+    background: #fff; border-radius: 12px; padding: 20px 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    border-left: 4px solid #e2e8f0;
+    transition: box-shadow .15s;
+  }
+  .q-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+  .q-card.pending  { border-left-color: #f59e0b; }
+  .q-card.approved { border-left-color: #22c55e; }
+  .q-card.rejected { border-left-color: #ef4444; }
+
+  .q-meta {
+    display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .badge {
+    padding: 2px 10px; border-radius: 99px; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  .badge-mcq      { background: #ede9fe; color: #6d28d9; }
+  .badge-open     { background: #fef3c7; color: #b45309; }
+  .badge-mudah    { background: #dcfce7; color: #166534; }
+  .badge-sedang   { background: #fef9c3; color: #854d0e; }
+  .badge-sulit    { background: #fee2e2; color: #991b1b; }
+  .badge-pending  { background: #fef3c7; color: #92400e; }
+  .badge-approved { background: #dcfce7; color: #14532d; }
+  .badge-rejected { background: #fee2e2; color: #7f1d1d; }
+  .topic-tag {
+    padding: 2px 10px; border-radius: 99px; font-size: 11px;
+    background: #f1f5f9; color: #475569;
+  }
+
+  .q-text { font-size: 15px; line-height: 1.6; margin-bottom: 12px; font-weight: 500; }
+
+  .q-options { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+  .q-option { font-size: 13px; color: #475569; padding: 4px 8px; border-radius: 4px; }
+  .q-option.correct { background: #dcfce7; color: #166534; font-weight: 600; }
+
+  .q-answer-ref {
+    background: #f8fafc; border-radius: 8px; padding: 10px 14px;
+    font-size: 13px; color: #475569; margin-bottom: 12px;
+  }
+  .q-answer-ref strong { color: #1a1a2e; }
+
+  .q-explanation {
+    font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 16px;
+    padding: 10px 14px; background: #f8fafc; border-radius: 8px;
+    border-left: 3px solid #6366f1;
+  }
+  .q-explanation strong { color: #6366f1; }
+
+  .q-actions { display: flex; gap: 10px; align-items: center; }
+  .btn-approve, .btn-reject, .btn-delete {
+    padding: 7px 16px; border: none; border-radius: 7px;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s;
+  }
+  .btn-approve { background: #22c55e; color: #fff; }
+  .btn-approve:hover { background: #16a34a; }
+  .btn-reject  { background: #f1f5f9; color: #475569; }
+  .btn-reject:hover  { background: #fee2e2; color: #ef4444; }
+  .btn-delete  { background: transparent; color: #cbd5e1; border: 1px solid #e2e8f0; }
+  .btn-delete:hover  { background: #fee2e2; color: #ef4444; border-color: #fca5a5; }
+  .q-timestamp { font-size: 11px; color: #94a3b8; margin-left: auto; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: #1a1a2e; color: #fff; padding: 12px 20px;
+    border-radius: 10px; font-size: 13px; opacity: 0;
+    transform: translateY(8px); transition: all .25s; pointer-events: none;
+    z-index: 1000;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.success { background: #166534; }
+  .toast.error   { background: #991b1b; }
+
+  /* ── Loading ── */
+  .loading {
+    display: flex; align-items: center; justify-content: center;
+    padding: 60px; color: #94a3b8; gap: 12px; font-size: 14px;
+  }
+  .spinner {
+    width: 20px; height: 20px; border: 2px solid #e2e8f0;
+    border-top-color: #6366f1; border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty { text-align: center; padding: 60px; color: #94a3b8; font-size: 14px; }
+  .reject-input {
+    display: none; margin-top: 10px; width: 100%;
+    padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 7px;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <h2>Question Bank</h2>
+  <button class="nav-btn active" onclick="switchView('pending')">⏳ Pending Review</button>
+  <button class="nav-btn" onclick="switchView('approved')">✅ Approved</button>
+  <button class="nav-btn" onclick="switchView('rejected')">❌ Rejected</button>
+  <button class="nav-btn" onclick="switchView('all')">📋 All Questions</button>
+  <button class="nav-btn" style="margin-top:auto" onclick="switchView('stats')">📊 Stats</button>
+</nav>
+
+<!-- Main -->
+<main class="main">
+  <div class="page-header">
+    <h1 id="page-title">Pending Review</h1>
+    <button class="btn-generate" id="gen-btn" onclick="generateQuestions()">
+      <span>✨</span> Generate This Week's Questions
+    </button>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats" id="stats-bar">
+    <div class="stat-card total">
+      <div class="label">Total</div>
+      <div class="value" id="stat-total">—</div>
+    </div>
+    <div class="stat-card pending">
+      <div class="label">Pending</div>
+      <div class="value" id="stat-pending">—</div>
+    </div>
+    <div class="stat-card approved">
+      <div class="label">Approved</div>
+      <div class="value" id="stat-approved">—</div>
+    </div>
+    <div class="stat-card rejected">
+      <div class="label">Rejected</div>
+      <div class="value" id="stat-rejected">—</div>
+    </div>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <select id="filter-week" onchange="applyFilters()">
+      <option value="">All weeks</option>
+    </select>
+    <select id="filter-type" onchange="applyFilters()">
+      <option value="">All types</option>
+      <option value="mcq">MCQ</option>
+      <option value="open">Open-ended</option>
+    </select>
+    <select id="filter-diff" onchange="applyFilters()">
+      <option value="">All difficulties</option>
+      <option value="mudah">Mudah</option>
+      <option value="sedang">Sedang</option>
+      <option value="sulit">Sulit</option>
+    </select>
+  </div>
+
+  <!-- Question list -->
+  <div id="question-list" class="question-list"></div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '';
+let currentView = 'pending';
+let allQuestions = [];
+
+// ── Fetch & render ──────────────────────────────────────────────────────
+
+async function fetchStats() {
+  try {
+    const r = await fetch(`${API}/questions/stats`);
+    const d = await r.json();
+    document.getElementById('stat-total').textContent    = d.total ?? '—';
+    document.getElementById('stat-pending').textContent  = d.pending ?? '—';
+    document.getElementById('stat-approved').textContent = d.approved ?? '—';
+    document.getElementById('stat-rejected').textContent = d.rejected ?? '—';
+
+    // Populate week filter
+    const sel = document.getElementById('filter-week');
+    const existing = new Set([...sel.options].map(o => o.value).filter(Boolean));
+    Object.keys(d.by_week || {}).sort().reverse().forEach(wid => {
+      if (!existing.has(wid)) {
+        const opt = document.createElement('option');
+        opt.value = wid; opt.textContent = wid;
+        sel.appendChild(opt);
+      }
+    });
+  } catch(e) { console.error(e); }
+}
+
+async function fetchQuestions(status) {
+  const list = document.getElementById('question-list');
+  list.innerHTML = '<div class="loading"><div class="spinner"></div> Loading questions…</div>';
+  try {
+    const url = status === 'all'
+      ? `${API}/questions/all`
+      : `${API}/questions/all?status=${status}`;
+    const r = await fetch(url);
+    const d = await r.json();
+    allQuestions = d.questions || [];
+    applyFilters();
+  } catch(e) {
+    list.innerHTML = `<div class="empty">Failed to load: ${e.message}</div>`;
+  }
+}
+
+function applyFilters() {
+  const week = document.getElementById('filter-week').value;
+  const type = document.getElementById('filter-type').value;
+  const diff = document.getElementById('filter-diff').value;
+
+  let qs = allQuestions;
+  if (week) qs = qs.filter(q => q.week_id === week);
+  if (type) qs = qs.filter(q => q.type === type);
+  if (diff) qs = qs.filter(q => q.difficulty === diff);
+
+  renderQuestions(qs);
+}
+
+function renderQuestions(questions) {
+  const list = document.getElementById('question-list');
+  if (!questions.length) {
+    list.innerHTML = '<div class="empty">No questions found.</div>';
+    return;
+  }
+  list.innerHTML = questions.map(q => questionCard(q)).join('');
+}
+
+function questionCard(q) {
+  const opts = q.options
+    ? Object.entries(q.options).map(([k, v]) => `
+        <div class="q-option ${k === q.correct_answer ? 'correct' : ''}">
+          <strong>${k}.</strong> ${escHtml(v)}
+          ${k === q.correct_answer ? ' ✓' : ''}
+        </div>`).join('')
+    : '';
+
+  const answerRef = q.type === 'open' ? `
+    <div class="q-answer-ref">
+      <strong>Jawaban Referensi:</strong> ${escHtml(q.correct_answer || '')}
+    </div>` : '';
+
+  const actions = q.status === 'pending' ? `
+    <button class="btn-approve" onclick="approve('${q.id}')">✓ Approve</button>
+    <button class="btn-reject"  onclick="toggleReject('${q.id}')">✗ Reject</button>
+    <input  class="reject-input" id="ri-${q.id}" placeholder="Rejection reason (optional)"
+            onkeydown="if(event.key==='Enter') confirmReject('${q.id}')">
+    <button class="btn-delete" onclick="deleteQ('${q.id}')" title="Delete permanently">🗑</button>` : `
+    <button class="btn-delete" onclick="deleteQ('${q.id}')" title="Delete permanently">🗑</button>`;
+
+  const ts = q.created_at
+    ? new Date(q.created_at).toLocaleDateString('id-ID', {day:'2-digit',month:'short',year:'numeric'})
+    : '';
+
+  return `
+  <div class="q-card ${q.status}" id="card-${q.id}">
+    <div class="q-meta">
+      <span class="badge badge-${q.type}">${q.type === 'mcq' ? 'MCQ' : 'Uraian'}</span>
+      <span class="badge badge-${q.difficulty}">${q.difficulty}</span>
+      <span class="badge badge-${q.status}">${q.status}</span>
+      <span class="topic-tag">${escHtml(q.topic || '')}</span>
+      <span class="topic-tag">${escHtml(q.week_id || '')}</span>
+    </div>
+    <div class="q-text">${escHtml(q.question || '')}</div>
+    ${q.type === 'mcq' ? `<div class="q-options">${opts}</div>` : ''}
+    ${answerRef}
+    ${q.explanation ? `<div class="q-explanation"><strong>Pembahasan:</strong> ${escHtml(q.explanation)}</div>` : ''}
+    <div class="q-actions">
+      ${actions}
+      <span class="q-timestamp">${ts}</span>
+    </div>
+  </div>`;
+}
+
+// ── Actions ──────────────────────────────────────────────────────────────
+
+async function approve(id) {
+  try {
+    const r = await fetch(`${API}/questions/${id}/approve`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({admin_note: ''})
+    });
+    if (!r.ok) throw new Error(await r.text());
+    toast('Question approved ✓', 'success');
+    removeCard(id);
+    fetchStats();
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+
+function toggleReject(id) {
+  const inp = document.getElementById(`ri-${id}`);
+  if (inp.style.display === 'block') {
+    inp.style.display = 'none';
+  } else {
+    inp.style.display = 'block';
+    inp.focus();
+  }
+}
+
+async function confirmReject(id) {
+  const reason = document.getElementById(`ri-${id}`).value;
+  try {
+    const r = await fetch(`${API}/questions/${id}/reject`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({reason})
+    });
+    if (!r.ok) throw new Error(await r.text());
+    toast('Question rejected', 'success');
+    removeCard(id);
+    fetchStats();
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+
+async function deleteQ(id) {
+  if (!confirm('Permanently delete this question?')) return;
+  try {
+    const r = await fetch(`${API}/questions/${id}`, {method: 'DELETE'});
+    if (!r.ok) throw new Error(await r.text());
+    toast('Question deleted', 'success');
+    removeCard(id);
+    fetchStats();
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+
+async function generateQuestions() {
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Generating… (may take 2-3 min)';
+  try {
+    const r = await fetch(`${API}/questions/generate`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({n_mcq: 6, n_open: 4})
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail || JSON.stringify(d));
+    toast(`${d.generated} questions generated for ${d.week_id} ✓`, 'success');
+    await fetchStats();
+    if (currentView === 'pending' || currentView === 'all') fetchQuestions(currentView);
+  } catch(e) {
+    toast('Generation failed: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span>✨</span> Generate This Week\'s Questions';
+  }
+}
+
+// ── Navigation ───────────────────────────────────────────────────────────
+
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  const titles = {pending:'Pending Review', approved:'Approved', rejected:'Rejected', all:'All Questions', stats:'Stats'};
+  document.getElementById('page-title').textContent = titles[view] || view;
+
+  if (view === 'stats') {
+    document.getElementById('question-list').innerHTML = '';
+  } else {
+    fetchQuestions(view);
+  }
+}
+
+// ── Helpers ──────────────────────────────────────────────────────────────
+
+function removeCard(id) {
+  allQuestions = allQuestions.filter(q => q.id !== id);
+  document.getElementById(`card-${id}`)?.remove();
+  if (!document.querySelectorAll('.q-card').length) {
+    document.getElementById('question-list').innerHTML = '<div class="empty">No questions in this view.</div>';
+  }
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+let toastTimer;
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = 'toast', 3000);
+}
+
+// ── Reject button wiring (event delegation) ───────────────────────────────
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('btn-reject')) return; // handled above
+  // clicking outside reject input hides it
+  document.querySelectorAll('.reject-input').forEach(inp => {
+    if (inp !== e.target) inp.style.display = 'none';
+  });
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────
+fetchStats();
+fetchQuestions('pending');
+</script>
+</body>
+</html>
