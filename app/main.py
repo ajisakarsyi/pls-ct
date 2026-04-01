@@ -1,9 +1,5 @@
 """
-app/main.py
-────────────
-FastAPI application factory.
-
-Import ``create_app`` in tests or run the module directly via uvicorn.
+app/main.py  — updated for MVP Feature 1 + Feature 2
 """
 
 import logging
@@ -31,47 +27,71 @@ def create_app() -> FastAPI:
 
     app = FastAPI(
         title="CSIPBLLM Personalized Learning System",
-        description=(
-            "Adaptive AI tutor with personalised cognitive profiles, "
-            "RAG-augmented responses, and scaffolded evaluation."
-        ),
-        version="3.0.0",
+        version="3.2.0",
         docs_url="/docs",
         redoc_url="/redoc",
     )
 
     # ── Static files ──────────────────────────────────────────────────────
     if os.path.isdir(settings.static_dir):
-        app.mount(
-            "/static",
-            StaticFiles(directory=settings.static_dir),
-            name="static",
-        )
+        app.mount("/static", StaticFiles(directory=settings.static_dir), name="static")
 
-    # ── Routes ────────────────────────────────────────────────────────────
+    # ── All API routes (tutor + question bank) ────────────────────────────
     app.include_router(api_router)
 
-    # ── Frontend entry-point ──────────────────────────────────────────────
+    # ── Student frontend (existing) ───────────────────────────────────────
     @app.get("/", include_in_schema=False)
     def serve_index():
-        index_path = os.path.join(settings.static_dir, "index.html")
-        if os.path.exists(index_path):
-            return FileResponse(index_path)
-        return JSONResponse({"error": "index.html not found"}, status_code=404)
+        path = os.path.join(settings.static_dir, "index.html")
+        return FileResponse(path) if os.path.exists(path) else \
+               JSONResponse({"error": "index.html not found"}, status_code=404)
 
-    # ── Startup event ─────────────────────────────────────────────────────
+    # ── Admin question bank dashboard (new) ───────────────────────────────
+    @app.get("/admin/questions", include_in_schema=False)
+    def serve_admin_dashboard():
+        path = os.path.join(settings.static_dir, "admin_questions.html")
+        return FileResponse(path) if os.path.exists(path) else \
+               JSONResponse({"error": "admin_questions.html not found in static/"}, status_code=404)
+
+    # ── Provider status (debug) ───────────────────────────────────────────
+    @app.get("/provider-status", include_in_schema=False)
+    def provider_status():
+        from app.services.llm import get_active_provider
+        return {
+            "chat_provider":      get_active_provider(),
+            "embed_provider":     "ollama (always)",
+            "ollama_embed_model": settings.ollama_embed_model,
+            "ollama_base_url":    settings.ollama_base_url,
+        }
+
+    # ── Startup ───────────────────────────────────────────────────────────
     @app.on_event("startup")
     async def on_startup():
-        logger.info("Preloading global RAG materials index…")
+        from app.services.llm import probe_and_set_chat_provider
+
+        # 1. Decide chat provider (ChatAnywhere if key valid, else Ollama)
+        provider = probe_and_set_chat_provider()
+
+        # 2. Build RAG index for Feature 2 (always local Ollama embeddings)
+        logger.info("Building RAG index…")
         load_global_materials()
+
+        # 3. Ensure data/ folder exists for question bank
+        data_dir = os.path.join(settings.base_dir, "data")
+        os.makedirs(data_dir, exist_ok=True)
+
         logger.info(
-            "Server ready — %d cognitive types supported.",
-            len(VALID_COGNITIVE_TYPES),
+            "━━ Server ready ━━  chat=%s | embed=ollama/%s | cognitive_types=%d",
+            provider, settings.ollama_embed_model, len(VALID_COGNITIVE_TYPES),
         )
+        logger.info("  Feature 1 admin dashboard : http://%s:%s/admin/questions",
+                    settings.host, settings.port)
+        logger.info("  Feature 2 student chat    : http://%s:%s/",
+                    settings.host, settings.port)
+        logger.info("  API docs                  : http://%s:%s/docs",
+                    settings.host, settings.port)
 
     return app
 
 
-# Expose a module-level ``app`` instance so uvicorn can be pointed at
-# ``app.main:app`` directly.
 app = create_app()
