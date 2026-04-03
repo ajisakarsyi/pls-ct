@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 5TGR
+Pedagogi: Affirmative and corrective feedback
+Tipe Kognitif: TGR – Text, Global, Reflective
+
+1. Deskripsi
+User menunjukkan kemampuan refleksi yang baik dalam menanggapi umpan balik, khususnya ketika masukan diberikan dalam bentuk penjelasan umum yang jelas dan terarah. User cenderung mempertimbangkan feedback yang diterima terlebih dahulu sebelum melakukan penyesuaian terhadap pemahamannya, sehingga proses perbaikan berlangsung secara sadar dan sistematis. Respons user terhadap evaluasi tergolong positif; user mampu menangkap esensi permasalahan, mengenali kelemahan secara menyeluruh, serta menunjukkan kesiapan untuk melakukan perbaikan. Selain itu, user memiliki sikap terbuka terhadap penilaian, motivasi belajar yang tinggi, dan dorongan untuk meningkatkan pemahaman setelah memperoleh arahan. Dengan demikian, penerapan strategi pembelajaran yang menyajikan umpan balik secara singkat, lugas, dan berfokus pada poin-poin utama, disertai dukungan berupa penguatan positif, sangat membantu dalam meningkatkan pemahaman.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Affirmative and corrective feedback.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 6TAR
+Pedagogi: Opportunity to practise & review
+Tipe Kognitif: TAR – Text, Analytic, Reflective
+
+1. Deskripsi
+User menunjukkan pendekatan yang analitis dan reflektif ketika mengerjakan latihan berbasis teks yang bersifat rinci. User tidak langsung menjawab, tetapi terlebih dahulu menganalisis informasi yang tersedia serta mempertimbangkan berbagai kemungkinan jawaban sebelum menyelesaikan latihan. Hal ini mencerminkan kehati-hatian dalam berpikir, kemampuan mengolah detail secara mendalam, serta upaya untuk memastikan ketepatan pemahaman. Pendekatan latihan teks yang terperinci sangat mendukung penguatan pemahaman konseptual dan ketelitian user dalam belajar.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Opportunity to practise & review.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

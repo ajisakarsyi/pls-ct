@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 5TAI
+Pedagogi: Affirmative and corrective feedback
+Tipe Kognitif: TAI – Text, Analytic, Impulsive
+
+1. Deskripsi
+User menunjukkan respons yang cepat dan proaktif terhadap feedback rinci yang disampaikan melalui teks. Ketika umpan balik secara jelas menyoroti kesalahan serta detail-detail penting yang perlu diperhatikan, user mampu segera mengidentifikasi bagian yang kurang tepat dan langsung melakukan perbaikan. User memiliki kemampuan analisis yang baik terhadap kesalahan, disertai kemauan belajar yang tinggi dan sikap terbuka terhadap evaluasi. Pendekatan pemberian feedback yang spesifik, terperinci, dan langsung pada sumber kesalahan sangat efektif dalam membantu user meningkatkan ketepatan pemahaman dan kualitas hasil belajarnya.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Affirmative and corrective feedback.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 1TGI
+Pedagogi: Clear learning intention
+Tipe Kognitif: TGI
+
+1. Deskripsi
+User menunjukkan kecenderungan merespons tujuan pembelajaran yang disampaikan secara ringkas melalui teks dengan cepat dan intuitif. User lebih menaruh perhatian pada gambaran besar materi tanpa terlibat dalam analisis mendalam, mencerminkan fokus pada motivasi awal, orientasi umum, serta kesiapan untuk memasuki topik pembelajaran.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Clear learning intention.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: FEEDBACK

@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 5PAI
+Pedagogi: Affirmative and corrective feedback
+Tipe Kognitif: PAI – Pictorial, Analytic, Impulsive
+
+1. Deskripsi
+User menunjukkan respons yang cepat dan tepat ketika menerima feedback rinci yang disajikan dalam bentuk visual. Visualisasi yang jelas membantu user mengidentifikasi kesalahan-kesalahan spesifik secara langsung serta memahami bagian yang perlu diperbaiki. Dengan dukungan informasi visual yang terperinci, user mampu segera menyesuaikan pemahamannya dan melakukan perbaikan secara efektif. Pendekatan feedback yang mengombinasikan detail informasi dan visualisasi terbukti sangat membantu dalam meningkatkan akurasi dan kualitas hasil belajar user.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Affirmative and corrective feedback.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan

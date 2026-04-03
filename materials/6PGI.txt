@@ -1,0 +1,22 @@
+KOMBINASI KOGNITIF: 6PGI
+Pedagogi: Opportunity to practise & review
+Tipe Kognitif: PGI – Pictorial, Global, Impulsive
+
+1. Deskripsi
+User menunjukkan respons yang cepat ketika mengerjakan latihan yang divisualisasikan secara sederhana. Penyajian visual membantu user dengan mudah menangkap inti pertanyaan serta memahami informasi yang disampaikan, sehingga user dapat memberikan jawaban yang selaras dengan visual yang ditampilkan. Hal ini menunjukkan kemampuan interpretasi visual yang baik serta kecepatan dalam menghubungkan representasi visual dengan konsep yang dipelajari. Pendekatan latihan berbasis visual sederhana efektif dalam mendukung pemahaman dan respons yang tepat dari user.
+
+2. Ciri Khas Kognitif
+- Memiliki kecenderungan belajar yang selaras dengan pendekatan Opportunity to practise & review.
+- Respons kognitif mencerminkan pola berpikir akademik berbasis CT (Computational Thinking).
+- Cocok digunakan dalam konteks pembelajaran terstruktur dan evaluatif.
+
+3. Kelemahan Potensial
+- Risiko ketergantungan pada pola berpikir dominan.
+- Dapat kurang fleksibel jika dihadapkan pada konteks belajar non-struktural.
+- Membutuhkan stimulus pertanyaan yang tepat agar tidak stagnan.
+
+4. Sugesti Fokus untuk LLM
+- Fokus pada penguatan aspek CT sesuai profil ini.
+- Pertanyaan perlu diarahkan untuk memperdalam analisis, refleksi, dan pemecahan masalah.
+- Gunakan pendekatan akademik dan scaffolding kognitif.
+- Tipe feedback yang disarankan: nan
