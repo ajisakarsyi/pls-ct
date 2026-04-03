@@ -46,6 +46,12 @@ def create_app() -> FastAPI:
         return FileResponse(path) if os.path.exists(path) else \
                JSONResponse({"error": "index.html not found"}, status_code=404)
 
+    # ── Student Asah Otak page (new) ────────────────────────────────────────
+    @app.get("/asah-otak", include_in_schema=False)
+    def serve_asah_otak():
+        path = os.path.join(settings.static_dir, "asah_otak.html")
+        return FileResponse(path) if os.path.exists(path) else                JSONResponse({"error": "asah_otak.html not found in static/"}, status_code=404)
+
     # ── Admin question bank dashboard (new) ───────────────────────────────
     @app.get("/admin/questions", include_in_schema=False)
     def serve_admin_dashboard():
@@ -85,6 +91,8 @@ def create_app() -> FastAPI:
             provider, settings.ollama_embed_model, len(VALID_COGNITIVE_TYPES),
         )
         logger.info("  Feature 1 admin dashboard : http://%s:%s/admin/questions",
+                    settings.host, settings.port)
+        logger.info("  Asah Otak (students)      : http://%s:%s/asah-otak",
                     settings.host, settings.port)
         logger.info("  Feature 2 student chat    : http://%s:%s/",
                     settings.host, settings.port)

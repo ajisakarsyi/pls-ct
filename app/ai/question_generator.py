@@ -1,23 +1,23 @@
 """
 app/ai/question_generator.py
 ─────────────────────────────
-AI layer that generates Computational Thinking questions for the weekly
-Asah Otak quiz bank.
+Generates a weekly batch of 10 CT questions, all sharing ONE topic.
 
-Produces a mix of MCQ (pilihan ganda) and open-ended questions.
-Each question includes:
-  - question text
-  - type: "mcq" | "open"
-  - options (MCQ only): {"A": ..., "B": ..., "C": ..., "D": ...}
-  - correct_answer: the correct option key (MCQ) or reference answer (open)
-    → stored server-side only, NEVER sent to end-users
-  - explanation (pembahasan): why the answer is correct
-  - difficulty: "mudah" | "sedang" | "sulit"
-  - topic: CT topic tag
-  - week_id: ISO week string e.g. "2026-W12"
+The topic is provided as a free-text description (definition, explanation,
+examples) written by the admin/teacher. The AI uses ONLY this topic text
+as its knowledge source — no external topics are mixed in.
 
-Uses ChatAnywhere if available, otherwise falls back to local Ollama.
-LLM response is parsed as strict JSON — malformed responses are retried.
+Four question types (2-3 of each per batch):
+  mcq       — single correct answer from A/B/C/D
+  multi     — multiple correct answers (checkboxes), 2-4 correct out of 4-5 options
+  truefalse — True/False with justification
+  open      — free-text answer, evaluated by LLM
+
+Batch composition (10 questions, 1 topic):
+  3 × mcq
+  3 × multi
+  2 × truefalse
+  2 × open
 """
 
 import json
@@ -31,104 +31,108 @@ import requests as _req
 
 logger = logging.getLogger(__name__)
 
-# ── CT topics pool — rotated across weeks ─────────────────────────────────
-CT_TOPICS = [
-    "algoritma dan pseudocode",
-    "dekomposisi masalah",
-    "abstraksi",
-    "pengenalan pola (pattern recognition)",
-    "bubble sort",
-    "selection sort",
-    "insertion sort",
-    "merge sort",
-    "quick sort",
-    "binary search",
-    "linear search",
-    "rekursi",
-    "iterasi dan perulangan",
-    "kompleksitas waktu Big-O",
-    "kompleksitas ruang",
-    "stack dan queue",
-    "linked list",
-    "array dan list",
-    "hash table dan dictionary",
-    "binary tree dan traversal",
-    "graph dan BFS/DFS",
-    "dynamic programming",
-    "greedy algorithm",
-    "paradigma pemrograman",
-    "abstract data type (ADT)",
+# ── Batch composition ─────────────────────────────────────────────────────
+BATCH_COMPOSITION = [
+    ("mcq",       3),
+    ("multi",     3),
+    ("truefalse", 2),
+    ("open",      2),
 ]
-
 DIFFICULTIES = ["mudah", "sedang", "sulit"]
-
-# Target mix per batch of 10: 6 MCQ + 4 open-ended
-MCQ_COUNT  = 6
-OPEN_COUNT = 4
 
 
 # ══════════════════════════════════════════════════════════════════════════
-# PROMPT TEMPLATES
+# PROMPT TEMPLATES  — all grounded in the provided topic_text
 # ══════════════════════════════════════════════════════════════════════════
 
 _MCQ_PROMPT = """\
-Kamu adalah pembuat soal Computational Thinking untuk mahasiswa universitas Indonesia.
+Kamu adalah pembuat soal untuk mata kuliah Computational Thinking.
 
-Buat SATU soal pilihan ganda (MCQ) dengan ketentuan berikut:
-- Topik: {topic}
-- Tingkat kesulitan: {difficulty}
-- Bahasa: Indonesia
-- Soal harus menguji pemahaman konsep, bukan sekadar hafalan
-- Opsi jawaban harus masuk akal dan tidak trivial
+MATERI MINGGU INI:
+{topic_text}
 
-Balas HANYA dengan JSON valid berikut, tidak ada teks lain:
+Buat SATU soal pilihan ganda dengan SATU jawaban benar berdasarkan materi di atas.
+Tingkat kesulitan: {difficulty}
+Bahasa: Indonesia
+Soal harus menguji pemahaman konsep dari materi, bukan hafalan.
+
+Balas HANYA dengan JSON valid ini, tidak ada teks lain:
 {{
-  "question": "teks pertanyaan di sini",
-  "options": {{
-    "A": "opsi A",
-    "B": "opsi B",
-    "C": "opsi C",
-    "D": "opsi D"
-  }},
+  "question": "teks pertanyaan",
+  "options": {{"A": "...", "B": "...", "C": "...", "D": "..."}},
   "correct_answer": "A",
-  "explanation": "penjelasan mengapa jawaban ini benar dan mengapa opsi lain salah (2-3 kalimat)"
+  "explanation": "penjelasan singkat mengapa jawaban ini benar (2-3 kalimat)"
+}}"""
+
+_MULTI_PROMPT = """\
+Kamu adalah pembuat soal untuk mata kuliah Computational Thinking.
+
+MATERI MINGGU INI:
+{topic_text}
+
+Buat SATU soal pilihan ganda dengan LEBIH DARI SATU jawaban benar berdasarkan materi di atas.
+Tingkat kesulitan: {difficulty}
+Bahasa: Indonesia
+Sediakan 5 opsi (A-E), dengan 2-3 jawaban yang benar.
+Soal harus jelas bahwa mahasiswa perlu memilih SEMUA jawaban yang benar.
+
+Balas HANYA dengan JSON valid ini, tidak ada teks lain:
+{{
+  "question": "teks pertanyaan (tambahkan: 'Pilih SEMUA jawaban yang benar.')",
+  "options": {{"A": "...", "B": "...", "C": "...", "D": "...", "E": "..."}},
+  "correct_answers": ["A", "C"],
+  "explanation": "penjelasan mengapa opsi-opsi tersebut benar dan yang lain salah (2-3 kalimat)"
+}}"""
+
+_TF_PROMPT = """\
+Kamu adalah pembuat soal untuk mata kuliah Computational Thinking.
+
+MATERI MINGGU INI:
+{topic_text}
+
+Buat SATU pernyataan Benar/Salah berdasarkan materi di atas.
+Tingkat kesulitan: {difficulty}
+Bahasa: Indonesia
+Pernyataan harus spesifik dan dapat diverifikasi dari materi yang diberikan.
+Jangan buat pernyataan yang ambigu.
+
+Balas HANYA dengan JSON valid ini, tidak ada teks lain:
+{{
+  "question": "pernyataan yang harus dinilai Benar atau Salah",
+  "correct_answer": "Benar",
+  "explanation": "penjelasan mengapa pernyataan ini benar atau salah berdasarkan materi (2-3 kalimat)"
 }}"""
 
 _OPEN_PROMPT = """\
-Kamu adalah pembuat soal Computational Thinking untuk mahasiswa universitas Indonesia.
+Kamu adalah pembuat soal untuk mata kuliah Computational Thinking.
 
-Buat SATU soal uraian (open-ended) dengan ketentuan berikut:
-- Topik: {topic}
-- Tingkat kesulitan: {difficulty}
-- Bahasa: Indonesia
-- Soal harus berbasis skenario atau penerapan konkret
-- Jawaban referensi harus jelas dan dapat dinilai secara objektif
+MATERI MINGGU INI:
+{topic_text}
 
-Balas HANYA dengan JSON valid berikut, tidak ada teks lain:
+Buat SATU soal uraian berbasis skenario dari materi di atas.
+Tingkat kesulitan: {difficulty}
+Bahasa: Indonesia
+Soal harus mendorong mahasiswa menerapkan konsep, bukan sekadar mendefinisikan.
+Jawaban referensi harus jelas dan terukur.
+
+Balas HANYA dengan JSON valid ini, tidak ada teks lain:
 {{
-  "question": "teks pertanyaan di sini (bisa berupa skenario 2-3 kalimat + pertanyaan spesifik)",
-  "correct_answer": "jawaban referensi lengkap yang digunakan untuk menilai jawaban mahasiswa",
-  "explanation": "pembahasan tambahan: konsep kunci yang harus ada dalam jawaban yang benar (2-3 kalimat)"
+  "question": "skenario + pertanyaan spesifik (2-4 kalimat, diakhiri tanda tanya)",
+  "correct_answer": "jawaban referensi lengkap yang dipakai untuk menilai jawaban mahasiswa",
+  "explanation": "poin-poin utama yang harus ada dalam jawaban yang benar (2-3 kalimat)"
 }}"""
 
 
 # ══════════════════════════════════════════════════════════════════════════
-# LLM CALLER — uses same provider logic as the main app
+# LLM CALLER
 # ══════════════════════════════════════════════════════════════════════════
 
 def _call_llm(prompt: str) -> Optional[str]:
-    """
-    Call LLM for question generation.
-    Tries app's query_llm first (respects provider switching),
-    falls back to direct Ollama call if import fails.
-    """
     try:
         from app.services.llm import query_llm
         return query_llm(prompt)
     except Exception:
         pass
-
-    # Direct Ollama fallback
     try:
         from app.core.config import get_settings
         s = get_settings()
@@ -140,35 +144,21 @@ def _call_llm(prompt: str) -> Optional[str]:
         resp.raise_for_status()
         return resp.json().get("response", "").strip()
     except Exception as exc:
-        logger.error("LLM call failed in question_generator: %s", exc)
+        logger.error("LLM call failed: %s", exc)
         return None
 
-
-# ══════════════════════════════════════════════════════════════════════════
-# JSON EXTRACTION
-# ══════════════════════════════════════════════════════════════════════════
 
 def _extract_json(text: str) -> Optional[Dict]:
-    """
-    Extract the first valid JSON object from LLM output.
-    Handles cases where LLM wraps JSON in markdown code blocks or adds preamble.
-    """
     if not text:
         return None
-
-    # Strip markdown code fences
     text = re.sub(r"```(?:json)?", "", text).strip()
-
-    # Find JSON object boundaries
     start = text.find("{")
     end   = text.rfind("}") + 1
     if start == -1 or end == 0:
         return None
-
     try:
         return json.loads(text[start:end])
     except json.JSONDecodeError:
-        # Try to fix common LLM JSON errors: trailing commas
         cleaned = re.sub(r",\s*([}\]])", r"\1", text[start:end])
         try:
             return json.loads(cleaned)
@@ -180,164 +170,176 @@ def _extract_json(text: str) -> Optional[Dict]:
 # SINGLE QUESTION GENERATORS
 # ══════════════════════════════════════════════════════════════════════════
 
-def _generate_mcq(topic: str, difficulty: str, week_id: str, max_retries: int = 3) -> Optional[Dict]:
-    """Generate one MCQ question. Retries on malformed JSON."""
-    prompt = _MCQ_PROMPT.format(topic=topic, difficulty=difficulty)
+def _base(q_type: str, topic_name: str, difficulty: str, week_id: str) -> Dict:
+    return {
+        "id":         str(uuid.uuid4()),
+        "type":       q_type,
+        "topic":      topic_name,
+        "difficulty": difficulty,
+        "week_id":    week_id,
+        "status":     "pending",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
 
-    for attempt in range(max_retries):
-        raw = _call_llm(prompt)
-        data = _extract_json(raw or "")
 
+def _gen_mcq(topic_text: str, topic_name: str, difficulty: str, week_id: str) -> Optional[Dict]:
+    prompt = _MCQ_PROMPT.format(topic_text=topic_text[:2000], difficulty=difficulty)
+    for _ in range(3):
+        data = _extract_json(_call_llm(prompt) or "")
         if not data:
-            logger.warning("MCQ attempt %d: could not extract JSON for topic=%s", attempt + 1, topic)
             continue
-
-        # Validate required fields
         if not all(k in data for k in ["question", "options", "correct_answer", "explanation"]):
-            logger.warning("MCQ attempt %d: missing fields: %s", attempt + 1, list(data.keys()))
             continue
-
-        options = data.get("options", {})
-        if not isinstance(options, dict) or len(options) < 2:
-            logger.warning("MCQ attempt %d: invalid options: %s", attempt + 1, options)
+        opts = data["options"]
+        if not isinstance(opts, dict) or len(opts) < 2:
             continue
-
         correct = str(data["correct_answer"]).strip().upper()
-        if correct not in options:
-            # Try to recover if model gave full answer text instead of key
-            for k, v in options.items():
-                if str(v).strip().lower() == correct.lower():
-                    correct = k
-                    break
-            else:
-                correct = list(options.keys())[0]  # fallback to first option
-
-        return {
-            "id":             str(uuid.uuid4()),
-            "type":           "mcq",
+        if correct not in opts:
+            correct = list(opts.keys())[0]
+        q = _base("mcq", topic_name, difficulty, week_id)
+        q.update({
             "question":       data["question"].strip(),
-            "options":        {k: str(v) for k, v in options.items()},
+            "options":        {k: str(v) for k, v in opts.items()},
             "correct_answer": correct,
             "explanation":    data.get("explanation", "").strip(),
-            "topic":          topic,
-            "difficulty":     difficulty,
-            "week_id":        week_id,
-            "status":         "pending",
-            "created_at":     datetime.now(timezone.utc).isoformat(),
-        }
-
-    logger.error("Failed to generate MCQ for topic=%s after %d attempts", topic, max_retries)
+        })
+        return q
     return None
 
 
-def _generate_open(topic: str, difficulty: str, week_id: str, max_retries: int = 3) -> Optional[Dict]:
-    """Generate one open-ended question."""
-    prompt = _OPEN_PROMPT.format(topic=topic, difficulty=difficulty)
-
-    for attempt in range(max_retries):
-        raw = _call_llm(prompt)
-        data = _extract_json(raw or "")
-
+def _gen_multi(topic_text: str, topic_name: str, difficulty: str, week_id: str) -> Optional[Dict]:
+    prompt = _MULTI_PROMPT.format(topic_text=topic_text[:2000], difficulty=difficulty)
+    for _ in range(3):
+        data = _extract_json(_call_llm(prompt) or "")
         if not data:
-            logger.warning("Open attempt %d: could not extract JSON for topic=%s", attempt + 1, topic)
             continue
+        if not all(k in data for k in ["question", "options", "correct_answers", "explanation"]):
+            continue
+        opts = data["options"]
+        if not isinstance(opts, dict) or len(opts) < 3:
+            continue
+        corrects = [str(c).strip().upper() for c in data["correct_answers"]]
+        corrects = [c for c in corrects if c in opts]
+        if not corrects:
+            corrects = [list(opts.keys())[0]]
+        q = _base("multi", topic_name, difficulty, week_id)
+        q.update({
+            "question":        data["question"].strip(),
+            "options":         {k: str(v) for k, v in opts.items()},
+            "correct_answers": corrects,   # list, e.g. ["A","C"]
+            "correct_answer":  corrects,   # alias for unified handling
+            "explanation":     data.get("explanation", "").strip(),
+        })
+        return q
+    return None
 
+
+def _gen_truefalse(topic_text: str, topic_name: str, difficulty: str, week_id: str) -> Optional[Dict]:
+    prompt = _TF_PROMPT.format(topic_text=topic_text[:2000], difficulty=difficulty)
+    for _ in range(3):
+        data = _extract_json(_call_llm(prompt) or "")
+        if not data:
+            continue
         if not all(k in data for k in ["question", "correct_answer", "explanation"]):
-            logger.warning("Open attempt %d: missing fields", attempt + 1)
             continue
+        answer = str(data["correct_answer"]).strip().lower()
+        # Normalise to "Benar" or "Salah"
+        if answer in ("true", "benar", "ya", "yes", "1"):
+            answer = "Benar"
+        else:
+            answer = "Salah"
+        q = _base("truefalse", topic_name, difficulty, week_id)
+        q.update({
+            "question":       data["question"].strip(),
+            "options":        {"Benar": "Benar", "Salah": "Salah"},
+            "correct_answer": answer,
+            "explanation":    data.get("explanation", "").strip(),
+        })
+        return q
+    return None
 
-        return {
-            "id":             str(uuid.uuid4()),
-            "type":           "open",
+
+def _gen_open(topic_text: str, topic_name: str, difficulty: str, week_id: str) -> Optional[Dict]:
+    prompt = _OPEN_PROMPT.format(topic_text=topic_text[:2000], difficulty=difficulty)
+    for _ in range(3):
+        data = _extract_json(_call_llm(prompt) or "")
+        if not data:
+            continue
+        if not all(k in data for k in ["question", "correct_answer", "explanation"]):
+            continue
+        q = _base("open", topic_name, difficulty, week_id)
+        q.update({
             "question":       data["question"].strip(),
             "options":        None,
             "correct_answer": data["correct_answer"].strip(),
             "explanation":    data.get("explanation", "").strip(),
-            "topic":          topic,
-            "difficulty":     difficulty,
-            "week_id":        week_id,
-            "status":         "pending",
-            "created_at":     datetime.now(timezone.utc).isoformat(),
-        }
-
-    logger.error("Failed to generate open question for topic=%s after %d attempts", topic, max_retries)
+        })
+        return q
     return None
 
 
+_GENERATORS = {
+    "mcq":       _gen_mcq,
+    "multi":     _gen_multi,
+    "truefalse": _gen_truefalse,
+    "open":      _gen_open,
+}
+
+
 # ══════════════════════════════════════════════════════════════════════════
-# BATCH GENERATOR
+# BATCH GENERATOR — single topic per session
 # ══════════════════════════════════════════════════════════════════════════
 
-def get_week_id(dt: Optional[datetime] = None) -> str:
-    """Return ISO week string like '2026-W12'."""
+def get_week_id(dt=None) -> str:
+    from datetime import datetime, timezone
     d = dt or datetime.now(timezone.utc)
     return f"{d.year}-W{d.isocalendar()[1]:02d}"
 
 
 def generate_weekly_batch(
+    topic_name: str,
+    topic_text: str,
     week_id: Optional[str] = None,
-    n_mcq: int = MCQ_COUNT,
-    n_open: int = OPEN_COUNT,
-    topics: Optional[List[str]] = None,
+    composition: Optional[List] = None,
 ) -> List[Dict]:
     """
-    Generate a full weekly batch of CT questions.
-
-    Returns list of question dicts (all status='pending').
-    The caller is responsible for storing them.
+    Generate a weekly batch of questions all based on ONE topic.
 
     Args:
-        week_id:  override week string, default = current week
-        n_mcq:    number of MCQ questions (default 6)
-        n_open:   number of open-ended questions (default 4)
-        topics:   override topic list; if None, picks from CT_TOPICS pool
+        topic_name:  Short label, e.g. "Abstraksi"
+        topic_text:  Full description the admin provides — definition,
+                     explanation, examples. This is the SOLE reference.
+        week_id:     Override ISO week string. Default: current week.
+        composition: List of (type, count) tuples. Default: BATCH_COMPOSITION.
+
+    Returns:
+        List of question dicts with status='pending'.
     """
-    wid    = week_id or get_week_id()
-    pool   = topics or CT_TOPICS
-    total  = n_mcq + n_open
+    wid   = week_id or get_week_id()
+    comp  = composition or BATCH_COMPOSITION
+    total = sum(c for _, c in comp)
 
-    # Select topics — spread across difficulties
+    # Build difficulty list — balanced across total questions
     import random
-    selected_topics = random.sample(pool, min(total, len(pool)))
-    if len(selected_topics) < total:
-        # Repeat pool if needed
-        selected_topics *= (total // len(selected_topics) + 1)
-    selected_topics = selected_topics[:total]
+    diffs = (DIFFICULTIES * (total // len(DIFFICULTIES) + 1))[:total]
+    random.shuffle(diffs)
 
-    # Assign difficulties — roughly balanced
-    difficulty_cycle = (
-        DIFFICULTIES * (total // len(DIFFICULTIES) + 1)
-    )[:total]
-    random.shuffle(difficulty_cycle)
+    questions: List[Dict] = []
+    diff_idx  = 0
 
-    questions = []
-    errors    = 0
+    logger.info("Generating %d questions | topic='%s' | week=%s", total, topic_name, wid)
 
-    logger.info("Generating weekly batch: week=%s MCQ=%d open=%d", wid, n_mcq, n_open)
+    for q_type, count in comp:
+        gen_fn = _GENERATORS[q_type]
+        for _ in range(count):
+            diff = diffs[diff_idx % len(diffs)]
+            diff_idx += 1
+            q = gen_fn(topic_text, topic_name, diff, wid)
+            if q:
+                questions.append(q)
+                logger.info("  ✓ [%s] %s | diff=%s", q_type, topic_name, diff)
+            else:
+                logger.error("  ✗ Failed to generate %s question", q_type)
 
-    # Generate MCQs
-    for i in range(n_mcq):
-        q = _generate_mcq(selected_topics[i], difficulty_cycle[i], wid)
-        if q:
-            questions.append(q)
-            logger.info("  [%d/%d] MCQ generated: topic=%s difficulty=%s",
-                        len(questions), total, q["topic"], q["difficulty"])
-        else:
-            errors += 1
-
-    # Generate open-ended
-    for i in range(n_open):
-        idx = n_mcq + i
-        q = _generate_open(selected_topics[idx], difficulty_cycle[idx], wid)
-        if q:
-            questions.append(q)
-            logger.info("  [%d/%d] Open generated: topic=%s difficulty=%s",
-                        len(questions), total, q["topic"], q["difficulty"])
-        else:
-            errors += 1
-
-    logger.info(
-        "Batch complete: %d generated, %d failed. week=%s",
-        len(questions), errors, wid,
-    )
+    logger.info("Batch done: %d/%d generated | week=%s", len(questions), total, wid)
     return questions

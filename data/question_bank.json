@@ -1,0 +1,216 @@
+[
+  {
+    "id": "a6ab47ba-5b4b-4840-ae36-1bd16b46bfb0",
+    "type": "mcq",
+    "topic": "abstraksi",
+    "difficulty": "sedang",
+    "week_id": "2026-W14",
+    "status": "approved",
+    "created_at": "2026-04-03T04:34:19.906971+00:00",
+    "question": "Apa yang dimaksud dengan abstraksi dalam konteks pemrograman dan berpikir sehari-hari?",
+    "options": {
+      "A": "Proses menyederhanakan dengan fokus pada inti penting dan mengabaikan detail yang tidak diperlukan.",
+      "B": "Proses menambahkan detail-detail kecil untuk memperjelas informasi.",
+      "C": "Metode pengolahan data yang mengutamakan kecepatan lebih dari ketepatan.",
+      "D": "Cara memahami informasi dengan cara menganalisis semua aspek secara mendalam."
+    },
+    "correct_answer": "A",
+    "explanation": "Jawaban A tepat karena menggambarkan definisi abstraksi, yaitu mengeksplorasi inti atau bagian penting sambil mengabaikan detail yang kurang relevan, baik dalam konteks pemrograman maupun berpikir sehari-hari.",
+    "approved_at": "2026-04-03T04:34:51.508762+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "0a04d809-cacb-40b8-aebd-ac75427c2473",
+    "type": "mcq",
+    "topic": "abstraksi",
+    "difficulty": "sulit",
+    "week_id": "2026-W14",
+    "status": "approved",
+    "created_at": "2026-04-03T04:34:22.456338+00:00",
+    "question": "Dalam konteks pemrograman, mengapa penggunaan fungsi dapat dianggap sebagai bentuk abstraksi?",
+    "options": {
+      "A": "Karena fungsi menyederhanakan proses dengan menyembunyikan detail implementasi yang tidak perlu.",
+      "B": "Karena fungsi selalu menentukan langkah-langkah yang harus diikuti secara terperinci.",
+      "C": "Karena semua fungsi memiliki nama yang jelas dan tidak memerlukan parameter.",
+      "D": "Karena fungsi tidak dapat digunakan kembali dalam kode."
+    },
+    "correct_answer": "A",
+    "explanation": "Jawaban A benar karena fungsi membantu programmer untuk fokus pada hasil yang ingin dicapai tanpa harus memahami setiap langkah detail dari prosesnya. Ini mencerminkan prinsip abstraksi dengan menyederhanakan pemrosesan informasi.",
+    "approved_at": "2026-04-03T04:34:51.838492+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "754899f7-2d9c-4459-a719-f0bbb43348f3",
+    "type": "mcq",
+    "topic": "abstraksi",
+    "difficulty": "sulit",
+    "week_id": "2026-W14",
+    "status": "approved",
+    "created_at": "2026-04-03T04:34:24.611569+00:00",
+    "question": "Mengapa proses abstraksi sangat penting dalam pemrograman dan pemecahan masalah?",
+    "options": {
+      "A": "Karena memungkinkan fokus pada konsep utama tanpa terganggu detail yang kompleks.",
+      "B": "Karena menyederhanakan semua detail menjadi satu bentuk tunggal.",
+      "C": "Karena membantu mengurangi jumlah baris kode yang ditulis.",
+      "D": "Karena dapat menghilangkan semua masalah yang ada."
+    },
+    "correct_answer": "A",
+    "explanation": "Jawaban ini benar karena abstraksi memungkinkan programmer untuk memusatkan perhatian pada gagasan atau logika utama dari masalah yang dihadapi, sehingga mengurangi kompleksitas dan meningkatkan efisiensi pemecahan masalah.",
+    "approved_at": "2026-04-03T04:34:52.044244+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "815ef5b9-34c4-481e-91e8-c89129eeb836",
+    "type": "multi",
+    "topic": "abstraksi",
+    "difficulty": "mudah",
+    "week_id": "2026-W14",
+    "status": "approved",
+    "created_at": "2026-04-03T04:34:26.938975+00:00",
+    "question": "Apa saja yang termasuk contoh penggunaan abstraksi dalam kehidupan sehari-hari? Pilih SEMUA jawaban yang benar.",
+    "options": {
+      "A": "Peta yang menunjukkan hanya jalan dan lokasi penting.",
+      "B": "Menjelaskan secara rinci setiap elemen dalam suatu objek.",
+      "C": "Menggunakan fungsi dalam pemrograman tanpa mengetahui detail implementasinya.",
+      "D": "Membaca novel tanpa memahami tema dan karakter utama.",
+      "E": "Membuat rangkuman dari suatu artikel."
+    },
+    "correct_answers": [
+      "A",
+      "C",
+      "E"
+    ],
+    "correct_answer": [
+      "A",
+      "C",
+      "E"
+    ],
+    "explanation": "Opsi A, C, dan E benar karena semua contoh tersebut menunjukkan penyederhanaan dengan fokus pada inti penting. Opsi B salah karena menjelaskan detail, sedangkan opsi D tidak menunjukkan abstraksi yang tepat karena membaca novel dengan fokus pada detail tidak mengutamakan inti cerita.",
+    "approved_at": "2026-04-03T04:34:52.870181+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "91fdb8fe-f0f7-48f6-8ab4-fc24c9a9065a",
+    "type": "multi",
+    "topic": "abstraksi",
+    "difficulty": "sedang",
+    "week_id": "2026-W14",
+    "status": "approved",
+    "created_at": "2026-04-03T04:34:30.928568+00:00",
+    "question": "Apa saja manfaat dari penggunaan abstraksi dalam berbagai bidang? Pilih SEMUA jawaban yang benar.",
+    "options": {
+      "A": "Abstraksi memungkinkan kita untuk fokus pada gagasan utama.",
+      "B": "Abstraksi menampilkan semua detail secara rinci.",
+      "C": "Abstraksi membantu menyederhanakan informasi kompleks.",
+      "D": "Abstraksi hanya digunakan dalam pemrograman.",
+      "E": "Abstraksi membuat kita lebih mudah memahami konsep yang rumit."
+    },
+    "correct_answers": [
+      "A",
+      "C",
+      "E"
+    ],
+    "correct_answer": [
+      "A",
+      "C",
+      "E"
+    ],
+    "explanation": "Opsi A, C, dan E menjelaskan manfaat dari abstraksi dengan tepat, yaitu membantu fokus pada inti penting, menyederhanakan informasi kompleks, dan memudahkan pemahaman konsep yang rumit. Opsi B salah karena abstraksi justru mengabaikan detail yang tidak diperlukan. Opsi D salah karena abstraksi digunakan di berbagai bidang, bukan hanya dalam pemrograman.",
+    "approved_at": "2026-04-03T04:34:53.116445+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "0455273b-030b-4d28-ab42-52f8aa0fc76e",
+    "type": "multi",
+    "topic": "abstraksi",
+    "difficulty": "mudah",
+    "week_id": "2026-W14",
+    "status": "approved",
+    "created_at": "2026-04-03T04:34:34.900677+00:00",
+    "question": "Apa saja yang merupakan contoh dari proses abstraksi? Pilih SEMUA jawaban yang benar.",
+    "options": {
+      "A": "Peta yang menunjukkan lokasi penting seperti jalan dan gedung.",
+      "B": "Detail lengkap dari sebuah sistem operasi komputer.",
+      "C": "Penggunaan fungsi dalam pemrograman tanpa mengetahui implementasi dalamnya.",
+      "D": "Sebuah novel yang menguraikan setiap aspek kehidupan karakter secara mendetail.",
+      "E": "Spesifikasi teknis dari sebuah perangkat keras."
+    },
+    "correct_answers": [
+      "A",
+      "C"
+    ],
+    "correct_answer": [
+      "A",
+      "C"
+    ],
+    "explanation": "Opsi A dan C merupakan contoh dari proses abstraksi, dimana peta hanya menampilkan informasi penting dan fungsi dalam pemrograman memungkinkan penggunaan tanpa pemahaman detail. Sebaliknya, opsi B, D, dan E mengandung banyak detail yang tidak disederhanakan, sehingga tidak mencerminkan konsep abstraksi.",
+    "approved_at": "2026-04-03T04:34:53.305984+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "f1e4a982-be58-4e1d-bfbe-e66fc365e1ea",
+    "type": "truefalse",
+    "topic": "abstraksi",
+    "difficulty": "mudah",
+    "week_id": "2026-W14",
+    "status": "approved",
+    "created_at": "2026-04-03T04:34:36.552561+00:00",
+    "question": "Abstraksi dalam pemrograman memungkinkan kita untuk menggunakan fungsi tanpa perlu mengetahui semua detail cara kerjanya di dalam.",
+    "options": {
+      "Benar": "Benar",
+      "Salah": "Salah"
+    },
+    "correct_answer": "Benar",
+    "explanation": "Pernyataan ini benar karena sesuai dengan penjelasan tentang abstraksi dalam materi. Abstraksi memungkinkan fokus pada fungsi utama tanpa terpengaruh oleh detail teknis yang rumit.",
+    "approved_at": "2026-04-03T04:34:54.230809+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "0b9d7111-6586-488d-8544-1cfcaabbee91",
+    "type": "truefalse",
+    "topic": "abstraksi",
+    "difficulty": "sulit",
+    "week_id": "2026-W14",
+    "status": "approved",
+    "created_at": "2026-04-03T04:34:38.327632+00:00",
+    "question": "Abstraksi dalam pemrograman memungkinkan kita menggunakan fungsi tanpa mengetahui rincian detail cara kerja fungsi tersebut.",
+    "options": {
+      "Benar": "Benar",
+      "Salah": "Salah"
+    },
+    "correct_answer": "Benar",
+    "explanation": "Pernyataan ini benar karena sesuai dengan pengertian abstraksi yang diuraikan. Dalam konteks pemrograman, abstraksi menyederhanakan cara kita berinteraksi dengan kode, fokus pada fungsi utamanya tanpa terjebak dalam detail teknis yang kompleks.",
+    "approved_at": "2026-04-03T04:34:54.437424+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "afc77042-5fba-4b41-89ac-263ee7520b3a",
+    "type": "open",
+    "topic": "abstraksi",
+    "difficulty": "mudah",
+    "week_id": "2026-W14",
+    "status": "approved",
+    "created_at": "2026-04-03T04:34:40.948127+00:00",
+    "question": "Anda diminta untuk merancang sebuah peta sederhana untuk sebuah festival musik yang diadakan di taman kota. Dalam peta tersebut, Anda hanya perlu mencantumkan lokasi panggung, area makan, dan toilet. Bagaimana Anda dapat menerapkan konsep abstraksi dalam pembuatan peta tersebut, dan mengapa penting untuk mengabaikan detail-detail yang tidak relevan?",
+    "options": null,
+    "correct_answer": "Dalam merancang peta festival musik, penerapan konsep abstraksi dapat dilakukan dengan hanya menampilkan elemen-elemen kunci seperti lokasi panggung, area makan, dan toilet. Detail-detail lain seperti spesifikasi tanaman, jenis bangunan, atau jalan kecil tidak perlu dicantumkan, karena dapat mengganggu fokus pengunjung. Dengan demikian, peta yang dihasilkan lebih mudah dipahami dan digunakan oleh pengunjung festival.",
+    "explanation": "Jawaban yang benar harus mencakup penjelasan tentang pemilihan elemen penting yang ditampilkan pada peta dan pengabaian detail yang tidak relevan. Mahasiswa juga harus menjelaskan pentingnya fokus pada inti informasi untuk kemudahan penggunaan peta oleh pengunjung.",
+    "approved_at": "2026-04-03T04:34:54.926425+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "1ae74f5b-32f0-448d-a167-6ad2e1aa2d83",
+    "type": "open",
+    "topic": "abstraksi",
+    "difficulty": "sedang",
+    "week_id": "2026-W14",
+    "status": "approved",
+    "created_at": "2026-04-03T04:34:43.474070+00:00",
+    "question": "Anda sedang merancang aplikasi peta untuk memudahkan pengguna menemukan lokasi penting di kota. Bagaimana Anda dapat menggunakan konsep abstraksi dalam desain aplikasi tersebut agar pengguna tidak merasa kewalahan dengan informasi yang tidak penting? Sebutkan beberapa fitur yang dapat diterapkan untuk mencapai tujuan ini.",
+    "options": null,
+    "correct_answer": "Abstraksi dalam desain aplikasi peta dapat dicapai dengan menampilkan hanya informasi penting seperti jalan utama, lokasi landmark, dan titik akses transportasi tanpa memperlihatkan detail kecil seperti nama jalan yang kurang dikenal atau bangunan yang tidak relevan. Fitur-fitur yang bisa diterapkan termasuk filter untuk menunjukkan jenis lokasi tertentu (misal, restoran, rumah sakit), zoom yang otomatis menyoroti lokasi penting, dan antarmuka yang sederhana dengan pilihan navigasi yang jelas.",
+    "explanation": "Jawaban yang benar harus mencakup penggunaan abstraksi dengan menonjolkan fitur-fitur utama yang mendukung kemudahan pengguna dalam memahami informasi penting. Selain itu, mahasiswa perlu menjelaskan alasan pemilihan fitur tersebut dalam konteks fokus pada inti data dan mengurangi kebingungan bagi pengguna.",
+    "approved_at": "2026-04-03T04:34:55.233251+00:00",
+    "admin_note": ""
+  }
+]
