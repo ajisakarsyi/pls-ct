@@ -194,7 +194,11 @@ def retrieve(query: str, cognitive_code: str, k: int = None) -> List[Dict]:
     load_cognitive_materials(code)
     load_global_materials()
 
-    q_emb = np.array(get_embedding(query), dtype="float32")
+    emb_list = get_embedding(query)
+    if not emb_list:
+        return []
+    
+    q_emb = np.array(emb_list, dtype="float32")
     norm = np.linalg.norm(q_emb)
     if norm:
         q_emb /= norm
