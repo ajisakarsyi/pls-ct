@@ -1,109 +1,73 @@
 [
   {
-    "id": "a6ab47ba-5b4b-4840-ae36-1bd16b46bfb0",
+    "id": "db901220-abd6-4bd4-8f38-eadadf91247d",
     "type": "mcq",
-    "topic": "abstraksi",
-    "difficulty": "sedang",
-    "week_id": "2026-W14",
-    "status": "approved",
-    "created_at": "2026-04-03T04:34:19.906971+00:00",
-    "question": "Apa yang dimaksud dengan abstraksi dalam konteks pemrograman dan berpikir sehari-hari?",
-    "options": {
-      "A": "Proses menyederhanakan dengan fokus pada inti penting dan mengabaikan detail yang tidak diperlukan.",
-      "B": "Proses menambahkan detail-detail kecil untuk memperjelas informasi.",
-      "C": "Metode pengolahan data yang mengutamakan kecepatan lebih dari ketepatan.",
-      "D": "Cara memahami informasi dengan cara menganalisis semua aspek secara mendalam."
-    },
-    "correct_answer": "A",
-    "explanation": "Jawaban A tepat karena menggambarkan definisi abstraksi, yaitu mengeksplorasi inti atau bagian penting sambil mengabaikan detail yang kurang relevan, baik dalam konteks pemrograman maupun berpikir sehari-hari.",
-    "approved_at": "2026-04-03T04:34:51.508762+00:00",
-    "admin_note": ""
-  },
-  {
-    "id": "0a04d809-cacb-40b8-aebd-ac75427c2473",
-    "type": "mcq",
-    "topic": "abstraksi",
+    "topic": "Pendahuluan",
     "difficulty": "sulit",
-    "week_id": "2026-W14",
-    "status": "approved",
-    "created_at": "2026-04-03T04:34:22.456338+00:00",
-    "question": "Dalam konteks pemrograman, mengapa penggunaan fungsi dapat dianggap sebagai bentuk abstraksi?",
+    "week_id": "1",
+    "status": "pending",
+    "created_at": "2026-04-03T17:27:47.983104+00:00",
+    "question": "Manakah dari pernyataan berikut yang paling tepat menggambarkan tujuan dari Computational Thinking dalam konteks pemecahan masalah?",
     "options": {
-      "A": "Karena fungsi menyederhanakan proses dengan menyembunyikan detail implementasi yang tidak perlu.",
-      "B": "Karena fungsi selalu menentukan langkah-langkah yang harus diikuti secara terperinci.",
-      "C": "Karena semua fungsi memiliki nama yang jelas dan tidak memerlukan parameter.",
-      "D": "Karena fungsi tidak dapat digunakan kembali dalam kode."
+      "A": "Menggunakan pendekatan sistematis untuk memahami dan menyelesaikan masalah kompleks dengan memecahnya menjadi bagian-bagian yang lebih kecil.",
+      "B": "Mengandalkan algoritma sederhana untuk menyelesaikan masalah sehari-hari tanpa mempertimbangkan kompleksitasnya.",
+      "C": "Fokus pada kemampuan pengkodean untuk mengeksekusi solusi tanpa analisis mendalam.",
+      "D": "Menerapkan teknologi terkini dalam menyelesaikan masalah tanpa mempertimbangkan metode tradisional."
     },
     "correct_answer": "A",
-    "explanation": "Jawaban A benar karena fungsi membantu programmer untuk fokus pada hasil yang ingin dicapai tanpa harus memahami setiap langkah detail dari prosesnya. Ini mencerminkan prinsip abstraksi dengan menyederhanakan pemrosesan informasi.",
-    "approved_at": "2026-04-03T04:34:51.838492+00:00",
-    "admin_note": ""
+    "explanation": "Jawaban A benar karena Computational Thinking melibatkan pemecahan masalah secara sistematis, di mana masalah besar dibagi menjadi komponen yang lebih kecil untuk mendapatkan solusi yang efisien. Pendekatan ini sangat penting untuk memahami masalah kompleks secara mendalam."
   },
   {
-    "id": "754899f7-2d9c-4459-a719-f0bbb43348f3",
+    "id": "200235c3-4b40-45b4-a8f9-25c5a2dd0140",
     "type": "mcq",
-    "topic": "abstraksi",
+    "topic": "Pendahuluan",
     "difficulty": "sulit",
-    "week_id": "2026-W14",
-    "status": "approved",
-    "created_at": "2026-04-03T04:34:24.611569+00:00",
-    "question": "Mengapa proses abstraksi sangat penting dalam pemrograman dan pemecahan masalah?",
+    "week_id": "1",
+    "status": "pending",
+    "created_at": "2026-04-03T17:27:50.095537+00:00",
+    "question": "Dalam konteks Computational Thinking, manakah dari berikut ini yang paling tepat menggambarkan proses dekomposisi dalam memecahkan masalah?",
     "options": {
-      "A": "Karena memungkinkan fokus pada konsep utama tanpa terganggu detail yang kompleks.",
-      "B": "Karena menyederhanakan semua detail menjadi satu bentuk tunggal.",
-      "C": "Karena membantu mengurangi jumlah baris kode yang ditulis.",
-      "D": "Karena dapat menghilangkan semua masalah yang ada."
+      "A": "Membagi masalah besar menjadi bagian yang lebih kecil dan lebih mudah dikelola",
+      "B": "Menggabungkan data dari berbagai sumber untuk menemukan solusi",
+      "C": "Merepresentasikan masalah dalam bentuk diagram alir",
+      "D": "Mengidentifikasi pola dalam data untuk membuat prediksi"
     },
     "correct_answer": "A",
-    "explanation": "Jawaban ini benar karena abstraksi memungkinkan programmer untuk memusatkan perhatian pada gagasan atau logika utama dari masalah yang dihadapi, sehingga mengurangi kompleksitas dan meningkatkan efisiensi pemecahan masalah.",
-    "approved_at": "2026-04-03T04:34:52.044244+00:00",
-    "admin_note": ""
+    "explanation": "Dekomposisi adalah langkah awal dalam Computational Thinking yang bertujuan untuk memecah masalah kompleks menjadi bagian yang lebih sederhana. Dengan cara ini, pemecahan masalah dapat dilakukan secara lebih terstruktur dan efektif."
   },
   {
-    "id": "815ef5b9-34c4-481e-91e8-c89129eeb836",
-    "type": "multi",
-    "topic": "abstraksi",
-    "difficulty": "mudah",
-    "week_id": "2026-W14",
-    "status": "approved",
-    "created_at": "2026-04-03T04:34:26.938975+00:00",
-    "question": "Apa saja yang termasuk contoh penggunaan abstraksi dalam kehidupan sehari-hari? Pilih SEMUA jawaban yang benar.",
+    "id": "727c7f1d-0e1c-431a-8bbd-b9051ea7d3f8",
+    "type": "mcq",
+    "topic": "Pendahuluan",
+    "difficulty": "sulit",
+    "week_id": "1",
+    "status": "pending",
+    "created_at": "2026-04-03T17:27:52.731048+00:00",
+    "question": "Apa yang menjadi inti dari pendekatan Computational Thinking dalam menyelesaikan masalah kompleks di berbagai disiplin ilmu?",
     "options": {
-      "A": "Peta yang menunjukkan hanya jalan dan lokasi penting.",
-      "B": "Menjelaskan secara rinci setiap elemen dalam suatu objek.",
-      "C": "Menggunakan fungsi dalam pemrograman tanpa mengetahui detail implementasinya.",
-      "D": "Membaca novel tanpa memahami tema dan karakter utama.",
-      "E": "Membuat rangkuman dari suatu artikel."
+      "A": "Menyusun solusi berupa algoritma yang dapat dieksekusi oleh mesin.",
+      "B": "Menerapkan pemrograman komputer untuk setiap masalah.",
+      "C": "Menghafal langkah-langkah penyelesaian masalah dari buku teks.",
+      "D": "Fokus pada penggunaan perangkat lunak tertentu untuk memecahkan masalah."
     },
-    "correct_answers": [
-      "A",
-      "C",
-      "E"
-    ],
-    "correct_answer": [
-      "A",
-      "C",
-      "E"
-    ],
-    "explanation": "Opsi A, C, dan E benar karena semua contoh tersebut menunjukkan penyederhanaan dengan fokus pada inti penting. Opsi B salah karena menjelaskan detail, sedangkan opsi D tidak menunjukkan abstraksi yang tepat karena membaca novel dengan fokus pada detail tidak mengutamakan inti cerita.",
-    "approved_at": "2026-04-03T04:34:52.870181+00:00",
-    "admin_note": ""
+    "correct_answer": "A",
+    "explanation": "Jawaban A benar karena Computational Thinking menekankan pada proses pemecahan masalah dengan mendesain algoritma yang terstruktur dan logis, yang dapat diterapkan di berbagai bidang. Sedangkan pilihan lain tidak mencerminkan inti dari pendekatan ini."
   },
   {
-    "id": "91fdb8fe-f0f7-48f6-8ab4-fc24c9a9065a",
+    "id": "9b0e9fa1-843a-497f-b15c-582ef9f77984",
     "type": "multi",
-    "topic": "abstraksi",
+    "topic": "Pendahuluan",
     "difficulty": "sedang",
-    "week_id": "2026-W14",
-    "status": "approved",
-    "created_at": "2026-04-03T04:34:30.928568+00:00",
-    "question": "Apa saja manfaat dari penggunaan abstraksi dalam berbagai bidang? Pilih SEMUA jawaban yang benar.",
+    "week_id": "1",
+    "status": "pending",
+    "created_at": "2026-04-03T17:27:55.875126+00:00",
+    "question": "Apa saja yang merupakan aspek penting dari Computational Thinking? Pilih SEMUA jawaban yang benar.",
     "options": {
-      "A": "Abstraksi memungkinkan kita untuk fokus pada gagasan utama.",
-      "B": "Abstraksi menampilkan semua detail secara rinci.",
-      "C": "Abstraksi membantu menyederhanakan informasi kompleks.",
-      "D": "Abstraksi hanya digunakan dalam pemrograman.",
-      "E": "Abstraksi membuat kita lebih mudah memahami konsep yang rumit."
+      "A": "Kemampuan untuk memecahkan masalah dengan sistematis",
+      "B": "Kemampuan untuk menghafal berbagai rumus matematis",
+      "C": "Penggunaan algoritma untuk menyelesaikan masalah",
+      "D": "Penguasaan bahasa pemrograman tertentu",
+      "E": "Kemampuan untuk menyusun dan menganalisis data"
     },
     "correct_answers": [
       "A",
@@ -115,102 +79,120 @@
       "C",
       "E"
     ],
-    "explanation": "Opsi A, C, dan E menjelaskan manfaat dari abstraksi dengan tepat, yaitu membantu fokus pada inti penting, menyederhanakan informasi kompleks, dan memudahkan pemahaman konsep yang rumit. Opsi B salah karena abstraksi justru mengabaikan detail yang tidak diperlukan. Opsi D salah karena abstraksi digunakan di berbagai bidang, bukan hanya dalam pemrograman.",
-    "approved_at": "2026-04-03T04:34:53.116445+00:00",
-    "admin_note": ""
+    "explanation": "Opsi A, C, dan E adalah benar karena Computational Thinking mencakup kemampuan untuk memecahkan masalah secara sistematis, menggunakan algoritma, dan menganalisis data. Sementara itu, opsi B dan D tidak sepenuhnya relevan karena tidak semua aspek Computational Thinking bergantung pada penghafalan rumus atau penguasaan bahasa pemrograman."
   },
   {
-    "id": "0455273b-030b-4d28-ab42-52f8aa0fc76e",
+    "id": "fe6452e0-3c65-445a-8db9-7c2f2d042626",
     "type": "multi",
-    "topic": "abstraksi",
+    "topic": "Pendahuluan",
     "difficulty": "mudah",
-    "week_id": "2026-W14",
-    "status": "approved",
-    "created_at": "2026-04-03T04:34:34.900677+00:00",
-    "question": "Apa saja yang merupakan contoh dari proses abstraksi? Pilih SEMUA jawaban yang benar.",
+    "week_id": "1",
+    "status": "pending",
+    "created_at": "2026-04-03T17:27:59.022425+00:00",
+    "question": "Apa saja tujuan dari penerapan computational thinking dalam pemecahan masalah? Pilih SEMUA jawaban yang benar.",
     "options": {
-      "A": "Peta yang menunjukkan lokasi penting seperti jalan dan gedung.",
-      "B": "Detail lengkap dari sebuah sistem operasi komputer.",
-      "C": "Penggunaan fungsi dalam pemrograman tanpa mengetahui implementasi dalamnya.",
-      "D": "Sebuah novel yang menguraikan setiap aspek kehidupan karakter secara mendetail.",
-      "E": "Spesifikasi teknis dari sebuah perangkat keras."
+      "A": "Meningkatkan kemampuan analisis dan logika.",
+      "B": "Mengurangi kolaborasi dalam tim.",
+      "C": "Mempermudah proses penyelesaian masalah kompleks.",
+      "D": "Mendorong penggunaan teknologi secara berlebihan.",
+      "E": "Memfasilitasi identifikasi pola dalam data."
     },
     "correct_answers": [
       "A",
-      "C"
+      "C",
+      "E"
     ],
     "correct_answer": [
       "A",
-      "C"
+      "C",
+      "E"
     ],
-    "explanation": "Opsi A dan C merupakan contoh dari proses abstraksi, dimana peta hanya menampilkan informasi penting dan fungsi dalam pemrograman memungkinkan penggunaan tanpa pemahaman detail. Sebaliknya, opsi B, D, dan E mengandung banyak detail yang tidak disederhanakan, sehingga tidak mencerminkan konsep abstraksi.",
-    "approved_at": "2026-04-03T04:34:53.305984+00:00",
-    "admin_note": ""
+    "explanation": "Opsi A, C, dan E benar karena tujuan utama computational thinking adalah untuk meningkatkan kemampuan analisis, mempermudah proses penyelesaian masalah, dan membantu dalam identifikasi pola data. Sementara opsi B dan D salah karena computational thinking justru mendorong kolaborasi dan penggunaan teknologi yang tepat, bukan berlebihan."
   },
   {
-    "id": "f1e4a982-be58-4e1d-bfbe-e66fc365e1ea",
+    "id": "40f201b3-d18b-4c59-b1c0-fd7e82f201d6",
+    "type": "multi",
+    "topic": "Pendahuluan",
+    "difficulty": "sedang",
+    "week_id": "1",
+    "status": "pending",
+    "created_at": "2026-04-03T17:28:02.222560+00:00",
+    "question": "Apa saja tujuan dari penerapan Computational Thinking dalam pendidikan? Pilih SEMUA jawaban yang benar.",
+    "options": {
+      "A": "Mengajarkan cara berpikir logis dan analitis.",
+      "B": "Membantu siswa menjadi programmer profesional.",
+      "C": "Mendorong pemecahan masalah secara kreatif.",
+      "D": "Mengurangi ketergantungan siswa terhadap teknologi.",
+      "E": "Meningkatkan kemampuan kolaborasi dalam tim."
+    },
+    "correct_answers": [
+      "A",
+      "C",
+      "E"
+    ],
+    "correct_answer": [
+      "A",
+      "C",
+      "E"
+    ],
+    "explanation": "Opsi A, C, dan E adalah tujuan dari penerapan Computational Thinking, yang berfokus pada pengembangan kemampuan berpikir logis, kreativitas dalam pemecahan masalah, dan kolaborasi. Opsi B tidak sepenuhnya benar karena Computational Thinking tidak hanya bertujuan untuk menjadikan siswa programmer, dan opsi D malah bertentangan dengan penerapan teknologi dalam pembelajaran."
+  },
+  {
+    "id": "e7f75ca3-d6a4-4cb5-91b0-a01272e6d9e2",
     "type": "truefalse",
-    "topic": "abstraksi",
+    "topic": "Pendahuluan",
     "difficulty": "mudah",
-    "week_id": "2026-W14",
-    "status": "approved",
-    "created_at": "2026-04-03T04:34:36.552561+00:00",
-    "question": "Abstraksi dalam pemrograman memungkinkan kita untuk menggunakan fungsi tanpa perlu mengetahui semua detail cara kerjanya di dalam.",
+    "week_id": "1",
+    "status": "pending",
+    "created_at": "2026-04-03T17:28:03.855116+00:00",
+    "question": "Computational Thinking merupakan pendekatan yang digunakan untuk memecahkan masalah secara sistematis dan logis.",
     "options": {
       "Benar": "Benar",
       "Salah": "Salah"
     },
     "correct_answer": "Benar",
-    "explanation": "Pernyataan ini benar karena sesuai dengan penjelasan tentang abstraksi dalam materi. Abstraksi memungkinkan fokus pada fungsi utama tanpa terpengaruh oleh detail teknis yang rumit.",
-    "approved_at": "2026-04-03T04:34:54.230809+00:00",
-    "admin_note": ""
+    "explanation": "Pernyataan ini benar karena Computational Thinking melibatkan proses berpikir yang logis dan sistematis untuk menyelesaikan berbagai masalah, yang menjadi inti tujuan pembelajaran dalam materi minggu ini."
   },
   {
-    "id": "0b9d7111-6586-488d-8544-1cfcaabbee91",
+    "id": "674588be-f1e2-47c1-98e0-68f47356bd6b",
     "type": "truefalse",
-    "topic": "abstraksi",
-    "difficulty": "sulit",
-    "week_id": "2026-W14",
-    "status": "approved",
-    "created_at": "2026-04-03T04:34:38.327632+00:00",
-    "question": "Abstraksi dalam pemrograman memungkinkan kita menggunakan fungsi tanpa mengetahui rincian detail cara kerja fungsi tersebut.",
+    "topic": "Pendahuluan",
+    "difficulty": "mudah",
+    "week_id": "1",
+    "status": "pending",
+    "created_at": "2026-04-03T17:28:06.368114+00:00",
+    "question": "Computational Thinking adalah proses pemecahan masalah yang melibatkan cara berpikir berbasis algoritma dan pemrograman komputer.",
     "options": {
       "Benar": "Benar",
       "Salah": "Salah"
     },
     "correct_answer": "Benar",
-    "explanation": "Pernyataan ini benar karena sesuai dengan pengertian abstraksi yang diuraikan. Dalam konteks pemrograman, abstraksi menyederhanakan cara kita berinteraksi dengan kode, fokus pada fungsi utamanya tanpa terjebak dalam detail teknis yang kompleks.",
-    "approved_at": "2026-04-03T04:34:54.437424+00:00",
-    "admin_note": ""
+    "explanation": "Pernyataan ini benar karena Computational Thinking mencakup cara berpikir yang sistematis dalam memecahkan masalah, yang sering kali melibatkan penggunaan algoritma dan konsep-konsep pemrograman untuk menemukan solusi yang efisien."
   },
   {
-    "id": "afc77042-5fba-4b41-89ac-263ee7520b3a",
+    "id": "c76f9d67-bf0d-4685-8b44-fd2249a20f45",
     "type": "open",
-    "topic": "abstraksi",
+    "topic": "Pendahuluan",
     "difficulty": "mudah",
-    "week_id": "2026-W14",
-    "status": "approved",
-    "created_at": "2026-04-03T04:34:40.948127+00:00",
-    "question": "Anda diminta untuk merancang sebuah peta sederhana untuk sebuah festival musik yang diadakan di taman kota. Dalam peta tersebut, Anda hanya perlu mencantumkan lokasi panggung, area makan, dan toilet. Bagaimana Anda dapat menerapkan konsep abstraksi dalam pembuatan peta tersebut, dan mengapa penting untuk mengabaikan detail-detail yang tidak relevan?",
+    "week_id": "1",
+    "status": "pending",
+    "created_at": "2026-04-03T17:28:10.171542+00:00",
+    "question": "Seorang guru ingin mengajarkan konsep pengelompokan data kepada murid-muridnya menggunakan metode Computational Thinking. Ia memutuskan untuk menggunakan contoh buah-buahan dan meminta siswa untuk mengelompokkan buah-buahan berdasarkan warna dan rasa. Bagaimana langkah-langkah Computational Thinking yang dapat dilakukan oleh siswa dalam proses pengelompokan ini?",
     "options": null,
-    "correct_answer": "Dalam merancang peta festival musik, penerapan konsep abstraksi dapat dilakukan dengan hanya menampilkan elemen-elemen kunci seperti lokasi panggung, area makan, dan toilet. Detail-detail lain seperti spesifikasi tanaman, jenis bangunan, atau jalan kecil tidak perlu dicantumkan, karena dapat mengganggu fokus pengunjung. Dengan demikian, peta yang dihasilkan lebih mudah dipahami dan digunakan oleh pengunjung festival.",
-    "explanation": "Jawaban yang benar harus mencakup penjelasan tentang pemilihan elemen penting yang ditampilkan pada peta dan pengabaian detail yang tidak relevan. Mahasiswa juga harus menjelaskan pentingnya fokus pada inti informasi untuk kemudahan penggunaan peta oleh pengunjung.",
-    "approved_at": "2026-04-03T04:34:54.926425+00:00",
-    "admin_note": ""
+    "correct_answer": "Siswa dapat mengikuti langkah-langkah berikut: 1) Memahami masalah dengan mengenali berbagai jenis buah-buahan yang tersedia; 2) Menganalisis kriteria pengelompokan, yaitu berdasarkan warna dan rasa; 3) Mengorganisasi data dengan mencatat setiap jenis buah sesuai kriteria; 4) Mengimplementasikan pengelompokan dengan membuat tabel yang jelas menunjukkan kelompok buah; 5) Mengevaluasi hasil pengelompokan untuk memastikan bahwa semua buah terkelompok dengan tepat.",
+    "explanation": "Jawaban yang benar harus mencakup langkah-langkah yang sesuai dengan proses Computational Thinking, yaitu memahami masalah, menganalisis, mengorganisasi data, mengimplementasikan, dan mengevaluasi. Siswa harus menunjukkan pemahaman tentang cara mengelompokkan data secara logis dan terstruktur."
   },
   {
-    "id": "1ae74f5b-32f0-448d-a167-6ad2e1aa2d83",
+    "id": "cd6a2f34-6e85-4646-a8a7-c237b1608350",
     "type": "open",
-    "topic": "abstraksi",
+    "topic": "Pendahuluan",
     "difficulty": "sedang",
-    "week_id": "2026-W14",
-    "status": "approved",
-    "created_at": "2026-04-03T04:34:43.474070+00:00",
-    "question": "Anda sedang merancang aplikasi peta untuk memudahkan pengguna menemukan lokasi penting di kota. Bagaimana Anda dapat menggunakan konsep abstraksi dalam desain aplikasi tersebut agar pengguna tidak merasa kewalahan dengan informasi yang tidak penting? Sebutkan beberapa fitur yang dapat diterapkan untuk mencapai tujuan ini.",
+    "week_id": "1",
+    "status": "pending",
+    "created_at": "2026-04-03T17:28:12.813179+00:00",
+    "question": "Anda sedang menghadapi masalah dalam mengatur jadwal kegiatan harian di kampus. Anda memiliki beberapa kelas, tugas yang harus diselesaikan, dan kegiatan ekstrakurikuler yang ingin diikuti. Bagaimana Anda akan menerapkan konsep Computational Thinking untuk menyelesaikan masalah tersebut?",
     "options": null,
-    "correct_answer": "Abstraksi dalam desain aplikasi peta dapat dicapai dengan menampilkan hanya informasi penting seperti jalan utama, lokasi landmark, dan titik akses transportasi tanpa memperlihatkan detail kecil seperti nama jalan yang kurang dikenal atau bangunan yang tidak relevan. Fitur-fitur yang bisa diterapkan termasuk filter untuk menunjukkan jenis lokasi tertentu (misal, restoran, rumah sakit), zoom yang otomatis menyoroti lokasi penting, dan antarmuka yang sederhana dengan pilihan navigasi yang jelas.",
-    "explanation": "Jawaban yang benar harus mencakup penggunaan abstraksi dengan menonjolkan fitur-fitur utama yang mendukung kemudahan pengguna dalam memahami informasi penting. Selain itu, mahasiswa perlu menjelaskan alasan pemilihan fitur tersebut dalam konteks fokus pada inti data dan mengurangi kebingungan bagi pengguna.",
-    "approved_at": "2026-04-03T04:34:55.233251+00:00",
-    "admin_note": ""
+    "correct_answer": "Langkah pertama adalah mendefinisikan masalah dengan jelas: saya ingin mengatur waktu untuk semua kegiatan tanpa bentrokan. Selanjutnya, saya akan memecah masalah ini menjadi sub-masalah, seperti mengatur jadwal kelas, menyisihkan waktu untuk tugas dan kegiatan ekstrakurikuler. Kemudian, saya akan mencari pola atau membuat algoritma sederhana untuk menentukan prioritas dan mengalokasikan waktu sesuai kebutuhan. Terakhir, saya akan mengevaluasi dan menyesuaikan rencana saya berdasarkan umpan balik yang saya terima.",
+    "explanation": "Jawaban yang benar harus mencakup langkah-langkah berpikir komputasional seperti mendefinisikan masalah, memecah masalah menjadi bagian-bagian yang lebih kecil, mencari pola atau algoritma, serta evaluasi dan penyesuaian. Mahasiswa harus menunjukkan pemahaman tentang penerapan metode tersebut dalam konteks nyata."
   }
 ]

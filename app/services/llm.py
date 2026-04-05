@@ -171,14 +171,23 @@ def _chat_ollama(prompt: str) -> str:
 
 def get_embedding(text: str) -> List[float]:
     """Always local Ollama — never calls remote embedding API."""
-    resp = requests.post(
-        f"{_settings.ollama_base_url}/api/embeddings",
-        json={"model": _settings.ollama_embed_model, "prompt": text},
-        timeout=60,
-    )
-    resp.raise_for_status()
-    vec = np.array(resp.json()["embedding"], dtype="float32")
-    norm = np.linalg.norm(vec)
-    if norm:
-        vec /= norm
-    return vec.tolist()
+    try:
+        # Check if URL exists to avoid MissingSchema error
+        if not _settings.ollama_base_url:
+            return []
+            
+        resp = requests.post(
+            f"{_settings.ollama_base_url}/api/embeddings",
+            json={"model": _settings.ollama_embed_model, "prompt": text},
+            timeout=10, # Perubahan hanya di timeout
+        )
+        resp.raise_for_status()
+        vec = np.array(resp.json()["embedding"], dtype="float32")
+        norm = np.linalg.norm(vec)
+        if norm:
+            vec /= norm
+        return vec.tolist()
+    except Exception as e:
+        logger.error(f"Embedding error (Ollama offline?): {e}")
+        return []
+

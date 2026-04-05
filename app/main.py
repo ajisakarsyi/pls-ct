@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
+from fastapi.middleware.cors import CORSMiddleware
 from app.api import api_router
 from app.core.config import get_settings
 from app.core.cognitive import VALID_COGNITIVE_TYPES
@@ -30,6 +31,14 @@ def create_app() -> FastAPI:
         version="3.2.0",
         docs_url="/docs",
         redoc_url="/redoc",
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     # ── Static files ──────────────────────────────────────────────────────

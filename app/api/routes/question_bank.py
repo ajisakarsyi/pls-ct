@@ -67,9 +67,9 @@ def generate_questions(req: GenerateRequest):
     """
     if not req.topic_name.strip():
         raise HTTPException(status_code=422, detail="topic_name cannot be empty.")
-    if len(req.topic_text.strip()) < 50:
+    if len(req.topic_text.strip()) < 10:
         raise HTTPException(status_code=422,
-                            detail="topic_text too short — provide a full description (min 50 chars).")
+                            detail="topic_text too short — provide a full description (min 10 chars).")
 
     week_id = req.week_id or get_week_id()
 
@@ -101,6 +101,7 @@ def generate_questions(req: GenerateRequest):
         "topic":      req.topic_name,
         "generated":  added,
         "breakdown":  type_counts,
+        "questions":  questions,
     }
 
 
