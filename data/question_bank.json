@@ -194,5 +194,241 @@
     "options": null,
     "correct_answer": "Langkah pertama adalah mendefinisikan masalah dengan jelas: saya ingin mengatur waktu untuk semua kegiatan tanpa bentrokan. Selanjutnya, saya akan memecah masalah ini menjadi sub-masalah, seperti mengatur jadwal kelas, menyisihkan waktu untuk tugas dan kegiatan ekstrakurikuler. Kemudian, saya akan mencari pola atau membuat algoritma sederhana untuk menentukan prioritas dan mengalokasikan waktu sesuai kebutuhan. Terakhir, saya akan mengevaluasi dan menyesuaikan rencana saya berdasarkan umpan balik yang saya terima.",
     "explanation": "Jawaban yang benar harus mencakup langkah-langkah berpikir komputasional seperti mendefinisikan masalah, memecah masalah menjadi bagian-bagian yang lebih kecil, mencari pola atau algoritma, serta evaluasi dan penyesuaian. Mahasiswa harus menunjukkan pemahaman tentang penerapan metode tersebut dalam konteks nyata."
+  },
+  {
+    "id": "02684a33-b0fc-4213-b2e7-1f290fbe963e",
+    "type": "mcq",
+    "topic": "Dasar Pemikiran Komputasional",
+    "difficulty": "sulit",
+    "week_id": "2",
+    "status": "pending",
+    "created_at": "2026-04-05T13:22:52.106616+00:00",
+    "question": "Sebuah perusahaan teknologi ingin mengembangkan aplikasi baru untuk manajemen proyek. Langkah pertama yang harus mereka lakukan dalam proses pemecahan masalah adalah?",
+    "options": {
+      "A": "Mengidentifikasi kebutuhan pengguna dan mengelompokkan fitur yang penting.",
+      "B": "Mengembangkan kode untuk aplikasi sebelum merumuskan konsepnya.",
+      "C": "Menghitung biaya dan waktu yang dibutuhkan untuk pengembangan aplikasi.",
+      "D": "Melakukan riset pasar tanpa melihat ke dalam organisasi."
+    },
+    "correct_answer": "A",
+    "explanation": "Jawaban A benar karena mengidentifikasi kebutuhan pengguna adalah langkah awal yang krusial dalam pemecahan masalah. Ini membantu dalam menentukan fitur yang relevan dan penting sebelum melanjutkan ke tahap berikutnya.",
+    "weight_abstraction": 0.3,
+    "weight_pattern": 0.2,
+    "weight_algorithm": 0.3,
+    "weight_decomposition": 0.2
+  },
+  {
+    "id": "c0351689-687a-462d-b7cd-13c9b64bec55",
+    "type": "mcq",
+    "topic": "Dasar Pemikiran Komputasional",
+    "difficulty": "sedang",
+    "week_id": "2",
+    "status": "pending",
+    "created_at": "2026-04-05T13:22:55.590635+00:00",
+    "question": "Dalam proses memecahkan masalah kompleks, seorang analis menemukan bahwa mengelompokkan data berdasarkan kesamaan sifat dapat membantu mengurangi kompleksitas. Apa yang paling tepat mencerminkan pendekatan ini?",
+    "options": {
+      "A": "Mengidentifikasi pola dalam data untuk membuat kategori.",
+      "B": "Menguraikan masalah menjadi bagian yang lebih kecil.",
+      "C": "Menyusun langkah-langkah dalam bentuk algoritma.",
+      "D": "Mengabaikan informasi yang tidak relevan."
+    },
+    "correct_answer": "A",
+    "explanation": "Jawaban A benar karena mengidentifikasi pola dalam data membantu membuat kategori, yang merupakan langkah awal dalam mengurangi kompleksitas suatu masalah. Dengan mengelompokkan data, analis dapat lebih mudah menerapkan metode yang relevan pada setiap kategori.",
+    "weight_abstraction": 0.3,
+    "weight_pattern": 0.4,
+    "weight_algorithm": 0.2,
+    "weight_decomposition": 0.1
+  },
+  {
+    "id": "f2a37a77-872f-45c4-8847-2c0c49bb10a0",
+    "type": "mcq",
+    "topic": "Dasar Pemikiran Komputasional",
+    "difficulty": "sedang",
+    "week_id": "2",
+    "status": "pending",
+    "created_at": "2026-04-05T13:22:59.037164+00:00",
+    "question": "Dalam menyelesaikan suatu masalah kompleks, langkah pertama yang harus dilakukan adalah:",
+    "options": {
+      "A": "Mengidentifikasi dan merinci bagian-bagian yang relevan dari masalah tersebut.",
+      "B": "Membuat algoritma untuk menyelesaikan masalah secara langsung.",
+      "C": "Mencari pola dari masalah yang telah terjadi sebelumnya.",
+      "D": "Menyimpulkan solusi tanpa analisis mendalam."
+    },
+    "correct_answer": "A",
+    "explanation": "Jawaban A benar karena langkah awal dalam memecahkan masalah kompleks adalah mengidentifikasi dan merinci bagian-bagian penting dari masalah untuk memahami konteks dan informasi yang relevan. Ini merupakan fondasi penting dalam proses penyelesaian masalah.",
+    "weight_abstraction": 0.3,
+    "weight_pattern": 0.2,
+    "weight_algorithm": 0.3,
+    "weight_decomposition": 0.2
+  },
+  {
+    "id": "93bdaad1-6b55-4aa1-819c-1d4624643b44",
+    "type": "multi",
+    "topic": "Dasar Pemikiran Komputasional",
+    "difficulty": "mudah",
+    "week_id": "2",
+    "status": "pending",
+    "created_at": "2026-04-05T13:23:01.976264+00:00",
+    "question": "Dalam memecahkan masalah kompleks, langkah-langkah apa yang diperlukan untuk menerapkan fondasi logika? Pilih SEMUA jawaban yang benar.",
+    "options": {
+      "A": "Mengidentifikasi pola dalam data.",
+      "B": "Mengabaikan detail yang tidak relevan.",
+      "C": "Menyusun langkah-langkah atau instruksi yang jelas.",
+      "D": "Mencatat semua informasi tanpa mengelompokkannya.",
+      "E": "Membagi masalah menjadi bagian-bagian yang lebih kecil."
+    },
+    "correct_answers": [
+      "A",
+      "C",
+      "E"
+    ],
+    "correct_answer": [
+      "A",
+      "C",
+      "E"
+    ],
+    "explanation": "Opsi A, C, dan E benar karena mengidentifikasi pola, menyusun algoritma, dan memecah masalah menjadi bagian lebih kecil adalah metode penting dalam logika pemecahan masalah. Sebaliknya, opsi B dan D tidak mendukung proses logis tersebut dengan tepat.",
+    "weight_abstraction": 0.25,
+    "weight_pattern": 0.25,
+    "weight_algorithm": 0.25,
+    "weight_decomposition": 0.25
+  },
+  {
+    "id": "bf820619-e884-47f6-898e-61ab5269eb8a",
+    "type": "multi",
+    "topic": "Dasar Pemikiran Komputasional",
+    "difficulty": "sulit",
+    "week_id": "2",
+    "status": "pending",
+    "created_at": "2026-04-05T13:23:06.046972+00:00",
+    "question": "Dalam konteks pemecahan masalah kompleks, manakah dari berikut ini yang mencerminkan fondasi logika yang baik? Pilih SEMUA jawaban yang benar.",
+    "options": {
+      "A": "Mengidentifikasi pola dari data yang ada untuk menemukan solusi.",
+      "B": "Mengabaikan langkah-langkah yang jelas dalam menyusun algoritma.",
+      "C": "Membagi masalah besar menjadi bagian-bagian yang lebih kecil dan lebih terkelola.",
+      "D": "Menggunakan pendekatan acak tanpa dasar logis.",
+      "E": "Mendefinisikan masalah secara jelas sebelum mencari solusi."
+    },
+    "correct_answers": [
+      "A",
+      "C",
+      "E"
+    ],
+    "correct_answer": [
+      "A",
+      "C",
+      "E"
+    ],
+    "explanation": "Opsi A, C, dan E mencerminkan pendekatan logis dalam memecahkan masalah kompleks; A menunjukkan pola pengenalan, C menunjukkan dekomposisi, dan E menunjukkan pentingnya definisi masalah. Opsi B dan D tidak mencerminkan logika yang baik karena mengabaikan langkah-langkah penting dalam pengembangan solusi yang efektif.",
+    "weight_abstraction": 0.25,
+    "weight_pattern": 0.25,
+    "weight_algorithm": 0.25,
+    "weight_decomposition": 0.25
+  },
+  {
+    "id": "94f4905b-665b-4114-b962-22ddea04f117",
+    "type": "multi",
+    "topic": "Dasar Pemikiran Komputasional",
+    "difficulty": "mudah",
+    "week_id": "2",
+    "status": "pending",
+    "created_at": "2026-04-05T13:23:10.360554+00:00",
+    "question": "Dalam konteks logika dan penyelesaian masalah, manakah dari pernyataan berikut yang merupakan fondasi penting dalam Computational Thinking? Pilih SEMUA jawaban yang benar.",
+    "options": {
+      "A": "Menggunakan pola untuk mengenali solusi yang dapat diterapkan pada masalah serupa.",
+      "B": "Hanya fokus pada detail terkecil dari masalah tanpa melihat gambaran besar.",
+      "C": "Menguraikan masalah kompleks menjadi bagian-bagian yang lebih kecil dan lebih mudah dipecahkan.",
+      "D": "Mengabaikan langkah-langkah sistematis dalam menemukan solusi.",
+      "E": "Menciptakan algoritma atau langkah-langkah untuk menyelesaikan masalah."
+    },
+    "correct_answers": [
+      "A",
+      "C",
+      "E"
+    ],
+    "correct_answer": [
+      "A",
+      "C",
+      "E"
+    ],
+    "explanation": "Opsi A, C, dan E adalah benar karena menggunakan pola, menguraikan masalah, dan menciptakan algoritma merupakan bagian penting dari Computational Thinking. Opsi B dan D salah karena tidak mencerminkan pendekatan yang efektif dalam menyelesaikan masalah.",
+    "weight_abstraction": 0.25,
+    "weight_pattern": 0.25,
+    "weight_algorithm": 0.25,
+    "weight_decomposition": 0.25
+  },
+  {
+    "id": "bdfb6656-92c9-45f4-8e62-034ae69457be",
+    "type": "truefalse",
+    "topic": "Dasar Pemikiran Komputasional",
+    "difficulty": "sedang",
+    "week_id": "2",
+    "status": "pending",
+    "created_at": "2026-04-05T13:23:12.858535+00:00",
+    "question": "Logika adalah dasar fundamental dalam menciptakan algoritma untuk memecahkan masalah kompleks.",
+    "options": {
+      "Benar": "Benar",
+      "Salah": "Salah"
+    },
+    "correct_answer": "Benar",
+    "explanation": "Pernyataan ini benar karena logika berfungsi sebagai alat untuk menyusun langkah-langkah yang sistematis dalam bentuk algoritma, yang sangat diperlukan dalam proses pemecahan masalah. Tanpa pemahaman logika, algoritma yang dihasilkan dapat menjadi tidak efisien atau tidak efektif.",
+    "weight_abstraction": 0.4,
+    "weight_pattern": 0.2,
+    "weight_algorithm": 0.2,
+    "weight_decomposition": 0.2
+  },
+  {
+    "id": "04d35484-ecfa-4b27-88a7-45acd1e17982",
+    "type": "truefalse",
+    "topic": "Dasar Pemikiran Komputasional",
+    "difficulty": "mudah",
+    "week_id": "2",
+    "status": "pending",
+    "created_at": "2026-04-05T13:23:14.831292+00:00",
+    "question": "Logika merupakan fondasi penting dalam memecahkan masalah kompleks dalam Computational Thinking.",
+    "options": {
+      "Benar": "Benar",
+      "Salah": "Salah"
+    },
+    "correct_answer": "Benar",
+    "explanation": "Pernyataan ini benar karena logika memberikan cara sistematis untuk menganalisis dan memahami struktur masalah. Dengan menggunakan logika, kita dapat mengembangkan solusi yang lebih efektif dan efisien untuk berbagai masalah yang kompleks.",
+    "weight_abstraction": 0.4,
+    "weight_pattern": 0.2,
+    "weight_algorithm": 0.2,
+    "weight_decomposition": 0.2
+  },
+  {
+    "id": "b074f737-6ef0-4635-a0c4-505fc81dd5f3",
+    "type": "open",
+    "topic": "Dasar Pemikiran Komputasional",
+    "difficulty": "sulit",
+    "week_id": "2",
+    "status": "pending",
+    "created_at": "2026-04-05T13:23:18.513908+00:00",
+    "question": "Sebuah perusahaan teknologi ingin mengembangkan aplikasi baru untuk memprediksi tren pasar berdasarkan data penjualan tahun sebelumnya. Dalam merancang solusi ini, tim Anda perlu memecah masalah menjadi bagian-bagian yang lebih kecil dan menggunakan pola yang ada untuk membangun algoritma. Bagaimana Anda akan menerapkan konsep-konsep tersebut dalam proses pembuatan aplikasi ini?",
+    "options": null,
+    "correct_answer": "Untuk memecahkan masalah ini, langkah pertama adalah melakukan dekomposisi terhadap data penjualan yang ada. Identifikasi elemen-elemen penting seperti produk, periode waktu, dan lokasi penjualan. Selanjutnya, cari pola-pola dalam data tersebut, seperti peningkatan penjualan musiman atau preferensi produk tertentu. Berdasarkan pola yang ditemukan, buat algoritma untuk memprediksi tren di masa depan dengan mempertimbangkan variabel-variabel yang mempengaruhi penjualan. Algoritma tersebut harus diuji dan disesuaikan untuk akurasi yang lebih tinggi.",
+    "explanation": "Jawaban yang benar harus menunjukkan kemampuan mahasiswa untuk mendekomporsi data menjadi elemen-elemen kunci, mengenali pola yang relevan dari data tersebut, dan kemudian membangun algoritma yang dapat memberikan prediksi berdasarkan temuan. Identifikasi setiap langkah secara jelas dan terukur dalam proses pengembangan aplikasi.",
+    "weight_abstraction": 0.1,
+    "weight_pattern": 0.3,
+    "weight_algorithm": 0.3,
+    "weight_decomposition": 0.3
+  },
+  {
+    "id": "12966b6a-0b83-47f9-9eff-fba87e01002b",
+    "type": "open",
+    "topic": "Dasar Pemikiran Komputasional",
+    "difficulty": "mudah",
+    "week_id": "2",
+    "status": "pending",
+    "created_at": "2026-04-05T13:23:21.711233+00:00",
+    "question": "Seorang manajer proyek di sebuah perusahaan teknologi menghadapi masalah keterlambatan dalam pengembangan perangkat lunak. Ia ingin menyusun rencana untuk menentukan langkah-langkah apa yang perlu diambil agar proyek kembali ke jalur yang benar. Bagaimana Anda akan menggunakan pendekatan logika untuk membantu manajer merumuskan solusi yang efektif?",
+    "options": null,
+    "correct_answer": "Langkah pertama adalah mendekomposisi masalah menjadi beberapa faktor yang dapat mempengaruhi keterlambatan, seperti sumber daya manusia, waktu, dan batasan teknis. Setelah itu, identifikasi pola yang mungkin muncul dari faktor-faktor ini untuk menemukan akar masalah. Kemudian, buat algoritma atau langkah-langkah spesifik, seperti menjadwalkan ulang tugas, menambah anggota tim, atau mengurangi ruang lingkup proyek untuk mencapai penyelesaian tepat waktu.",
+    "explanation": "Jawaban yang benar harus mencakup langkah-langkah dekomposisi masalah serta identifikasi pola yang relevan untuk memecahkan masalah saat ini. Juga, mahasiswa harus menyertakan rencana algoritmik yang konkret untuk mencapai penyelesaian proyek dengan efektif.",
+    "weight_abstraction": 0.1,
+    "weight_pattern": 0.3,
+    "weight_algorithm": 0.3,
+    "weight_decomposition": 0.3
   }
 ]

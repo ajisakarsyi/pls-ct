@@ -56,12 +56,24 @@ Tingkat kesulitan: {difficulty}
 Bahasa: Indonesia
 Soal harus menguji pemahaman konsep dari materi, bukan hafalan.
 
+Estimasi juga bobot komponen Computational Thinking (CT) variabel di bawah ini (total harus tepat 1.0):
+- abstraction: seberapa besar fokus pada informasi relevan?
+- pattern_recognition: seberapa besar fokus pada pola/kesamaan?
+- algorithms: seberapa besar fokus pada langkah-langkah logis?
+- decomposition: seberapa besar fokus pada pemecahan masalah besar menjadi kecil?
+
 Balas HANYA dengan JSON valid ini, tidak ada teks lain:
 {{
   "question": "teks pertanyaan",
   "options": {{"A": "...", "B": "...", "C": "...", "D": "..."}},
   "correct_answer": "A",
-  "explanation": "penjelasan singkat mengapa jawaban ini benar (2-3 kalimat)"
+  "explanation": "penjelasan singkat mengapa jawaban ini benar (2-3 kalimat)",
+  "ct_framework": {{
+    "abstraction": 0.3,
+    "pattern_recognition": 0.2,
+    "algorithm": 0.3,
+    "decomposition": 0.2
+  }}
 }}"""
 
 _MULTI_PROMPT = """\
@@ -76,12 +88,21 @@ Bahasa: Indonesia
 Sediakan 5 opsi (A-E), dengan 2-3 jawaban yang benar.
 Soal harus jelas bahwa mahasiswa perlu memilih SEMUA jawaban yang benar.
 
+Estimasi juga bobot komponen Computational Thinking (CT) variabel di bawah ini (total harus tepat 1.0):
+- abstraction, pattern_recognition, algorithm, decomposition.
+
 Balas HANYA dengan JSON valid ini, tidak ada teks lain:
 {{
   "question": "teks pertanyaan (tambahkan: 'Pilih SEMUA jawaban yang benar.')",
   "options": {{"A": "...", "B": "...", "C": "...", "D": "...", "E": "..."}},
   "correct_answers": ["A", "C"],
-  "explanation": "penjelasan mengapa opsi-opsi tersebut benar dan yang lain salah (2-3 kalimat)"
+  "explanation": "penjelasan mengapa opsi-opsi tersebut benar dan yang lain salah (2-3 kalimat)",
+  "ct_framework": {{
+    "abstraction": 0.25,
+    "pattern_recognition": 0.25,
+    "algorithm": 0.25,
+    "decomposition": 0.25
+  }}
 }}"""
 
 _TF_PROMPT = """\
@@ -96,11 +117,20 @@ Bahasa: Indonesia
 Pernyataan harus spesifik dan dapat diverifikasi dari materi yang diberikan.
 Jangan buat pernyataan yang ambigu.
 
+Estimasi juga bobot komponen Computational Thinking (CT) variabel di bawah ini (total harus tepat 1.0):
+- abstraction, pattern_recognition, algorithm, decomposition.
+
 Balas HANYA dengan JSON valid ini, tidak ada teks lain:
 {{
   "question": "pernyataan yang harus dinilai Benar atau Salah",
   "correct_answer": "Benar",
-  "explanation": "penjelasan mengapa pernyataan ini benar atau salah berdasarkan materi (2-3 kalimat)"
+  "explanation": "penjelasan mengapa pernyataan ini benar atau salah berdasarkan materi (2-3 kalimat)",
+  "ct_framework": {{
+    "abstraction": 0.4,
+    "pattern_recognition": 0.2,
+    "algorithm": 0.2,
+    "decomposition": 0.2
+  }}
 }}"""
 
 _OPEN_PROMPT = """\
@@ -115,11 +145,20 @@ Bahasa: Indonesia
 Soal harus mendorong mahasiswa menerapkan konsep, bukan sekadar mendefinisikan.
 Jawaban referensi harus jelas dan terukur.
 
+Estimasi juga bobot komponen Computational Thinking (CT) variabel di bawah ini (total harus tepat 1.0):
+- abstraction, pattern_recognition, algorithm, decomposition.
+
 Balas HANYA dengan JSON valid ini, tidak ada teks lain:
 {{
   "question": "skenario + pertanyaan spesifik (2-4 kalimat, diakhiri tanda tanya)",
   "correct_answer": "jawaban referensi lengkap yang dipakai untuk menilai jawaban mahasiswa",
-  "explanation": "poin-poin utama yang harus ada dalam jawaban yang benar (2-3 kalimat)"
+  "explanation": "poin-poin utama yang harus ada dalam jawaban yang benar (2-3 kalimat)",
+  "ct_framework": {{
+    "abstraction": 0.1,
+    "pattern_recognition": 0.3,
+    "algorithm": 0.3,
+    "decomposition": 0.3
+  }}
 }}"""
 
 
@@ -196,12 +235,17 @@ def _gen_mcq(topic_text: str, topic_name: str, difficulty: str, week_id: str) ->
         correct = str(data["correct_answer"]).strip().upper()
         if correct not in opts:
             correct = list(opts.keys())[0]
+        ct = data.get("ct_framework", {})
         q = _base("mcq", topic_name, difficulty, week_id)
         q.update({
             "question":       data["question"].strip(),
             "options":        {k: str(v) for k, v in opts.items()},
             "correct_answer": correct,
             "explanation":    data.get("explanation", "").strip(),
+            "weight_abstraction":         float(ct.get("abstraction", 0.25)),
+            "weight_pattern":             float(ct.get("pattern_recognition", 0.25)),
+            "weight_algorithm":           float(ct.get("algorithm", 0.25)),
+            "weight_decomposition":       float(ct.get("decomposition", 0.25)),
         })
         return q
     return None
@@ -222,6 +266,7 @@ def _gen_multi(topic_text: str, topic_name: str, difficulty: str, week_id: str) 
         corrects = [c for c in corrects if c in opts]
         if not corrects:
             corrects = [list(opts.keys())[0]]
+        ct = data.get("ct_framework", {})
         q = _base("multi", topic_name, difficulty, week_id)
         q.update({
             "question":        data["question"].strip(),
@@ -229,6 +274,10 @@ def _gen_multi(topic_text: str, topic_name: str, difficulty: str, week_id: str) 
             "correct_answers": corrects,   # list, e.g. ["A","C"]
             "correct_answer":  corrects,   # alias for unified handling
             "explanation":     data.get("explanation", "").strip(),
+            "weight_abstraction":         float(ct.get("abstraction", 0.25)),
+            "weight_pattern":             float(ct.get("pattern_recognition", 0.25)),
+            "weight_algorithm":           float(ct.get("algorithm", 0.25)),
+            "weight_decomposition":       float(ct.get("decomposition", 0.25)),
         })
         return q
     return None
@@ -248,12 +297,17 @@ def _gen_truefalse(topic_text: str, topic_name: str, difficulty: str, week_id: s
             answer = "Benar"
         else:
             answer = "Salah"
+        ct = data.get("ct_framework", {})
         q = _base("truefalse", topic_name, difficulty, week_id)
         q.update({
             "question":       data["question"].strip(),
             "options":        {"Benar": "Benar", "Salah": "Salah"},
             "correct_answer": answer,
             "explanation":    data.get("explanation", "").strip(),
+            "weight_abstraction":         float(ct.get("abstraction", 0.25)),
+            "weight_pattern":             float(ct.get("pattern_recognition", 0.25)),
+            "weight_algorithm":           float(ct.get("algorithm", 0.25)),
+            "weight_decomposition":       float(ct.get("decomposition", 0.25)),
         })
         return q
     return None
@@ -267,12 +321,17 @@ def _gen_open(topic_text: str, topic_name: str, difficulty: str, week_id: str) -
             continue
         if not all(k in data for k in ["question", "correct_answer", "explanation"]):
             continue
+        ct = data.get("ct_framework", {})
         q = _base("open", topic_name, difficulty, week_id)
         q.update({
             "question":       data["question"].strip(),
             "options":        None,
             "correct_answer": data["correct_answer"].strip(),
             "explanation":    data.get("explanation", "").strip(),
+            "weight_abstraction":         float(ct.get("abstraction", 0.25)),
+            "weight_pattern":             float(ct.get("pattern_recognition", 0.25)),
+            "weight_algorithm":           float(ct.get("algorithm", 0.25)),
+            "weight_decomposition":       float(ct.get("decomposition", 0.25)),
         })
         return q
     return None
