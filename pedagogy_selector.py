@@ -67,9 +67,9 @@ from rl_metrics import (
 STATE_DIM              = 3          # [mastery, performance, engagement]
 N_ACTIONS              = len(LEARNING_TYPES)
 
-EPSILON_INIT           = 0.20
+EPSILON_INIT           = 0.50   # cold-start: explore half the time initially
 EPSILON_MIN            = 0.05
-EPSILON_DECAY          = 0.995
+EPSILON_DECAY          = 0.97   # faster decay so we exploit sooner
 LEARNING_RATE          = 0.05
 MLR_REFIT_EVERY        = 10
 
@@ -77,7 +77,7 @@ MLR_REFIT_EVERY        = 10
 SEEDING_QUESTIONS      = 10   # force assigned LT for this many questions
 SEEDING_SESSIONS       = SEEDING_QUESTIONS   # legacy alias kept for ollamaapi.py
 
-CONSECUTIVE_TO_PROMOTE = 2
+CONSECUTIVE_TO_PROMOTE = 1      # promote after 1 correct answer on a LT
 DEFAULT_CATEGORY       = "Penggalang"
 
 
@@ -116,7 +116,7 @@ class RLAgent:
 
         # Bandit weights  (N_ACTIONS × STATE_DIM)  — optimistic init breaks ties
         rng     = np.random.default_rng(abs(hash(session_id)) % (2**32))
-        self.W  = rng.uniform(0.001, 0.01, size=(N_ACTIONS, STATE_DIM))
+        self.W  = rng.uniform(0.05, 0.15, size=(N_ACTIONS, STATE_DIM))  # optimistic init
         self.lr = learning_rate
 
         # Exploration
@@ -282,13 +282,14 @@ class RLAgent:
         prev_state = self._global_state()
         prev_best  = self._current_best_lt()
 
-        # MetricsTracker update
+        # MetricsTracker update — pass is_correct so engagement is zeroed on wrong answers
         record = self.tracker.record_attempt(
             learning_type    = lt,
             mastery_code     = mastery_code,
             n_attempt        = n_attempt,
             t_answer_seconds = t_answer_seconds,
             question_idx     = q_idx,
+            is_correct       = is_correct,
         )
 
         # Bandit TD update

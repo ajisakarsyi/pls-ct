@@ -8,22 +8,19 @@ Includes RL-specific fields (category, rl_* response fields).
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
-from app.core.cognitive import DEFAULT_COGNITIVE_TYPE
-
 
 # ── Request models ─────────────────────────────────────────────────────────
 
 class ChatRequest(BaseModel):
-    message:    str = Field(...,                   description="Pertanyaan atau pesan mahasiswa")
-    cognitive:  str = Field(DEFAULT_COGNITIVE_TYPE, description="Kode tipe kognitif, misal '3TGR'. RL akan auto-select jika tidak diisi atau digunakan sebagai seeding hint.")
-    session_id: str = Field("default",             description="Identifikasi sesi")
-    category:   str = Field("Penggalang",          description="Kategori siswa: SiKecil | Siaga | Penggalang | Penegak")
+    message:    str            = Field(...,         description="Pertanyaan atau pesan mahasiswa")
+    cognitive:  Optional[str]  = Field(None,        description="Opsional. Jika tidak diisi, RL Agent memilih LT secara otomatis (cold start).")
+    session_id: str            = Field("default",   description="Identifikasi sesi")
+    category:   str            = Field("Penggalang", description="Kategori siswa: SiKecil | Siaga | Penggalang | Penegak")
 
     model_config = {
         "json_schema_extra": {
             "example": {
                 "message":    "Apa itu algoritma?",
-                "cognitive":  "2TAR",
                 "session_id": "mahasiswa-01",
                 "category":   "Penggalang",
             }
@@ -32,14 +29,14 @@ class ChatRequest(BaseModel):
 
 
 class EvalRequest(BaseModel):
-    answer:           str            = Field(...,                     description="Jawaban mahasiswa")
-    correct_answer:   str            = Field(...,                     description="Jawaban referensi / kunci (penjelasan tutor)")
-    active_question:  str            = Field("",                      description="Pertanyaan spesifik yang sedang dijawab mahasiswa")
-    wrong_count:      int            = Field(0,                       description="Jumlah percobaan salah sejauh ini")
-    cognitive:        str            = Field(DEFAULT_COGNITIVE_TYPE,  description="Kode tipe kognitif, mis. '3TGR'")
-    session_id:       str            = Field("default",               description="Identifikasi sesi")
-    t_answer_seconds: Optional[float]= Field(None,                    description="Waktu menjawab (detik). Jika None, dihitung otomatis.")
-    category:         str            = Field("Penggalang",            description="Kategori siswa")
+    answer:           str            = Field(...,          description="Jawaban mahasiswa")
+    correct_answer:   str            = Field(...,          description="Jawaban referensi / kunci (penjelasan tutor)")
+    active_question:  str            = Field("",           description="Pertanyaan spesifik yang sedang dijawab mahasiswa")
+    wrong_count:      int            = Field(0,            description="Jumlah percobaan salah sejauh ini")
+    cognitive:        Optional[str]  = Field(None,         description="Opsional. Jika None, RL Agent menggunakan LT yang dipilih pada /chat terakhir.")
+    session_id:       str            = Field("default",    description="Identifikasi sesi")
+    t_answer_seconds: Optional[float]= Field(None,         description="Waktu menjawab (detik). Jika None, dihitung otomatis.")
+    category:         str            = Field("Penggalang", description="Kategori siswa")
 
     model_config = {
         "json_schema_extra": {
@@ -48,7 +45,6 @@ class EvalRequest(BaseModel):
                 "correct_answer":   "Penjelasan tutor tentang integral...",
                 "active_question":  "Berapa luas area di bawah f(x) = -x^2 + 4x pada interval [0,4]?",
                 "wrong_count":      0,
-                "cognitive":        "2TAR",
                 "session_id":       "mahasiswa-01",
                 "t_answer_seconds": None,
                 "category":         "Penggalang",

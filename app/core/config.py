@@ -1,10 +1,3 @@
-"""
-app/core/config.py
-──────────────────
-Centralised settings for CSIPBLLM (RAG + RL).
-All values are hardcoded here — no .env file needed.
-"""
-
 import os
 from functools import lru_cache
 from dataclasses import dataclass, field

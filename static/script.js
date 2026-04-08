@@ -34,12 +34,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const answerSection    = document.getElementById("answerSection");
   const historySection   = document.getElementById("historySection");
   const questionInput    = document.getElementById("question");
-  const cognitiveSelect  = document.getElementById("cognitive");
   const downloadTxt      = document.getElementById("downloadTxt");
   const downloadJson     = document.getElementById("downloadJson");
   const followupSection  = document.getElementById("followupSection");
   const followupContainer= document.getElementById("followupContainer");
   const historyButtons   = document.getElementById("historyButtons");
+  const rlBadge          = document.getElementById("rlBadge");
+  const rlLtText         = document.getElementById("rlLtText");
+  const rlPhaseText      = document.getElementById("rlPhaseText");
+  const rlEpsText        = document.getElementById("rlEpsText");
 
   // ===========================================================
   // 3. State global
@@ -214,11 +217,24 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ===========================================================
-  // 8. Kirim pertanyaan ke /chat
+  // 8. Update RL status badge
+  // ===========================================================
+  const updateRlBadge = (data) => {
+    if (!rlBadge || !data) return;
+    const lt    = data.rl_selected_lt  || data.learning_type || "—";
+    const phase = data.rl_phase?.phase || "";
+    const eps   = data.rl_epsilon      != null ? `ε=${data.rl_epsilon.toFixed(3)}` : "";
+    if (rlLtText)   rlLtText.textContent   = lt;
+    if (rlPhaseText) rlPhaseText.textContent = phase ? `[${phase}]` : "";
+    if (rlEpsText)   rlEpsText.textContent  = eps;
+    rlBadge.style.display = "flex";
+  };
+
+  // ===========================================================
+  // 9. Kirim pertanyaan ke /chat
   // ===========================================================
   const sendQuestion = async () => {
-    const message   = getTrimmedValue(questionInput);
-    const cognitive = getRawValue(cognitiveSelect, "1PAR");
+    const message = getTrimmedValue(questionInput);
 
     if (!message) { alert("Tulis pertanyaan terlebih dahulu!"); return; }
 
@@ -238,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, cognitive, session_id: "default" }),
+        body: JSON.stringify({ message, session_id: "default" }),
       });
 
       const data = await res.json();
@@ -249,9 +265,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      updateRlBadge(data);
+
       appendBubble(
         "bot",
-        `<b>Tutor (${escapeHtml(data.cognitive || cognitive)}):</b><br>${renderMarkdown(data.reply || "")}`
+        `<b>Tutor (${escapeHtml(data.cognitive || "—")}):</b><br>${renderMarkdown(data.reply || "")}`
       );
 
       if (data.followup_question) {
@@ -278,11 +296,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===========================================================
-  // 9. Evaluasi jawaban via /evaluate
+  // 10. Evaluasi jawaban via /evaluate
   // ===========================================================
   const evaluateAnswer = async () => {
-    const answer    = getTrimmedValue(userAnswer);
-    const cognitive = getRawValue(cognitiveSelect, "1PAR");
+    const answer = getTrimmedValue(userAnswer);
 
     if (!answer)        { alert("Tulis jawabanmu dulu!"); return; }
     if (!correctAnswer) { alert("Belum ada jawaban referensi dari tutor. Kirim pertanyaan dulu."); return; }
@@ -298,15 +315,17 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({
           answer,
           correct_answer:  correctAnswer,
-          active_question: activeQuestion,  // pertanyaan spesifik yang sedang dijawab
+          active_question: activeQuestion,
           wrong_count:     wrongAttempts,
-          cognitive,
           session_id:      "default",
         }),
       });
 
       const data = await res.json();
       evalResult.classList.remove("correct", "incorrect");
+
+      // Update RL badge from evaluate response
+      if (data.rl) updateRlBadge(data.rl);
 
       if (data.is_correct) {
         // ── BENAR ─────────────────────────────────────────────
@@ -363,7 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===========================================================
-  // 10. Download riwayat
+  // 11. Download riwayat
   // ===========================================================
   if (downloadTxt) {
     downloadTxt.addEventListener("click", async () => {

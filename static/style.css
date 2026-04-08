@@ -58,9 +58,21 @@ input:focus, textarea:focus, select:focus {
 textarea { resize: vertical; }
 .note { font-size: 13px; color: var(--muted); margin-top: 6px; }
 
-.cognitive-wrapper { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 10px; }
-.cognitive-field label { font-weight: 600; }
-.cognitive-field select { margin-top: 4px; }
+/* ---------------- RL BADGE ---------------- */
+.rl-badge {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  background: #eef3ff; border: 1px solid var(--brand-light);
+  border-radius: 8px; padding: 7px 14px;
+  font-size: 13px; margin-bottom: 10px;
+}
+.rl-badge-label { color: var(--muted); font-weight: 600; }
+.rl-lt-text {
+  font-weight: 700; color: var(--brand);
+  background: var(--brand-light); border-radius: 5px;
+  padding: 1px 8px; letter-spacing: 0.5px;
+}
+.rl-phase-text { color: #7a5800; font-size: 12px; }
+.rl-eps-text   { color: var(--muted); font-size: 12px; }
 
 /* ---------------- BUTTONS ---------------- */
 button {

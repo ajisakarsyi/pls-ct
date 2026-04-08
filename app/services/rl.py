@@ -135,17 +135,40 @@ def rl_record_response(
     """
     Record the student's answer in the RL agent and update Q-values.
 
+    Bug-fix: only record to the RL agent (and therefore to MLR history) when
+    the question is *resolved* — i.e. the student answered correctly OR
+    exhausted all N_MAX attempts.  Intermediate wrong answers return early
+    without touching the bandit so that:
+      1. MLR trains on one observation per question, not 4 for 3-wrong+1-correct.
+      2. The reward signal is clean — partial credit is not given for wrong tries.
+
     Returns (rl_step, next_cognitive_code, lt_change_info).
     """
     try:
         agent = rl_registry.get_agent(session_id, category=category)
         agent.mastery_levels[lt] = mastery_level
 
+        # ── Check whether the question is resolved ────────────────────────
+        # is_correct=False AND wrong_count+1 < N_MAX → still mid-question
+        question_resolved = is_correct or (wrong_count + 1 >= RL_N_MAX)
+        if not question_resolved:
+            # Do NOT record to RL — this is an intermediate wrong attempt.
+            # Return a lightweight info dict so the route can still respond.
+            next_cognitive = build_cognitive_code(agent.mastery_levels[lt], lt)
+            return (
+                None,
+                next_cognitive,
+                {"changed": False, "current_lt": agent._current_best_lt(),
+                 "note": "intermediate_wrong_not_recorded"},
+            )
+
         q_start      = session_question_start.pop(session_id, None)
         t_answer_sec = (
             t_answer_seconds if t_answer_seconds is not None
             else (time.time() - q_start if q_start else 60.0)
         )
+        # n_attempt reflects total tries: correct on attempt (wrong_count+1)
+        # or N_MAX if exhausted
         n_attempt = (wrong_count + 1) if is_correct else RL_N_MAX
 
         prev_rec = agent._last_recommendation
@@ -180,19 +203,22 @@ def rl_record_response(
 
         rl_registry.save_logs()
 
-        # Console log line (matches existing format users expect)
+        # Console log line
         print(
-            f"[RL] {session_id} | {lt} | correct={is_correct} | "
+            f"[RL] {session_id} | {lt} | correct={is_correct} | attempts={n_attempt} | "
             f"phase={agent.phase} | seeding_rem={agent.seeding_remaining} | "
             f"R={rl_step['reward']:+.4f} | M={rl_step['mastery_score']:.2f} "
             f"P={rl_step['performance']:.2f} E={rl_step['engagement']:.2f} "
             f"→ next: {next_cognitive}"
         )
 
-        # Print full summary every 10 steps
         n_steps = len(agent.step_log)
+
+        # Every 10 resolved questions: print summary AND auto-save single-line plot
         if n_steps > 0 and n_steps % 10 == 0:
             print_session_summary(session_id, agent, agent.step_log)
+            if HAS_PLOT:
+                _auto_save_single_line_plot(session_id)
 
         return rl_step, next_cognitive, lt_change_info
 
@@ -200,6 +226,20 @@ def rl_record_response(
         logger.error("[RL] record_response error: %s", exc)
         print(f"[RL] ⚠️  record_response error: {exc}")
         return None, cognitive_code, None
+
+
+def _auto_save_single_line_plot(session_id: str) -> None:
+    """Save the single-line reward plot to disk after every 10 steps."""
+    try:
+        dest = os.path.join(_settings.rl_plots_dir, f"{session_id}_single_line.png")
+        data = generate_single_line_plot(session_id)
+        if data:
+            print(
+                f"[RL] 📊 Plot saved → {dest}  "
+                f"(also at GET /rl/plots/{session_id}/single_line)"
+            )
+    except Exception as exc:
+        logger.error("[RL] auto-save plot error: %s", exc)
 
 
 # ── Console summary ────────────────────────────────────────────────────────
@@ -275,28 +315,11 @@ def print_session_summary(session_id: str, agent: Any, steps: list) -> None:
 
 # ── Plot generation ────────────────────────────────────────────────────────
 
-def generate_plots(session_id: str) -> Dict[str, str]:
+def _enrich_steps(steps: list, session_id: str) -> list:
     """
-    Generate all 7 plots from the agent step_log using simulate_rl's plot
-    functions (so API and CLI always produce identical charts).
-
-    Returns dict: plot_name → base64 PNG string.
-    Also saves PNGs to rl_plots/{session_id}_{name}.png.
+    Convert agent.step_log entries into the dict shape that simulate_rl
+    plot functions expect.  Works for both multi-step and single-line plots.
     """
-    if not HAS_PLOT:
-        return {}
-
-    agent = rl_registry.get_agent(session_id)
-    steps = agent.step_log
-    if len(steps) < 2:
-        return {}
-
-    from simulate_rl import (
-        make_plots, make_qvalue_plots, make_lt_change_plot,
-        make_phase_bar_plot, make_mpe_plots,
-    )
-
-    # Enrich step_log entries with the key aliases that simulate_rl expects
     enriched = []
     prev_lt  = None
     for i, s in enumerate(steps):
@@ -310,6 +333,78 @@ def generate_plots(session_id: str) -> Dict[str, str]:
         e["mastery_score"] = s.get("mastery_score", 0)
         enriched.append(e)
         prev_lt = s["learning_type"]
+    return enriched
+
+
+def generate_single_line_plot(session_id: str) -> Optional[str]:
+    """
+    Generate the single-line reward plot coloured by LT — identical to the
+    --single-line CLI output but driven by real session data.
+
+    Cold-start aware: no profile label needed; LT ordering falls back to
+    the clockwise radar axis order.
+
+    Returns base64 PNG string, or None if matplotlib is unavailable / too few steps.
+    """
+    if not HAS_PLOT:
+        return None
+
+    agent = rl_registry.get_agent(session_id)
+    steps = agent.step_log
+    if len(steps) < 2:
+        return None
+
+    from simulate_rl.plots import make_single_line_plot
+
+    enriched = _enrich_steps(steps, session_id)
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        try:
+            make_single_line_plot(enriched, out_dir=tmpdir, profile=session_id)
+        except Exception as exc:
+            logger.error("[plots] single_line error: %s", exc)
+            return None
+
+        # make_single_line_plot saves as single_line_reward_{profile}.png
+        fname = os.path.join(tmpdir, f"single_line_reward_{session_id}.png")
+        if not os.path.exists(fname):
+            # Fallback name pattern
+            for f in os.listdir(tmpdir):
+                if f.startswith("single_line"):
+                    fname = os.path.join(tmpdir, f)
+                    break
+
+        if not os.path.exists(fname):
+            logger.warning("[plots] single_line plot file not found")
+            return None
+
+        dest = os.path.join(_settings.rl_plots_dir, f"{session_id}_single_line.png")
+        shutil.copy2(fname, dest)
+        with open(dest, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+
+
+def generate_plots(session_id: str) -> Dict[str, str]:
+    """
+    Generate all 8 plots from the agent step_log (7 standard + single_line).
+
+    Returns dict: plot_name → base64 PNG string.
+    Also saves PNGs to rl_plots/{session_id}_{name}.png.
+    """
+    if not HAS_PLOT:
+        return {}
+
+    agent = rl_registry.get_agent(session_id)
+    steps = agent.step_log
+    if len(steps) < 2:
+        return {}
+
+    from simulate_rl.plots import (
+        make_plots, make_qvalue_plots, make_lt_change_plot,
+        make_phase_bar_plot, make_mpe_plots,
+    )
+
+    enriched = _enrich_steps(steps, session_id)
 
     PLOT_KEYS = {
         f"reward_timeseries_{session_id}.png":          "reward_timeseries",
@@ -344,5 +439,10 @@ def generate_plots(session_id: str) -> Dict[str, str]:
                     result[key] = base64.b64encode(f.read()).decode()
             else:
                 logger.warning("[plots] not generated: %s", fname)
+
+    # Always include single_line plot in the full set
+    sl = generate_single_line_plot(session_id)
+    if sl:
+        result["single_line"] = sl
 
     return result

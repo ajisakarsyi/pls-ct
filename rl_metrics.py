@@ -409,6 +409,7 @@ class MetricsTracker:
         t_answer_seconds: float,
         question_idx: Optional[int] = None,
         n_max: int = N_MAX,
+        is_correct: bool = True,
     ) -> Dict:
         """
         Record a student's attempt and compute/update all metrics.
@@ -421,6 +422,8 @@ class MetricsTracker:
         t_answer_seconds  : float— wall-clock seconds the student took
         question_idx      : int  — question index within session (optional)
         n_max             : int  — override default max attempts
+        is_correct        : bool — False forces engagement=0 so wrong answers
+                                   carry no engagement bonus in the reward.
 
         Returns
         -------
@@ -446,8 +449,14 @@ class MetricsTracker:
             question_idx=question_idx,
             historical_times=self._question_times[q_key] if self._question_times[q_key] else None,
         )
-        e_new = compute_engagement(t_answer_seconds, t_expected)
-        # After computing, record this time for future Texpected estimation
+        # Engagement is zero on wrong/exhausted answers.
+        # A student who did not solve the question correctly gets no engagement bonus.
+        # This prevents high-speed wrong answers from earning positive reward.
+        if is_correct:
+            e_new = compute_engagement(t_answer_seconds, t_expected)
+        else:
+            e_new = 0.0
+        # Always record the time so Texpected adapts to actual answering pace
         self._question_times[q_key].append(t_answer_seconds)
 
         # ── Update state and get deltas

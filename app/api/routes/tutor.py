@@ -3,9 +3,8 @@ app/api/routes/tutor.py
 ────────────────────────
 /chat  and  /evaluate  endpoints.
 
-These are the two main endpoints students interact with.
-RL selection (which LT/cognitive type to use) is handled here,
-then the resolved cognitive_code is passed to the tutor service.
+Cold-start by default: the student does NOT choose a LT.
+The RL agent selects the LT via epsilon-greedy from the very first question.
 """
 
 import time
@@ -32,22 +31,25 @@ router = APIRouter(tags=["Tutor"])
 @router.post(
     "/chat",
     response_model=ChatResponse,
-    summary="Kirim pertanyaan dan terima respons tutor personal",
+    summary="Kirim pertanyaan — RL Agent memilih LT secara otomatis (cold start)",
 )
 def chat(req: ChatRequest) -> ChatResponse:
     """
-    Main tutoring endpoint.
+    Main tutoring endpoint — cold start by default.
 
-    The RL agent selects the best cognitive type / LT for this student
-    during the free phase.  During the seeding phase (first 10 questions)
-    the LT from the *cognitive* field is used as seeding_lt.
+    The student sends ONLY their message and session_id.
+    The RL agent selects the LT via epsilon-greedy from question 1.
+    No seeding_lt is pre-assigned; the agent discovers the best LT
+    through exploration-exploitation.
 
-    Returns the tutor reply, a follow-up question, and RL metadata.
+    The selected cognitive code is returned in the response so the
+    frontend can display what the agent chose.
     """
+    # req.cognitive is None for cold-start (no user input)
     cognitive_code, rl_lt, rl_selected, rl_phase = rl_select_cognitive(
         session_id          = req.session_id,
         category            = req.category,
-        requested_cognitive = req.cognitive,
+        requested_cognitive = req.cognitive,   # None → pure RL selection
     )
     if not is_valid(cognitive_code):
         cognitive_code = DEFAULT_COGNITIVE_TYPE
@@ -87,19 +89,27 @@ def chat(req: ChatRequest) -> ChatResponse:
 @router.post(
     "/evaluate",
     response_model=EvalResponse,
-    summary="Evaluasi jawaban mahasiswa dengan umpan balik scaffolded adaptif",
+    summary="Evaluasi jawaban mahasiswa — RL Agent diperbarui berdasarkan hasil",
 )
 def evaluate(req: EvalRequest) -> EvalResponse:
     """
-    Evaluate a student's answer.
+    Evaluate a student's answer and update the RL agent.
 
-    After evaluating correctness and generating feedback, the result is
-    fed into the RL agent (record_response) to update Q-values and mastery.
-    The updated RL state is returned alongside the feedback.
+    cognitive is optional — if not provided (cold start), the LT is derived
+    from the agent's most recently selected LT so the reward is attributed
+    to the correct action.
     """
-    cognitive_code = req.cognitive.strip().upper()
-    if not is_valid(cognitive_code):
-        cognitive_code = DEFAULT_COGNITIVE_TYPE
+    # ── Resolve cognitive code ────────────────────────────────────────────
+    if req.cognitive:
+        cognitive_code = req.cognitive.strip().upper()
+        if not is_valid(cognitive_code):
+            cognitive_code = DEFAULT_COGNITIVE_TYPE
+    else:
+        # Cold-start: derive from the agent's last selection
+        agent_lookup = rl_registry.get_agent(req.session_id, category=req.category)
+        last_lt      = agent_lookup.last_action_lt or "PAR"
+        last_level   = agent_lookup.mastery_levels.get(last_lt, 1)
+        cognitive_code = build_cognitive_code(last_level, last_lt)
 
     parsed = parse_cognitive(cognitive_code)
     mastery_level, lt = parsed if parsed else (1, "PAR")
@@ -131,17 +141,17 @@ def evaluate(req: EvalRequest) -> EvalResponse:
     rl_block = None
     if rl_step:
         rl_block = {
-            "learning_type":    rl_step["learning_type"],
-            "mastery_level":    rl_step["mastery_level"],
-            "mastery_label":    rl_step["mastery_label"],
-            "mastery_score":    rl_step["mastery_score"],
-            "performance":      rl_step["performance"],
-            "engagement":       rl_step["engagement"],
-            "reward":           rl_step["reward"],
-            "t_expected":       rl_step["t_expected"],
-            "mlr_refitted":     rl_step["mlr_refitted"],
-            "next_cognitive":   next_cognitive,
-            "phase":            agent.phase,
+            "learning_type":     rl_step["learning_type"],
+            "mastery_level":     rl_step["mastery_level"],
+            "mastery_label":     rl_step["mastery_label"],
+            "mastery_score":     rl_step["mastery_score"],
+            "performance":       rl_step["performance"],
+            "engagement":        rl_step["engagement"],
+            "reward":            rl_step["reward"],
+            "t_expected":        rl_step["t_expected"],
+            "mlr_refitted":      rl_step["mlr_refitted"],
+            "next_cognitive":    next_cognitive,
+            "phase":             agent.phase,
             "seeding_remaining": agent.seeding_remaining,
         }
 

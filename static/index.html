@@ -33,7 +33,7 @@
   <div class="container">
 
     <h1>Personalized Learning System</h1>
-    <p class="subtitle">Ditenagai oleh <b>GPT API + RAG Kognitif</b></p>
+    <p class="subtitle">Ditenagai oleh <b>GPT API + RAG Kognitif</b> · LT dipilih otomatis oleh <b>RL Agent</b></p>
 
     <!-- PERTANYAAN -->
     <section class="question-section">
@@ -44,68 +44,19 @@
         rows="4"
       ></textarea>
 
-      <div class="cognitive-wrapper">
-        <div class="cognitive-field">
-          <label for="cognitive">Tipe Kognitif:</label>
-          <select id="cognitive">
-            <option value="1PAI">1PAI — Level 1, Praktis, Analitis, Individual</option>
-            <option value="1PAR" selected>1PAR — Level 1, Praktis, Analitis, Relasional</option>
-            <option value="1PGI">1PGI — Level 1, Praktis, Global, Individual</option>
-            <option value="1PGR">1PGR — Level 1, Praktis, Global, Relasional</option>
-            <option value="1TAI">1TAI — Level 1, Teoretis, Analitis, Individual</option>
-            <option value="1TAR">1TAR — Level 1, Teoretis, Analitis, Relasional</option>
-            <option value="1TGI">1TGI — Level 1, Teoretis, Global, Individual</option>
-            <option value="1TGR">1TGR — Level 1, Teoretis, Global, Relasional</option>
-            <option value="2PAI">2PAI — Level 2, Praktis, Analitis, Individual</option>
-            <option value="2PAR">2PAR — Level 2, Praktis, Analitis, Relasional</option>
-            <option value="2PGI">2PGI — Level 2, Praktis, Global, Individual</option>
-            <option value="2PGR">2PGR — Level 2, Praktis, Global, Relasional</option>
-            <option value="2TAI">2TAI — Level 2, Teoretis, Analitis, Individual</option>
-            <option value="2TAR">2TAR — Level 2, Teoretis, Analitis, Relasional</option>
-            <option value="2TGI">2TGI — Level 2, Teoretis, Global, Individual</option>
-            <option value="2TGR">2TGR — Level 2, Teoretis, Global, Relasional</option>
-            <option value="3PAI">3PAI — Level 3, Praktis, Analitis, Individual</option>
-            <option value="3PAR">3PAR — Level 3, Praktis, Analitis, Relasional</option>
-            <option value="3PGI">3PGI — Level 3, Praktis, Global, Individual</option>
-            <option value="3PGR">3PGR — Level 3, Praktis, Global, Relasional</option>
-            <option value="3TAI">3TAI — Level 3, Teoretis, Analitis, Individual</option>
-            <option value="3TAR">3TAR — Level 3, Teoretis, Analitis, Relasional</option>
-            <option value="3TGI">3TGI — Level 3, Teoretis, Global, Individual</option>
-            <option value="3TGR">3TGR — Level 3, Teoretis, Global, Relasional</option>
-            <option value="4PAI">4PAI — Level 4, Praktis, Analitis, Individual</option>
-            <option value="4PAR">4PAR — Level 4, Praktis, Analitis, Relasional</option>
-            <option value="4PGI">4PGI — Level 4, Praktis, Global, Individual</option>
-            <option value="4PGR">4PGR — Level 4, Praktis, Global, Relasional</option>
-            <option value="4TAI">4TAI — Level 4, Teoretis, Analitis, Individual</option>
-            <option value="4TAR">4TAR — Level 4, Teoretis, Analitis, Relasional</option>
-            <option value="4TGI">4TGI — Level 4, Teoretis, Global, Individual</option>
-            <option value="4TGR">4TGR — Level 4, Teoretis, Global, Relasional</option>
-            <option value="5PAI">5PAI — Level 5, Praktis, Analitis, Individual</option>
-            <option value="5PAR">5PAR — Level 5, Praktis, Analitis, Relasional</option>
-            <option value="5PGI">5PGI — Level 5, Praktis, Global, Individual</option>
-            <option value="5PGR">5PGR — Level 5, Praktis, Global, Relasional</option>
-            <option value="5TAI">5TAI — Level 5, Teoretis, Analitis, Individual</option>
-            <option value="5TAR">5TAR — Level 5, Teoretis, Analitis, Relasional</option>
-            <option value="5TGI">5TGI — Level 5, Teoretis, Global, Individual</option>
-            <option value="5TGR">5TGR — Level 5, Teoretis, Global, Relasional</option>
-            <option value="6PAI">6PAI — Level 6, Praktis, Analitis, Individual</option>
-            <option value="6PAR">6PAR — Level 6, Praktis, Analitis, Relasional</option>
-            <option value="6PGI">6PGI — Level 6, Praktis, Global, Individual</option>
-            <option value="6PGR">6PGR — Level 6, Praktis, Global, Relasional</option>
-            <option value="6TAI">6TAI — Level 6, Teoretis, Analitis, Individual</option>
-            <option value="6TAR">6TAR — Level 6, Teoretis, Analitis, Relasional</option>
-            <option value="6TGI">6TGI — Level 6, Teoretis, Global, Individual</option>
-            <option value="6TGR">6TGR — Level 6, Teoretis, Global, Relasional</option>
-          </select>
-        </div>
-      </div>
-
       <button id="sendBtn" title="Kirim ke tutor">Kirim Pertanyaan</button>
     </section>
 
     <!-- PERCAKAPAN -->
     <section class="chat-section">
       <h3>Percakapan</h3>
+      <!-- RL status badge — diperbarui JS setiap respons -->
+      <div id="rlBadge" class="rl-badge" style="display:none;">
+        <span class="rl-badge-label">RL Agent memilih:</span>
+        <span id="rlLtText" class="rl-lt-text">—</span>
+        <span id="rlPhaseText" class="rl-phase-text"></span>
+        <span id="rlEpsText" class="rl-eps-text"></span>
+      </div>
       <div id="chatBox" aria-live="polite">
         <p class="placeholder">
           Belum ada percakapan. Tulis pertanyaan di atas dan klik <b>Kirim</b>.
