@@ -155,53 +155,6 @@ The system no longer requires the student to choose a Learning Type upfront. The
 
 ---
 
-## Frontend Integration
-
-```javascript
-// Step 1 — send question (no cognitive field)
-const chat = await fetch('/chat', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ message, session_id: studentId, category: 'Penggalang' }),
-}).then(r => r.json());
-
-displayReply(chat.reply);
-displayFollowup(chat.followup_question);
-showRLBadge(chat.rl_selected_lt, chat.rl_epsilon); // show what the agent picked
-
-// Step 2 — submit answer
-let wrongAttempts = 0;
-
-const result = await fetch('/evaluate', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    answer:          studentAnswer,
-    correct_answer:  chat.reply,
-    active_question: chat.followup_question,
-    wrong_count:     wrongAttempts,
-    session_id:      studentId,
-  }),
-}).then(r => r.json());
-
-if (result.is_correct) {
-  showSuccess(result.feedback);
-  wrongAttempts = 0;
-  // ready for next question — call /chat again
-} else {
-  wrongAttempts++;
-  showHint(result.feedback, result.hint_level);
-  // student tries again — only call /evaluate, not /chat
-}
-```
-
-**Reward chart** — available after 10 resolved questions:
-```html
-<img src="/rl/plots/student-001/single_line" alt="RL reward chart" />
-```
-
----
-
 ## Configuration
 
 All settings in `app/core/config.py` and `pedagogy_selector.py`.
@@ -216,23 +169,6 @@ All settings in `app/core/config.py` and `pedagogy_selector.py`.
 | `EPSILON_MIN` | `0.05` | Minimum exploration floor |
 | `N_MAX` | `5` | Max wrong attempts before answer is revealed |
 | `MLR_REFIT_EVERY` | `10` | Refit α/β/γ every N resolved questions |
-
----
-
-## Simulation Tools
-
-```bash
-python simulate_rl.py                              # 1 session, 15 Q
-python simulate_rl.py --sessions 3 --questions 30
-python simulate_rl.py --single-line --profile student_tgi --questions 40 --sessions 2
-python simulate_rl.py --fixed-lt TGI --questions 25
-python simulate_rl.py --story --assigned-lt PAI --true-lt TAR
-python simulate_rl.py --per-lt 50
-python simulate_rl.py --cross-lt 100
-python simulate_rl.py --correlation
-
-python rag_evaluator.py              # RAG eval suite (server must be running)
-```
 
 ---
 
@@ -292,19 +228,3 @@ pls-ct-combined/
 ├── rl_plots/                  # Auto-saved reward plots per session
 └── requirements.txt
 ```
-
----
-
-## Developer Notes
-
-**CORS** — not configured by default. Add to `app/main.py` if your frontend is on a different origin:
-```python
-from fastapi.middleware.cors import CORSMiddleware
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
-```
-
-**Session persistence** — sessions are in-memory. Restarting the server resets all sessions.
-
-**Mastery progression** — one correct answer promotes the LT's level (`1PAR → 2PAR → 3PAR`). The `next_cognitive` field in the `/evaluate` response always reflects the updated level.
-
-**Reward chart** — auto-saved to `rl_plots/{session_id}_single_line.png` after every 10 resolved questions. Also always accessible at `GET /rl/plots/{session_id}/single_line`.
