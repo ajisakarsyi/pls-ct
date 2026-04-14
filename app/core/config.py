@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 
 @dataclass
 class Settings:
-    # ── OpenAI ────────────────────────────────────────────────────────────
+    # ── OpenAI / ChatAnywhere (chat completions) ──────────────────────────
     openai_api_key:      str   = ""
     openai_api_base:     str   = "https://api.chatanywhere.org/v1"
     chat_model:          str   = "gpt-3.5-turbo"
@@ -13,6 +13,22 @@ class Settings:
     chat_temperature:    float = 0.7
     chat_retries:        int   = 3
     chat_retry_delay:    int   = 2
+
+    # ── Chat provider routing ─────────────────────────────────────────────
+    # auto   → probe ChatAnywhere at startup; fall back to Ollama if quota exhausted
+    # openai → always use ChatAnywhere/OpenAI
+    # ollama → always use local Ollama
+    chat_provider:       str   = "auto"
+
+    # ── Embedding provider ────────────────────────────────────────────────
+    # openai → OpenAI/ChatAnywhere embedding API (default)
+    # ollama → local Ollama nomic-embed-text (avoids ChatAnywhere 200/day limit)
+    embedding_provider:  str   = "openai"
+
+    # ── Ollama (fallback / local) ─────────────────────────────────────────
+    ollama_base_url:     str   = "http://localhost:11434"
+    ollama_chat_model:   str   = "llama3"
+    ollama_embed_model:  str   = "nomic-embed-text"
 
     # ── RAG ───────────────────────────────────────────────────────────────
     rag_chunk_max_chars:  int = 400
@@ -29,7 +45,6 @@ class Settings:
     log_level: str  = "info"
 
     # ── Paths ─────────────────────────────────────────────────────────────
-    # base_dir = project root (pls-ct-combined/)
     base_dir: str = field(
         default_factory=lambda: os.path.dirname(
             os.path.dirname(os.path.dirname(__file__))
@@ -59,6 +74,10 @@ class Settings:
     @property
     def eval_results_dir(self) -> str:
         return os.path.join(self.base_dir, "logs", "eval_results")
+
+    @property
+    def data_dir(self) -> str:
+        return os.path.join(self.base_dir, "data")
 
 
 @lru_cache

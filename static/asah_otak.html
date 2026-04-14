@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asah Otak</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--primary:#6366f1;--pd:#4f46e5;--green:#22c55e;--red:#ef4444;--bg:#f5f6fa;--card:#fff;--text:#1a1a2e;--muted:#64748b;--border:#e2e8f0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+  header{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  header h1{font-size:17px;font-weight:700;display:flex;align-items:center;gap:9px}
+  .week-pill{padding:3px 12px;background:#ede9fe;color:var(--primary);border-radius:99px;font-size:12px;font-weight:600}
+  .topic-pill{padding:3px 12px;background:#f1f5f9;color:var(--muted);border-radius:99px;font-size:12px}
+  .hdr-right{display:flex;align-items:center;gap:16px}
+  .answered-counter{font-size:13px;color:var(--muted)}
+  .answered-counter strong{color:var(--text)}
+  .btn-submit-all{padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;opacity:.4;pointer-events:none;transition:all .2s}
+  .btn-submit-all.ready{opacity:1;pointer-events:auto}
+  .btn-submit-all.ready:hover{background:var(--pd)}
+
+  .container{max-width:740px;margin:0 auto;padding:28px 16px 60px}
+
+  /* progress */
+  .prog-wrap{margin-bottom:24px}
+  .prog-lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px}
+  .prog-bar{height:5px;background:var(--border);border-radius:99px;overflow:hidden}
+  .prog-fill{height:100%;background:var(--primary);border-radius:99px;transition:width .3s}
+
+  /* Question card */
+  .q-card{background:var(--card);border-radius:14px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.05);margin-bottom:18px;border:2px solid transparent;transition:border-color .3s}
+  .q-card.reveal-correct{border-color:var(--green)}
+  .q-card.reveal-wrong{border-color:var(--red)}
+
+  .q-meta{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+  .badge{padding:2px 9px;border-radius:99px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+  .b-mcq{background:#ede9fe;color:#6d28d9}.b-multi{background:#dbeafe;color:#1d4ed8}
+  .b-tf{background:#fce7f3;color:#9d174d}.b-open{background:#fef3c7;color:#b45309}
+  .b-mudah{background:#dcfce7;color:#166534}.b-sedang{background:#fef9c3;color:#854d0e}.b-sulit{background:#fee2e2;color:#991b1b}
+  .q-num{font-size:11px;color:var(--muted);margin-left:auto}
+  .q-text{font-size:15px;line-height:1.65;font-weight:500;margin-bottom:18px}
+
+  /* MCQ / TF options */
+  .options{display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;align-items:center;gap:11px;padding:11px 15px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;text-align:left;font-size:13px;transition:all .15s;width:100%}
+  .opt:hover:not(.locked){border-color:var(--primary);background:#f0f0ff}
+  .opt .key{width:26px;height:26px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0;transition:all .15s}
+  .opt.chosen{border-color:var(--primary);background:#f0f0ff}
+  .opt.chosen .key{background:var(--primary);color:#fff}
+  /* Reveal states */
+  .opt.rev-correct{border-color:var(--green)!important;background:#f0fdf4!important}
+  .opt.rev-correct .key{background:var(--green)!important;color:#fff!important}
+  .opt.rev-wrong{border-color:var(--red)!important;background:#fef2f2!important}
+  .opt.rev-wrong .key{background:var(--red)!important;color:#fff!important}
+  .opt.locked{cursor:default}
+
+  /* Multi checkbox */
+  .multi-note{font-size:11px;color:var(--muted);margin-bottom:10px;font-style:italic}
+  .opt-check{display:flex;align-items:center;gap:11px;padding:11px 15px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;text-align:left;font-size:13px;transition:all .15s;width:100%}
+  .opt-check:hover:not(.locked){border-color:var(--primary);background:#f0f0ff}
+  .opt-check input[type=checkbox]{width:16px;height:16px;accent-color:var(--primary);flex-shrink:0}
+  .opt-check.chosen{border-color:var(--primary);background:#f0f0ff}
+  .opt-check.rev-correct{border-color:var(--green)!important;background:#f0fdf4!important}
+  .opt-check.rev-wrong{border-color:var(--red)!important;background:#fef2f2!important}
+  .opt-check.rev-missed{border-color:var(--green)!important;background:#f0fdf4!important;opacity:.6}
+  .opt-check.locked{cursor:default;pointer-events:none}
+
+  /* True/False */
+  .tf-wrap{display:flex;gap:10px}
+  .tf-btn{flex:1;padding:12px;border-radius:9px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;font-size:14px;font-weight:600;text-align:center;transition:all .15s}
+  .tf-btn:hover:not(.locked){border-color:var(--primary);background:#f0f0ff}
+  .tf-btn.chosen{border-color:var(--primary);background:#f0f0ff;color:var(--primary)}
+  .tf-btn.rev-correct{border-color:var(--green)!important;background:#f0fdf4!important;color:var(--green)!important}
+  .tf-btn.rev-wrong{border-color:var(--red)!important;background:#fef2f2!important;color:var(--red)!important}
+  .tf-btn.locked{cursor:default}
+
+  /* Open textarea */
+  .open-inp{width:100%;padding:11px 14px;border-radius:9px;border:1.5px solid var(--border);font-size:13px;font-family:inherit;resize:vertical;min-height:90px;background:var(--bg);transition:border-color .15s}
+  .open-inp:focus{outline:none;border-color:var(--primary)}
+  .open-inp.has-answer{border-color:var(--primary);background:#f0f0ff}
+  .open-inp:disabled{opacity:.7;cursor:default}
+
+  /* Reveal result */
+  .result-box{display:none;margin-top:14px;padding:12px 15px;border-radius:9px;font-size:13px;line-height:1.6}
+  .result-box.show{display:block}
+  .result-box.correct{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+  .result-box.wrong{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+  .result-box .expl{margin-top:9px;padding-top:9px;border-top:1px solid rgba(0,0,0,.1);font-size:12px;opacity:.85}
+
+  /* Empty/loading */
+  .loading{display:flex;align-items:center;justify-content:center;padding:80px;gap:12px;color:var(--muted);font-size:13px}
+  .spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .empty{text-align:center;padding:80px 20px;color:var(--muted)}
+  .empty .icon{font-size:44px;margin-bottom:14px}
+
+  /* Score modal */
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
+  .overlay.show{display:flex}
+  .modal{background:var(--card);border-radius:20px;padding:40px 36px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  .modal .score{font-size:68px;font-weight:800;color:var(--primary);line-height:1}
+  .modal .score-label{font-size:13px;color:var(--muted);margin:4px 0 6px}
+  .modal h2{font-size:20px;margin-bottom:6px}
+  .modal p{color:var(--muted);font-size:13px;margin-bottom:28px}
+  .modal-breakdown{display:flex;gap:20px;justify-content:center;margin-bottom:24px}
+  .modal-breakdown .mb-item{text-align:center}
+  .modal-breakdown .mb-val{font-size:22px;font-weight:700}
+  .modal-breakdown .mb-lbl{font-size:11px;color:var(--muted);text-transform:uppercase}
+  .btn-see{padding:11px 28px;background:var(--primary);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer}
+  .btn-see:hover{background:var(--pd)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧠 Asah Otak</h1>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span class="week-pill" id="week-pill">—</span>
+    <span class="topic-pill" id="topic-pill">—</span>
+  </div>
+  <div class="hdr-right">
+    <span class="answered-counter">Dijawab: <strong id="ans-count">0</strong> / <strong id="total-count">0</strong></span>
+    <button class="btn-submit-all" id="submit-all-btn" onclick="submitAll()">Lihat Hasil →</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="prog-wrap">
+    <div class="prog-lbl"><span id="prog-txt">0 dari 0 dijawab</span><span id="prog-pct">0%</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+  <div id="q-list"></div>
+</div>
+
+<!-- Score modal -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="score" id="m-score">0/0</div>
+    <div class="score-label">soal benar</div>
+    <h2 id="m-title">—</h2>
+    <p id="m-sub"></p>
+    <div class="modal-breakdown">
+      <div class="mb-item"><div class="mb-val" id="m-correct" style="color:var(--green)">—</div><div class="mb-lbl">Benar</div></div>
+      <div class="mb-item"><div class="mb-val" id="m-wrong" style="color:var(--red)">—</div><div class="mb-lbl">Salah</div></div>
+    </div>
+    <button class="btn-see" onclick="revealAndClose()">Lihat Jawaban & Pembahasan</button>
+  </div>
+</div>
+
+<script>
+const API = '';
+let questions   = [];       // sanitized (no correct_answer)
+let draft       = {};       // { id: chosen_value }  — live selections before submit
+let results     = {};       // { id: {is_correct, correct_answer, explanation} } — after submit
+let revealed    = false;
+
+// ── Load ──────────────────────────────────────────────────────────────────
+async function load(){
+  document.getElementById('q-list').innerHTML='<div class="loading"><div class="spinner"></div> Memuat soal…</div>';
+  try{
+    const r=await fetch(`${API}/questions/live/current-week`);
+    const d=await r.json();
+    questions=d.questions||[];
+
+    document.getElementById('week-pill').textContent   = d.week_id||'—';
+    document.getElementById('total-count').textContent = questions.length;
+
+    if(questions.length){
+      const topic=questions[0]?.topic||'';
+      document.getElementById('topic-pill').textContent=topic;
+    }
+
+    if(!questions.length){
+      document.getElementById('q-list').innerHTML='<div class="empty"><div class="icon">📭</div><p>Belum ada soal untuk minggu ini.</p></div>';
+      return;
+    }
+    renderAll();
+  } catch(e){
+    document.getElementById('q-list').innerHTML=`<div class="empty"><div class="icon">⚠️</div><p>Gagal memuat: ${e.message}</p></div>`;
+  }
+}
+
+// ── Render all questions ──────────────────────────────────────────────────
+function renderAll(){
+  document.getElementById('q-list').innerHTML = questions.map((q,i)=>renderCard(q,i+1)).join('');
+  updateProgress();
+}
+
+function renderCard(q, num){
+  const res     = results[q.id];
+  const chosen  = draft[q.id];
+  const isRev   = revealed && res;
+  const cardCls = isRev ? (res.is_correct?'reveal-correct':'reveal-wrong') : '';
+
+  const meta=`<div class="q-meta">
+    <span class="badge b-${q.type==='mcq'?'mcq':q.type==='multi'?'multi':q.type==='truefalse'?'tf':'open'}">${
+      {mcq:'Pilihan Ganda',multi:'Multi-Pilih',truefalse:'Benar / Salah',open:'Uraian'}[q.type]||q.type
+    }</span>
+    <span class="badge b-${q.difficulty}">${q.difficulty}</span>
+    <span class="q-num">Soal ${num}</span>
+  </div>`;
+
+  let body='';
+  if(q.type==='mcq')        body=renderMCQ(q,chosen,res,isRev);
+  else if(q.type==='multi') body=renderMulti(q,chosen,res,isRev);
+  else if(q.type==='truefalse') body=renderTF(q,chosen,res,isRev);
+  else                      body=renderOpen(q,chosen,res,isRev);
+
+  const resultBox = isRev ? `
+    <div class="result-box show ${res.is_correct?'correct':'wrong'}">
+      ${res.is_correct
+        ? '✅ Jawaban kamu benar!'
+        : (q.type==='open'
+            ? '📝 Jawaban kurang tepat berdasarkan referensi.'
+            : `❌ Kurang tepat. Jawaban benar: <strong>${
+                Array.isArray(res.correct_answer)
+                  ? res.correct_answer.join(', ')
+                  : (res.correct_answer||'—')
+              }</strong>`
+          )
+      }
+      ${q.explanation?`<div class="expl"><strong>Pembahasan:</strong> ${esc(q.explanation)}</div>`:''}
+    </div>` : '';
+
+  return `<div class="q-card ${cardCls}" id="card-${q.id}">${meta}
+    <div class="q-text">${esc(q.question)}</div>
+    ${body}${resultBox}
+  </div>`;
+}
+
+function renderMCQ(q,chosen,res,isRev){
+  return '<div class="options">'
+    + Object.entries(q.options||{}).map(([k,v])=>{
+        let cls='';
+        if(k===chosen) cls='chosen';
+        if(isRev && res){
+          if(k===String(res.correct_answer)) cls+=' rev-correct';
+          else if(k===chosen && !res.is_correct) cls+=' rev-wrong';
+        }
+        const locked = revealed ? 'locked' : '';
+        return `<button class="opt ${cls} ${locked}" onclick="pickMCQ('${q.id}','${k}')">
+          <span class="key">${k}</span><span>${esc(v)}</span>
+        </button>`;
+      }).join('')
+    +'</div>';
+}
+
+function renderMulti(q,chosen,res,isRev){
+  const chosenSet   = new Set((chosen||'').split(',').filter(Boolean).map(s=>s.trim()));
+  const correctSet  = new Set((res?.correct_answer||[]).map(s=>String(s).toUpperCase()));
+  return `<div class="multi-note">Pilih semua jawaban yang benar (bisa lebih dari satu)</div>
+    <div class="options">`
+    + Object.entries(q.options||{}).map(([k,v])=>{
+        const isChosen   = chosenSet.has(k);
+        const isCorrect  = correctSet.has(k.toUpperCase());
+        let cls = isChosen ? 'opt-check chosen' : 'opt-check';
+        if(isRev && res){
+          if(isChosen && isCorrect)  cls+=' rev-correct';
+          else if(isChosen && !isCorrect) cls+=' rev-wrong';
+          else if(!isChosen && isCorrect) cls+=' rev-missed';
+        }
+        const dis = revealed ? 'disabled' : '';
+        return `<label class="${cls} ${revealed?'locked':''}">
+          <input type="checkbox" ${dis} ${isChosen?'checked':''} onchange="toggleMulti('${q.id}','${k}',this.checked)">
+          <strong>${k}.</strong> ${esc(v)}
+        </label>`;
+      }).join('')
+    +'</div>';
+}
+
+function renderTF(q,chosen,res,isRev){
+  return '<div class="tf-wrap">'
+    + ['Benar','Salah'].map(val=>{
+        let cls='tf-btn';
+        if(val===chosen) cls+=' chosen';
+        if(isRev && res){
+          if(val===res.correct_answer) cls+=' rev-correct';
+          else if(val===chosen && !res.is_correct) cls+=' rev-wrong';
+        }
+        const locked = revealed ? 'locked' : '';
+        return `<button class="${cls} ${locked}" onclick="pickTF('${q.id}','${val}')">${val}</button>`;
+      }).join('')
+    +'</div>';
+}
+
+function renderOpen(q,chosen,res,isRev){
+  return `<textarea class="open-inp ${chosen?'has-answer':''}" id="oa-${q.id}"
+    ${revealed?'disabled':''}
+    oninput="pickOpen('${q.id}',this.value)"
+    placeholder="Tulis jawaban kamu di sini…">${esc(chosen||'')}</textarea>`;
+}
+
+// ── Draft selection ───────────────────────────────────────────────────────
+function pickMCQ(id,key){
+  if(revealed) return;
+  draft[id]=key;
+  refreshCard(id);
+  updateProgress();
+}
+
+function toggleMulti(id,key,checked){
+  if(revealed) return;
+  const current=new Set((draft[id]||'').split(',').filter(Boolean));
+  checked ? current.add(key) : current.delete(key);
+  draft[id]=[...current].join(',');
+  // don't re-render — checkbox state managed by DOM
+  updateProgress();
+}
+
+function pickTF(id,val){
+  if(revealed) return;
+  draft[id]=val;
+  refreshCard(id);
+  updateProgress();
+}
+
+function pickOpen(id,val){
+  if(revealed) return;
+  draft[id]=val.trim();
+  updateProgress();
+}
+
+function refreshCard(id){
+  const q   = questions.find(x=>x.id===id);
+  const idx = questions.indexOf(q);
+  const card= document.getElementById(`card-${id}`);
+  if(card) card.outerHTML=renderCard(q,idx+1);
+}
+
+// ── Progress ──────────────────────────────────────────────────────────────
+function countAnswered(){
+  return questions.filter(q=>{
+    const v=draft[q.id];
+    if(!v) return false;
+    if(q.type==='multi') return v.split(',').filter(Boolean).length>0;
+    return v.length>0;
+  }).length;
+}
+
+function updateProgress(){
+  const total    = questions.length;
+  const answered = countAnswered();
+  const pct      = total?Math.round(answered/total*100):0;
+  document.getElementById('prog-txt').textContent  = `${answered} dari ${total} dijawab`;
+  document.getElementById('prog-pct').textContent  = `${pct}%`;
+  document.getElementById('prog-fill').style.width = `${pct}%`;
+  document.getElementById('ans-count').textContent = answered;
+
+  const btn=document.getElementById('submit-all-btn');
+  if(answered===total && total>0){
+    btn.classList.add('ready');
+  } else {
+    btn.classList.remove('ready');
+  }
+}
+
+// ── Submit all answers ────────────────────────────────────────────────────
+async function submitAll(){
+  if(revealed) return;
+
+  const btn=document.getElementById('submit-all-btn');
+  btn.textContent='Menilai…';
+  btn.classList.remove('ready');
+
+  // Submit each question concurrently
+  const promises = questions.map(async q => {
+    const answer = draft[q.id]||'';
+    try{
+      const r=await fetch(`${API}/questions/${q.id}/answer`,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({answer, question_type:q.type})
+      });
+      const d=await r.json();
+      results[q.id]=d;
+    } catch(e){
+      results[q.id]={is_correct:null, explanation:'', correct_answer:null};
+    }
+  });
+
+  await Promise.all(promises);
+
+  // Show score modal
+  const total   = questions.length;
+  const correct = Object.values(results).filter(r=>r.is_correct===true).length;
+  const pct     = Math.round(correct/total*100);
+
+  document.getElementById('m-score').textContent   = `${correct}/${total}`;
+  document.getElementById('m-correct').textContent = correct;
+  document.getElementById('m-wrong').textContent   = total-correct;
+  document.getElementById('m-title').textContent   =
+    pct>=80?'🎉 Luar biasa!' : pct>=60?'👍 Bagus!' : '💪 Terus semangat!';
+  document.getElementById('m-sub').textContent     =
+    `Kamu menjawab ${correct} dari ${total} soal dengan benar.`;
+  document.getElementById('overlay').classList.add('show');
+}
+
+function revealAndClose(){
+  document.getElementById('overlay').classList.remove('show');
+  revealed=true;
+  renderAll();   // re-render with correct/wrong states and explanations
+  document.getElementById('submit-all-btn').textContent='Selesai ✓';
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+load();
+</script>
+</body>
+</html>

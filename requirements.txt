@@ -1,25 +1,25 @@
-# CSIPBLLM — Combined RAG + RL requirements
+# CSIPBLLM — Combined RAG + RL + Question Bank requirements
+
+# ── Web framework ──────────────────────────────────────────────────────────
 fastapi
 uvicorn[standard]
 pydantic
 python-multipart
 
-# LLM / Embeddings
+# ── LLM / Embeddings ──────────────────────────────────────────────────────
 openai
+requests               # Ollama fallback calls
 
-# RAG
+# ── RAG ───────────────────────────────────────────────────────────────────
 faiss-cpu
 numpy
 
-# Session history
+# ── Session history ────────────────────────────────────────────────────────
 langchain
 langchain-community
 
-# RL / Simulation plots
+# ── RL / Simulation plots ─────────────────────────────────────────────────
 matplotlib
 scipy
 pandas
 scikit-learn
-
-# Requests (for rag_evaluator.py test runner)
-requests

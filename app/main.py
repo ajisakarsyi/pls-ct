@@ -1,19 +1,19 @@
 """
 app/main.py
 ────────────
-FastAPI application factory for CSIPBLLM (Combined RAG + RL).
+FastAPI application factory for CSIPBLLM PLS-CT v5.0.0.
 
-Startup:
-  - Preloads global RAG materials index (shared embeddings)
-  - Initialises RL session registry with correct log directory
-  - Serves static frontend from /static
+Modules:
+  /          → Student tutoring UI (cold start RL)
+  /asah-otak → Student weekly quiz (Asah Otak)
+  /admin/questions → Admin question bank dashboard
 
 Architecture:
-  /chat        → RL selects cognitive type  → RAG retrieves context  → LLM answers
-  /evaluate    → LLM strict-evaluates answer  → RL records reward, updates Q-table
-  /rl/*        → RL introspection (phase, Q-values, plots, summary …)
-  /history     → conversation logs (history_logs/)
-  /cognitive-types → reference list of all 48 codes
+  /chat        → RL selects LT (cold start)  → RAG context  → LLM answer
+  /evaluate    → LLM evaluates  → RL reward update (resolved only)
+  /rl/*        → RL introspection (Q-values, plots, evaluation)
+  /questions/* → Question bank (admin CRUD + student quiz)
+  /history     → Conversation logs
 """
 
 import logging
@@ -45,19 +45,22 @@ def create_app() -> FastAPI:
         settings.rl_logs_dir,
         settings.rl_plots_dir,
         settings.eval_results_dir,
+        settings.data_dir,
     ):
         os.makedirs(d, exist_ok=True)
 
     app = FastAPI(
         title="CSIPBLLM Personalized Learning System",
         description=(
-            "Sistem tutor adaptif yang menggabungkan:\n"
-            "• **RAG** (Retrieval-Augmented Generation) — jawaban berbasis materi\n"
-            "• **RL Contextual Bandit** (seeding 10 soal → free phase) — pemilihan LT optimal\n"
-            "• **48 tipe kognitif** (Level 1–6 × P/T × A/G × I/R)\n\n"
-            "Run: `uvicorn app.main:app --reload`  |  Docs: `/docs`"
+            "Sistem tutor adaptif berbasis **cold start** — mahasiswa tidak perlu memilih Tipe Kognitif.\n\n"
+            "• **RAG** — jawaban berbasis materi per LT\n"
+            "• **RL Contextual Bandit** (ε=0.50 awal) — eksplorasi-eksploitasi LT otomatis\n"
+            "• **Asah Otak** — kuis mingguan berbasis soal AI yang dikurasi admin\n"
+            "• **8 Learning Types** × **6 level penguasaan** = 48 kode kognitif\n\n"
+            "**Alur utama:** `POST /chat` → `POST /evaluate` (ulangi jika salah)\n\n"
+            "Run: `python main.py`  |  Docs: `/docs`"
         ),
-        version="4.0.0",
+        version="5.0.0",
         docs_url="/docs",
         redoc_url="/redoc",
     )
@@ -69,23 +72,59 @@ def create_app() -> FastAPI:
     # ── Routes ────────────────────────────────────────────────────────────
     app.include_router(api_router)
 
-    # ── Frontend entry-point ──────────────────────────────────────────────
+    # ── Student tutoring UI (main cold-start interface) ───────────────────
     @app.get("/", include_in_schema=False)
     def serve_index():
-        index_path = os.path.join(settings.static_dir, "index.html")
-        if os.path.exists(index_path):
-            return FileResponse(index_path)
-        return JSONResponse({"message": "CSIPBLLM API running — visit /docs"})
+        path = os.path.join(settings.static_dir, "index.html")
+        return FileResponse(path) if os.path.exists(path) else \
+               JSONResponse({"message": "CSIPBLLM API running — visit /docs"})
+
+    # ── Asah Otak — student weekly quiz ──────────────────────────────────
+    @app.get("/asah-otak", include_in_schema=False)
+    def serve_asah_otak():
+        path = os.path.join(settings.static_dir, "asah_otak.html")
+        return FileResponse(path) if os.path.exists(path) else \
+               JSONResponse({"error": "asah_otak.html not found"}, status_code=404)
+
+    # ── Admin — question bank dashboard ──────────────────────────────────
+    @app.get("/admin/questions", include_in_schema=False)
+    def serve_admin_dashboard():
+        path = os.path.join(settings.static_dir, "admin_questions.html")
+        return FileResponse(path) if os.path.exists(path) else \
+               JSONResponse({"error": "admin_questions.html not found"}, status_code=404)
+
+    # ── Provider status (debug) ───────────────────────────────────────────
+    @app.get("/provider-status", include_in_schema=False)
+    def provider_status():
+        from app.services.llm import get_active_provider
+        return {
+            "chat_provider":      get_active_provider(),
+            "embed_provider":     settings.embedding_provider,
+            "ollama_embed_model": settings.ollama_embed_model,
+            "ollama_base_url":    settings.ollama_base_url,
+            "chat_model":         settings.chat_model,
+        }
 
     # ── Startup ───────────────────────────────────────────────────────────
     @app.on_event("startup")
     async def on_startup():
-        logger.info("Preloading global RAG materials index…")
+        from app.services.llm import probe_and_set_chat_provider
+
+        # 1. Decide chat provider (ChatAnywhere if key OK, else Ollama)
+        provider = probe_and_set_chat_provider()
+
+        # 2. Build RAG index
+        logger.info("Building RAG index…")
         load_global_materials()
+
         logger.info(
-            "Server ready — %d cognitive types | RAG + RL active.",
-            len(VALID_COGNITIVE_TYPES),
+            "━━ Server ready ━━  chat=%s | embed=%s | cognitive_types=%d",
+            provider, settings.embedding_provider, len(VALID_COGNITIVE_TYPES),
         )
+        logger.info("  Tutoring UI    → http://%s:%s/", settings.host, settings.port)
+        logger.info("  Asah Otak      → http://%s:%s/asah-otak", settings.host, settings.port)
+        logger.info("  Admin panel    → http://%s:%s/admin/questions", settings.host, settings.port)
+        logger.info("  API docs       → http://%s:%s/docs", settings.host, settings.port)
 
     return app
 
