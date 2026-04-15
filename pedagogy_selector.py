@@ -67,9 +67,9 @@ from rl_metrics import (
 STATE_DIM              = 3          # [mastery, performance, engagement]
 N_ACTIONS              = len(LEARNING_TYPES)
 
-EPSILON_INIT           = 0.50   # cold-start: explore half the time initially
+EPSILON_INIT           = 0.30   # cold-start: explore 30% the time initially
 EPSILON_MIN            = 0.05
-EPSILON_DECAY          = 0.97   # faster decay so we exploit sooner
+EPSILON_DECAY          = 0.98   # faster decay to exploit sooner
 LEARNING_RATE          = 0.05
 MLR_REFIT_EVERY        = 10
 
