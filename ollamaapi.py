@@ -13,18 +13,48 @@ import numpy as np
 from datetime import datetime
 
 # ============================================================
-# OPENAI CONFIG
+# HYBRID LLM CONFIG (Ollama & ChatAnywhere)
 # ============================================================
 from openai import OpenAI
+from dotenv import load_dotenv
+import httpx # Digunakan untuk cek ketersediaan API cepat
 
-OPENAI_API_KEY       = os.getenv("OPENAI_API_KEY",  "YOUR_GPT_API_KEY_HERE")
-OPENAI_API_BASE      = os.getenv("OPENAI_API_BASE",  "https://api.openai.com/v1")
-MODEL_NAME           = "gpt-3.5-turbo"
-EMBEDDING_MODEL_NAME = "text-embedding-3-small"
+load_dotenv()
 
-client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_API_BASE)
-print(f"[LLM] Menggunakan API BASE: {OPENAI_API_BASE}")
+# --- KONFIGURASI ---
+TEST_MODE = True  # SET KE TRUE UNTUK TESTING (MEMAKSA OLLAMA)
 
+# ChatAnywhere Config
+CA_API_KEY  = os.getenv("OPENAI_API_KEY", "sk-8qopXoq0Gcn3YbFToEWt4nEOyo5rigUmXlFcWzitTQZGzROg")
+CA_API_BASE = "https://api.chatanywhere.tech/v1"
+CA_MODEL    = "gpt-3.5-turbo"
+
+# Ollama Config
+OLLAMA_BASE  = "http://localhost:11434/v1"
+OLLAMA_MODEL = "llama3:8b" # Sesuaikan dengan model yang Anda pull
+
+# Embedding tetap gunakan ChatAnywhere (atau ganti ke Ollama jika ingin full lokal)
+EMBEDDING_MODEL_NAME = "mxbai-embed-large"
+
+# Inisialisasi Clients
+client_ca     = OpenAI(api_key=CA_API_KEY, base_url=CA_API_BASE)
+client_ollama = OpenAI(api_key="ollama", base_url=OLLAMA_BASE)
+client = client_ollama
+
+def is_chatanywhere_available() -> bool:
+    """Fungsi untuk mengecek apakah API ChatAnywhere bisa diakses dan token ada"""
+    if TEST_MODE: return False # Paksa lokal jika sedang testing
+    try:
+        # Cek simpel dengan timeout rendah
+        with httpx.Client(timeout=3.0) as check_client:
+            response = check_client.get(f"{CA_API_BASE}/models", headers={"Authorization": f"Bearer {CA_API_KEY}"})
+            return response.status_code == 200
+    except:
+        return False
+
+# Penentuan model default awal
+CURRENT_MODE = "OLLAMA (Testing)" if TEST_MODE else "CHATANYWHERE (Produksi)"
+print(f"[LLM] Mode Aktif: {CURRENT_MODE}")
 # ============================================================
 # TIPE KOGNITIF (48 kombinasi)
 # Format : {1-6}{P|T}{A|G}{I|R}
@@ -151,8 +181,27 @@ global_materials_loaded                      = False
 # ============================================================
 class GPTEmbeddings:
     def embed_query(self, text: str) -> List[float]:
-        resp = client.embeddings.create(model=EMBEDDING_MODEL_NAME, input=text)
-        return resp.data[0].embedding
+        # Tentukan client mana yang dipakai untuk embedding
+        if is_chatanywhere_available():
+            active_client = client_ca
+            # Pastikan model embedding di ChatAnywhere/OpenAI tersedia
+            # Biasanya: "text-embedding-3-small" atau "text-embedding-ada-002"
+            active_model = "text-embedding-3-small" 
+        else:
+            active_client = client_ollama
+            active_model = EMBEDDING_MODEL_NAME
+
+        try:
+            resp = active_client.embeddings.create(
+                model=active_model, 
+                input=text
+            )
+            return resp.data[0].embedding
+        except Exception as e:
+            print(f"[Embedding Error] Gagal menggunakan {active_model}: {e}")
+            # Fallback dimensi (1536 untuk OpenAI, 1024 untuk mxbai-embed-large)
+            dim = 1536 if "text-embedding" in active_model else 1024
+            return [0.0] * dim
 
 embeddings_model = GPTEmbeddings()
 
@@ -320,11 +369,21 @@ SYSTEM_PROMPT = (
     "JANGAN gunakan [...] sebagai pengganti \\[...\\]."
 )
 
-def query_gpt(prompt: str, retries: int = 3, delay: int = 2) -> str:
+def query_gpt(prompt: str, retries: int = 2, delay: int = 1) -> str:
+    # 1. Tentukan Client & Model
+    if is_chatanywhere_available():
+        active_client = client_ca
+        active_model  = CA_MODEL
+        tag = "[GPT-CA]"
+    else:
+        active_client = client_ollama
+        active_model  = OLLAMA_MODEL
+        tag = "[OLLAMA]"
+
     for attempt in range(retries):
         try:
-            resp = client.chat.completions.create(
-                model=MODEL_NAME,
+            resp = active_client.chat.completions.create(
+                model=active_model,
                 messages=[
                     {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user",   "content": prompt},
@@ -332,11 +391,16 @@ def query_gpt(prompt: str, retries: int = 3, delay: int = 2) -> str:
                 temperature=0.7,
             )
             raw = resp.choices[0].message.content.strip()
+            print(f"{tag} Response generated.")
             return normalize_latex(raw)
         except Exception as e:
-            print(f"[GPT] ❌ Percobaan {attempt+1}: {e}")
+            print(f"{tag} ❌ Percobaan {attempt+1}: {e}")
+            # Jika CA gagal di tengah jalan, coba switch ke Ollama di percobaan berikutnya
+            active_client = client_ollama
+            active_model  = OLLAMA_MODEL
             time.sleep(delay)
-    return "[ERROR] GPT API tidak tersedia."
+            
+    return "[ERROR] Semua layanan LLM (Ollama & ChatAnywhere) tidak tersedia."
 
 
 # ============================================================
@@ -397,7 +461,7 @@ JAWABAN MAHASISWA:
 
 {task_instruction}
 
-Tulis penjelasan singkat penilaian (2-3 kalimat), lalu pada baris terakhir tulis TEPAT salah satu:
+Tulis penjelasan singkat penilaian (3-4 kalimat), lalu pada baris terakhir tulis TEPAT salah satu:
 HASIL: BENAR
 HASIL: SALAH"""
 
@@ -500,6 +564,11 @@ def chat_endpoint(req: ChatRequest):
         f"[{c['source']}]\n{c['text'][:RAG_CHUNK_MAX_CHARS]}" for c in rag_chunks
     ) or "Tidak ada konteks materi relevan."
     history_txt = format_history_as_text(history)
+    check_understanding_lead = (
+    "Di akhir penjelasan, kamu WAJIB menambahkan kalimat penutup untuk memicu evaluasi mandiri. "
+    "Gunakan pola: 'Untuk memastikan kamu memahami konsep [Topik] ini, coba jelaskan dengan bahasamu sendiri "
+    "bagaimana cara kerja [Bagian Spesifik], atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.'"
+)
 
     # ── PENJELASAN TUTOR (singkat, maks 3 poin) ───────────────
     if is_code_like(req.message):
@@ -518,8 +587,9 @@ Pertanyaan mahasiswa (berupa kode):
 INSTRUKSI KETAT:
 - Analisis kode secara bertahap sesuai gaya kognitif mahasiswa.
 - Jangan langsung memberikan jawaban final — arahkan mahasiswa untuk berpikir.
-- Penjelasan MAKSIMAL 3 poin/paragraf pendek. Padat dan langsung ke inti.
+- Penjelasan MAKSIMAL 5 poin/paragraf pendek. Padat dan langsung ke inti.
 - Gunakan \\(...\\) untuk matematika inline dan \\[...\\] untuk persamaan blok.
+- {check_understanding_lead}
 - JANGAN tambahkan pertanyaan di akhir — pertanyaan lanjutan akan dibuat terpisah."""
     else:
         prompt = f"""Kamu adalah tutor untuk mahasiswa universitas di Indonesia.
@@ -538,9 +608,11 @@ INSTRUKSI KETAT:
 - Jelaskan konsep sesuai gaya kognitif mahasiswa ({label}).
 - Gunakan contoh konkret yang relevan dengan konteks Indonesia.
 - Jangan langsung memberikan jawaban final — bantu mahasiswa memahami konsep.
-- Penjelasan MAKSIMAL 3 poin/paragraf pendek. Padat dan langsung ke inti.
+- Penjelasan MAKSIMAL 5 poin/paragraf pendek. Padat dan langsung ke inti.
 - Gunakan \\(...\\) untuk matematika inline dan \\[...\\] untuk persamaan blok.
+- {check_understanding_lead}
 - JANGAN tambahkan pertanyaan di akhir — pertanyaan lanjutan akan dibuat terpisah."""
+
 
     reply = query_gpt(prompt)
 
@@ -711,7 +783,7 @@ if __name__ == "__main__":
     import uvicorn
     load_global_materials()
     print("\n🚀  Server  →  http://127.0.0.1:8000")
-    print(f"🧠  Model   →  {MODEL_NAME}")
-    print(f"🌐  API     →  {OPENAI_API_BASE}")
+    print(f"🧠  Mode Testing: {'AKTIF (Lokal Only)' if TEST_MODE else 'NON-AKTIF (Hybrid)'}")
+    print(f"🤖  Ollama Model: {OLLAMA_MODEL}")
     print(f"📚  Tipe kognitif: {len(VALID_COGNITIVE_TYPES)}")
     uvicorn.run("ollamaapi:app", host="127.0.0.1", port=8000, reload=True)

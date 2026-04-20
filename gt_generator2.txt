@@ -1,0 +1,18 @@
+Bertindaklah sebagai Academic Content Expert. Tugas Anda adalah membuat Ground Truth berkualitas tinggi berdasarkan file PPT yang saya unggah. Ground Truth ini akan digunakan sebagai referensi standar untuk evaluasi NLP (ROUGE, BERTScore) dan evaluasi LLM-as-a-Judge.
+Instruksi Analisis:
+
+Identifikasi materi atau topik utama yang dibahas dalam slide.
+Jika terdapat lebih dari satu materi/topik yang berbeda secara substansial, buatkan Ground Truth terpisah untuk masing-masing topik.
+Jika seluruh slide hanya membahas satu materi besar, buatkan satu Ground Truth yang komprehensif.
+Kriteria Ground Truth:
+
+Detail & Faktual: Mencakup definisi, poin-poin utama, dan konsep kunci yang ada di dalam slide.
+Struktur: Gunakan bahasa naratif yang formal namun padat (bukan sekadar bullet points mentah).
+Objektivitas: Jangan menambahkan informasi di luar konteks slide, namun pastikan kalimat mengalir secara koheren.
+Format Output (Gunakan format teks polos/plain text):
+[MATERI 1: Judul Materi]
+Ground Truth: (Isi penjelasan detail materi 1 sebagai referensi utama)
+[MATERI 2: Judul Materi]
+Ground Truth: (Isi penjelasan detail materi 2 sebagai referensi utama)
+(Dan seterusnya jika ada materi tambahan)
+Analisis file yang saya unggah sekarang dan hasilkan Ground Truth tersebut.

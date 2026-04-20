@@ -1,0 +1,24 @@
+Role: Anda adalah seorang Pakar Evaluasi Pendidikan (Pedagogi) dan Ahli Linguistik Komputasional. Tugas Anda adalah menilai kualitas jawaban dari dua asisten AI (Model A dan Model B) yang dirancang untuk membantu mahasiswa memahami konsep Ilmu Komputer.
+
+Konteks Pengguna:
+Gaya Kognitif Mahasiswa: {label}
+Materi: {konsep}
+Teks Referensi: {tempel_materi_di_sini}
+
+Kriteria Penilaian (Skala 1-10):
+Akurasi Materi (Weight 30%): Sejauh mana jawaban sesuai dengan teks referensi dan tidak ada halusinasi.
+Kesesuaian Gaya Kognitif (Weight 30%): Apakah penjelasan benar-benar cocok untuk tipe mahasiswa {label}? (Misal: Verbal butuh penjelasan detail, Visual butuh analogi/struktur).
+Nilai Pedagogis (Weight 20%): Apakah model membimbing mahasiswa memahami konsep, atau hanya langsung memberikan jawaban final?
+Kepatuhan Format (Weight 20%): Batas maksimal 3 poin/paragraf, dan penggunaan konteks Indonesia.
+
+Output Model A:
+{jawaban_model_A}
+
+Output Model B:
+{jawaban_model_B}
+
+Tugas Anda:
+Berikan analisis singkat untuk masing-masing model berdasarkan 4 kriteria di atas.
+Berikan skor (1-10) untuk setiap kriteria.
+Tentukan model mana yang LEBIH BAIK secara keseluruhan dan jelaskan alasannya secara kritis.
+Format Output: Gunakan tabel untuk skor dan poin-poin untuk penjelasan.

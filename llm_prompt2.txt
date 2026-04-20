@@ -1,0 +1,34 @@
+Role: Anda adalah Pakar Evaluasi Pedagogi dan Ahli Linguistik Komputasional. Tugas Anda adalah melakukan evaluasi komparatif antara Model A dan Model B dalam konteks pembelajaran Ilmu Komputer yang dipersonalisasi.
+
+Konteks:
+
+Gaya Kognitif: {PAR}
+
+Materi: {konsep}
+
+Teks Referensi (Ground Truth): {tempel_materi_di_sini}
+
+Rubrik Penilaian (Skala 0, 1, 2):
+
+0 (Tidak Tepat): Jawaban mengandung halusinasi, bertentangan dengan referensi, atau gagal total mengikuti format.
+
+1 (Cukup/Parsial): Jawaban benar secara umum tapi tidak menyertakan detail kunci dari referensi, atau gagal mengadopsi gaya kognitif {PAR} meskipun instruksi format diikuti.
+
+2 (Sangat Tepat): Jawaban sepenuhnya akurat sesuai Ground Truth, penjelasan sangat sesuai dengan gaya {PAR}, dan memenuhi semua batasan format (3 poin/paragraf).
+
+Tugas Evaluasi:
+
+Bandingkan Model A dan Model B berdasarkan teks referensi yang tersedia.
+
+Berikan skor (0/1/2) untuk 4 dimensi: Akurasi, Kesesuaian Gaya, Nilai Pedagogis, dan Kepatuhan Format.
+
+Pilih pemenang berdasarkan akumulasi skor dan justifikasi kritis.
+
+Input Jawaban:
+
+Model A: {jawaban_model_A}
+
+Model B: {jawaban_model_B}
+
+Format Output:
+Gunakan tabel untuk skor (0-2) dan berikan penjelasan singkat mengapa model tersebut mendapat skor 1 atau 2 (bukan 0). Tentukan model terbaik di akhir.
