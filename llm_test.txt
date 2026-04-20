@@ -3,19 +3,9 @@ Role: Anda adalah Pakar Evaluasi Pedagogi dan Ahli Linguistik Komputasional. Tug
 Konteks:
 Gaya Kognitif: {PAR}
 
-Materi: {Greedy}
+Materi: {Computational Thinking}
 
-Teks Referensi (Ground Truth): {Algoritme Greedy merupakan sebuah teknik dalam pengambilan keputusan terbaik pada setiap tahapan tanpa berupaya untuk memperbaiki atau mengubah keputusan yang telah diambil sebelumnya. Terdapat lima elemen pokok yang harus ada dalam pembentukan algoritme Greedy, yaitu:
-
-Mengidentifikasi tujuan: Algoritme Greedy wajib mempunyai tujuan yang jelas dan spesifik untuk dicapai. Dalam konteks ini, tujuannya adalah menentukan pilihan atau keputusan yang paling optimal pada setiap langkah yang dilakukan.
-
-Menghitung biaya: Algoritme Greedy harus mampu melakukan perhitungan biaya terhadap setiap keputusan yang dipilih. Komponen biaya ini bisa mencakup aspek waktu, biaya finansial, maupun berbagai bentuk keterbatasan lainnya.
-
-Menggunakan heuristik: Algoritme Greedy perlu menerapkan heuristik yang tepat guna menghasilkan keputusan terbaik. Heuristik tersebut dapat diimplementasikan dalam bentuk aturan tertentu, proporsi, atau metode lainnya.
-
-Mengabaikan kompleksitas: Algoritme Greedy harus memiliki kemampuan untuk mengabaikan kerumitan atau kompleksitas dari setiap keputusan yang telah diambil. Hal ini berarti algoritme tidak perlu berusaha untuk merevisi atau memperbaiki keputusan-keputusan di masa lalu.
-
-Mengiterasi keputusan: Algoritme Greedy harus dapat melakukan iterasi atau pengulangan terhadap keputusan yang diambil secara berkelanjutan hingga target atau tujuan yang diinginkan berhasil tercapai.}
+Teks Referensi (Ground Truth): {"Berpikir Komputasional (Computational Thinking) adalah proses formulasi masalah yang berfokus pada informasi penting untuk menghasilkan solusi generik yang terstruktur. Mata kuliah ini memberikan landasan berpikir agar mahasiswa mampu memanfaatkan teknologi komputer sebagai alat bantu penyelesaian masalah di domain bidang ilmu masing-masing tanpa harus memiliki kompetensi teknis setingkat mahasiswa ilmu komputer. Terdapat empat pilar utama dalam metode berpikir komputasional, yaitu: (1) Abstraksi, memfokuskan perhatian pada informasi penting dan mengabaikan detail yang tidak relevan; (2) Algoritme, menyusun langkah-langkah solusi yang terstruktur; (3) Dekomposisi, memecah masalah besar atau kompleks menjadi bagian-bagian yang lebih kecil dan sederhana; serta (4) Pengenalan Pola (Pattern Recognition), mencari kesamaan di dalam maupun antar masalah. Implementasi konsep ini diterapkan dalam berbagai studi kasus nyata, seperti optimasi penyusunan peti kemas menggunakan konsep Stack dan Queue, penentuan jalur logistik yang efisien melalui Graph untuk menekan ongkos operasional, penerapan teori antrean pada desain jalan tol, hingga mekanisme pengenalan pola wajah (Face-ID) yang mencocokkan gambar dengan pola titik dan garis tertentu. Pembelajaran ini didukung oleh berbagai referensi literatur mengenai pemecahan masalah kreatif dan pemrograman dasar."}
 
 Rubrik Penilaian (Skala 0, 1, 2):
 
@@ -23,7 +13,7 @@ Rubrik Penilaian (Skala 0, 1, 2):
 
 1 (Cukup/Parsial): Jawaban benar secara umum tapi tidak menyertakan detail kunci dari referensi, atau gagal mengadopsi gaya kognitif {Gaya Kognitif} meskipun instruksi format diikuti.
 
-2 (Sangat Tepat): Jawaban sepenuhnya akurat sesuai Ground Truth, penjelasan sangat sesuai dengan gaya {Gaya Kognitif}, dan memenuhi semua batasan format (3 poin/paragraf atau kurang).
+2 (Sangat Tepat): Jawaban terdapat dalam Ground Truth tidak harus semua yang ada di dalam Ground Truth tapi penjelasan model masih dalam lingkup Ground Truth, penjelasan sesuai dengan gaya {Gaya Kognitif}, dan memenuhi semua batasan format (3 poin/paragraf atau kurang).
 
 Tugas Evaluasi:
 
@@ -35,20 +25,21 @@ Pilih pemenang berdasarkan akumulasi skor dan justifikasi kritis.
 
 Input Jawaban:
 
-Model A: {Algoritme Greedy adalah suatu teknik untuk membuat keputusan yang terbaik dalam setiap langkah, tanpa mencoba untuk memperbaiki keputusan-keputusan sebelumnya. Berikut lima elemen pokok yang harus ada dalam pembentukan algoritme Greedy:
+Model A: {tujuan utama dari mata kuliah Berpikir Komputasional bagi mahasiswa non-Ilmu Komputer adalah meningkatkan kemampuan mereka dalam memformulasikan masalah, mengidentifikasi informasi penting, dan menghasilkan solusi yang terstruktur. Dalam hal ini, mahasiswa tidak harus memiliki kompetensi teknis setingkat mahasiswa Ilmu Komputer, namun harus memiliki kemampuan berpikir kritis dan sistematis untuk mengembangkan solusi yang efektif.
 
-Mengidentifikasi tujuan: Algoritme Greedy harus memiliki tujuan jelas yang ingin dicapai. Dalam kasus algoritme Greedy, tujuan adalah membuat keputusan yang terbaik dalam setiap langkah. Menghitung biaya: Algoritme Greedy harus dapat menghitung biaya dari setiap keputusan yang diambil. Biaya ini dapat berupa waktu, biaya, atau keterbatasan lainnya.
-Menggunakan heuristik: Algoritme Greedy harus menggunakan heuristik yang sesuai untuk membuat keputusan yang terbaik. Heuristik ini dapat berupa aturan, proporsi, atau lain-lain. Mengabaikan kompleksitas: Algoritme Greedy harus dapat mengabaikan kompleksitas dari setiap keputusan yang diambil. Artinya, algoritme Greedy tidak harus mencoba untuk memperbaiki keputusan-keputusan sebelumnya. Mengiterasi keputusan: Algoritme Greedy harus dapat mengiterasi keputusan yang diambil hingga mencapai tujuan yang diinginkan.}
+Dalam situasi sehari-hari, Berpikir Komputasional dapat digunakan untuk mengidentifikasi informasi penting dan menghitung kemungkinan terbaik. Misalnya, jika kita ingin memutuskan apakah sebuah bisnis memiliki potensi untuk sukses, kita harus mengidentifikasi informasi penting seperti kekuatan dan kelemahan bisnis, serta lingkungan pasar. Kemudian, kita dapat menggunakan informasi tersebut untuk menghitung kemungkinan sukses bisnis dan mengembangkan solusi yang terstruktur untuk meningkatkan kesuksesan.}
 
-Model B: {Dalam sintesis, lima elemen pokok yang harus ada dalam pembentukan algoritme Greedy adalah:
+Model B: {Definisi Computational Thinking (Berpikir Komputasional) adalah sebagai berikut:
 
-1. **Greedy Choice**: Algoritme Greedy memerlukan elemen pokok ini untuk memilih langkah terbaik dalam setiap tahapan. Greedy Choice harus berupa fungsi yang memilih langkah terbaik berdasarkan informasi yang tersedia.
-2. **Optimization Criterion**: Algoritme Greedy memerlukan elemen pokok ini untuk menentukan apakah langkah yang dipilih adalah langkah terbaik. Optimization Criterion harus berupa fungsi yang menentukan apakah langkah yang dipilih adalah langkah terbaik.
-3. **State Information**: Algoritme Greedy memerlukan elemen pokok ini untuk memahami situasi yang terjadi dalam setiap tahapan. State Information harus berupa informasi yang dapat membantu algoritme Greedy dalam membuat keputusan yang tepat.
-4. **Transition Function**: Algoritme Greedy memerlukan elemen pokok ini untuk menentukan apakah langkah yang dipilih akan menghasilkan state yang baru. Transition Function harus berupa fungsi yang menentukan apakah langkah yang dipilih akan menghasilkan state yang baru.
-5. **Termination Condition**: Algoritme Greedy memerlukan elemen pokok ini untuk menentukan apakah algoritme Greedy harus dihentikan. Termination Condition harus berupa kondisi yang harus terpenuhi agar algoritme Greedy dapat dihentikan.
+Berpikir Komputasional (Computational Thinking) adalah proses berpikir yang digunakan oleh manusia untuk memecahkan masalah, membuat keputusan, dan mengembangkan solusi, dengan menggunakan konsep-konsep dan prinsip-prinsip yang digunakan dalam ilmu komputer. Berpikir Komputasional melibatkan kemampuan-kemampuan seperti:
 
-Dalam sintesis, lima elemen pokok yang harus ada dalam pembentukan algoritme Greedy adalah Greedy Choice, Optimization Criterion, State Information, Transition Function, dan Termination Condition.}
+* Membagi masalah menjadi bagian-bagian yang lebih kecil dan lebih mudah dianalisis
+* Menggunakan algoritma dan struktur data untuk memecahkan masalah
+* Menerapkan prinsip-prinsip abstraksi dan modulasi untuk mengurangi kompleksitas masalah
+* Menggunakan data dan informasi untuk membuat keputusan
+* Mengembangkan solusi yang efektif dan efisiensi
+
+Berpikir Komputasional adalah proses berpikir yang dapat digunakan oleh orang-orang dari berbagai latar belakang dan bidang ilmu, tidak hanya orang-orang yang berlatar belakang ilmu komputer. Proses berpikir ini dapat membantu orang-orang untuk menjadi lebih kritis, analitis, dan kreatif dalam berpikir dan beraktivitas.}
 
 Format Output:
 Gunakan tabel untuk skor (0-2) dan berikan penjelasan singkat mengapa model tersebut mendapat skor 1 atau 2 (bukan 0). Tentukan model terbaik di akhir.

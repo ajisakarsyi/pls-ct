@@ -28,7 +28,7 @@ if __name__ == "__main__":
     validator = NLPValidator(lang="id")
     
     # Membaca Ground Truth langsung dari file .txt agar tidak ada error import
-    file_path = "gt_ct/01_01.txt"
+    file_path = "materials/Konsep Dasar dan Implementasi Berpikir Komputasional (Computational Thinking).txt"
     if os.path.exists(file_path):
         with open(file_path, "r", encoding="utf-8") as f:
             ref = f.read()
@@ -36,13 +36,9 @@ if __name__ == "__main__":
         print(f"Error: File {file_path} tidak ditemukan!")
         ref = ""
     
-    pred = """Dalam mata kuliah Berpikir Komputasional, tujuan utama bagi mahasiswa non-Ilmu Komputer adalah:
+    pred = """tujuan utama dari mata kuliah Berpikir Komputasional bagi mahasiswa non-Ilmu Komputer adalah meningkatkan kemampuan mereka dalam memformulasikan masalah, mengidentifikasi informasi penting, dan menghasilkan solusi yang terstruktur. Dalam hal ini, mahasiswa tidak harus memiliki kompetensi teknis setingkat mahasiswa Ilmu Komputer, namun harus memiliki kemampuan berpikir kritis dan sistematis untuk mengembangkan solusi yang efektif.
 
-Mengembangkan kemampuan berpikir kritis dan analisis: Mereka dapat mengidentifikasi dan memecahkan masalah dengan cara yang logis dan sistematis.
-Mengembangkan kemampuan berpikir abstrak: Mereka dapat mengidentifikasi dan mengembangkan konsep-konsep yang lebih tinggi dan abstrak, serta menerapkan konsep-konsep tersebut pada berbagai konteks.
-Mengembangkan kemampuan pengambilan keputusan: Mereka dapat mengidentifikasi dan menghitung risiko, serta membuat keputusan yang cerdas berdasarkan data dan informasi.
-Mengembangkan kemampuan komunikasi: Mereka dapat mengkomunikasikan gagasan dan ide-ide mereka dengan cara yang jelas dan efektif.
-Mengembangkan kemampuan kolaborasi: Mereka dapat bekerja sama dengan orang lain untuk mencapai tujuan, serta menerima dan menghargai kontribusi orang lain."""
+Dalam situasi sehari-hari, Berpikir Komputasional dapat digunakan untuk mengidentifikasi informasi penting dan menghitung kemungkinan terbaik. Misalnya, jika kita ingin memutuskan apakah sebuah bisnis memiliki potensi untuk sukses, kita harus mengidentifikasi informasi penting seperti kekuatan dan kelemahan bisnis, serta lingkungan pasar. Kemudian, kita dapat menggunakan informasi tersebut untuk menghitung kemungkinan sukses bisnis dan mengembangkan solusi yang terstruktur untuk meningkatkan kesuksesan."""
 
     # Pastikan variabel hasil sejajar dengan baris di atasnya
     hasil = validator.calculate_metrics(pred, ref)
