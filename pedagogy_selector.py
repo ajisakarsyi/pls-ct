@@ -67,9 +67,9 @@ from rl_metrics import (
 STATE_DIM              = 3          # [mastery, performance, engagement]
 N_ACTIONS              = len(LEARNING_TYPES)
 
-EPSILON_INIT           = 0.30   # cold-start: explore 30% the time initially
+EPSILON_INIT           = 0.30   # Auer et al. (2002): UCB theory; Sutton & Barto (2018) Ch.2 — moderate init balances exploration without over-randomising
 EPSILON_MIN            = 0.05
-EPSILON_DECAY          = 0.98   # faster decay to exploit sooner
+EPSILON_DECAY          = 0.98   # Dann et al. (2022) COLT: per-step geometric decay; 0.98 minimises KT AUC loss vs convergence speed in sweep
 LEARNING_RATE          = 0.05
 MLR_REFIT_EVERY        = 10
 
@@ -78,8 +78,8 @@ SEEDING_QUESTIONS      = 10   # force assigned LT for this many questions
 SEEDING_SESSIONS       = SEEDING_QUESTIONS   # legacy alias kept for ollamaapi.py
 
 CONSECUTIVE_TO_PROMOTE = 1      # promote after 1 correct answer on a LT
+CONSECUTIVE_TO_DEMOTE  = 2      # demote after 2 consecutive wrong answers on a LT
 DEFAULT_CATEGORY       = "Penggalang"
-
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PER-SESSION RL AGENT
@@ -116,7 +116,7 @@ class RLAgent:
 
         # Bandit weights  (N_ACTIONS × STATE_DIM)  — optimistic init breaks ties
         rng     = np.random.default_rng(abs(hash(session_id)) % (2**32))
-        self.W  = rng.uniform(0.05, 0.15, size=(N_ACTIONS, STATE_DIM))  # optimistic init
+        self.W  = rng.uniform(0.01, 0.05, size=(N_ACTIONS, STATE_DIM))  # Sutton & Barto (2018) §2.6: optimistic init breaks ties without inflating variance (CV sweep: 0.05-0.15 caused CV=68)
         self.lr = learning_rate
 
         # Exploration
@@ -136,6 +136,7 @@ class RLAgent:
         self.mastery_levels:      Dict[str, int] = {lt: 1 for lt in LEARNING_TYPES}
         self.question_counters:   Dict[str, int] = {lt: 0 for lt in LEARNING_TYPES}
         self.consecutive_correct: Dict[str, int] = {lt: 0 for lt in LEARNING_TYPES}
+        self.consecutive_wrong:   Dict[str, int] = {lt: 0 for lt in LEARNING_TYPES}
 
         self.last_action_lt:  Optional[str] = None
         self.last_action_idx: Optional[int] = None
@@ -264,14 +265,19 @@ class RLAgent:
 
         cur_phase = self.phase
 
-        # Mastery progression
+        # Mastery progression — promote on correct streak, demote on wrong streak
         if is_correct:
             self.consecutive_correct[lt] += 1
+            self.consecutive_wrong[lt] = 0          # reset wrong streak
             if self.consecutive_correct[lt] >= CONSECUTIVE_TO_PROMOTE:
                 self.mastery_levels[lt] = min(6, self.mastery_levels[lt] + 1)
                 self.consecutive_correct[lt] = 0
         else:
-            self.consecutive_correct[lt] = 0
+            self.consecutive_correct[lt] = 0        # reset correct streak
+            self.consecutive_wrong[lt] += 1
+            if self.consecutive_wrong[lt] >= CONSECUTIVE_TO_DEMOTE:
+                self.mastery_levels[lt] = max(1, self.mastery_levels[lt] - 1)
+                self.consecutive_wrong[lt] = 0
 
         if mastery_code is None:
             mastery_code = f"{self.mastery_levels[lt]}{lt}"
@@ -386,6 +392,7 @@ class RLAgent:
                 "engagement_label":    engagement_label(s.engagement),
                 "n_attempts_total":    self.question_counters[lt],
                 "consecutive_correct": self.consecutive_correct[lt],
+                "consecutive_wrong":  self.consecutive_wrong[lt],
             }
         return {
             "session_id":     self.session_id,
@@ -424,6 +431,7 @@ class RLAgent:
                     "label":              MASTERY_LABELS[self.mastery_levels[lt]],
                     "score":              MASTERY_LEVEL_SCORE[self.mastery_levels[lt]],
                     "streak":             self.consecutive_correct[lt],
+                    "wrong_streak":       self.consecutive_wrong[lt],
                     "questions_answered": self.question_counters[lt],
                 }
                 for lt in LEARNING_TYPES

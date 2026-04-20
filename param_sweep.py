@@ -18,11 +18,6 @@ from rl_metrics import (
     compute_expected_time, MASTERY_LEVEL_SCORE, N_MAX
 )
 
-# ── Student simulator ─────────────────────────────────────────────────────
-# Each profile has a "true" best LT and skill level.
-# p_correct is the probability of answering correctly on attempt 1
-# when the LT matches their style (degrades for mismatched LTs).
-
 PROFILES = [
     {"name": "PAR_strong",  "true_lt": "PAR", "base_p": 0.82},
     {"name": "TAR_strong",  "true_lt": "TAR", "base_p": 0.78},
@@ -38,10 +33,8 @@ LEARNING_TYPES = ["PAR", "TAR", "PAI", "TAI", "TGR", "TGI", "PGR", "PGI"]
 
 
 def lt_match_factor(selected_lt: str, true_lt: str) -> float:
-    """Reward multiplier based on how well selected LT matches student's true style."""
     if selected_lt == true_lt:
         return 1.00
-    # Partial match: same first letter (P/T) or same last letter (R/I)
     if selected_lt[0] == true_lt[0] or selected_lt[-1] == true_lt[-1]:
         return 0.75
     return 0.55
@@ -58,20 +51,16 @@ def simulate_student(
     consecutive_to_promote: int,
     seed: int,
 ) -> dict:
-    """
-    Simulate one student session under given hyperparameters.
-    Returns a step_log compatible with evaluation/evaluator.py.
-    """
     rng = random.Random(seed)
     np_rng = np.random.default_rng(seed)
 
-    # ── Bandit state ──────────────────────────────────────────────────────
     n_actions = len(LEARNING_TYPES)
-    state_dim = 3  # [mastery_score, performance, engagement]
+    state_dim = 3
     W = np_rng.uniform(w_init_low, w_init_high, size=(n_actions, state_dim))
     epsilon = epsilon_init
     mastery_levels = {lt: 1 for lt in LEARNING_TYPES}
     consecutive_correct = {lt: 0 for lt in LEARNING_TYPES}
+    consecutive_wrong   = {lt: 0 for lt in LEARNING_TYPES}
     tracker = MetricsTracker(student_id=f"{profile['name']}_{seed}", category="Penggalang")
 
     step_log = []
@@ -79,29 +68,24 @@ def simulate_student(
     prev_mast = {lt: MASTERY_LEVEL_SCORE[1] for lt in LEARNING_TYPES}
 
     for q_idx in range(n_questions):
-        # Build state vector from current tracker state
         state = np.array([
             np.mean([MASTERY_LEVEL_SCORE[mastery_levels[lt]] for lt in LEARNING_TYPES]),
             np.mean([tracker.states[lt].performance for lt in LEARNING_TYPES]),
             np.mean([tracker.states[lt].engagement  for lt in LEARNING_TYPES]),
         ], dtype=float)
 
-        # ε-greedy action selection
         q_vals = {lt: float(W[i] @ state) for i, lt in enumerate(LEARNING_TYPES)}
         if rng.random() < epsilon:
             lt = rng.choice(LEARNING_TYPES)
         else:
             lt = max(q_vals, key=q_vals.__getitem__)
 
-        # Decay epsilon
         epsilon = max(epsilon_min, epsilon * epsilon_decay)
 
-        # Simulate correctness based on LT match
         match   = lt_match_factor(lt, profile["true_lt"])
         p_corr  = min(0.97, profile["base_p"] * match)
         is_corr = rng.random() < p_corr
 
-        # n_attempt
         if is_corr:
             n_attempt = rng.randint(1, 3) if p_corr > 0.7 else rng.randint(1, N_MAX)
         else:
@@ -119,22 +103,25 @@ def simulate_student(
             is_correct       = is_corr,
         )
 
-        # TD update
         action_idx = LEARNING_TYPES.index(lt)
         reward     = record["reward"]
         td_error   = reward - float(W[action_idx] @ state)
         lr         = 0.1
         W[action_idx] += lr * td_error * state
 
-        # Mastery promotion
         if is_corr:
             consecutive_correct[lt] += 1
+            consecutive_wrong[lt] = 0
             if (consecutive_correct[lt] >= consecutive_to_promote
                     and mastery_levels[lt] < 6):
                 mastery_levels[lt] += 1
                 consecutive_correct[lt] = 0
         else:
             consecutive_correct[lt] = 0
+            consecutive_wrong[lt] += 1
+            if consecutive_wrong[lt] >= 2 and mastery_levels[lt] > 1:
+                mastery_levels[lt] -= 1
+                consecutive_wrong[lt] = 0
 
         step_log.append({
             "step_num":       q_idx + 1,
@@ -189,7 +176,6 @@ def eval_kt_auc(step_log):
 
 
 def eval_reward_stability(step_log):
-    """Coefficient of variation of reward — lower = more stable learning signal."""
     rewards = [s["reward"] for s in step_log]
     if not rewards or statistics.mean(rewards) == 0: return None
     try:
@@ -199,21 +185,15 @@ def eval_reward_stability(step_log):
 
 
 def eval_exploration_efficiency(step_log, true_lt):
-    """
-    How many questions until the agent starts consistently picking the true LT.
-    Lower = better exploration efficiency.
-    """
     for i, s in enumerate(step_log):
-        # Check if the last 5 steps are all the true LT
         if i >= 4:
             last5 = [step_log[j]["learning_type"] for j in range(i-4, i+1)]
             if all(lt == true_lt for lt in last5):
-                return i + 1  # 1-indexed
-    return len(step_log)  # never converged
+                return i + 1
+    return len(step_log)
 
 
 def eval_ope_dr(step_log):
-    """Estimate value of pure-exploit vs logged policy."""
     if len(step_log) < 5: return None
     lt_rewards = {}
     for s in step_log:
@@ -238,16 +218,16 @@ def eval_ope_dr(step_log):
 
 CONFIGS = [
     # name, eps_init, eps_decay, eps_min, w_low, w_high, consec
-    ("Low Exploration",  0.20, 0.995, 0.05, 0.001, 0.01, 2),
-    ("Low-Med Exploration",    0.30, 0.98,  0.05, 0.01,  0.05, 1),
-    ("Medium Exploration, High W Init",    0.40, 0.97,  0.05, 0.05,  0.15, 1),
-    ("Current",    0.50, 0.97,  0.05, 0.05,  0.15, 1),
-    ("High Exploration A", 0.60, 0.96,  0.05, 0.05,  0.15, 1),
-    ("High Exploration B", 0.70, 0.95,  0.05, 0.05,  0.20, 1),
-    ("Very High Exploration",      0.80, 0.94,  0.05, 0.05,  0.20, 1),
-    ("Fast Decay",    0.50, 0.90,  0.05, 0.05,  0.15, 1),
-    ("Slow Decay",     0.50, 0.99,  0.05, 0.05,  0.15, 1),
-    ("High W Init",   0.50, 0.97,  0.05, 0.10,  0.20, 1),
+    ("Low Exploration",              0.20, 0.995, 0.05, 0.001, 0.01, 2),
+    ("Low-Med Exploration",          0.30, 0.98,  0.05, 0.01,  0.05, 1),
+    ("Medium Exploration, High W Init", 0.40, 0.97, 0.05, 0.05, 0.15, 1),
+    ("Current",                      0.50, 0.97,  0.05, 0.05,  0.15, 1),
+    ("High Exploration A",           0.60, 0.96,  0.05, 0.05,  0.15, 1),
+    ("High Exploration B",           0.70, 0.95,  0.05, 0.05,  0.20, 1),
+    ("Very High Exploration",        0.80, 0.94,  0.05, 0.05,  0.20, 1),
+    ("Fast Decay",                   0.50, 0.90,  0.05, 0.05,  0.15, 1),
+    ("Slow Decay",                   0.50, 0.99,  0.05, 0.05,  0.15, 1),
+    ("High W Init",                  0.50, 0.97,  0.05, 0.10,  0.20, 1),
 ]
 
 N_STUDENTS   = 30
@@ -288,32 +268,32 @@ for cfg in CONFIGS:
         conv_qs.append(cq)
 
     results.append({
-        "name":        name,
-        "eps_init":    eps_i,
-        "eps_decay":   eps_d,
-        "eps_min":     eps_m,
-        "w_low":       w_lo,
-        "w_high":      w_hi,
-        "consec":      consec,
-        "kt_auc":      statistics.mean(aucs) if aucs else 0,
-        "reward_cv":   statistics.mean(stabs) if stabs else 99,
-        "ope_gain":    statistics.mean(opes)  if opes  else 0,
-        "conv_q":      statistics.mean(conv_qs),
+        "name":      name,
+        "eps_init":  eps_i,
+        "eps_decay": eps_d,
+        "eps_min":   eps_m,
+        "w_low":     w_lo,
+        "w_high":    w_hi,
+        "consec":    consec,
+        "kt_auc":    statistics.mean(aucs)   if aucs   else 0,
+        "reward_cv": statistics.mean(stabs)  if stabs  else 99,
+        "ope_gain":  statistics.mean(opes)   if opes   else 0,
+        "conv_q":    statistics.mean(conv_qs),
     })
-    print(f"  {name:<18} KT_AUC={results[-1]['kt_auc']:.4f}  "
+    print(f"  {name:<38} KT_AUC={results[-1]['kt_auc']:.4f}  "
           f"RewardCV={results[-1]['reward_cv']:.3f}  "
-          f"OPE_gain={results[-1]['ope_gain']:+.4f}  ")
+          f"OPE_gain={results[-1]['ope_gain']:+.4f}")
 
-# ── Per-metric ranking (no composite score) ──────────────────────────────
+# ── Per-metric ranking (no composite score) ───────────────────────────────
 SEP = "=" * 72
 
 print("\n" + SEP)
 print("RESULTS — Raw metrics per configuration")
 print(SEP)
-print(f"  {'Configuration':<26} {'KT AUC':>8}  {'Reward CV':>10}  {'OPE Gain':>10}")
-print(f"  {'-'*26} {'-'*8}  {'-'*10}  {'-'*10}")
+print(f"  {'Configuration':<38} {'KT AUC':>8}  {'Reward CV':>10}  {'OPE Gain':>10}")
+print(f"  {'-'*38} {'-'*8}  {'-'*10}  {'-'*10}")
 for r in results:
-    print(f"  {r['name']:<26} {r['kt_auc']:>8.4f}  {r['reward_cv']:>10.3f}  {r['ope_gain']:>+10.4f} ")
+    print(f"  {r['name']:<38} {r['kt_auc']:>8.4f}  {r['reward_cv']:>10.3f}  {r['ope_gain']:>+10.4f}")
 
 print("\n" + SEP)
 print("PER-METRIC WINNERS")
@@ -326,22 +306,22 @@ by_cq  = sorted(results, key=lambda x:  x["conv_q"])
 
 print("\n  KT AUC  (higher = better mastery tracking):")
 for i, r in enumerate(by_kt[:3]):
-    print(f"    #{i+1}  {r['name']:<26}  {r['kt_auc']:.4f}")
+    print(f"    #{i+1}  {r['name']:<38}  {r['kt_auc']:.4f}")
 
 print("\n  Reward CV  (lower = more stable reward signal):")
 for i, r in enumerate(by_cv[:3]):
     cv_note = "  ← catastrophic" if r["reward_cv"] > 5 else ""
-    print(f"    #{i+1}  {r['name']:<26}  {r['reward_cv']:.3f}{cv_note}")
+    print(f"    #{i+1}  {r['name']:<38}  {r['reward_cv']:.3f}{cv_note}")
 
 print("\n  OPE Gain  (positive = exploration is helping):")
 for i, r in enumerate(by_ope[:3]):
-    print(f"    #{i+1}  {r['name']:<26}  {r['ope_gain']:+.4f}")
+    print(f"    #{i+1}  {r['name']:<38}  {r['ope_gain']:+.4f}")
 
 print("\n  Convergence Speed  (fewer Q = faster):")
 for i, r in enumerate(by_cq[:3]):
-    print(f"    #{i+1}  {r['name']:<26}  {r['conv_q']:.1f} Q")
+    print(f"    #{i+1}  {r['name']:<38}  {r['conv_q']:.1f} Q")
 
-# Count top-2 finishes per config
+# Top-2 finish tally
 print("\n" + SEP)
 print("TOP-2 FINISHES PER CONFIGURATION")
 print(SEP)
@@ -351,9 +331,8 @@ for r in by_cv[:2]:  top2[r["name"]] = top2.get(r["name"], []) + ["Reward CV"]
 for r in by_ope[:2]: top2[r["name"]] = top2.get(r["name"], []) + ["OPE Gain"]
 for r in by_cq[:2]:  top2[r["name"]] = top2.get(r["name"], []) + ["Convergence"]
 for name, wins in sorted(top2.items(), key=lambda x: -len(x[1])):
-    print(f"  {name:<26}  top-2 in: {', '.join(wins)}")
+    print(f"  {name:<38}  top-2 in: {', '.join(wins)}")
 
-# Best overall without composite
 best_name = max(top2, key=lambda k: len(top2[k]))
 best = next(r for r in results if r["name"] == best_name)
 print("\n" + SEP)
