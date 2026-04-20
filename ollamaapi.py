@@ -587,7 +587,7 @@ Pertanyaan mahasiswa (berupa kode):
 INSTRUKSI KETAT:
 - Analisis kode secara bertahap sesuai gaya kognitif mahasiswa.
 - Jangan langsung memberikan jawaban final — arahkan mahasiswa untuk berpikir.
-- Penjelasan MAKSIMAL 5 poin/paragraf pendek. Padat dan langsung ke inti.
+- Penjelasan 4 poin/paragraf pendek. Padat dan langsung ke inti.
 - Gunakan \\(...\\) untuk matematika inline dan \\[...\\] untuk persamaan blok.
 - {check_understanding_lead}
 - JANGAN tambahkan pertanyaan di akhir — pertanyaan lanjutan akan dibuat terpisah."""
@@ -608,7 +608,7 @@ INSTRUKSI KETAT:
 - Jelaskan konsep sesuai gaya kognitif mahasiswa ({label}).
 - Gunakan contoh konkret yang relevan dengan konteks Indonesia.
 - Jangan langsung memberikan jawaban final — bantu mahasiswa memahami konsep.
-- Penjelasan MAKSIMAL 5 poin/paragraf pendek. Padat dan langsung ke inti.
+- Penjelasan 4 poin/paragraf pendek. Padat dan langsung ke inti.
 - Gunakan \\(...\\) untuk matematika inline dan \\[...\\] untuk persamaan blok.
 - {check_understanding_lead}
 - JANGAN tambahkan pertanyaan di akhir — pertanyaan lanjutan akan dibuat terpisah."""
