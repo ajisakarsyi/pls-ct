@@ -1,8 +1,0 @@
-Pada level 1 — Praktis, Analitis, Relasional (1PAR), konsep Berpikir Komputasional dapat dijabarkan sebagai berikut:
-
-Pilar utama dalam metode Berpikir Komputasional adalah:
-
-Analisis: Menganalisis masalah dan mengidentifikasi elemen-elemen penting yang terkait dengan masalah tersebut. Contoh, analisis dataset untuk menemukan pola dan pattern yang terkait dengan keputusan bisnis.
-Algoritma: Mengembangkan algoritma yang sesuai untuk menyelesaikan masalah. Contoh, mengembangkan algoritma untuk menemukan rute terpendek antara dua titik dalam jaringan jalan.
-Modeling: Membuat model yang sesuai untuk menyelesaikan masalah. Contoh, membuat model untuk memprediksi penjualan produk berdasarkan data penjualan sebelumnya.
-Abstraction: Mengurangi kompleksitas masalah dengan mengurangi detail dan fokus pada aspek penting yang terkait dengan masalah. Contoh, mengurangi kompleksitas masalah dengan membuat model yang sederhana namun efektif untuk menyelesaikan masalah.

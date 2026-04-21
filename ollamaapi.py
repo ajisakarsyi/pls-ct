@@ -166,7 +166,7 @@ def list_cognitive_types():
 # ============================================================
 # RAG GLOBALS
 # ============================================================
-RAG_CHUNK_MAX_CHARS = 400
+RAG_CHUNK_MAX_CHARS = 1000
 MAX_HISTORY_CHARS   = 1200
 
 cognitive_indices: Dict[str, Dict[str, Any]] = {}
@@ -388,7 +388,7 @@ def query_gpt(prompt: str, retries: int = 2, delay: int = 1) -> str:
                     {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user",   "content": prompt},
                 ],
-                temperature=0.7,
+                temperature=0.1,
             )
             raw = resp.choices[0].message.content.strip()
             print(f"{tag} Response generated.")
@@ -584,7 +584,11 @@ Materi referensi (profil {cognitive_code}):
 Pertanyaan mahasiswa (berupa kode):
 {req.message}
 
-INSTRUKSI KETAT:
+INSTRUKSI WAJIB:
+- Jawaban hanya boleh berasal dari materi referensi.
+- Jangan menambahkan informasi dari pengetahuan umum.
+- Gunakan istilah persis seperti materi.
+- Jika materi menyebut daftar, tampilkan sesuai urutan materi.
 - Analisis kode secara bertahap sesuai gaya kognitif mahasiswa.
 - Jangan langsung memberikan jawaban final — arahkan mahasiswa untuk berpikir.
 - Penjelasan 4 poin/paragraf pendek. Padat dan langsung ke inti.
@@ -604,7 +608,11 @@ Materi referensi (profil {cognitive_code}):
 Pertanyaan mahasiswa:
 {req.message}
 
-INSTRUKSI KETAT:
+INSTRUKSI WAJIB:
+- Jawaban hanya boleh berasal dari materi referensi.
+- Jangan menambahkan informasi dari pengetahuan umum.
+- Gunakan istilah persis seperti materi.
+- Jika materi menyebut daftar, tampilkan sesuai urutan materi.
 - Jelaskan konsep sesuai gaya kognitif mahasiswa ({label}).
 - Gunakan contoh konkret yang relevan dengan konteks Indonesia.
 - Jangan langsung memberikan jawaban final — bantu mahasiswa memahami konsep.

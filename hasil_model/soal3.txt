@@ -1,0 +1,3 @@
+Pengenalan Pola (Pattern Recognition) adalah salah satu dari empat fondasi utama yang berfokus pada aktivitas mencari kesamaan, karakteristik, atau tren di antara masalah yang berbeda maupun di dalam satu masalah tunggal. Dengan kata lain, Pengenalan Pola adalah kemampuan untuk mengidentifikasi pola dan struktur dalam data, sehingga dapat membantu dalam proses pemecahan masalah.
+
+Contoh konkret, dalam mencari data tertentu dari sekumpulan data yang tersedia, Algoritme Searching seperti Linear Search atau Binary Search dapat membantu memecah masalah menjadi bagian-bagian yang lebih kecil dan lebih mudah dipahami. Dalam kasus ini, Pengenalan Pola membantu dalam mengonstruksi jalan menuju solusi dengan merefleksikan pengalaman serupa yang pernah dilakukan sebelumnya.

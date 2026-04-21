@@ -1,0 +1,5 @@
+pilar Algoritme memainkan peran penting sebagai bagian dari proses dekomposisi. Dekomposisi adalah proses memecah masalah besar atau kompleks menjadi bagian-bagian kecil yang lebih mudah dikelola (manageable). Dalam konteks ini, Algoritme berfungsi sebagai strategi untuk mengurangi tingkat kompleksitas dan meningkatkan kejelasan bagi seorang pemikir komputasional.
+
+Algoritme dapat membantu dalam menyusun solusi sebuah masalah dengan cara membagi masalah menjadi bagian-bagian yang lebih kecil dan lebih mudah dipahami. Setiap bagian tersebut kemudian diproses menjadi sub-solusi masing-masing yang pada akhirnya digabungkan kembali untuk membentuk satu solusi menyeluruh.
+
+Contoh konkret, dalam mencari data tertentu dari sekumpulan data yang tersedia, Algoritme Searching seperti Linear Search atau Binary Search dapat membantu memecah masalah menjadi bagian-bagian yang lebih kecil dan lebih mudah dipahami. Dalam kasus ini, Algoritme Searching berfungsi sebagai strategi untuk menemukan data tertentu dari sekumpulan data yang tersedia.

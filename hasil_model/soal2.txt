@@ -1,0 +1,7 @@
+Abstraksi dan Dekomposisi adalah dua konsep penting yang membantu individu memahami kompleksitas masalah dan mengidentifikasi bagian-bagian yang lebih kecil untuk dipecahkan.
+
+Abstraksi berarti menghilangkan detail-detail yang tidak relevan dan fokus pada unsur-unsur utama yang terkait dengan masalah. Dalam konteks pemecahan masalah, abstraksi membantu individu memahami konsep-konsep dasar yang terkait dengan masalah dan mengidentifikasi hubungan antara unsur-unsur tersebut.
+
+Dekomposisi, sebaliknya, berarti membagi masalah menjadi bagian-bagian yang lebih kecil dan lebih mudah dipahami. Dalam konteks pemecahan masalah, dekomposisi membantu individu mengidentifikasi bagian-bagian yang terkait dengan masalah dan mengembangkan strategi untuk menyelesaikan masing-masing bagian.
+
+Perbedaan antara Abstraksi dan Dekomposisi terletak pada fokus dan tujuan. Abstraksi lebih berfokus pada penghilangan detail-detail yang tidak relevan dan memahami konsep-konsep dasar, sementara dekomposisi lebih berfokus pada membagi masalah menjadi bagian-bagian yang lebih kecil dan mengembangkan strategi untuk menyelesaikan masing-masing bagian.

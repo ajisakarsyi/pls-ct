@@ -55,6 +55,6 @@ if __name__ == "__main__":
         skor_per_model = validator.evaluate_multi_refs(preds, refs)
         
         for name, skor in zip(pred_names, skor_per_model):
-            print(f"File: {name} | R1: {skor['rouge1']:.4f} | BERT: {skor['bertscore_f1']:.4f}")
+            print(f"File: {name} | R1: {skor['rouge1']:.4f} | R2: {skor['rouge2']:.4f} | RL: {skor['rougeL']:.4f} | BERT: {skor['bertscore_f1']:.4f}")
     else:
         print("Pastikan folder 'materials' dan 'hasil_model' berisi file .txt")
