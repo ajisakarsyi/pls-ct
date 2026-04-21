@@ -214,11 +214,11 @@ def rl_record_response(
 
         n_steps = len(agent.step_log)
 
-        # Every 10 resolved questions: print summary AND auto-save single-line plot
+        # Every 10 resolved questions: print summary AND auto-save live plots
         if n_steps > 0 and n_steps % 10 == 0:
             print_session_summary(session_id, agent, agent.step_log)
             if HAS_PLOT:
-                _auto_save_single_line_plot(session_id)
+                _auto_save_live_plots(session_id)
 
         return rl_step, next_cognitive, lt_change_info
 
@@ -229,17 +229,74 @@ def rl_record_response(
 
 
 def _auto_save_single_line_plot(session_id: str) -> None:
-    """Save the single-line reward plot to disk after every 10 steps."""
+    """Legacy shim — delegates to _auto_save_live_plots."""
+    _auto_save_live_plots(session_id)
+
+
+def _auto_save_live_plots(session_id: str) -> None:
+    """
+    Save the three live-update plots after every 10 resolved steps.
+
+    Plots saved (cumulative — full step log each time, never truncated):
+      {session_id}_lt_changes.png       — LT recommendation swim-lane
+      {session_id}_mastery.png          — mastery level stepped line
+      {session_id}_epsilon.png          — epsilon decay coloured by LT
+
+    Each call re-renders with ALL steps so far, meaning the chart grows
+    left-to-right rather than being replaced with only the latest 10.
+    """
     try:
-        dest = os.path.join(_settings.rl_plots_dir, f"{session_id}_single_line.png")
-        data = generate_single_line_plot(session_id)
-        if data:
-            print(
-                f"[RL] 📊 Plot saved → {dest}  "
-                f"(also at GET /rl/plots/{session_id}/single_line)"
-            )
+        from simulate_rl.plots import (
+            make_lt_change_plot,
+            make_mastery_plot,
+            make_epsilon_plot,
+        )
+        import tempfile, shutil
+
+        agent = rl_registry.get_agent(session_id)
+        steps = agent.step_log
+        if len(steps) < 2:
+            return
+
+        enriched = _enrich_steps(steps, session_id)
+        out_dir  = _settings.rl_plots_dir
+
+        # map: plot function → output filename suffix
+        LIVE_PLOTS = [
+            (make_lt_change_plot, f"lt_recommendation_timeline_{session_id}",
+             f"{session_id}_lt_changes.png"),
+            (make_mastery_plot,   f"mastery_progression_{session_id}",
+             f"{session_id}_mastery.png"),
+            (make_epsilon_plot,   f"epsilon_decay_{session_id}",
+             f"{session_id}_epsilon.png"),
+        ]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            for fn, profile, dest_name in LIVE_PLOTS:
+                try:
+                    fn(enriched, out_dir=tmpdir, profile=session_id)
+                    # plot functions save as e.g. lt_recommendation_timeline_{session_id}.png
+                    src_name = profile + ".png"
+                    src  = os.path.join(tmpdir, src_name)
+                    dest = os.path.join(out_dir, dest_name)
+                    if os.path.exists(src):
+                        shutil.copy2(src, dest)
+                except Exception as exc:
+                    logger.error("[RL] live plot %s error: %s", dest_name, exc)
+
+        n = len(steps)
+        print(
+            f"[RL] Live plots saved at Q{n} → "
+            f"{session_id}_lt_changes.png  "
+            f"{session_id}_mastery.png  "
+            f"{session_id}_epsilon.png"
+        )
+
+        # Also keep the single_line plot for backward compat
+        generate_single_line_plot(session_id)
+
     except Exception as exc:
-        logger.error("[RL] auto-save plot error: %s", exc)
+        logger.error("[RL] _auto_save_live_plots error: %s", exc)
 
 
 # ── Console summary ────────────────────────────────────────────────────────
@@ -402,6 +459,8 @@ def generate_plots(session_id: str) -> Dict[str, str]:
     from simulate_rl.plots import (
         make_plots, make_qvalue_plots, make_lt_change_plot,
         make_phase_bar_plot, make_mpe_plots,
+        make_mastery_plot, make_epsilon_plot, make_hyperparam_comparison_plot,
+        make_hyperparam_student_comparison_plot,
     )
 
     enriched = _enrich_steps(steps, session_id)
@@ -414,6 +473,10 @@ def generate_plots(session_id: str) -> Dict[str, str]:
         f"lt_recommendation_timeline_{session_id}.png":  "lt_recommendation_timeline",
         f"seeding_vs_free_bar_{session_id}.png":         "seeding_vs_free_bar",
         f"mpe_per_lt_{session_id}.png":                  "mpe_per_lt",
+        f"mastery_progression_{session_id}.png":         "mastery_progression",
+        f"epsilon_decay_{session_id}.png":               "epsilon_decay",
+        f"hyperparam_comparison.png":                    "hyperparam_comparison",
+        f"real_student_improvement.png":                 "real_student_improvement",
     }
 
     result: Dict[str, str] = {}
@@ -424,9 +487,21 @@ def generate_plots(session_id: str) -> Dict[str, str]:
             (make_lt_change_plot, "make_lt_change_plot"),
             (make_phase_bar_plot, "make_phase_bar_plot"),
             (make_mpe_plots,      "make_mpe_plots"),
+            (make_mastery_plot,   "make_mastery_plot"),
+            (make_epsilon_plot,   "make_epsilon_plot"),
         ]:
             try:
                 fn(enriched, out_dir=tmpdir, profile=session_id)
+            except Exception as exc:
+                logger.error("[plots] %s error: %s", label, exc)
+
+        # static plots (no step data needed)
+        for fn, label in [
+            (make_hyperparam_comparison_plot,         "make_hyperparam_comparison_plot"),
+            (make_hyperparam_student_comparison_plot, "make_hyperparam_student_comparison_plot"),
+        ]:
+            try:
+                fn(out_dir=tmpdir)
             except Exception as exc:
                 logger.error("[plots] %s error: %s", label, exc)
 

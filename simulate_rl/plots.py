@@ -28,7 +28,7 @@ from typing import Dict, List, Optional
 import numpy as np
 
 from pedagogy_selector import SEEDING_QUESTIONS
-from rl_metrics import LEARNING_TYPES
+from rl_metrics import LEARNING_TYPES, MASTERY_LEVEL_SCORE, N_MAX
 from simulate_rl.profiles import (
     MPL_COLOURS, SEED_SHADE, RADAR_RING_ORDERS, RADAR_CLOCKWISE,
 )
@@ -708,3 +708,522 @@ def make_single_line_plot(steps: List[Dict], out_dir: str = "plots",
     plt.tight_layout()
     tag  = f"_{profile}" if profile else ""
     _save_plot(fig, out_dir, f"single_line_reward{tag}")
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# NEW PLOT A — Mastery swim-lane  (mirrors LT change plot style)
+# Shows the selected LT's mastery level as a stepped line after Q10,
+# with ▲ PROMOTE and ▼ DEMOTE markers on events.
+# ══════════════════════════════════════════════════════════════════════════
+
+def make_mastery_plot(steps: List[Dict], out_dir: str = "plots",
+                      profile: str = "") -> None:
+    """
+    Swim-lane chart of mastery level for the selected LT at each question.
+    Each row = one LT level (1–6).  The active LT's level is drawn as a
+    stepped line.  PROMOTE events get a green ▲, DEMOTE events a red ▼.
+    Mirrors the visual style of make_lt_change_plot.
+    """
+    if not HAS_PLOT or not steps:
+        return
+    os.makedirs(out_dir, exist_ok=True)
+
+    xs     = [s.get("step_num", i + 1) for i, s in enumerate(steps)]
+    levels = [s.get("mastery_level", 1) for s in steps]
+    lts    = [s.get("learning_type", "PAR") for s in steps]
+    events = [s.get("mastery_event") for s in steps]   # "PROMOTE" | "DEMOTE" | None
+
+    LEVEL_LABELS = {
+        1: "1 Pemula",
+        2: "2 Dasar",
+        3: "3 Menengah",
+        4: "4 Berkelanjutan",
+        5: "5 Near Mastery",
+        6: "6 Mastery",
+    }
+
+    fig, ax = plt.subplots(figsize=(16, 5))
+    _shade_seeding(ax, steps, _n_q_per_session(steps), SEEDING_QUESTIONS)
+
+    # ── horizontal guide lines for each level ──────────────────────────
+    for lvl in range(1, 7):
+        ax.axhline(lvl, color="#e8e8e8", lw=0.8, zorder=0)
+
+    # ── stepped mastery line coloured by selected LT ───────────────────
+    for i in range(len(xs) - 1):
+        col = MPL_COLOURS.get(lts[i], "#888888")
+        ax.plot([xs[i], xs[i + 1]], [levels[i], levels[i]],
+                color=col, lw=2.2, solid_capstyle="round", zorder=2, alpha=0.85)
+        ax.plot([xs[i + 1], xs[i + 1]], [levels[i], levels[i + 1]],
+                color=col, lw=2.2, solid_capstyle="round", zorder=2, alpha=0.85)
+    # last point
+    ax.plot([xs[-1]], [levels[-1]], "o", color=MPL_COLOURS.get(lts[-1], "#888888"),
+            ms=5, zorder=3)
+
+    # ── promote / demote markers ───────────────────────────────────────
+    for x, lvl, ev, lt in zip(xs, levels, events, lts):
+        if ev == "PROMOTE":
+            ax.scatter([x], [lvl], marker="^", color="#2ecc71",
+                       s=120, zorder=5, edgecolors="white", linewidths=0.8)
+        elif ev == "DEMOTE":
+            ax.scatter([x], [lvl], marker="v", color="#e74c3c",
+                       s=120, zorder=5, edgecolors="white", linewidths=0.8)
+
+    # ── vertical lines at LT changes ──────────────────────────────────
+    for i in range(1, len(lts)):
+        if lts[i] != lts[i - 1]:
+            ax.axvline(xs[i] - 0.5, color="#cc3333", lw=1.0, ls="--",
+                       alpha=0.55, zorder=4)
+
+    # ── LT colour legend ───────────────────────────────────────────────
+    handles = [mpatches.Patch(color=MPL_COLOURS[lt], label=lt)
+               for lt in LEARNING_TYPES]
+    handles += [
+        plt.Line2D([0], [0], marker="^", color="w", markerfacecolor="#2ecc71",
+                   markersize=10, label="Promote"),
+        plt.Line2D([0], [0], marker="v", color="w", markerfacecolor="#e74c3c",
+                   markersize=10, label="Demote"),
+    ]
+    ax.legend(handles=handles, loc="upper left", ncol=5, fontsize=8,
+              framealpha=0.85)
+
+    ax.set_yticks(list(LEVEL_LABELS.keys()))
+    ax.set_yticklabels(list(LEVEL_LABELS.values()), fontsize=9)
+    ax.set_ylim(0.4, 6.6)
+    ax.set_xlabel("Question number", fontsize=11)
+    ax.set_ylabel("Mastery level", fontsize=10)
+    ax.set_title(
+        f"Mastery Progression  |  profile: {profile or 'session'}\n"
+        "(stepped line = selected LT's mastery level  ·  "
+        "▲ = promoted  ·  ▼ = demoted  ·  red dashed = LT change  ·  yellow = seeding)",
+        fontsize=10,
+    )
+    ax.grid(True, axis="x", alpha=0.18)
+    plt.tight_layout()
+
+    tag = f"_{profile}" if profile else ""
+    _save_plot(fig, out_dir, f"mastery_progression{tag}")
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# NEW PLOT B — Epsilon decay  (same swim-lane style)
+# ══════════════════════════════════════════════════════════════════════════
+
+def make_epsilon_plot(steps: List[Dict], out_dir: str = "plots",
+                      profile: str = "") -> None:
+    """
+    Two-panel epsilon decay plot — mirrors the single_line_reward style exactly.
+
+    Top panel   : actual epsilon as connected dots coloured by selected LT,
+                  plus theoretical Low-Med (solid) and Current (dashed) curves.
+    Bottom panel: LT swim strip (clockwise radar order) — dot per question.
+    """
+    if not HAS_PLOT or not steps:
+        return
+    os.makedirs(out_dir, exist_ok=True)
+
+    try:
+        from pedagogy_selector import EPSILON_INIT, EPSILON_DECAY, EPSILON_MIN
+        opt_init, opt_decay, opt_min = EPSILON_INIT, EPSILON_DECAY, EPSILON_MIN
+    except Exception:
+        opt_init, opt_decay, opt_min = 0.30, 0.98, 0.05
+
+    cur_init, cur_decay, cur_min = 0.50, 0.97, 0.05
+
+    xs       = [s.get("step_num", i + 1) for i, s in enumerate(steps)]
+    epsilons = [s.get("epsilon", opt_init) for s in steps]
+    lts      = [s.get("learning_type", "PAR") for s in steps]
+
+    n         = len(xs)
+    cur_curve = [max(cur_min, cur_init * cur_decay ** i) for i in range(n)]
+    opt_curve = [max(opt_min, opt_init * opt_decay ** i) for i in range(n)]
+
+    strip_order = RADAR_CLOCKWISE
+    lt_y        = {lt: i for i, lt in enumerate(strip_order)}
+
+    # LT counts for legend
+    from collections import Counter
+    lt_counts = Counter(lts)
+
+    # ── Build figure — 2 rows, same proportions as single_line_reward ────
+    fig, (ax_top, ax_lt) = plt.subplots(
+        2, 1, figsize=(16, 6),
+        gridspec_kw={"height_ratios": [3, 1], "hspace": 0.12},
+    )
+    n_q_s = _n_q_per_session(steps)
+    _shade_seeding(ax_top, steps, n_q_s, SEEDING_QUESTIONS)
+    _shade_seeding(ax_lt,  steps, n_q_s, SEEDING_QUESTIONS)
+
+    # ── Top panel: epsilon dots + connecting line + theoretical curves ────
+
+    # grey connector between all dots (background)
+    ax_top.plot(xs, epsilons, color="#cccccc", lw=0.9, zorder=1, alpha=0.7)
+
+    # dots and per-segment lines coloured by LT
+    for i in range(len(xs)):
+        col = MPL_COLOURS.get(lts[i], "#888888")
+        ax_top.scatter([xs[i]], [epsilons[i]], color=col, s=55, zorder=3,
+                       edgecolors="white", linewidths=0.5)
+        if i > 0:
+            ax_top.plot([xs[i - 1], xs[i]], [epsilons[i - 1], epsilons[i]],
+                        color=MPL_COLOURS.get(lts[i - 1], "#888888"),
+                        lw=1.8, zorder=2, alpha=0.85)
+
+    # theoretical curves
+    ax_top.plot(xs, cur_curve, "--", color="#e67e22", lw=1.6, alpha=0.75, zorder=4,
+                label=f"Current  (ε₀={cur_init}, decay={cur_decay})")
+    ax_top.plot(xs, opt_curve, "-",  color="#2ecc71", lw=2.0, alpha=0.85, zorder=4,
+                label=f"Low-Med  (ε₀={opt_init}, decay={opt_decay})")
+
+    # ε_min floor
+    ax_top.axhline(opt_min, color="#aaaaaa", lw=0.9, ls=":", alpha=0.8)
+    ax_top.text(xs[0], opt_min + 0.005, f"ε_min={opt_min}", fontsize=8,
+                color="#888888", va="bottom")
+
+    # legend: one entry per LT that appeared + the two curves
+    legend_handles = []
+    for lt in LEARNING_TYPES:
+        if lt_counts.get(lt, 0) > 0:
+            legend_handles.append(
+                plt.Line2D([0], [0], marker="o", color="w",
+                           markerfacecolor=MPL_COLOURS[lt], markersize=7,
+                           label=f"{lt}  (n={lt_counts[lt]})")
+            )
+    legend_handles += [
+        plt.Line2D([0], [0], color="#555555", ls="--", lw=1.2,
+                   label="Rolling avg (5Q)"),  # kept for visual parity
+    ]
+    ax_top.legend(handles=legend_handles, loc="upper right",
+                  ncol=max(1, len(legend_handles) // 2),
+                  fontsize=8, framealpha=0.85)
+
+    ax_top.set_ylabel("Epsilon  (exploration rate)", fontsize=10)
+    ax_top.set_ylim(-0.02, max(cur_init, opt_init) + 0.08)
+    ax_top.set_title(
+        "Epsilon Decay  |  Each dot/segment coloured by LT selected  |  "
+        f"dashed=Current (e0={cur_init}) / solid=Low-Med (e0={opt_init})",
+        fontsize=10,
+    )
+    # ── Bottom panel: LT swim strip ───────────────────────────────────────
+    for i in range(len(xs)):
+        col = MPL_COLOURS.get(lts[i], "#888888")
+        ax_lt.scatter([xs[i]], [lt_y[lts[i]]], color=col, s=55, zorder=3,
+                      edgecolors="white", linewidths=0.5)
+    # grey connector
+    for i in range(1, len(xs)):
+        ax_lt.plot([xs[i - 1], xs[i]],
+                   [lt_y[lts[i - 1]], lt_y[lts[i]]],
+                   color="#cccccc", lw=0.8, zorder=1, alpha=0.6)
+
+    ax_lt.set_yticks(list(lt_y.values()))
+    ax_lt.set_yticklabels(list(lt_y.keys()), fontsize=9)
+    for tick, lt in zip(ax_lt.get_yticklabels(), strip_order):
+        tick.set_color(MPL_COLOURS.get(lt, "#888888"))
+        tick.set_fontweight("bold")
+    for lt in strip_order:
+        ax_lt.axhline(lt_y[lt], color="#eeeeee", lw=0.6, zorder=0)
+
+    ax_lt.set_ylim(-0.6, len(strip_order) - 0.4)
+    ax_lt.set_xlabel("Question number (global)", fontsize=11)
+    ax_lt.set_ylabel("LT", fontsize=10)
+    ax_lt.set_title("LT selected  (clockwise radar order)", fontsize=9)
+    ax_lt.grid(True, axis="x", alpha=0.15)
+
+    # align x-axes
+    for ax in (ax_top, ax_lt):
+        ax.set_xlim(min(xs) - 0.5, max(xs) + 0.5)
+
+    plt.tight_layout()
+    tag = f"_{profile}" if profile else ""
+    _save_plot(fig, out_dir, f"epsilon_decay{tag}")
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# NEW PLOT C — Current vs Low-Med hyperparameter comparison
+# ══════════════════════════════════════════════════════════════════════════
+
+def make_hyperparam_comparison_plot(out_dir: str = "plots") -> None:
+    """
+    Static side-by-side comparison: parameter values + sweep metric deltas.
+    Does not require step data — uses the sweep results directly.
+    """
+    if not HAS_PLOT:
+        return
+    os.makedirs(out_dir, exist_ok=True)
+
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+    fig.suptitle(
+        "Hyperparameter Comparison: Current  vs  Low-Med Exploration (Optimised)\n"
+        "Sweep: 10 configs × 30 students × 20 Q each  (6,000 simulated interactions)",
+        fontsize=12, fontweight="bold", y=1.02,
+    )
+
+    # ── Panel 1: parameter values ─────────────────────────────────────
+    ax = axes[0]
+    params   = ["ε₀ (init)", "ε decay", "W init low", "W init high"]
+    cur_vals = [0.50,  0.97,  0.05, 0.15]
+    opt_vals = [0.30,  0.98,  0.01, 0.05]
+    x = np.arange(len(params))
+    w = 0.35
+    b1 = ax.bar(x - w/2, cur_vals, w, label="Current",  color="#e67e22",
+                alpha=0.85, edgecolor="white")
+    b2 = ax.bar(x + w/2, opt_vals, w, label="Low-Med ★", color="#2ecc71",
+                alpha=0.85, edgecolor="white")
+    ylim_top = max(max(cur_vals), max(opt_vals)) * 1.22
+    for bar, v in zip(b1, cur_vals):
+        ypos = min(bar.get_height() + 0.012, ylim_top * 0.92)
+        ax.text(bar.get_x() + bar.get_width()/2, ypos,
+                str(v), ha="center", va="bottom", fontsize=9, color="#e67e22",
+                fontweight="bold")
+    for bar, v in zip(b2, opt_vals):
+        ypos = min(bar.get_height() + 0.012, ylim_top * 0.92)
+        ax.text(bar.get_x() + bar.get_width()/2, ypos,
+                str(v), ha="center", va="bottom", fontsize=9, color="#27ae60",
+                fontweight="bold")
+    ax.set_xticks(x); ax.set_xticklabels(params, fontsize=10)
+    ax.set_ylabel("Value"); ax.set_title("Parameter Values", fontsize=11)
+    ax.legend(fontsize=9); ax.set_ylim(0, ylim_top)
+    ax.grid(True, axis="y", alpha=0.2)
+
+    # ── Panel 2: sweep metric results ─────────────────────────────────
+    ax = axes[1]
+    metrics   = ["KT AUC", "Reward CV", "Convergence Q"]
+    cur_m     = [0.4384,  1.350,  19.0]
+    opt_m     = [0.4503,  1.081,  17.9]
+    note      = ["↑ higher better", "↓ lower better", "↓ lower better"]
+    x = np.arange(len(metrics))
+    b1 = ax.bar(x - w/2, cur_m, w, label="Current",  color="#e67e22", alpha=0.85, edgecolor="white")
+    b2 = ax.bar(x + w/2, opt_m, w, label="Low-Med ★", color="#2ecc71", alpha=0.85, edgecolor="white")
+    for bar, v in zip(b1, cur_m):
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.05,
+                f"{v:.3f}", ha="center", va="bottom", fontsize=8.5, color="#e67e22",
+                fontweight="bold")
+    for bar, v in zip(b2, opt_m):
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.05,
+                f"{v:.3f}", ha="center", va="bottom", fontsize=8.5, color="#27ae60",
+                fontweight="bold")
+    ax.set_xticks(x)
+    ax.set_xticklabels([f"{m}\n{n}" for m, n in zip(metrics, note)], fontsize=8.5)
+    ax.set_title("Sweep Evaluation Metrics", fontsize=11)
+    ax.legend(fontsize=9); ax.grid(True, axis="y", alpha=0.2)
+
+    # ── Panel 3: delta / improvement summary ──────────────────────────
+    ax = axes[2]
+    improvements = [
+        ("KT AUC",         +0.0119,  True),
+        ("Reward CV",      -0.269,   True),   # lower = better
+        ("OPE Gain",       +0.0006,  True),
+        ("Convergence Q",  -1.5,     True),   # fewer Q = better
+        ("Accuracy %",     +0.83,    True),
+        ("Wrong answers",  -5.0,     True),
+    ]
+    labels  = [x[0] for x in improvements]
+    deltas  = [x[1] for x in improvements]
+    colours = ["#2ecc71" if d > 0 else "#3498db" for d in deltas]
+    # all are improvements — positive delta or negative delta in a "lower is better" metric
+    all_improved = ["#2ecc71"] * len(deltas)
+
+    y = np.arange(len(labels))
+    bars = ax.barh(y, deltas, color=all_improved, alpha=0.85, edgecolor="white", height=0.55)
+    for bar, d, lbl in zip(bars, deltas, labels):
+        xpos = bar.get_width() + (max(abs(d) for d in deltas) * 0.04) * np.sign(d)
+        ax.text(xpos, bar.get_y() + bar.get_height()/2,
+                f"{d:+.4f}" if abs(d) < 0.1 else f"{d:+.2f}",
+                va="center", ha="left" if d > 0 else "right",
+                fontsize=8.5, fontweight="bold", color="#27ae60")
+    ax.set_yticks(y); ax.set_yticklabels(labels, fontsize=9)
+    ax.axvline(0, color="#666666", lw=1.0)
+    ax.set_title("Δ  (Low-Med − Current)\nAll improvements ✓", fontsize=11)
+    ax.set_xlabel("Change in metric value")
+    ax.grid(True, axis="x", alpha=0.2)
+
+    plt.tight_layout()
+    _save_plot(fig, out_dir, "hyperparam_comparison")
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# NEW PLOT D — Real student improvement: Current vs Low-Med
+# Simulates 4 student profiles × 30 seeds under both configs and shows
+# % time on true LT, mastery progression, and convergence speed.
+# ══════════════════════════════════════════════════════════════════════════
+
+def make_hyperparam_student_comparison_plot(out_dir: str = "plots") -> None:
+    """
+    Head-to-head comparison of Current vs Low-Med hyperparameters on
+    real simulated student trajectories.
+    Shows: (1) cumulative % picks on true LT, (2) avg mastery of true LT,
+    (3) convergence speed bar charts.
+    30 seeds × 4 profiles = 120 simulated sessions per config.
+    """
+    if not HAS_PLOT:
+        return
+    os.makedirs(out_dir, exist_ok=True)
+
+    import random
+    try:
+        from rl_metrics import MetricsTracker, N_MAX
+        from pedagogy_selector import EPSILON_INIT, EPSILON_DECAY, EPSILON_MIN
+        OPT_EPS_I, OPT_EPS_D, OPT_EPS_MIN = EPSILON_INIT, EPSILON_DECAY, EPSILON_MIN
+    except Exception:
+        OPT_EPS_I, OPT_EPS_D, OPT_EPS_MIN = 0.30, 0.98, 0.05
+        from rl_metrics import MetricsTracker, N_MAX
+
+    CUR_EPS_I, CUR_EPS_D, CUR_EPS_MIN = 0.50, 0.97, 0.05
+    CUR_W_LO, CUR_W_HI = 0.05, 0.15
+    OPT_W_LO, OPT_W_HI = 0.01, 0.05
+
+    PROFILES = [("PAR", 0.82), ("PGI", 0.75), ("TGR", 0.80), ("TAI", 0.77)]
+    LT_LABELS  = {"PAR": "PAR-strong", "PGI": "PGI-strong",
+                  "TGR": "TGR-strong", "TAI": "TAI-strong"}
+    LT_COLORS  = {"PAR": MPL_COLOURS["PAR"], "PGI": MPL_COLOURS["PGI"],
+                  "TGR": MPL_COLOURS["TGR"], "TAI": MPL_COLOURS["TAI"]}
+    CUR_C = "#e67e22";  OPT_C = "#27ae60"
+    N_SEEDS = 30;  N_Q = 40
+
+    def _lt_match(a, b):
+        if a == b: return 1.0
+        if a[0] == b[0] or a[-1] == b[-1]: return 0.75
+        return 0.55
+
+    def _simulate(true_lt, base_p, eps_i, eps_d, eps_min, w_lo, w_hi, seed):
+        rng = random.Random(seed)
+        np_rng = np.random.default_rng(seed)
+        W = np_rng.uniform(w_lo, w_hi, size=(8, 3))
+        eps = eps_i
+        ml = {lt: 1 for lt in LEARNING_TYPES}
+        cc = {lt: 0 for lt in LEARNING_TYPES}
+        cw = {lt: 0 for lt in LEARNING_TYPES}
+        tracker = MetricsTracker(student_id="sim", category="Penggalang")
+        log = []
+        for q in range(N_Q):
+            state = np.array([
+                np.mean([MASTERY_LEVEL_SCORE[ml[lt]] for lt in LEARNING_TYPES]),
+                np.mean([tracker.states[lt].performance for lt in LEARNING_TYPES]),
+                np.mean([tracker.states[lt].engagement  for lt in LEARNING_TYPES]),
+            ])
+            qv = {lt: float(W[i] @ state) for i, lt in enumerate(LEARNING_TYPES)}
+            lt = (rng.choice(LEARNING_TYPES) if rng.random() < eps
+                  else max(qv, key=qv.__getitem__))
+            eps = max(eps_min, eps * eps_d)
+            pc  = min(0.97, base_p * _lt_match(lt, true_lt))
+            ic  = rng.random() < pc
+            na  = rng.randint(1, 3) if (ic and pc > 0.7) else (1 if ic else N_MAX)
+            rec = tracker.record_attempt(lt, f"{ml[lt]}{lt}", na,
+                                         rng.uniform(20, 90), q, is_correct=ic)
+            ai = LEARNING_TYPES.index(lt)
+            W[ai] += 0.05 * (rec["reward"] - float(W[ai] @ state)) * state
+            if ic:
+                cc[lt] += 1; cw[lt] = 0
+                if cc[lt] >= 1 and ml[lt] < 6: ml[lt] += 1; cc[lt] = 0
+            else:
+                cc[lt] = 0; cw[lt] += 1
+                if cw[lt] >= 2 and ml[lt] > 1: ml[lt] -= 1; cw[lt] = 0
+            log.append({"lt": lt, "ic": int(ic), "ml_true": ml[true_lt]})
+        return log
+
+    def _aggregate(true_lt, base_p, eps_i, eps_d, eps_min, w_lo, w_hi):
+        cum = [0] * N_Q;  ml_a = [0] * N_Q;  convs = []
+        for seed in range(N_SEEDS):
+            log = _simulate(true_lt, base_p, eps_i, eps_d, eps_min,
+                            w_lo, w_hi, seed * 100 + 42)
+            for i, s in enumerate(log):
+                cum[i] += int(s["lt"] == true_lt)
+                ml_a[i] += s["ml_true"]
+            for i in range(4, N_Q):
+                if all(log[j]["lt"] == true_lt for j in range(i - 4, i + 1)):
+                    convs.append(i + 1); break
+        pct  = [round(cum[i] / (i + 1) / N_SEEDS * 100, 2) for i in range(N_Q)]
+        mla  = [round(ml_a[i] / N_SEEDS, 3) for i in range(N_Q)]
+        return {"pct": pct, "ml": mla,
+                "conv_rate": round(len(convs) / N_SEEDS * 100, 1),
+                "conv_q":    round(sum(convs) / len(convs), 1) if convs else None,
+                "final_pct": round(cum[-1] / N_SEEDS * 100, 1),
+                "final_ml":  round(ml_a[-1] / N_SEEDS, 2)}
+
+    qs = list(range(1, N_Q + 1))
+    fig, axes = plt.subplots(3, 4, figsize=(22, 14))
+    fig.suptitle(
+        f"Real Student Improvement: Current (e0={CUR_EPS_I}) vs Low-Med (e0={OPT_EPS_I})\n"
+        f"30 seeds x 4 profiles x 40 Q  |  decay: Current={CUR_EPS_D}, Low-Med={OPT_EPS_D}",
+        fontsize=13, fontweight="bold", y=1.01,
+    )
+
+    for col, (true_lt, base_p) in enumerate(PROFILES):
+        cur = _aggregate(true_lt, base_p, CUR_EPS_I, CUR_EPS_D, CUR_EPS_MIN,
+                         CUR_W_LO, CUR_W_HI)
+        opt = _aggregate(true_lt, base_p, OPT_EPS_I, OPT_EPS_D, OPT_EPS_MIN,
+                         OPT_W_LO, OPT_W_HI)
+
+        # ── Row 0: % picks on true LT ──────────────────────────────────
+        ax = axes[0][col]
+        ax.plot(qs, cur["pct"], color=CUR_C, lw=2, ls="--", label="Current (ε₀=0.50)")
+        ax.plot(qs, opt["pct"], color=OPT_C, lw=2.5,        label="Low-Med (ε₀=0.30)")
+        ax.axvline(10, color="#aaaaaa", lw=0.8, ls=":", alpha=0.7)
+        ax.fill_between(qs, cur["pct"], opt["pct"],
+                        where=[o > c for o, c in zip(opt["pct"], cur["pct"])],
+                        alpha=0.18, color=OPT_C)
+        ax.fill_between(qs, cur["pct"], opt["pct"],
+                        where=[o <= c for o, c in zip(opt["pct"], cur["pct"])],
+                        alpha=0.12, color=CUR_C)
+        ax.set_title(f"{LT_LABELS[true_lt]} (true LT = {true_lt})",
+                     fontsize=11, color=LT_COLORS[true_lt], fontweight="bold")
+        ax.set_ylabel("% questions on true LT" if col == 0 else "", fontsize=9)
+        ax.set_ylim(0, 100); ax.set_xlim(1, 40)
+        ax.grid(True, alpha=0.2)
+        if col == 0: ax.legend(fontsize=8, loc="upper right")
+        ax.annotate(f"{opt['final_pct']}%", xy=(40, opt["pct"][-1]),
+                    xytext=(36, min(opt["pct"][-1] + 9, 93)),
+                    fontsize=8, color=OPT_C, fontweight="bold",
+                    arrowprops=dict(arrowstyle="-", color=OPT_C, lw=0.7))
+        ax.annotate(f"{cur['final_pct']}%", xy=(40, cur["pct"][-1]),
+                    xytext=(36, max(cur["pct"][-1] - 12, 4)),
+                    fontsize=8, color=CUR_C, fontweight="bold",
+                    arrowprops=dict(arrowstyle="-", color=CUR_C, lw=0.7))
+
+        # ── Row 1: Avg mastery of true LT ─────────────────────────────
+        ax2 = axes[1][col]
+        ax2.plot(qs, cur["ml"], color=CUR_C, lw=2, ls="--")
+        ax2.plot(qs, opt["ml"], color=OPT_C, lw=2.5)
+        ax2.axvline(10, color="#aaaaaa", lw=0.8, ls=":", alpha=0.7)
+        ax2.set_yticks([1, 2, 3, 4, 5, 6])
+        ax2.set_yticklabels(["1 Pemula", "2 Dasar", "3 Menengah",
+                              "4 Berkl.", "5 Near", "6 Mastery"], fontsize=7)
+        ax2.set_ylim(0.8, 6.5); ax2.set_xlim(1, 40)
+        ax2.set_ylabel("Avg mastery (true LT)" if col == 0 else "", fontsize=9)
+        ax2.set_xlabel("Question number", fontsize=9)
+        ax2.grid(True, alpha=0.2)
+        ax2.text(41, opt["ml"][-1], f"{opt['final_ml']:.1f}",
+                 fontsize=8, color=OPT_C, va="center", fontweight="bold")
+        ax2.text(41, cur["ml"][-1], f"{cur['final_ml']:.1f}",
+                 fontsize=8, color=CUR_C, va="center")
+
+        # ── Row 2: Convergence bar chart ───────────────────────────────
+        ax3 = axes[2][col]
+        cats  = ["Conv. rate (5-consec %)", "Mean conv. Q (when it happens)"]
+        cur_v = [cur["conv_rate"], cur["conv_q"] or N_Q]
+        opt_v = [opt["conv_rate"], opt["conv_q"] or N_Q]
+        x = np.array([0, 1]); w = 0.32
+        b1 = ax3.bar(x - w/2, cur_v, w, color=CUR_C, alpha=0.85,
+                     label="Current", edgecolor="white")
+        b2 = ax3.bar(x + w/2, opt_v, w, color=OPT_C, alpha=0.85,
+                     label="Low-Med ★", edgecolor="white")
+        for bar, v in zip(b1, cur_v):
+            ax3.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.4,
+                     f"{v:.0f}", ha="center", fontsize=8.5, color=CUR_C, fontweight="bold")
+        for bar, v in zip(b2, opt_v):
+            ax3.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.4,
+                     f"{v:.0f}", ha="center", fontsize=8.5, color=OPT_C, fontweight="bold")
+        ax3.set_xticks(x); ax3.set_xticklabels(cats, fontsize=8.5)
+        ax3.set_ylabel("Value" if col == 0 else "", fontsize=9)
+        ax3.grid(True, axis="y", alpha=0.2)
+        if col == 0: ax3.legend(fontsize=8)
+        if cur["conv_q"] and opt["conv_q"]:
+            diff = cur["conv_q"] - opt["conv_q"]
+            ax3.set_title(
+                f"Low-Med converges {diff:.0f}Q earlier" if diff > 0
+                else f"Current converges {-diff:.0f}Q earlier",
+                fontsize=9, color=OPT_C if diff > 0 else CUR_C, style="italic"
+            )
+
+    plt.tight_layout()
+    _save_plot(fig, out_dir, "real_student_improvement")

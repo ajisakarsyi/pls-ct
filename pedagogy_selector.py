@@ -266,18 +266,21 @@ class RLAgent:
         cur_phase = self.phase
 
         # Mastery progression — promote on correct streak, demote on wrong streak
+        mastery_event = None   # "PROMOTE" | "DEMOTE" | None
         if is_correct:
             self.consecutive_correct[lt] += 1
             self.consecutive_wrong[lt] = 0          # reset wrong streak
             if self.consecutive_correct[lt] >= CONSECUTIVE_TO_PROMOTE:
                 self.mastery_levels[lt] = min(6, self.mastery_levels[lt] + 1)
                 self.consecutive_correct[lt] = 0
+                mastery_event = "PROMOTE"
         else:
             self.consecutive_correct[lt] = 0        # reset correct streak
             self.consecutive_wrong[lt] += 1
             if self.consecutive_wrong[lt] >= CONSECUTIVE_TO_DEMOTE:
                 self.mastery_levels[lt] = max(1, self.mastery_levels[lt] - 1)
                 self.consecutive_wrong[lt] = 0
+                mastery_event = "DEMOTE"
 
         if mastery_code is None:
             mastery_code = f"{self.mastery_levels[lt]}{lt}"
@@ -365,6 +368,9 @@ class RLAgent:
             # ── MLR ───────────────────────────────────────────────────────
             "mlr_refitted":           mlr_refitted,
             "mlr_weights":            mlr_weights,
+            # ── mastery event ──────────────────────────────────────────────
+            "mastery_event":          mastery_event,   # "PROMOTE" | "DEMOTE" | None
+            "all_mastery_levels":     dict(self.mastery_levels),  # snapshot of all LTs
         }
         self.step_log.append(step)
         return step
