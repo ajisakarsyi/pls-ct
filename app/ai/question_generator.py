@@ -7,17 +7,15 @@ The topic is provided as a free-text description (definition, explanation,
 examples) written by the admin/teacher. The AI uses ONLY this topic text
 as its knowledge source — no external topics are mixed in.
 
-Four question types (2-3 of each per batch):
+Three question types per batch:
   mcq       — single correct answer from A/B/C/D
   multi     — multiple correct answers (checkboxes), 2-4 correct out of 4-5 options
   truefalse — True/False with justification
-  open      — free-text answer, evaluated by LLM
 
 Batch composition (10 questions, 1 topic):
-  3 × mcq
+  4 × mcq
   3 × multi
-  2 × truefalse
-  2 × open
+  3 × truefalse
 """
 
 import json
@@ -33,10 +31,9 @@ logger = logging.getLogger(__name__)
 
 # ── Batch composition ─────────────────────────────────────────────────────
 BATCH_COMPOSITION = [
-    ("mcq",       3),
+    ("mcq",       4),
     ("multi",     3),
-    ("truefalse", 2),
-    ("open",      2),
+    ("truefalse", 3),
 ]
 DIFFICULTIES = ["mudah", "sedang", "sulit"]
 
@@ -101,25 +98,6 @@ Balas HANYA dengan JSON valid ini, tidak ada teks lain:
   "question": "pernyataan yang harus dinilai Benar atau Salah",
   "correct_answer": "Benar",
   "explanation": "penjelasan mengapa pernyataan ini benar atau salah berdasarkan materi (2-3 kalimat)"
-}}"""
-
-_OPEN_PROMPT = """\
-Kamu adalah pembuat soal untuk mata kuliah Computational Thinking.
-
-MATERI MINGGU INI:
-{topic_text}
-
-Buat SATU soal uraian berbasis skenario dari materi di atas.
-Tingkat kesulitan: {difficulty}
-Bahasa: Indonesia
-Soal harus mendorong mahasiswa menerapkan konsep, bukan sekadar mendefinisikan.
-Jawaban referensi harus jelas dan terukur.
-
-Balas HANYA dengan JSON valid ini, tidak ada teks lain:
-{{
-  "question": "skenario + pertanyaan spesifik (2-4 kalimat, diakhiri tanda tanya)",
-  "correct_answer": "jawaban referensi lengkap yang dipakai untuk menilai jawaban mahasiswa",
-  "explanation": "poin-poin utama yang harus ada dalam jawaban yang benar (2-3 kalimat)"
 }}"""
 
 
@@ -259,30 +237,10 @@ def _gen_truefalse(topic_text: str, topic_name: str, difficulty: str, week_id: s
     return None
 
 
-def _gen_open(topic_text: str, topic_name: str, difficulty: str, week_id: str) -> Optional[Dict]:
-    prompt = _OPEN_PROMPT.format(topic_text=topic_text[:2000], difficulty=difficulty)
-    for _ in range(3):
-        data = _extract_json(_call_llm(prompt) or "")
-        if not data:
-            continue
-        if not all(k in data for k in ["question", "correct_answer", "explanation"]):
-            continue
-        q = _base("open", topic_name, difficulty, week_id)
-        q.update({
-            "question":       data["question"].strip(),
-            "options":        None,
-            "correct_answer": data["correct_answer"].strip(),
-            "explanation":    data.get("explanation", "").strip(),
-        })
-        return q
-    return None
-
-
 _GENERATORS = {
     "mcq":       _gen_mcq,
     "multi":     _gen_multi,
     "truefalse": _gen_truefalse,
-    "open":      _gen_open,
 }
 
 
