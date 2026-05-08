@@ -486,6 +486,9 @@ def generate_technical_followup(original_question: str, tutor_reply: str,
 
 Tipe kognitif mahasiswa: {label}
 
+Pertanyaan awal mahasiswa: 
+{original_question}
+
 Topik yang baru dijelaskan:
 {tutor_reply[:600]}
 
@@ -493,19 +496,15 @@ Materi referensi:
 {context}
 
 TUGAS:
-Buat SATU pertanyaan lanjutan berbentuk studi kasus teknikal singkat.
+Buat SATU pertanyaan lanjutan berbentuk pertanyaan aplikasi yang relevan secara langsung dengan tingkat kesulitan topik di atas.
 Pertanyaan harus:
+- SANGAT SPESIFIK dan RELEVAN dengan sub-topik yang baru saja ditanyakan mahasiswa.
+- DILARANG KERAS memunculkan istilah teknis baru atau nama algoritma spesifik JIKA TIDAK DISEBUTKAN secara eksplisit di dalam teks penjelasan atau materi.
 - Berbasis skenario nyata atau penerapan konkret (bukan definisi ulang konsep).
 - Mendorong mahasiswa menerapkan konsep yang baru dipelajari pada situasi spesifik.
 - Cukup spesifik sehingga ada jawaban yang benar/salah secara teknikal.
 - Singkat: maksimal 3 kalimat total (skenario + pertanyaan).
 - Diakhiri tanda tanya (?).
-
-Contoh format yang BAIK:
-"Sebuah array berisi [5, 3, 8, 1, 9, 2] dan kamu diminta mengurutkannya menggunakan Bubble Sort. Pada iterasi pertama, elemen mana yang akan berpindah posisi, dan mengapa?"
-
-Contoh format yang BURUK (terlalu konseptual):
-"Apa perbedaan antara Bubble Sort dan Selection Sort?"
 
 Tulis HANYA pertanyaannya, tanpa penjelasan tambahan."""
 
