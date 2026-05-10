@@ -15,7 +15,8 @@ from app.core.prompts import (
     CHAT_PROMPT_TEMPLATE,
     CHAT_CODE_PROMPT_TEMPLATE,
     FOLLOWUP_PROMPT_TEMPLATE,
-    EVALUATE_PROMPT_TEMPLATE,
+    EVALUATE_PROMPT_WITH_QUESTION,
+    EVALUATE_PROMPT_WITHOUT_QUESTION,
     FEEDBACK_PROMPT_TEMPLATE,
 )
 from app.services.llm import query_llm
@@ -178,42 +179,33 @@ def _strict_evaluate(
     label: str,
     cognitive_code: str,
 ) -> Tuple[bool, str]:
+    # 1. Pilih template dan siapkan variabel payload
     if active_question and active_question.strip():
-        evaluation_scope = (
-            f"PERTANYAAN YANG SEDANG DIJAWAB:\n{active_question}\n\n"
-            f"KONTEKS MATERI (penjelasan tutor sebelumnya):\n{correct_answer[:800]}"
-        )
-        task_instruction = (
-            "TUGAS PENILAIAN:\n"
-            "1. Fokus pada pertanyaan yang sedang dijawab — BUKAN penjelasan tutor secara keseluruhan.\n"
-            "2. Hitung atau verifikasi kebenaran jawaban mahasiswa terhadap pertanyaan tersebut.\n"
-            "3. Untuk soal numerik/matematis: periksa apakah hasil akhirnya benar secara matematis.\n"
-            "4. Untuk soal konseptual: periksa apakah jawaban mencakup poin utama yang ditanyakan.\n"
-            "5. JANGAN menolak jawaban benar hanya karena singkat atau tidak menjelaskan proses."
+        template = EVALUATE_PROMPT_WITH_QUESTION
+        prompt = template.format(
+            label=label,
+            code=cognitive_code,
+            context=context,
+            history=history_txt,
+            active_question=active_question,
+            correct_answer=correct_answer[:800],
+            answer=answer,
         )
     else:
-        evaluation_scope = (
-            f"KUNCI / REFERENSI (penjelasan tutor):\n{correct_answer[:800]}"
-        )
-        task_instruction = (
-            "TUGAS PENILAIAN:\n"
-            "1. Bandingkan jawaban mahasiswa dengan penjelasan tutor secara konseptual.\n"
-            "2. Jawaban BENAR jika mencakup konsep utama, meskipun dengan kata berbeda.\n"
-            "3. Jawaban SALAH jika konsep utama hilang, keliru, atau tidak relevan.\n"
-            "4. Jangan anggap benar hanya karena terdengar logis — harus sesuai kunci."
+        template = EVALUATE_PROMPT_WITHOUT_QUESTION
+        prompt = template.format(
+            label=label,
+            code=cognitive_code,
+            context=context,
+            history=history_txt,
+            correct_answer=correct_answer[:800],
+            answer=answer,
         )
 
-    prompt = EVALUATE_PROMPT_TEMPLATE.format(
-        label=label,
-        code=cognitive_code,
-        context=context,
-        history=history_txt,
-        evaluation_scope=evaluation_scope,
-        answer=answer,
-        task_instruction=task_instruction,
-    )
-
+    # 2. Kirim ke LLM
     raw = query_llm(prompt)
+
+    # 3. Parsing hasil (Logika ini tetap sama)
     match = re.search(r"HASIL:\s*(BENAR|SALAH)", raw, re.IGNORECASE)
     if match:
         is_correct = match.group(1).upper() == "BENAR"
@@ -233,6 +225,7 @@ def _generate_followup(
 ) -> str:
     prompt = FOLLOWUP_PROMPT_TEMPLATE.format(
         label=label,
+        original_question=original_question, # Tambahkan variabel ini
         reply=tutor_reply[:600],
         context=context,
     )
