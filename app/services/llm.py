@@ -31,8 +31,9 @@ _settings = get_settings()
 _provider_lock         = threading.Lock()
 _active_chat_provider: str = "openai"   # overwritten by probe_and_set_chat_provider()
 
+import os as _os
 _openai_client = OpenAI(
-    api_key  = _settings.openai_api_key,
+    api_key  = _settings.openai_api_key or _os.environ.get('OPENAI_API_KEY', 'sk-placeholder'),
     base_url = _settings.openai_api_base,
 )
 
