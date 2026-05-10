@@ -1,0 +1,226 @@
+[
+  {
+    "id": "c557b429-e5bb-4e68-ab09-e29a27ed8980",
+    "type": "mcq",
+    "topic": "abstraksi",
+    "difficulty": "mudah",
+    "week_id": "2026-W19",
+    "status": "approved",
+    "created_at": "2026-05-10T15:05:02.020278+00:00",
+    "question": "Mengapa abstraksi penting dalam pemrograman berorientasi objek?",
+    "options": {
+      "A": "Abstraksi menyembunyikan detail yang tidak penting, memudahkan pemahaman dan penggunaan objek.",
+      "B": "Abstraksi membuat kode menjadi lebih panjang dan kompleks.",
+      "C": "Abstraksi hanya digunakan untuk mempercepat eksekusi program.",
+      "D": "Abstraksi menjadikan seluruh kode tidak dapat diakses oleh pengguna."
+    },
+    "correct_answer": "A",
+    "explanation": "Jawaban A benar karena abstraksi menyederhanakan interaksi dengan objek dengan menyembunyikan detail teknis yang rumit, sehingga pengguna dapat fokus pada fungsi utama tanpa terganggu oleh kompleksitas implementasi.",
+    "approved_at": "2026-05-10T15:05:32.841439+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "e131b1d5-f08a-4e61-bcf4-ec22f3a845a3",
+    "type": "mcq",
+    "topic": "abstraksi",
+    "difficulty": "sulit",
+    "week_id": "2026-W19",
+    "status": "approved",
+    "created_at": "2026-05-10T15:05:04.713181+00:00",
+    "question": "Apa yang paling tepat menggambarkan tujuan utama dari abstraksi dalam pemrograman berorientasi objek?",
+    "options": {
+      "A": "Menyederhanakan sistem dengan menyembunyikan detail yang tidak penting untuk fokus pada perilaku objek.",
+      "B": "Menciptakan implementasi yang lebih kompleks untuk meningkatkan efisiensi program.",
+      "C": "Mengurangi kebutuhan akan dokumentasi dalam perangkat lunak.",
+      "D": "Memastikan bahwa semua data dalam program dapat diakses oleh pengguna."
+    },
+    "correct_answer": "A",
+    "explanation": "Jawaban A benar karena abstraksi bertujuan untuk menyederhanakan sistem perangkat lunak dengan menyembunyikan detail-detail teknis yang tidak relevan, sehingga pengguna dapat fokus pada fungsi utama objek. Ini memungkinkan program menjadi lebih mudah dipahami dan digunakan.",
+    "approved_at": "2026-05-10T15:05:33.194927+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "00b2249f-ae34-4314-88bf-8f84cddec0da",
+    "type": "mcq",
+    "topic": "abstraksi",
+    "difficulty": "sedang",
+    "week_id": "2026-W19",
+    "status": "approved",
+    "created_at": "2026-05-10T15:05:07.300921+00:00",
+    "question": "Apa tujuan utama dari penerapan abstraksi dalam pemrograman berorientasi objek?",
+    "options": {
+      "A": "Menyederhanakan kompleksitas sistem dan fokus pada fungsi utama objek",
+      "B": "Meningkatkan kecepatan eksekusi program",
+      "C": "Membuat kode menjadi lebih panjang dan sulit dipahami",
+      "D": "Menyimpan semua detail proses dalam program"
+    },
+    "correct_answer": "A",
+    "explanation": "Tujuan utama dari penerapan abstraksi adalah untuk menyederhanakan kompleksitas sistem dengan menyembunyikan detail yang tidak penting dan mengedepankan fungsi utama objek, sehingga memudahkan pemrogram dalam memahami dan mengembangkan kode.",
+    "approved_at": "2026-05-10T15:05:33.323535+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "40b7bf9c-ce43-4731-bf03-8f82a0ef52c3",
+    "type": "mcq",
+    "topic": "abstraksi",
+    "difficulty": "sulit",
+    "week_id": "2026-W19",
+    "status": "approved",
+    "created_at": "2026-05-10T15:05:09.588556+00:00",
+    "question": "Dalam pemrograman berorientasi objek, apa manfaat utama dari penggunaan konsep abstraksi?",
+    "options": {
+      "A": "Menyederhanakan penggunaan objek dengan menyembunyikan detail implementasi yang tidak perlu.",
+      "B": "Meningkatkan performa eksekusi program secara signifikan.",
+      "C": "Menghasilkan kode yang lebih panjang dan rumit.",
+      "D": "Memungkinkan pengembang untuk bekerja tanpa menggunakan struktur data."
+    },
+    "correct_answer": "A",
+    "explanation": "Jawaban ini benar karena abstraksi memungkinkan programmer untuk fokus pada fungsi utama objek tanpa terbebani oleh rincian teknis. Hal ini meningkatkan kemudahan dalam memahami, menggunakan, dan memelihara kode.",
+    "approved_at": "2026-05-10T15:05:33.427010+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "e2cf7daa-fcce-45e7-82a2-f6a9633cd826",
+    "type": "multi",
+    "topic": "abstraksi",
+    "difficulty": "mudah",
+    "week_id": "2026-W19",
+    "status": "approved",
+    "created_at": "2026-05-10T15:05:12.891476+00:00",
+    "question": "Apa saja manfaat dari abstraksi dalam pemrograman? Pilih SEMUA jawaban yang benar.",
+    "options": {
+      "A": "Menyederhanakan sistem dengan menyembunyikan detail yang tidak penting.",
+      "B": "Mengharuskan programmer untuk memahami setiap detail implementasi.",
+      "C": "Memungkinkan fokus pada fungsi utama tanpa memikirkan detail teknis.",
+      "D": "Mengurangi kerumitan dalam pengembangan perangkat lunak.",
+      "E": "Menghilangkan kebutuhan akan dokumentasi pada kode."
+    },
+    "correct_answers": [
+      "A",
+      "C",
+      "D"
+    ],
+    "correct_answer": [
+      "A",
+      "C",
+      "D"
+    ],
+    "explanation": "Opsi A, C, dan D adalah manfaat dari abstraksi yang jelas, yaitu menyederhanakan sistem, memungkinkan fokus pada fungsi utama, dan mengurangi kerumitan. Opsi B salah karena abstraksi justru menyembunyikan detail, dan opsi E salah karena dokumentasi tetap penting untuk pemeliharaan kode.",
+    "approved_at": "2026-05-10T15:05:34.397380+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "d6047622-70db-4843-8474-d94a7050f3e5",
+    "type": "multi",
+    "topic": "abstraksi",
+    "difficulty": "sedang",
+    "week_id": "2026-W19",
+    "status": "approved",
+    "created_at": "2026-05-10T15:05:15.425631+00:00",
+    "question": "Apa saja pernyataan yang benar mengenai konsep abstraksi dalam pemrograman? Pilih SEMUA jawaban yang benar.",
+    "options": {
+      "A": "Abstraksi membantu menyederhanakan sistem dengan menyembunyikan detail yang tidak penting.",
+      "B": "Abstraksi hanya digunakan dalam pemrograman berorientasi prosedural.",
+      "C": "Abstraksi memungkinkan pengguna fokus pada fungsi utama tanpa mengetahui cara kerjanya.",
+      "D": "Abstraksi meningkatkan kompleksitas dalam pengembangan perangkat lunak.",
+      "E": "Abstraksi dapat diterapkan melalui class abstrak dan interface."
+    },
+    "correct_answers": [
+      "A",
+      "C",
+      "E"
+    ],
+    "correct_answer": [
+      "A",
+      "C",
+      "E"
+    ],
+    "explanation": "Opsi A, C, dan E adalah benar karena masing-masing menjelaskan fungsi dan tujuan abstraksi dalam menyederhanakan kode dan penggunaannya. Opsi B salah karena abstraksi juga digunakan dalam pemrograman berorientasi objek. Opsi D salah karena sebaliknya, abstraksi justru mengurangi kompleksitas.",
+    "approved_at": "2026-05-10T15:05:34.527685+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "cb0c8271-abd9-4a5c-bc3e-21633a637cb7",
+    "type": "multi",
+    "topic": "abstraksi",
+    "difficulty": "sedang",
+    "week_id": "2026-W19",
+    "status": "approved",
+    "created_at": "2026-05-10T15:05:19.210943+00:00",
+    "question": "Dalam konteks pemrograman dan ilmu komputer, mana saja pernyataan yang benar tentang konsep abstraksi? Pilih SEMUA jawaban yang benar.",
+    "options": {
+      "A": "Abstraksi menyederhanakan sistem dengan menyembunyikan detail yang tidak penting.",
+      "B": "Abstraksi hanya dapat diterapkan dalam bahasa pemrograman tertentu.",
+      "C": "Abstraksi memungkinkan fokus pada fungsi utama tanpa perlu mengetahui detail implementasi.",
+      "D": "Abstraksi tidak berpengaruh terhadap pemeliharaan kode dan pengembangan perangkat lunak.",
+      "E": "Abstraksi dapat diterapkan melalui class abstrak dan interface."
+    },
+    "correct_answers": [
+      "A",
+      "C",
+      "E"
+    ],
+    "correct_answer": [
+      "A",
+      "C",
+      "E"
+    ],
+    "explanation": "Opsi A, C, dan E benar karena masing-masing menjelaskan aspek penting dari konsep abstraksi dalam pemrograman yang menyederhanakan kompleksitas, memungkinkan fokus pada fungsi utama, dan metode penerapannya. Opsi B salah karena abstraksi dapat diterapkan di banyak bahasa pemrograman. Opsi D juga salah karena abstraksi justru berkontribusi terhadap kemudahan pemeliharaan kode dan pengembangan perangkat lunak.",
+    "approved_at": "2026-05-10T15:05:34.966094+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "ad3c720b-891d-4f21-8a9b-d1dccfd28c89",
+    "type": "truefalse",
+    "topic": "abstraksi",
+    "difficulty": "sulit",
+    "week_id": "2026-W19",
+    "status": "approved",
+    "created_at": "2026-05-10T15:05:21.309098+00:00",
+    "question": "Abstraksi dalam pemrograman berorientasi objek hanya diterapkan melalui class abstrak dan tidak dapat dilakukan menggunakan interface atau fungsi.",
+    "options": {
+      "Benar": "Benar",
+      "Salah": "Salah"
+    },
+    "correct_answer": "Salah",
+    "explanation": "Pernyataan ini salah karena abstraksi dapat diterapkan tidak hanya melalui class abstrak, tetapi juga melalui interface dan fungsi yang menyembunyikan kompleksitas program. Tujuan utama dari abstraksi adalah untuk menyederhanakan sistem dengan hanya menampilkan informasi penting kepada pengguna.",
+    "approved_at": "2026-05-10T15:05:35.696749+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "051cf83b-c7af-4ac0-bfea-770073f40857",
+    "type": "truefalse",
+    "topic": "abstraksi",
+    "difficulty": "mudah",
+    "week_id": "2026-W19",
+    "status": "approved",
+    "created_at": "2026-05-10T15:05:23.423982+00:00",
+    "question": "Abstraksi dalam pemrograman berorientasi objek memungkinkan programmer fokus pada 'apa yang dilakukan' suatu objek tanpa harus mengetahui 'bagaimana cara kerjanya' secara detail.",
+    "options": {
+      "Benar": "Benar",
+      "Salah": "Salah"
+    },
+    "correct_answer": "Benar",
+    "explanation": "Pernyataan ini benar karena sesuai dengan penjelasan tentang abstraksi yang menyebutkan bahwa tujuan dari abstraksi adalah untuk menyederhanakan sistem dengan menyembunyikan detail yang tidak penting, sehingga pengembang dapat lebih fokus pada fungsi utama objek.",
+    "approved_at": "2026-05-10T15:05:35.877036+00:00",
+    "admin_note": ""
+  },
+  {
+    "id": "cb861d7c-1df4-4192-b32d-0370a4e41221",
+    "type": "truefalse",
+    "topic": "abstraksi",
+    "difficulty": "mudah",
+    "week_id": "2026-W19",
+    "status": "approved",
+    "created_at": "2026-05-10T15:05:25.252209+00:00",
+    "question": "Abstraksi dalam pemrograman memungkinkan pengguna untuk memahami fungsi utama tanpa mengetahui detail implementasi di baliknya.",
+    "options": {
+      "Benar": "Benar",
+      "Salah": "Salah"
+    },
+    "correct_answer": "Benar",
+    "explanation": "Pernyataan ini benar karena abstraksi menyederhanakan sistem dengan menyembunyikan detail yang tidak penting, sehingga pengguna dapat fokus pada apa yang dilakukan oleh objek tanpa perlu memahami bagaimana cara kerjanya secara rinci.",
+    "approved_at": "2026-05-10T15:05:36.012736+00:00",
+    "admin_note": ""
+  }
+]
