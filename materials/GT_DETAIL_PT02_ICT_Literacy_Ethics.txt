@@ -1,0 +1,233 @@
+================================================================
+GROUND TRUTH DETAIL — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 2: ICT Literacy and Ethics
+================================================================
+
+----------------------------------------------------------------
+[MATERI: Literasi ICT, Etika Digital, dan Fenomena Sosial Digital]
+----------------------------------------------------------------
+
+PENJELASAN DETAIL:
+
+A. LITERASI DAN LITERACY WITH ICT (LwICT)
+
+Literasi pada awalnya merujuk pada kemampuan kebahasaan, namun pengertiannya berkembang mencakup:
+berpikir kritis, kemampuan berhitung, memecahkan masalah, cara untuk mencapai tujuan,
+mengembangkan ilmu pengetahuan, serta mengembangkan potensi diri seseorang.
+
+Literacy with ICT (LwICT) didefinisikan sebagai:
+"LwICT means thinking critically and creatively, about information and about communication,
+as citizens of the global community, while using ICT safely, responsibly & ethically."
+
+LwICT bukan sekadar kemampuan teknis mengoperasikan perangkat, melainkan mencakup dimensi
+berpikir kritis dan kreatif yang dilandasi tanggung jawab etis.
+
+Dua komponen berpikir utama LwICT:
+1. Critical Thinking (Berpikir Kritis): menganalisis, mengevaluasi, dan mempertanyakan
+   informasi secara sistematis sebelum mengambil kesimpulan atau keputusan.
+2. Creative Thinking (Berpikir Kreatif): kemampuan melihat berbagai kemungkinan penyelesaian
+   terhadap suatu masalah, menghasilkan gagasan-gagasan baru dan berguna.
+→ Keduanya merupakan satu kesatuan yang saling melengkapi dan tidak dapat dipisahkan.
+
+B. HEALTH AND SAFETY DALAM PENGGUNAAN ICT
+
+Bahaya penggunaan ICT yang tidak bijak:
+- Cyber bullying (perundungan digital)
+- Pencurian identitas (identity theft)
+- Body shaming
+- Semua hal di atas dapat menyebabkan stres dan gangguan kesehatan mental.
+
+Data UNICEF 2020: 45% anak di Indonesia berusia 14–24 tahun pernah menjadi korban
+cyber bullying.
+
+C. ETIKA DAN TANGGUNG JAWAB
+
+Definisi Etika (KBBI): Ilmu tentang apa yang baik dan apa yang buruk, serta tentang hak
+dan kewajiban moral.
+
+Empat Dilema Etika dalam Penggunaan Teknologi Informasi
+(Perspektif Aristotelian — Michael D. Myers & Leigh Miller, 1996):
+
+1. AKURASI INFORMASI
+   - Penyebaran informasi tidak benar berbahaya: dapat menyebabkan pengambilan keputusan
+     yang salah.
+   - Kesalahan penyebaran informasi dapat mengakibatkan konsekuensi hukum.
+   - Keakuratan informasi mensyaratkan prinsip kejujuran, kebenaran, dan integritas.
+
+2. PRIVASI
+   - Teknologi dapat menyimpan dan mengakses banyak data pribadi → ancaman privasi.
+   - Ada konflik antara hak privasi individu dan kepentingan komunitas.
+   - Contoh: data pribadi digunakan untuk menargetkan iklan di media sosial.
+
+3. AKSES KE INFORMASI
+   - Pembatasan akses informasi pada sistem tertentu.
+   - Perlunya pengetahuan dan keterampilan untuk mengakses informasi.
+   - Penanggung jawab dan pemilik informasi harus jelas.
+   - Perlu peraturan perlindungan data yang memadai.
+
+4. HAK KEKAYAAN INTELEKTUAL (HKI)
+   - Dilema: perlindungan hak pemilik KI vs. akses publik yang memadai.
+   - Contoh pelanggaran: pembajakan perangkat lunak.
+   - Hak cipta mendorong kreativitas, namun jika terlalu ketat dapat menghambat akses
+     publik terhadap pengetahuan.
+
+D. ISU ETIKA KONTEMPORER DALAM TEKNOLOGI
+
+Lima isu etika utama saat ini:
+1. Penyalahgunaan Informasi Pribadi: data pengguna rentan disalahgunakan.
+2. Informasi Salah dan Deep Fakes: teknologi memungkinkan pembuatan konten palsu
+   yang tampak nyata; potensi pelanggaran privasi dan penyalahgunaan identitas sangat tinggi.
+3. Kurangnya Pengawasan dan Tanggung Jawab: perkembangan teknologi tidak selalu
+   diimbangi mekanisme akuntabilitas yang memadai.
+4. Pemanfaatan AI: bias algoritmik, privasi data, dampak sosial otomatisasi.
+5. Teknologi Otonom: mobil tanpa pengemudi, drone, senjata robotik. Isu utama: manusia
+   terlalu mempercayai teknologi tanpa memahami cara kerjanya.
+
+Regulasi Digital di Indonesia:
+- UU No. 27 Tahun 2022 tentang Perlindungan Data Pribadi
+- UU No. 11 Tahun 2008 tentang Informasi dan Transaksi Elektronik (ITE)
+- UU No. 19 Tahun 2016 tentang Perubahan atas UU No. 11 Tahun 2008 tentang ITE
+
+E. FENOMENA SOSIAL DIGITAL
+
+1. Budaya Anonim dan Fenomena "Fess":
+   Budaya anonim di media sosial mendorong pernyataan tanpa tanggung jawab, memunculkan
+   komentar tidak ramah dan pernyataan sensitif yang merugikan pihak lain.
+
+2. Internet Fraud:
+   Penggunaan layanan internet atau software untuk menipu atau mengambil keuntungan dengan
+   cara merugikan pihak lain.
+
+3. Hoax:
+   Usaha untuk menipu masyarakat agar mempercayai sesuatu yang tidak benar.
+   Ciri-ciri Hoax:
+   a) Judul bersifat provokatif dan sensasional
+   b) Kredibilitas alamat situs meragukan
+   c) Tidak menyertakan fakta yang dapat diverifikasi
+   d) Media (foto/video) palsu atau dimanipulasi
+   Gerakan Anti Hoax: turnbackhoax.id
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Identifikasi Dilema Etika]
+Sebuah perusahaan e-commerce menggunakan data riwayat pembelian dan lokasi pengguna untuk
+menampilkan iklan yang sangat personal, bahkan sebelum pengguna mencarinya. Termasuk dilema
+etika apakah kasus ini? Jelaskan!
+
+JAWABAN:
+Kasus ini terutama termasuk dalam dilema etika PRIVASI. Data pribadi pengguna (riwayat
+pembelian, lokasi) diakses dan digunakan untuk kepentingan komersial tanpa transparansi
+penuh kepada pengguna. Ada konflik antara hak privasi individu dan kepentingan bisnis
+perusahaan. Secara sekunder, juga menyentuh dilema AKURASI INFORMASI apabila data yang
+digunakan tidak akurat.
+
+[SOAL 2 — Identifikasi Hoax]
+Perhatikan karakteristik berita berikut: "VIRAL!! MINUM AIR KELAPA + BAWANG PUTIH SEMBUHKAN
+COVID DALAM 3 JAM! DOKTER INI BUKTIKAN! (dari situs: free-news-viral123.blogspot.com)"
+Identifikasi ciri-ciri hoax yang ada pada berita ini!
+
+JAWABAN:
+a) Judul provokatif/sensasional: kata "VIRAL!!", huruf kapital seluruhnya, klaim
+   penyembuhan dalam 3 jam yang tidak masuk akal.
+b) Kredibilitas situs meragukan: menggunakan platform blog gratis (blogspot.com) dengan
+   nama domain tidak profesional.
+c) Klaim tidak didukung fakta ilmiah yang terverifikasi.
+d) Potensi penggunaan foto/video yang dimanipulasi untuk mendukung klaim.
+
+[SOAL 3 — Critical vs. Creative Thinking]
+Bedakan bagaimana seorang mahasiswa menggunakan critical thinking vs creative thinking
+ketika menemukan artikel ilmiah yang ia ragukan kebenarannya!
+
+JAWABAN:
+Critical Thinking: Mahasiswa memeriksa sumber artikel (jurnal terindeks atau tidak?),
+memverifikasi metodologi penelitian, mencari referensi pembanding, memeriksa apakah
+klaim didukung data yang memadai, dan mengevaluasi potensi bias penulis.
+
+Creative Thinking: Mahasiswa memikirkan cara-cara alternatif untuk menguji klaim artikel
+tersebut (misalnya replikasi eksperimen sederhana), mencari sudut pandang berbeda dari
+peneliti lain, atau mengkombinasikan temuan artikel dengan pengetahuan dari bidang lain
+untuk menghasilkan perspektif baru.
+
+[SOAL 4 — Regulasi Digital]
+Seorang pengguna media sosial memposting foto orang lain tanpa izin dan mencantumkan
+informasi pribadi orang tersebut. Undang-undang mana yang berpotensi dilanggar?
+Jelaskan alasannya!
+
+JAWABAN:
+Dua undang-undang yang berpotensi dilanggar:
+1. UU No. 27 Tahun 2022 tentang Perlindungan Data Pribadi: karena menyebarkan informasi
+   pribadi orang lain tanpa consent (persetujuan) yang sah.
+2. UU No. 19 Tahun 2016 (perubahan UU ITE): karena menyebarkan informasi yang menyangkut
+   kehidupan pribadi orang lain melalui media elektronik tanpa hak, yang dapat merugikan
+   pihak tersebut.
+
+[SOAL 5 — Analisis Teknologi Otonom]
+Sebuah mobil otonom (self-driving car) mengalami kecelakaan yang mengakibatkan korban jiwa.
+Diskusikan isu etika yang muncul dari kasus ini!
+
+JAWABAN:
+Beberapa isu etika yang muncul:
+1. Tanggung jawab: siapa yang bertanggung jawab — produsen mobil, pengembang software,
+   pemilik kendaraan, atau regulator?
+2. Kepercayaan berlebihan: manusia mungkin terlalu mempercayai sistem otonom tanpa memahami
+   sepenuhnya batasannya (limitasi teknologi dalam situasi tak terduga).
+3. Kurangnya pengawasan: apakah ada regulasi yang cukup untuk menguji keamanan kendaraan
+   otonom sebelum dipasarkan?
+4. Dilema etika dalam pemrograman: bagaimana sistem diprogram untuk membuat keputusan
+   dalam situasi darurat (misalnya "trolley problem" — menabrak tembok atau pejalan kaki)?
+
+[SOAL 6 — LwICT dalam Konteks Akademik]
+Seorang mahasiswa menggunakan ChatGPT untuk mengerjakan seluruh tugas esainya tanpa
+menyebutkan penggunaan AI tersebut. Analisis kasus ini dari perspektif LwICT!
+
+JAWABAN:
+Dari perspektif LwICT, mahasiswa ini gagal memenuhi aspek "menggunakan ICT secara
+bertanggung jawab dan beretika":
+- Tidak bertanggung jawab: menyembunyikan penggunaan AI dari dosen melanggar prinsip
+  kejujuran akademik (academic integrity).
+- Tidak beretika: esai yang dikumpulkan bukan merupakan karya intelektual mahasiswa
+  sendiri, yang melanggar prinsip orisinalitas.
+- Lemah dalam critical thinking: mahasiswa tidak menggunakan ICT sebagai alat bantu
+  berpikir, melainkan menggantikan seluruh proses berpikirnya dengan AI.
+Pendekatan yang benar: menggunakan AI sebagai alat bantu brainstorming, lalu secara
+kritis mengevaluasi, mengembangkan, dan menulis ulang dengan pemikiran sendiri.
+
+[SOAL 7 — Cyber Bullying]
+Berdasarkan data UNICEF 2020, 45% anak Indonesia usia 14-24 tahun pernah menjadi korban
+cyber bullying. Jelaskan tiga dampak nyata cyber bullying terhadap korban dan dua langkah
+yang dapat diambil untuk mencegahnya!
+
+JAWABAN:
+Dampak cyber bullying:
+1. Gangguan kesehatan mental: kecemasan, depresi, bahkan dapat memicu pikiran untuk
+   menyakiti diri sendiri.
+2. Penurunan prestasi akademik: korban kehilangan konsentrasi dan motivasi belajar.
+3. Isolasi sosial: korban menarik diri dari lingkungan pertemanan karena rasa malu
+   atau takut.
+
+Langkah pencegahan:
+1. Literasi digital: edukasi kepada pengguna tentang etika berkomunikasi di ruang digital
+   dan konsekuensi hukum dari perundungan digital.
+2. Pelaporan dan respons cepat: platform media sosial harus menyediakan mekanisme
+   pelaporan yang mudah dan merespons laporan bullying dengan cepat.
+
+[SOAL 8 — Hak Kekayaan Intelektual]
+Seorang developer mengunduh dan menggunakan software berbayar secara ilegal (bajakan)
+untuk proyeknya. Jelaskan dilema etika HKI yang terlibat dan dua konsekuensi yang
+mungkin dihadapi!
+
+JAWABAN:
+Dilema HKI: Developer melanggar hak cipta pemilik software. Meski software bajakan
+memberikan akses gratis, hal ini merugikan developer software yang telah berinvestasi
+waktu dan sumber daya untuk mengembangkannya, serta mengurangi insentif untuk berinovasi.
+
+Konsekuensi:
+1. Hukum: dapat dikenai sanksi pidana dan/atau perdata berdasarkan UU HKI yang berlaku.
+2. Keamanan: software bajakan sering kali mengandung malware atau backdoor yang
+   membahayakan sistem dan data proyek.
+
+================================================================
+END OF GROUND TRUTH DETAIL — PERTEMUAN 2
+================================================================

@@ -1,0 +1,250 @@
+================================================================
+GROUND TRUTH DETAIL — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 5: Pattern Recognition (Pengenalan Pola)
+================================================================
+
+----------------------------------------------------------------
+[MATERI: Pengenalan Pola — Konsep, Strategi, dan Penerapan]
+----------------------------------------------------------------
+
+PENJELASAN DETAIL:
+
+A. DEFINISI DAN KONSEP DASAR
+
+Definisi formal:
+Pattern Recognition adalah kemampuan untuk mengenali kesamaan atau perbedaan umum melalui
+suatu pola yang ada, dengan tujuan untuk memprediksi atau memperoleh cara cepat dalam
+melihat persoalan.
+
+Pertanyaan kunci sebagai titik tolak:
+"Di mana saya pernah melihat (melakukan) ini sebelumnya?"
+
+Dua fungsi utama pengenalan pola:
+1. Menyaring informasi penting dari informasi yang tidak dibutuhkan
+2. Membangun solusi umum yang dapat diterapkan pada kelas masalah yang serupa
+
+Pengenalan pola adalah DASAR dari pengetahuan manusia. Manusia mulai belajar
+dari pola sejak bayi — respons verbal, bahasa, hingga perilaku sosial.
+
+B. POLA DALAM KEHIDUPAN SEHARI-HARI
+
+1. Identifikasi Wajah: mata + hidung + mulut = pola konstan manusia.
+   Warna kulit, bentuk rambut = variabel → diabaikan dalam pengenalan.
+
+2. Wabah Penyakit: ilmuwan mencari kemiripan kasus untuk mengidentifikasi pola penyebaran.
+   Contoh: COVID-19 vs. Flu Spanyol 1918.
+
+3. Rekomendasi YouTube: sistem mengenali pola tontonan untuk merekomendasikan konten.
+
+4. Cuaca: prakiraan cuaca berdasarkan pola historis suhu, kelembapan, tekanan udara.
+
+5. Deteksi Fraud (Penipuan): bank mendeteksi transaksi mencurigakan berdasarkan pola
+   perilaku pengguna yang menyimpang dari kebiasaan.
+
+C. POLA ANTAR-MASALAH (CROSS-PROBLEM PATTERNS)
+
+Strategi: cari hal yang SAMA atau SANGAT MIRIP di setiap masalah dalam satu kelas.
+
+Contoh — Memanggang Kue:
+Dekomposisi: jenis kue, bahan + takaran, jumlah orang, lama memanggang, urutan bahan,
+peralatan.
+POLA yang ditemukan (berlaku untuk SEMUA jenis kue):
+- Setiap kue memiliki jumlah bahan tertentu yang tepat
+- Bahan ditambahkan pada waktu tertentu
+- Setiap kue dipanggang untuk durasi tertentu
+→ Pola ini memungkinkan kita memanggang KUE APAPUN tanpa belajar dari nol.
+
+Prinsip: Setelah pola diidentifikasi, kita dapat membangun SOLUSI UMUM (general solution)
+yang berlaku untuk seluruh kelas masalah yang memiliki pola serupa.
+
+D. PERBEDAAN MATHEMATICAL THINKING vs. COMPUTATIONAL THINKING
+
+Masalah: 1 + 2 + 3 + ... + 10 = ?
+
+Mathematical Thinking (kalkulasi bertahap):
+1+2=3, 3+3=6, 6+4=10, 10+5=15, ... = 55 (10 langkah)
+
+Computational Thinking (pengenalan pola):
+Pasangkan bilangan dari ujung kiri dan kanan:
+1+10=11, 2+9=11, 3+8=11, 4+7=11, 5+6=11
+→ Ada 5 pasangan, setiap pasangan = 11
+→ Total = 5 × 11 = 55
+→ Formula umum: (n/2) × (n+1)
+
+Kunci: CT mencari POLA untuk membangun SOLUSI EFISIEN, bukan menghitung satu per satu.
+
+E. SOAL COKLAT BEBEK — PENGENALAN POLA DERET SEGITIGA
+
+Bebek ke-n mendapat n coklat. Total 500 coklat.
+Pola akumulasi (deret segitiga):
+n=1: 1, n=2: 3, n=3: 6, n=4: 10, n=5: 15, ..., n=30: 465, n=31: 496, n=32: 528
+Karena 496 ≤ 500 < 528 → bebek ke-32 adalah yang pertama tidak dapat coklat.
+
+F. DIGIT TERAKHIR PERPANGKATAN 2
+
+Pola digit terakhir dari 2^n berulang dalam siklus 4:
+2^1=2, 2^2=4, 2^3=8, 2^4=16(6), 2^5=32(2), ... → siklus: 2,4,8,6
+Rumus: N mod 4 → 1:digit 2, 2:digit 4, 3:digit 8, 0:digit 6
+Untuk 2^2003: 2003 mod 4 = 3 → digit terakhir = 8
+
+G. SOAL AYAM BEBEK — POLA URUTAN HEWAN
+
+Aturan: jika kemarin beli x bebek → hari ini 2x ayam
+        jika kemarin beli y ayam  → hari ini 3y bebek
+Simulasi:
+Hari 1: 1 bebek   (total: 1)
+Hari 2: 2 ayam    (total: 3)
+Hari 3: 6 bebek   (total: 9)
+Hari 4: 12 ayam   (total: 21)
+Hari 5: 36 bebek  (total: 57)
+Pola: hari ganjil = bebek, hari genap = ayam
+Hewan ke-1000: cari n di mana total kumulatif ≥ 1000.
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Coklat Bebek]
+Pak Dengklek memiliki 500 coklat. Bebek ke-n mendapat n coklat. Bebek nomor berapa
+yang pertama kali tidak mendapat coklat?
+
+JAWABAN:
+Pola deret segitiga: S(n) = n(n+1)/2
+S(30) = 30×31/2 = 465 ≤ 500 ✓ (bebek 1–30 semua dapat coklat)
+S(31) = 31×32/2 = 496 ≤ 500 ✓ (bebek 31 dapat 31 coklat, sisa: 500-496=4)
+S(32) = 32×33/2 = 528 > 500 ✗ (bebek 32 butuh 32 coklat, tersisa hanya 4)
+Jawaban: Bebek nomor 32 adalah yang pertama tidak mendapat coklat.
+
+[SOAL 2 — Digit Terakhir Perpangkatan]
+Berapa digit terakhir dari:
+a) 2^100
+b) 2^2025
+c) 3^2024
+
+JAWABAN:
+Untuk 2^n (siklus 4: digit 2,4,8,6):
+a) 100 mod 4 = 0 → digit terakhir = 6
+b) 2025 mod 4 = 1 → digit terakhir = 2
+
+Untuk 3^n, temukan polanya terlebih dahulu:
+3^1=3, 3^2=9, 3^3=27(7), 3^4=81(1), 3^5=243(3) → siklus 4: 3,9,7,1
+c) 2024 mod 4 = 0 → digit terakhir = 1
+
+[SOAL 3 — Pola Bilangan]
+Temukan pola dari barisan berikut dan tentukan suku ke-10:
+a) 2, 5, 10, 17, 26, ...
+b) 1, 1, 2, 3, 5, 8, 13, ...
+c) 3, 6, 12, 24, 48, ...
+
+JAWABAN:
+a) Selisih: 3, 5, 7, 9, ... (bertambah 2) → pola: n² + 1
+   Suku ke-10: 10² + 1 = 101
+
+b) Deret Fibonacci: setiap suku = jumlah dua suku sebelumnya.
+   Suku ke-10: 1,1,2,3,5,8,13,21,34,55 → Suku ke-10 = 55
+
+c) Deret geometri: rasio = 2 (setiap suku dikali 2).
+   Suku ke-10: 3 × 2^(10-1) = 3 × 512 = 1536
+
+[SOAL 4 — Pola dalam Algoritme]
+Hitung nilai dari ekspresi berikut menggunakan pengenalan pola:
+1×2 + 2×3 + 3×4 + ... + n×(n+1) = ?
+Tunjukkan pola dan formula umumnya!
+
+JAWABAN:
+Hitung beberapa nilai pertama:
+n=1: 1×2 = 2
+n=2: 2 + 2×3 = 2+6 = 8
+n=3: 8 + 3×4 = 8+12 = 20
+n=4: 20 + 4×5 = 20+20 = 40
+n=5: 40 + 5×6 = 40+30 = 70
+
+Amati pola hasil: 2, 8, 20, 40, 70
+Coba formula n(n+1)(n+2)/3:
+n=1: 1×2×3/3 = 2 ✓
+n=2: 2×3×4/3 = 8 ✓
+n=3: 3×4×5/3 = 20 ✓
+n=4: 4×5×6/3 = 40 ✓
+Formula umum: n(n+1)(n+2)/3
+
+[SOAL 5 — Pola Dal Mi (Jarak 2)]
+Dal Mi memiliki 12 kartu: 9, 2, 6, 7, 10, 15, 4, 20, 12, 18, 1, 17.
+Cari semua pasangan kartu yang memiliki selisih tepat 2!
+
+JAWABAN:
+Urutkan terlebih dahulu: 1, 2, 4, 6, 7, 9, 10, 12, 15, 17, 18, 20
+
+Cari pasangan dengan selisih = 2 (pengenalan pola: bandingkan elemen berurutan):
+- (1,3)? 3 tidak ada.
+- (2,4): selisih 2 ✓
+- (4,6): selisih 2 ✓
+- (6,4): sudah terhitung.
+- (7,9): selisih 2 ✓
+- (9,7): sudah terhitung.
+- (10,12): selisih 2 ✓
+- (12,10): sudah.
+- (15,17): selisih 2 ✓
+- (17,15): sudah.
+- (18,20): selisih 2 ✓
+- (20,18): sudah.
+
+Pasangan: (2,4), (4,6), (7,9), (10,12), (15,17), (18,20)
+Jawaban: 6 pasangan.
+
+[SOAL 6 — Ayam Bebek]
+Dengan aturan yang sama (x bebek → 2x ayam; y ayam → 3y bebek), mulai hari 1 beli
+1 bebek. Tentukan:
+a) Jenis hewan ke-20 yang dibeli
+b) Total hewan yang dibeli setelah 6 hari
+
+JAWABAN:
+Pola: hari ganjil = bebek, hari genap = ayam
+
+Simulasi lengkap (6 hari):
+Hari 1: 1 bebek   → kumulatif: 1
+Hari 2: 1×2=2 ayam → kumulatif: 3
+Hari 3: 2×3=6 bebek → kumulatif: 9
+Hari 4: 6×2=12 ayam → kumulatif: 21
+Hari 5: 12×3=36 bebek → kumulatif: 57
+Hari 6: 36×2=72 ayam → kumulatif: 129
+
+a) Hewan ke-20 dibeli (cari di hari ke berapa kumulatif ≥ 20):
+   Setelah hari 4: total 21 hewan. Hewan ke-20 dibeli di hari 4.
+   Hari 4 = genap = AYAM
+   Jawaban: Hewan ke-20 adalah AYAM.
+
+b) Total hewan setelah 6 hari = 129 hewan.
+
+[SOAL 7 — Pola Visual/Geometri]
+Amati pola berikut dan tentukan jumlah kotak pada pola ke-5:
+Pola 1: 1 kotak (■)
+Pola 2: 5 kotak (+ bentuk tanda plus)
+Pola 3: 13 kotak
+Pola 4: 25 kotak
+
+JAWABAN:
+Selisih antar pola: 5-1=4, 13-5=8, 25-13=12 → selisih bertambah 4 setiap langkah.
+Selisih ke-5: 12+4 = 16
+Pola ke-5: 25 + 16 = 41 kotak
+
+Formula: pola ke-n = 2n² - 2n + 1
+Verifikasi: n=1: 1 ✓, n=2: 5 ✓, n=3: 13 ✓, n=4: 25 ✓
+Pola ke-5: 2(25) - 2(5) + 1 = 50 - 10 + 1 = 41 ✓
+
+[SOAL 8 — Pola dalam Problem Solving]
+Gunakan pengenalan pola untuk menemukan formula penjumlahan deret berikut:
+1 + 3 + 5 + 7 + ... + (2n-1) = ?
+(jumlah n bilangan ganjil pertama)
+
+JAWABAN:
+Hitung beberapa nilai:
+n=1: 1 = 1 = 1²
+n=2: 1+3 = 4 = 2²
+n=3: 1+3+5 = 9 = 3²
+n=4: 1+3+5+7 = 16 = 4²
+Pola terdeteksi: jumlah n bilangan ganjil pertama = n²
+Formula: 1 + 3 + 5 + ... + (2n-1) = n²
+
+================================================================
+END OF GROUND TRUTH DETAIL — PERTEMUAN 5
+================================================================

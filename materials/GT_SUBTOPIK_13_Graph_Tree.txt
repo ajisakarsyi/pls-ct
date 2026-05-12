@@ -1,0 +1,252 @@
+================================================================
+GROUND TRUTH SUBTOPIK -- KOM2102 COMPUTATIONAL THINKING
+Subtopik: Graph dan Tree -- Representasi, Traversal, dan Jalur Terpendek
+================================================================
+
+KONSEP INTI:
+
+GRAPH:
+  Node/Vertex : merepresentasikan objek
+  Edge        : merepresentasikan relasi antar node
+  Directed    : hubungan tidak simetris (ada arah)
+  Undirected  : hubungan simetris (tanpa arah)
+  Weighted    : setiap edge memiliki bobot (jarak, biaya, waktu)
+
+TREE:
+  Graph khusus yang TIDAK mengandung cycle (lintasan melingkar).
+  Bersifat HIERARKIS: setiap node (kecuali root) punya tepat 1 parent.
+  Terminologi: root, parent, child, leaf, level, depth.
+
+REPRESENTASI GRAPH:
+  1. Adjacency Matrix: grid NxN, cell[i][j]=1 jika ada edge i->j
+  2. Adjacency List: setiap node menyimpan list tetangganya
+
+TRAVERSAL GRAPH:
+  BFS (Breadth-First Search): eksplorasi level per level, gunakan QUEUE
+  DFS (Depth-First Search)  : eksplorasi sedalam mungkin dulu, gunakan STACK/rekursi
+
+JALUR TERPENDEK -- ALGORITME DIJKSTRA:
+  Inisialisasi: jarak semua node = tak hingga, kecuali sumber = 0
+  Iterasi: pilih node dengan jarak terkecil yang belum dikunjungi,
+           update jarak tetangganya jika lebih kecil via node ini
+  Selesai saat semua node dikunjungi atau target ditemukan
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 -- Directed vs Undirected]
+Tentukan jenis graph yang tepat untuk setiap kasus:
+a) Jaringan jalan raya dua arah antar kota
+b) Sistem follow di Instagram
+c) Jaringan transmisi listrik
+d) Sitasi antar paper ilmiah
+e) Hubungan pertemanan di WhatsApp group
+f) Peta rute penerbangan satu arah
+
+JAWABAN:
+a) Undirected weighted (jalan dua arah, jarak sebagai bobot)
+b) Directed (A follow B tidak berarti B follow A)
+c) Undirected (listrik mengalir dua arah)
+d) Directed (A mengutip B, bukan sebaliknya)
+e) Undirected (semua anggota saling terhubung)
+f) Directed weighted (rute satu arah, harga/waktu sebagai bobot)
+
+[SOAL 2 -- Jalur Terpendek: Enumerasi]
+Graph dengan node A,B,C,D,E dan bobot berikut:
+A-B:4, A-C:2, B-C:1, B-D:5, C-D:8, C-E:10, D-E:2, B-E:7
+
+Temukan jalur terpendek dari A ke E!
+
+JAWABAN (enumerasi semua jalur):
+A->B->E          : 4+7=11
+A->B->D->E       : 4+5+2=11
+A->C->E          : 2+10=12
+A->C->D->E       : 2+8+2=12
+A->B->C->E       : 4+1+10=15
+A->B->C->D->E    : 4+1+8+2=15
+A->C->B->E       : 2+1+7=10 *
+A->C->B->D->E    : 2+1+5+2=10 *
+
+Jalur terpendek: A->C->B->E atau A->C->B->D->E, bobot=10
+
+[SOAL 3 -- Algoritme Dijkstra]
+Gunakan Dijkstra untuk graph pada Soal 2, mulai dari A!
+
+JAWABAN:
+Init: dist={A:0, B:inf, C:inf, D:inf, E:inf}, visited={}
+
+Langkah 1: Pilih A (dist=0). Kunjungi A.
+  Update: B->min(inf, 0+4)=4, C->min(inf, 0+2)=2
+  dist={A:0, B:4, C:2, D:inf, E:inf}
+
+Langkah 2: Pilih C (dist=2, terkecil belum dikunjungi). Kunjungi C.
+  Update: B->min(4, 2+1)=3, D->min(inf, 2+8)=10, E->min(inf, 2+10)=12
+  dist={A:0, B:3, C:2, D:10, E:12}
+
+Langkah 3: Pilih B (dist=3). Kunjungi B.
+  Update: D->min(10, 3+5)=8, E->min(12, 3+7)=10
+  dist={A:0, B:3, C:2, D:8, E:10}
+
+Langkah 4: Pilih D (dist=8). Kunjungi D.
+  Update: E->min(10, 8+2)=10 (tidak berubah)
+  dist={A:0, B:3, C:2, D:8, E:10}
+
+Langkah 5: Pilih E (dist=10). Kunjungi E. Selesai.
+
+Jarak terpendek A ke E = 10
+Jalur: lacak balik -> E dari B (dist 3+7=10) atau D (dist 8+2=10)
+       B dari C (dist 2+1=3), C dari A (dist 0+2=2)
+Jalur: A->C->B->E (bobot 10) atau A->C->B->D->E (bobot 10)
+
+[SOAL 4 -- Traversal BFS]
+Graph berikut (undirected):
+A--B, A--C, B--D, B--E, C--F, D--G
+
+Lakukan BFS mulai dari A!
+
+JAWABAN:
+Queue: [A], Visited: {A}
+Proses A: tetangga B,C -> enqueue B,C. Queue:[B,C], Visited:{A,B,C}
+Proses B: tetangga D,E (A sudah visited) -> enqueue D,E. Queue:[C,D,E]
+Proses C: tetangga F (A sudah visited) -> enqueue F. Queue:[D,E,F]
+Proses D: tetangga G (B sudah visited) -> enqueue G. Queue:[E,F,G]
+Proses E: tidak ada tetangga baru. Queue:[F,G]
+Proses F: tidak ada tetangga baru. Queue:[G]
+Proses G: tidak ada tetangga baru. Queue:[]
+
+Urutan BFS: A, B, C, D, E, F, G
+(Level 0: A | Level 1: B,C | Level 2: D,E,F | Level 3: G)
+
+[SOAL 5 -- Traversal DFS]
+Lakukan DFS pada graph Soal 4 mulai dari A (pilih tetangga secara alfabetis)!
+
+JAWABAN (rekursif):
+DFS(A): visited A, rekursi ke B (alfabetis pertama)
+  DFS(B): visited B, rekursi ke D
+    DFS(D): visited D, rekursi ke G
+      DFS(G): visited G, tidak ada tetangga baru. Kembali
+    Kembali ke D -> E
+    DFS(E): visited E, tidak ada tetangga baru. Kembali
+  Kembali ke B -> selesai (A sudah visited)
+  Kembali ke A -> C
+DFS(C): visited C, rekursi ke F
+  DFS(F): visited F, tidak ada tetangga baru. Kembali
+Selesai.
+
+Urutan DFS: A, B, D, G, E, C, F
+
+[SOAL 6 -- Terminologi Tree]
+Diberikan tree berikut:
+         A (root)
+        / \
+       B   C
+      / \   \
+     D   E   F
+    /
+   G
+
+Identifikasi:
+a) Root
+b) Semua leaf node
+c) Parent dari D
+d) Children dari B
+e) Level/depth dari G
+f) Height (tinggi) pohon
+
+JAWABAN:
+a) Root: A
+b) Leaf node (tidak punya child): E, F, G
+c) Parent dari D: B
+d) Children dari B: D, E
+e) Level dari G (root di level 0): A=0, B=1, D=2, G=3 -> Level 3
+f) Height = level terdalam = 3
+
+[SOAL 7 -- Adjacency Matrix]
+Gambarkan adjacency matrix untuk graph directed berikut:
+Node: 1,2,3,4
+Edge: 1->2, 1->3, 2->4, 3->2, 3->4, 4->1
+
+JAWABAN:
+Matrix 4x4 (baris=dari, kolom=ke):
+    1  2  3  4
+1 [ 0  1  1  0 ]
+2 [ 0  0  0  1 ]
+3 [ 0  1  0  1 ]
+4 [ 1  0  0  0 ]
+
+Baca: cell[i][j]=1 berarti ada edge dari i ke j
+Jumlah edge: hitung semua angka 1 = 6 (sesuai dengan 6 edge yang diberikan)
+
+[SOAL 8 -- Adjacency List]
+Buat adjacency list untuk graph Soal 7!
+
+JAWABAN:
+1: [2, 3]
+2: [4]
+3: [2, 4]
+4: [1]
+
+Adjacency list lebih efisien untuk SPARSE graph (sedikit edge).
+Adjacency matrix lebih efisien untuk DENSE graph dan pengecekan edge O(1).
+
+[SOAL 9 -- Aplikasi Graph: Mutual Friends]
+Diberikan graph pertemanan (undirected):
+Ali--Budi, Ali--Citra, Budi--Dini, Citra--Dini, Budi--Eka
+
+Siapa "mutual friend" antara Ali dan Dini?
+(Mutual friend = teman Ali yang juga teman Dini)
+
+JAWABAN:
+Teman Ali: {Budi, Citra}
+Teman Dini: {Budi, Citra}
+Irisan: {Budi, Citra}
+
+Mutual friends antara Ali dan Dini: Budi dan Citra.
+
+Pseudocode:
+  teman_A = adjacency_list[A]
+  teman_B = adjacency_list[B]
+  mutual = irisan(teman_A, teman_B)
+  print(mutual)
+
+[SOAL 10 -- Tree: Struktur Folder]
+Deskripsikan tree untuk struktur direktori berikut:
+/home/
+  /mahasiswa/
+    /semester1/
+      kom2102.pdf
+      mtk101.pdf
+    /semester2/
+      fis201.pdf
+  /dosen/
+    silabus.docx
+
+Jawab: jumlah node, jumlah leaf, height, parent dari "semester1"!
+
+JAWABAN:
+Node-node:
+  /home (root)
+  /mahasiswa, /dosen (children dari root)
+  /semester1, /semester2 (children dari mahasiswa)
+  silabus.docx (child dari dosen)
+  kom2102.pdf, mtk101.pdf (children dari semester1)
+  fis201.pdf (child dari semester2)
+
+Total node: 9
+
+Leaf node (tidak punya child):
+  kom2102.pdf, mtk101.pdf, fis201.pdf, silabus.docx -> 4 leaf
+
+Height:
+  Level 0: /home
+  Level 1: /mahasiswa, /dosen
+  Level 2: /semester1, /semester2, silabus.docx
+  Level 3: kom2102.pdf, mtk101.pdf, fis201.pdf
+  Height = 3
+
+Parent dari "semester1": /mahasiswa
+
+================================================================
+END OF GROUND TRUTH SUBTOPIK -- GRAPH DAN TREE
+================================================================

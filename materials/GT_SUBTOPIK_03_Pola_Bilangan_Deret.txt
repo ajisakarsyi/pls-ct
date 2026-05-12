@@ -1,0 +1,165 @@
+================================================================
+GROUND TRUTH SUBTOPIK — KOM2102 COMPUTATIONAL THINKING
+Subtopik: Pattern Recognition — Pola Bilangan dan Deret Matematis
+================================================================
+
+KONSEP INTI:
+Pengenalan pola = menemukan ATURAN TERSEMBUNYI di balik sekumpulan angka/objek,
+lalu menggunakan aturan itu untuk memprediksi atau menghitung secara efisien.
+
+PERTANYAAN PEMANDU: "Di mana saya pernah melihat ini sebelumnya?"
+
+JENIS POLA YANG UMUM:
+1. Deret Aritmatika    : selisih konstan (d)       → an = a1 + (n-1)d
+2. Deret Geometri      : rasio konstan (r)          → an = a1 × r^(n-1)
+3. Deret Segitiga      : akumulasi 1+2+3+...+n      → Sn = n(n+1)/2
+4. Deret Fibonacci     : an = a(n-1) + a(n-2)
+5. Pola Kuadrat        : an = n², atau kombinasinya
+6. Pola Modulo (Siklus): digit terakhir, sisa bagi
+7. Pola Selisih Bertingkat: selisih dari selisih     → lihat pola di tingkat ke-2, ke-3
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Coklat Bebek (Deret Segitiga)]
+Bebek ke-n mendapat n coklat. Total = 500 coklat.
+Bebek nomor berapa yang pertama tidak mendapat coklat?
+
+JAWABAN:
+Pola: jumlah komulatif s/d bebek ke-n = n(n+1)/2
+Cari n terbesar sehingga n(n+1)/2 ≤ 500:
+  n=31: 31×32/2 = 496 ≤ 500 ✓
+  n=32: 32×33/2 = 528 > 500 ✗
+Setelah bebek ke-31 terbagi 496 coklat, sisa 500-496=4 coklat.
+Bebek ke-32 butuh 32 coklat, hanya ada 4 → tidak dapat.
+JAWABAN: Bebek nomor 32.
+
+[SOAL 2 — Deret Aritmatika]
+Tentukan suku ke-15 dan jumlah 15 suku pertama dari deret:
+3, 7, 11, 15, 19, ...
+
+JAWABAN:
+Beda d = 7-3 = 4, suku pertama a1 = 3.
+Suku ke-n: an = a1 + (n-1)d = 3 + (n-1)×4
+Suku ke-15: a15 = 3 + 14×4 = 3 + 56 = 59
+
+Jumlah 15 suku: Sn = n/2 × (a1 + an)
+S15 = 15/2 × (3 + 59) = 7,5 × 62 = 465
+
+[SOAL 3 — Deret Geometri]
+Suku ke-7 dari deret: 2, 6, 18, 54, ...
+Dan jumlah 8 suku pertama.
+
+JAWABAN:
+Rasio r = 6/2 = 3, a1 = 2.
+Suku ke-n: an = a1 × r^(n-1)
+Suku ke-7: a7 = 2 × 3^6 = 2 × 729 = 1458
+
+Jumlah n suku: Sn = a1 × (r^n - 1)/(r - 1)
+S8 = 2 × (3^8 - 1)/(3-1) = 2 × (6561-1)/2 = 6560
+
+[SOAL 4 — Pola Selisih Bertingkat]
+Temukan pola dan suku ke-6 dari: 2, 5, 10, 17, 26, ...
+
+JAWABAN:
+Selisih tingkat 1: 3, 5, 7, 9, ... (selisihnya bertambah 2)
+Selisih tingkat 2: 2, 2, 2, ... (konstan!)
+→ Ini pola kuadrat. Coba an = n² + 1:
+  n=1: 1+1=2 ✓, n=2: 4+1=5 ✓, n=3: 9+1=10 ✓
+Suku ke-6: 6² + 1 = 37
+
+[SOAL 5 — Deret Fibonacci]
+Barisan Fibonacci: 1, 1, 2, 3, 5, 8, 13, 21, 34, ...
+a) Tentukan suku ke-12.
+b) Berapakah rasio dua suku berurutan mendekati pada suku besar?
+
+JAWABAN:
+a) Lanjutkan: 34, 55, 89 → suku ke-12 = 144
+
+b) Rasio suku berurutan: 89/55≈1.618, 144/89≈1.618, 233/144≈1.618
+→ Mendekati bilangan Emas (Golden Ratio) φ ≈ 1.618033...
+
+[SOAL 6 — Jumlah Deret Spesial]
+Gunakan pengenalan pola untuk menemukan rumus:
+a) 1 + 2 + 3 + ... + n = ?
+b) 1² + 2² + 3² + ... + n² = ?
+c) 1×2 + 2×3 + 3×4 + ... + n(n+1) = ?
+
+JAWABAN:
+a) Pola pasangan ujung: (1+n)+(2+(n-1))+... = (n+1) sebanyak n/2 pasang
+   Formula: n(n+1)/2
+   Verifikasi: n=10: 10×11/2=55 ✓
+
+b) Hitung beberapa nilai:
+   n=1:1, n=2:5, n=3:14, n=4:30, n=5:55
+   Coba n(n+1)(2n+1)/6:
+   n=3: 3×4×7/6=14 ✓, n=4: 4×5×9/6=30 ✓
+   Formula: n(n+1)(2n+1)/6
+
+c) Hitung: n=1:2, n=2:8, n=3:20, n=4:40, n=5:70
+   Coba n(n+1)(n+2)/3:
+   n=2: 2×3×4/3=8 ✓, n=3: 3×4×5/3=20 ✓
+   Formula: n(n+1)(n+2)/3
+
+[SOAL 7 — Pola Geometri Visual]
+Hitung jumlah titik pada pola ke-5:
+Pola 1: ●           = 1
+Pola 2: ● ● ●      = 5 (ditambah 4 di sekitar)
+         ●●●
+Pola 3: 13 titik (ditambah 8)
+Pola 4: 25 titik (ditambah 12)
+
+JAWABAN:
+Selisih antar pola: 4, 8, 12, ... → bertambah 4 setiap langkah
+Selisih ke-5: 16
+Pola ke-5: 25 + 16 = 41
+
+Formula: an = 2n² - 2n + 1
+Verifikasi: n=5: 50-10+1=41 ✓
+
+[SOAL 8 — Pola Bilangan Ganjil]
+Jumlah n bilangan ganjil pertama: 1 + 3 + 5 + ... + (2n-1) = ?
+Buktikan dengan pengenalan pola!
+
+JAWABAN:
+n=1: 1 = 1 = 1²
+n=2: 1+3 = 4 = 2²
+n=3: 1+3+5 = 9 = 3²
+n=4: 1+3+5+7 = 16 = 4²
+POLA: jumlah n bilangan ganjil pertama = n²
+Formula: 1 + 3 + 5 + ... + (2n-1) = n²
+
+Intuisi visual: bilangan ganjil ke-k = 2k-1 adalah "L-shape" yang membentuk
+persegi sempurna saat ditambahkan satu per satu.
+
+[SOAL 9 — Barisan Campuran]
+Temukan pola dan lanjutkan 3 suku:
+a) 1, 4, 9, 16, 25, ...
+b) 2, 3, 5, 8, 13, 21, ...
+c) 1, 2, 4, 8, 16, ...
+d) 0, 1, 3, 6, 10, 15, ...
+e) 1, 8, 27, 64, 125, ...
+
+JAWABAN:
+a) n² → suku berikutnya: 36, 49, 64
+b) Fibonacci-like (setiap suku = jumlah dua sebelumnya): 34, 55, 89
+c) Geometri (×2): 32, 64, 128
+d) Segitiga (n(n-1)/2): 21, 28, 36
+e) n³ → 216, 343, 512
+
+[SOAL 10 — Pola untuk Coklat dengan Total Berbeda]
+a) Berapa bebek yang bisa dapat coklat jika total = 1000?
+b) Berapa total coklat yang dibutuhkan agar 50 bebek semua dapat?
+
+JAWABAN:
+a) Cari n terbesar s.t. n(n+1)/2 ≤ 1000:
+   n=44: 44×45/2 = 990 ≤ 1000 ✓
+   n=45: 45×46/2 = 1035 > 1000 ✗
+   44 bebek bisa dapat coklat. Bebek ke-45 tidak dapat.
+
+b) Agar 50 bebek semua dapat: total = 50×51/2 = 1275 coklat.
+
+================================================================
+END OF GROUND TRUTH SUBTOPIK — POLA BILANGAN DAN DERET
+================================================================

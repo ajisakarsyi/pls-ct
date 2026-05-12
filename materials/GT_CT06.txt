@@ -1,0 +1,88 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 6: Pengenalan Algoritme & Block Programming
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Konsep Dasar Algoritme]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Algoritme didefinisikan sebagai instruksi atau langkah-langkah yang berstruktur untuk menyelesaikan suatu persoalan (problem). Secara historis, kata "algoritme" berasal dari nama seorang penulis buku berkebangsaan Uzbekistan, yaitu Abu Ja'far Muhammad Ibnu Musa Al-Khwarizmi. Orang-orang Barat menyebut Al-Khwarizmi dengan istilah "Algorism," yang kemudian berevolusi menjadi kata "algorithm" dalam bahasa Inggris. Kata algoritme pertama kali digunakan secara formal pada tahun 1950, merujuk pada Algoritme Euclidean (Euclid's Algorithm), yang merupakan algoritme yang disusun oleh ilmuwan Yunani bernama Euclid untuk memperoleh Faktor Persekutuan Terbesar (FPB) dari dua bilangan bulat.
+
+Algoritme tidak hanya eksis dalam dunia komputasi, tetapi juga dapat ditemukan dalam kehidupan sehari-hari dalam berbagai bentuk instruksi terstruktur, seperti buku manual mesin cuci dan panduan penggunaan perangkat elektronik (misalnya Apple Watch). Hal ini menunjukkan bahwa konsep algoritme pada dasarnya sudah akrab dengan kehidupan manusia sehari-hari, jauh sebelum dikaitkan dengan pemrograman komputer.
+
+
+----------------------------------------------------------------
+[MATERI 2: Pemrograman (Programming) dan Block Programming]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Pemrograman (programming) adalah proses menulis instruksi atau perintah yang akan dijalankan oleh komputer agar dapat melakukan tugas tertentu. Instruksi tersebut ditulis menggunakan bahasa pemrograman, seperti Python, Java, C++, atau JavaScript. Membuat program pada dasarnya merupakan aktivitas yang menantang karena membutuhkan kombinasi dari pemahaman terhadap bahasa (sintaks), logika berpikir, kemampuan problem solving, serta kesabaran dalam proses debugging (pencarian dan perbaikan kesalahan). Oleh karena itu, dibutuhkan platform khusus agar aktivitas belajar pemrograman dapat menjadi lebih mudah dan lebih mudah diakses, terutama bagi pemula.
+
+Block programming adalah metode pemrograman yang menggunakan blok-blok visual berbentuk puzzle yang dapat disusun dengan cara drag and drop, sehingga relatif lebih mudah dibandingkan pemrograman teks biasa. Setiap blok merepresentasikan satu instruksi tertentu, misalnya perintah bergerak, mengulang suatu aksi, atau membuat suatu kondisi. Pengguna tidak perlu mengetik sintaks yang rumit, sehingga pendekatan ini sangat cocok untuk pemula karena lebih mudah, interaktif, dan minim kesalahan sintaks. Contoh platform yang menggunakan block programming antara lain code.org, Scratch, dan App Inventor.
+
+Perbedaan mendasar antara block programming dan text programming dapat dirangkum sebagai berikut. Dari sisi bentuk, block programming menggunakan blok visual berbasis drag-and-drop, sedangkan text programming menggunakan sintaks teks yang diketik secara manual. Dari sisi kemudahan, block programming sangat mudah dipelajari, sementara text programming lebih sulit dan membutuhkan latihan yang lebih intensif. Dari sisi potensi kesalahan, block programming minim error sintaks, sedangkan text programming lebih rawan terhadap kesalahan sintaks. Dari sisi target pengguna, block programming cocok untuk anak-anak dan pemula, sedangkan text programming lebih sesuai untuk kalangan profesional. Dari sisi fleksibilitas, block programming bersifat terbatas dan lebih ditujukan sebagai media latihan, sementara text programming sangat fleksibel dan mampu menghasilkan aplikasi yang siap digunakan.
+
+
+----------------------------------------------------------------
+[MATERI 3: Platform Block Programming — code.org]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Code.org adalah organisasi nirlaba global yang berfokus pada pengenalan ilmu komputer (Computer Science/CS) untuk semua kalangan, khususnya melalui pendekatan block programming. Platform ini dikenal luas melalui kampanye globalnya yang bernama Hour of Code. Code.org menyediakan beberapa kurikulum yang berjenjang sesuai tingkat pendidikan, yaitu: CS Fundamentals yang ditujukan untuk jenjang Sekolah Dasar (SD), CS Discoveries untuk jenjang SMP dan SMA, serta CS Principles untuk jenjang SMA dan Universitas. Platform ini didukung oleh perusahaan-perusahaan teknologi besar seperti Google, Microsoft, dan Amazon.
+
+Antarmuka platform block programming pada code.org terdiri dari empat area utama yang saling berinteraksi, yaitu:
+
+1. Area Blok (Block Area): tempat di mana seluruh blok instruksi yang tersedia ditampilkan dan dapat dipilih oleh pengguna.
+2. Area Kerja (Work Area): area di mana pengguna menyusun blok-blok instruksi yang telah dipilih dengan cara drag and drop untuk membangun program.
+3. Area Instruksi: area yang menampilkan panduan atau petunjuk mengenai tugas yang harus diselesaikan.
+4. Area Run: area di mana program yang telah disusun dapat dijalankan dan hasilnya dapat diamati.
+
+Tampilan keseluruhan platform berbasis drag-and-drop, di mana blok-blok yang mewakili instruksi saling terhubung seperti potongan puzzle. Output yang dapat dihasilkan dari program yang dibuat mencakup animasi, permainan (game), atau cerita interaktif.
+
+
+----------------------------------------------------------------
+[MATERI 4: Komponen Blok dalam Block Programming]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Dalam platform block programming pada code.org, terdapat beberapa kategori blok komponen yang memiliki fungsi berbeda-beda, yaitu:
+
+1. Blok Dunia (World): berisi blok-blok yang digunakan untuk mengatur stage atau canvas secara keseluruhan. Fungsinya antara lain mengatur latar belakang, memulai simulasi, dan menetapkan aturan umum pada stage.
+
+2. Blok Sprites: berisi blok-blok untuk membuat atau mengontrol sprite, yaitu karakter atau objek yang tampil di layar. Blok ini dapat digunakan untuk menambahkan sprite baru, memberi nama pada sprite, mengganti kostum atau tampilan sprite, dan berbagai pengaturan lainnya terkait karakter.
+
+3. Blok Lokasi (Location): berfungsi untuk mengatur posisi sprite di dalam stage atau canvas. Contoh penggunaannya antara lain memindahkan sprite ke koordinat tertentu (x, y), mengatur arah orientasi sprite, atau menempatkan sprite di posisi acak.
+
+4. Blok Perilaku (Behaviours): berisi blok-blok yang mendefinisikan perilaku otomatis yang dapat diberikan kepada sprite. Contoh perilaku yang dapat diatur antara lain "bergerak maju terus," "memantul jika menabrak tepi layar," atau "mengikuti sprite lain."
+
+Seluruh komponen blok ini dioperasikan melalui mekanisme drag and drop, di mana pengguna menarik blok yang diinginkan dari block area ke dalam work area untuk merangkai instruksi program secara visual.
+
+
+----------------------------------------------------------------
+[MATERI 5: Contoh Program dalam Block Programming]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Pemahaman terhadap block programming diperkuat melalui berbagai contoh sederhana yang menunjukkan bagaimana blok-blok instruksi disusun untuk menghasilkan perilaku tertentu pada sprite. Terdapat empat contoh program yang didemonstrasikan dalam pertemuan ini:
+
+1. Sprite Memunculkan Teks Saat Diklik: Program disusun agar ketika pengguna mengklik sebuah sprite, sprite tersebut akan menampilkan suatu teks tertentu di layar.
+
+2. Sprite Berubah Ukuran Saat Diklik: Program disusun agar ketika sprite diklik, ukuran sprite tersebut akan berubah (membesar atau mengecil) sesuai dengan instruksi yang telah diatur.
+
+3. Sprite Berputar Saat Diklik: Program disusun agar ketika sprite diklik, sprite tersebut akan melakukan gerakan berputar sesuai parameter yang telah ditetapkan dalam blok instruksi.
+
+4. Sprite Memunculkan Teks dan Bersuara Saat Diklik: Program yang lebih kompleks ini menggabungkan dua instruksi sekaligus, yaitu ketika sprite diklik, selain akan memunculkan teks di layar, juga akan menghasilkan suara secara bersamaan. Contoh ini menunjukkan bahwa dalam block programming, beberapa blok instruksi dapat dirangkai secara berurutan untuk menghasilkan lebih dari satu perilaku dalam satu aksi pemicu (trigger).
+
+Keseluruhan contoh ini mendemonstrasikan bagaimana konsep algoritme, yaitu langkah-langkah terstruktur untuk menyelesaikan tugas, diterapkan secara visual dan interaktif melalui pendekatan block programming.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

@@ -1,0 +1,216 @@
+================================================================
+GROUND TRUTH SUBTOPIK -- KOM2102 COMPUTATIONAL THINKING
+Subtopik: Kompleksitas Algoritme (Big-O Notation)
+================================================================
+
+KONSEP INTI:
+Kompleksitas Algoritme = ukuran efisiensi algoritme ketika ukuran input (n) bertambah.
+
+Dua dimensi:
+  Time Complexity  : jumlah OPERASI yang dibutuhkan seiring bertambahnya n
+  Space Complexity : kebutuhan MEMORI tambahan seiring bertambahnya n
+
+NOTASI BIG-O: O(f(n))
+  Menggambarkan batas atas pertumbuhan (worst case).
+  O(1)      : Konstan   -- tidak bergantung n sama sekali
+  O(log n)  : Logaritmik -- sangat efisien (binary search)
+  O(n)      : Linear    -- tumbuh sebanding n (linear search)
+  O(n log n): Log-linear -- efisien (merge sort, quick sort avg)
+  O(n^2)    : Kuadratik  -- cepat lambat untuk n besar (bubble sort)
+  O(2^n)    : Eksponensial -- sangat lambat (brute force kombinasi)
+  O(n!)     : Faktorial  -- paling lambat (permutasi semua kemungkinan)
+
+HIRARKI (dari terbaik ke terburuk):
+  O(1) < O(log n) < O(n) < O(n log n) < O(n^2) < O(2^n) < O(n!)
+
+ATURAN PENYEDERHANAAN BIG-O:
+  1. Buang konstanta: O(3n) = O(n)
+  2. Ambil yang terbesar: O(n^2 + n) = O(n^2)
+  3. Kalikan loop bersarang: O(n) dalam O(n) = O(n^2)
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 -- Identifikasi Big-O dari Kode]
+Tentukan kompleksitas waktu dari setiap pseudocode berikut!
+
+a) print(arr[5])
+b) for i=1 to n do print(arr[i])
+c) for i=1 to n do for j=1 to n do print(i,j)
+d) for i=1 to n do for j=i to n do print(i,j)
+e) x=n; while x>1 do x=x/2; print(x)
+
+JAWABAN:
+a) O(1)   -- akses langsung ke indeks, 1 operasi konstan
+
+b) O(n)   -- satu loop, n iterasi
+
+c) O(n^2) -- dua loop bersarang, n*n iterasi
+
+d) O(n^2) -- meski j mulai dari i bukan 1:
+   Total iterasi = n + (n-1) + ... + 1 = n(n+1)/2
+   Buang konstanta: n^2/2 = O(n^2)
+
+e) O(log n) -- setiap iterasi x dibagi 2:
+   n -> n/2 -> n/4 -> ... -> 1
+   Butuh log2(n) langkah
+
+[SOAL 2 -- Perbandingan Algoritme]
+Dua algoritme mencari nilai terbesar dari n elemen:
+
+Algoritme A (Linear Search):
+  maks = arr[1]
+  for i = 2 to n do
+    if arr[i] > maks then maks = arr[i]
+
+Algoritme B (Bubble Sort lalu ambil elemen terakhir):
+  for i = 1 to n-1 do
+    for j = 1 to n-i do
+      if arr[j] > arr[j+1] then swap(arr[j], arr[j+1])
+  maks = arr[n]
+
+Bandingkan kompleksitas dan rekomendasikan yang lebih baik!
+
+JAWABAN:
+Algoritme A: O(n) -- satu pass, n-1 perbandingan
+Algoritme B: O(n^2) -- bubble sort penuh sebelum ambil maksimum
+
+Rekomendasi: Algoritme A jauh lebih efisien.
+Untuk n=1000: A butuh ~1000 operasi, B butuh ~1.000.000 operasi.
+Algoritme B berlebihan -- mensortir seluruh array padahal hanya perlu 1 nilai.
+
+[SOAL 3 -- Analisis FPB Euclidean]
+Tunjukkan bahwa Algoritme Euclidean untuk FPB adalah O(log min(a,b))!
+
+JAWABAN:
+Setiap iterasi: a,b -> b, a mod b
+Kunci: a mod b < b/2 selalu berlaku (terbukti dari sifat modulo).
+Ini berarti setelah 2 iterasi, nilai b setidaknya berkurang setengah.
+Sehingga butuh paling banyak 2*log2(b) iterasi = O(log b).
+Lebih presisnya: O(log min(a,b)).
+
+Contoh FPB(144, 89):
+Iterasi: (144,89) -> (89,55) -> (55,34) -> (34,21) -> (21,13) ->
+         (13,8) -> (8,5) -> (5,3) -> (3,2) -> (2,1) -> (1,0)
+Total: 11 iterasi.
+log2(89) ≈ 6.5 -> 2*6.5=13 (batas atas terpenuhi)
+
+[SOAL 4 -- Space Complexity]
+Tentukan space complexity dari:
+a) Menghitung rata-rata n bilangan (baca satu per satu, akumulasikan)
+b) Menyimpan semua n bilangan ke array, lalu hitung rata-rata
+c) Fibonacci rekursif fib(n)
+d) Fibonacci iteratif dengan dua variabel
+
+JAWABAN:
+a) O(1) space -- hanya butuh 2 variabel (sum dan count), tidak peduli berapa besar n
+
+b) O(n) space -- menyimpan semua n bilangan di array
+
+c) O(n) space -- call stack tumbuh hingga kedalaman n
+   (fib(n)->fib(n-1)->...->fib(1) semua tersimpan di stack)
+
+d) O(1) space -- hanya butuh 2 variabel (prev dan curr), tidak bergantung n
+
+[SOAL 5 -- Menghitung Total Operasi]
+Hitung TEPAT berapa kali print dieksekusi, lalu tentukan Big-O:
+
+a) for i=1 to n do for j=1 to i do print("*")
+b) for i=1 to n do for j=1 to n do for k=1 to n do print("*")
+c) for i=1 to n step 2 do print(i)
+
+JAWABAN:
+a) Total = 1+2+3+...+n = n(n+1)/2
+   Untuk n=10: 55 kali
+   Big-O: O(n^2) -- buang konstanta 1/2
+
+b) Total = n*n*n = n^3
+   Big-O: O(n^3)
+
+c) Total = n/2 (bilangan ganjil dari 1 s.d. n)
+   Big-O: O(n) -- konstanta 1/2 dibuang
+
+[SOAL 6 -- Perbandingan Waktu Nyata]
+Sebuah komputer dapat mengeksekusi 10^8 operasi per detik.
+Berapa waktu yang dibutuhkan algoritme O(n), O(n^2), O(n log n), O(2^n)
+untuk n=1.000 dan n=1.000.000?
+
+JAWABAN:
+Untuk n=1.000:
+  O(n)        : 1.000 / 10^8 = 0,00001 detik (sangat cepat)
+  O(n log n)  : 1.000*10 / 10^8 = 0,0001 detik (cepat)
+  O(n^2)      : 10^6 / 10^8 = 0,01 detik (masih oke)
+  O(2^n)      : 2^1000 / 10^8 = TIDAK MUNGKIN selesai (lebih besar dari umur alam semesta!)
+
+Untuk n=1.000.000:
+  O(n)        : 10^6 / 10^8 = 0,01 detik (cepat)
+  O(n log n)  : 10^6*20 / 10^8 = 0,2 detik (masih bisa)
+  O(n^2)      : 10^12 / 10^8 = 10.000 detik = ~2,8 JAM (tidak praktis!)
+  O(2^n)      : MUSTAHIL
+
+Kesimpulan: pemilihan algoritme SANGAT PENTING untuk input besar.
+
+[SOAL 7 -- Optimasi Algoritme]
+Diberikan algoritme mencari apakah ada dua elemen di array yang jumlahnya = target.
+Versi A (brute force O(n^2)):
+  for i=1 to n do
+    for j=i+1 to n do
+      if arr[i]+arr[j]==target then return True
+  return False
+
+Usulkan algoritme yang lebih efisien dan tentukan kompleksitasnya!
+
+JAWABAN:
+Versi B (sortir + dua pointer, O(n log n)):
+  Sortir arr ascending               // O(n log n)
+  kiri = 1, kanan = n
+  while kiri < kanan do             // O(n)
+    jumlah = arr[kiri] + arr[kanan]
+    if jumlah == target then return True
+    else if jumlah < target then kiri = kiri + 1
+    else kanan = kanan - 1
+  return False
+
+Kompleksitas: O(n log n) -- didominasi langkah sortir
+
+Versi C (hash set, O(n) average):
+  buat set kosong
+  for setiap x dalam arr do          // O(n)
+    pelengkap = target - x
+    if pelengkap ada di set then return True
+    masukkan x ke set
+  return False
+
+Kompleksitas: O(n) time, O(n) space
+
+Perbandingan untuk n=10.000:
+  A: ~50.000.000 operasi
+  B: ~10.000 * 14 = ~140.000 operasi (1000x lebih cepat!)
+  C: ~10.000 operasi (5000x lebih cepat!)
+
+[SOAL 8 -- Kompleksitas Rekursi]
+Tentukan kompleksitas time dan space untuk:
+a) faktorial(n) rekursif
+b) fib(n) rekursif naive
+c) binarySearch(arr, n) rekursif
+
+JAWABAN:
+a) faktorial(n):
+   Time : O(n) -- n pemanggilan rekursif
+   Space: O(n) -- kedalaman call stack = n
+
+b) fib(n) naive:
+   Time : O(2^n) -- setiap fib(n) memanggil fib(n-1) DAN fib(n-2)
+                    -> pohon rekursi dengan 2^n node
+   Space: O(n)  -- kedalaman call stack = n (jalur terdalam)
+
+c) binarySearch rekursif:
+   Time : O(log n) -- setiap panggilan mengurangi n setengahnya
+   Space: O(log n) -- kedalaman rekursi = log n (lebih buruk dari iteratif O(1)!)
+
+Catatan: binarySearch iteratif lebih baik dari segi space (O(1) vs O(log n)).
+
+================================================================
+END OF GROUND TRUTH SUBTOPIK -- KOMPLEKSITAS ALGORITME
+================================================================

@@ -1,0 +1,245 @@
+================================================================
+GROUND TRUTH SUBTOPIK — KOM2102 COMPUTATIONAL THINKING
+Subtopik: Pseudocode dan Notasi Algoritme
+================================================================
+
+KONSEP INTI:
+Pseudocode = cara informal menuliskan algoritme tanpa terikat sintaks bahasa
+pemrograman tertentu. Tujuan: mendapatkan ide cepat, mudah dibaca, mudah
+dikomunikasikan.
+
+CIRI ALGORITME YANG BAIK:
+1. Goal unik dan jelas
+2. Tidak ambigu (setiap langkah = 1 makna)
+3. Finiteness (jumlah langkah terhingga)
+4. Feasibility (sesuai sumber daya yang ada)
+5. Independen dari perangkat/agen tertentu
+
+KONVENSI PSEUDOCODE YANG DIGUNAKAN:
+  read(x)          : baca input ke variabel x
+  print(x)         : tampilkan nilai x
+  x = ekspresi     : assignment
+  if () then ... else ... : percabangan
+  for i=a to b do  : perulangan tetap
+  while () do      : perulangan kondisi
+  function f(x:tipe):tipe : definisi fungsi
+  return nilai     : kembalikan nilai dari fungsi
+
+KOMPLEKSITAS (Big-O):
+  O(1)     : konstan (tidak bergantung ukuran input)
+  O(log n) : logaritmik (binary search)
+  O(n)     : linear (scan satu kali)
+  O(n²)    : kuadratik (dua loop bersarang)
+  O(2^n)   : eksponensial (brute force kombinasi)
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Pseudocode: FPB (Algoritme Euclidean)]
+Tulis pseudocode untuk mencari FPB dari dua bilangan a dan b!
+Jalankan untuk FPB(48, 18).
+
+JAWABAN:
+Input : dua bilangan bulat positif a, b
+Output: FPB(a, b)
+
+  read(a, b)
+  if (a < b) then swap(a, b)
+  while (true)
+    r = a mod b
+    if (r == 0) then break
+    a = b
+    b = r
+  print(b)
+
+Trace FPB(48, 18):
+  a=48, b=18 (48>18, tidak perlu swap)
+  r = 48 mod 18 = 12; a=18, b=12
+  r = 18 mod 12 = 6;  a=12, b=6
+  r = 12 mod 6  = 0;  break
+  Output: 6
+
+[SOAL 2 — Pseudocode: Jarak Angka]
+Diberikan n bilangan dan selisih d. Hitung banyak pasangan dengan selisih = d.
+
+JAWABAN:
+Input : n bilangan, selisih d
+Output: banyak pasangan (p)
+
+  read(n, d)
+  baca semua bilangan ke arr[1..n]
+  urutkan arr secara menaik
+  p = 0
+  for i = 1 to n-1 do
+    for j = i+1 to n do
+      if (arr[j] - arr[i] == d) then p = p + 1
+      if (arr[j] - arr[i] > d) then break
+  print(p)
+
+Contoh: arr=[1,2,4,6,7,9,10,12,15,17,18,20], d=2
+Pasangan: (2,4),(4,6),(7,9),(10,12),(15,17),(18,20) → p=6
+
+[SOAL 3 — Pseudocode: Cek Prima]
+Tulis pseudocode untuk mengecek apakah bilangan n prima!
+
+JAWABAN:
+Input : bilangan bulat n
+Output: "prima" atau "bukan prima"
+
+  read(n)
+  if (n <= 1) then
+    print("bukan prima")
+  else if (n == 2) then
+    print("prima")
+  else if (n mod 2 == 0) then
+    print("bukan prima")
+  else
+    prima = true
+    i = 3
+    while (i*i <= n) do
+      if (n mod i == 0) then
+        prima = false
+        break
+      i = i + 2
+    if (prima) then print("prima")
+    else print("bukan prima")
+
+Kompleksitas: O(√n)
+
+[SOAL 4 — Pseudocode: Reverse String]
+Tulis pseudocode untuk membalik urutan karakter dalam string s!
+
+JAWABAN:
+Input : string s
+Output: string s yang dibalik
+
+  read(s)
+  n = panjang(s)
+  hasil = ""
+  for i = n to 1 step -1 do
+    hasil = hasil + s[i]
+  print(hasil)
+
+Contoh: s="SAYANG" → hasil="GNAYAAS"
+
+[SOAL 5 — Pseudocode: Pesan Sandi (Enkripsi)]
+Tulis pseudocode untuk mengenkripsi pesan dengan 3 langkah:
+(1) balik string, (2) geser 2 ke kiri, (3) ganti huruf ke berikutnya.
+
+JAWABAN:
+function enkripsi(pesan: string) : string
+  // Langkah 1: balik
+  n = panjang(pesan)
+  s1 = ""
+  for i = n to 1 step -1 do
+    s1 = s1 + pesan[i]
+  
+  // Langkah 2: geser 2 ke kiri
+  s2 = substring(s1, 3, n) + substring(s1, 1, 2)
+  
+  // Langkah 3: ganti ke huruf berikutnya (Z → A)
+  s3 = ""
+  for setiap huruf h dalam s2 do
+    if h == 'Z' then s3 = s3 + 'A'
+    else s3 = s3 + chr(ord(h) + 1)
+  
+  return s3
+
+Dekripsi (langkah 1,2,3 dibalik):
+  // Langkah 1 dekripsi: ganti ke huruf sebelumnya (A → Z)
+  // Langkah 2 dekripsi: geser 2 ke kanan
+  // Langkah 3 dekripsi: balik string
+
+[SOAL 6 — Trace Pseudocode]
+Telusuri output dari pseudocode berikut:
+  a = 5
+  b = 3
+  c = 0
+  while (a > 0) do
+    c = c + b
+    a = a - 1
+  print(c)
+
+JAWABAN:
+Iterasi:
+a=5,b=3,c=0 → c=3, a=4
+a=4,b=3,c=3 → c=6, a=3
+a=3,b=3,c=6 → c=9, a=2
+a=2,b=3,c=9 → c=12, a=1
+a=1,b=3,c=12→ c=15, a=0
+a=0 → kondisi while False → keluar
+Output: 15
+
+Insight: algoritme ini menghitung a × b = 5 × 3 = 15 menggunakan penambahan berulang.
+
+[SOAL 7 — Pseudocode: Konversi Desimal ke Biner]
+Tulis pseudocode untuk mengonversi bilangan bulat positif n ke representasi biner!
+
+JAWABAN:
+Input : bilangan bulat positif n
+Output: representasi biner n (string)
+
+  read(n)
+  biner = ""
+  while (n > 0) do
+    sisa = n mod 2
+    biner = str(sisa) + biner  // tambahkan di KIRI
+    n = n / 2                  // pembagian integer
+  if (biner == "") then biner = "0"
+  print(biner)
+
+Trace n=13:
+  13 mod 2 = 1, biner="1", n=6
+  6 mod 2  = 0, biner="01", n=3
+  3 mod 2  = 1, biner="101", n=1
+  1 mod 2  = 1, biner="1101", n=0
+  Output: 1101 (= 8+4+0+1 = 13 ✓)
+
+[SOAL 8 — Pseudocode: Menghitung FPB dari N Bilangan]
+Tulis pseudocode untuk mencari FPB dari N bilangan!
+
+JAWABAN:
+function fpb(a: int, b: int) : int
+  while (b != 0) do
+    r = a mod b
+    a = b
+    b = r
+  return a
+
+procedure fpbN()
+  read(N)
+  read(x)
+  hasil = x
+  for i = 2 to N do
+    read(x)
+    hasil = fpb(hasil, x)
+  print(hasil)
+
+Contoh N=3, bilangan: 12, 18, 24:
+  hasil = fpb(12,18) = 6
+  hasil = fpb(6,24)  = 6
+  Output: 6
+
+[SOAL 9 — Kompleksitas Algoritme]
+Tentukan Big-O dari algoritme berikut:
+
+a) Mencari nilai terbesar dari n bilangan
+b) Bubble sort (bandingkan elemen berdekatan, ulangi n kali)
+c) Binary search (cari di array terurut, bagi dua setiap langkah)
+d) Menghitung semua subset dari n elemen
+
+JAWABAN:
+a) O(n): harus periksa semua n elemen satu kali
+
+b) O(n²): dua loop bersarang — luar n iterasi, dalam n iterasi
+   for i=1 to n: for j=1 to n-i: bandingkan
+
+c) O(log n): setiap langkah mengurangi ruang pencarian setengahnya
+   n → n/2 → n/4 → ... → 1 memerlukan log₂(n) langkah
+
+d) O(2^n): ada 2^n subset dari n elemen (setiap elemen: masuk/tidak)
+
+================================================================
+END OF GROUND TRUTH SUBTOPIK — PSEUDOCODE DAN NOTASI ALGORITME
+================================================================

@@ -1,0 +1,291 @@
+================================================================
+GROUND TRUTH DETAIL — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 11: Struktur Kontrol — Perulangan
+================================================================
+
+PENJELASAN DETAIL:
+
+A. KONSEP PERULANGAN
+
+Definisi: Struktur kendali yang mengulangi serangkaian instruksi hingga suatu kondisi terpenuhi.
+
+Tiga jenis perulangan:
+1. Iterasi Tetap           : perulangan FOR (jumlah sudah diketahui)
+2. Iterasi Berdasarkan Kondisi: perulangan WHILE, DO-WHILE, DO-UNTIL
+3. Iterasi Berbasis Koleksi: perulangan FOR-IN
+
+B. PERULANGAN FOR (ITERASI TETAP)
+
+Format:
+  for <var> = <awal> to <akhir> step <langkah> do
+    <body>
+
+Aturan:
+- Jika step tidak dicantumkan, langkah default = 1
+- Variabel penghitung bergerak dari awal ke akhir
+- Step negatif untuk perulangan mundur
+- Kompleksitas: O(n) untuk n iterasi
+
+Contoh:
+  for i = 1 to 5 do print(i)         → 1 2 3 4 5
+  for i = 1 to 10 step 3 do print(i) → 1 4 7 10
+  for i = 5 to 0 step -1 do print(i) → 5 4 3 2 1 0
+  for i = 100 to 200 step 11 do      → 100 111 122 133 144 155 166 177 188 199
+
+C. PERULANGAN WHILE (ITERASI BERDASARKAN KONDISI)
+
+Format:
+  while <kondisi> do
+    <body>
+
+Aturan:
+- Kondisi dievaluasi SEBELUM body dijalankan
+- Jika kondisi False sejak awal → body tidak pernah dijalankan
+- Jika kondisi tidak pernah False → infinite loop (hindari!)
+- Body HARUS mengubah sesuatu yang mempengaruhi kondisi
+
+Contoh:
+  i = 1; while i <= 5 do { print(i); i = i+1 } → 1 2 3 4 5; i akhir = 6
+  x = 405; while x mod 3 == 0 do { x = x/3; print(x) } → 135 45 15 5; x akhir = 5
+
+D. PERULANGAN INTERAKTIF DAN SENTINEL
+
+Interaktif (pengguna mengontrol lanjut/berhenti):
+  more = "yes"
+  while more == "yes" do
+    read(x); process(x)
+    read(more)  // tanya lanjut atau tidak
+
+Sentinel (nilai khusus sebagai penanda berhenti):
+  x = 0
+  while x <> -99 do
+    process(x)
+    read(x)
+  // -99 adalah sentinel: penanda bahwa input selesai
+
+E. DO-WHILE DAN DO-UNTIL
+
+DO-WHILE: kondisi diperiksa di AKHIR (body selalu jalan minimal 1×)
+  do
+    <body>
+  while <kondisi>
+  → Ulangi selama kondisi True
+
+DO-UNTIL: kondisi diperiksa di AKHIR (body selalu jalan minimal 1×)
+  do
+    <body>
+  until <kondisi>
+  → Ulangi selama kondisi False (berhenti ketika kondisi True)
+
+Perbedaan kunci while vs do-while:
+- while: bisa tidak pernah dijalankan (jika kondisi langsung False)
+- do-while/do-until: selalu dijalankan MINIMAL SATU KALI
+
+F. PERULANGAN BERSARANG (NESTED LOOP)
+
+Konsep: perulangan di dalam perulangan.
+- Setiap 1 iterasi luar → dalam menyelesaikan SEMUA iterasinya
+- Total iterasi = iterasi_luar × iterasi_dalam
+- Kompleksitas: O(m × n) untuk m × n grid
+
+Contoh — Cetak kotak 4×5 bintang:
+  for i = 1 to 4 do
+    for j = 1 to 5 do
+      print("*", end="")
+    print()  // pindah baris
+
+Strategi merancang nested loop:
+1. Tentukan pembagian tugas: luar untuk baris, dalam untuk kolom (atau sebaliknya)
+2. Rancang loop luar dulu
+3. Rancang loop dalam
+4. Gabungkan
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — FOR: Mencetak Bilangan Genap]
+Tuliskan dua versi pseudocode untuk mencetak 10 bilangan genap pertama (2,4,...,20)!
+
+JAWABAN:
+Versi 1 (step):
+  for i = 2 to 20 step 2 do
+    print(i)
+
+Versi 2 (kalkulasi dalam body):
+  x = 0
+  for i = 1 to 10 do
+    x = x + 2
+    print(x)
+
+[SOAL 2 — FOR: Jumlah Bilangan Genap]
+Hitung dan cetak jumlah dari n bilangan genap pertama (n dari pengguna)!
+
+JAWABAN:
+  read(n)
+  sum = 0
+  x = 0
+  for i = 1 to n do
+    x = x + 2
+    sum = sum + x
+  print(sum)
+
+[SOAL 3 — FOR: Bilangan Terkecil dan Terbesar]
+Input: integer n, lalu n bilangan. Output: nilai terkecil dan terbesar!
+
+JAWABAN:
+  read(n)
+  read(pertama)
+  min = pertama
+  maks = pertama
+  for i = 2 to n do
+    read(x)
+    if (x < min) then min = x
+    if (x > maks) then maks = x
+  print("Terkecil: ", min)
+  print("Terbesar: ", maks)
+
+[SOAL 4 — WHILE: Digit Jumlah]
+Hitung jumlah digit dari bilangan bulat positif n!
+Contoh: n=1234 → jumlah digit = 4
+
+JAWABAN:
+  read(n)
+  count = 0
+  while n > 0 do
+    n = n / 10     // buang digit terakhir (pembagian integer)
+    count = count + 1
+  print(count)
+
+[SOAL 5 — WHILE: Jumlah Digit]
+Hitung jumlah (sum) dari semua digit bilangan bulat positif n!
+Contoh: n=1234 → 1+2+3+4 = 10
+
+JAWABAN:
+  read(n)
+  sum = 0
+  while n > 0 do
+    digit = n mod 10   // ambil digit terakhir
+    sum = sum + digit
+    n = n / 10         // buang digit terakhir
+  print(sum)
+
+[SOAL 6 — Interaktif + Sentinel]
+Buat pseudocode untuk terus membaca nilai ujian mahasiswa hingga input = -1 (sentinel),
+lalu hitung rata-rata semua nilai yang valid!
+
+JAWABAN:
+  sum = 0
+  count = 0
+  read(nilai)
+  while nilai <> -1 do
+    sum = sum + nilai
+    count = count + 1
+    read(nilai)
+  if (count > 0) then
+    print(sum / count)
+  else
+    print("Tidak ada data")
+
+[SOAL 7 — Nested Loop: Segitiga Bintang]
+Cetak segitiga bintang seperti ini untuk tinggi = 4:
+*
+**
+***
+****
+
+JAWABAN:
+  read(tinggi)
+  for i = 1 to tinggi do
+    for j = 1 to i do
+      print("*", end="")
+    print()
+
+[SOAL 8 — Nested Loop: Segitiga Terbalik]
+Cetak segitiga terbalik untuk tinggi = 4:
+****
+***
+**
+*
+
+JAWABAN:
+  read(tinggi)
+  for i = tinggi to 1 step -1 do
+    for j = 1 to i do
+      print("*", end="")
+    print()
+
+[SOAL 9 — Nested Loop: Kotak Berongga]
+Cetak kotak berongga 4×5 (*****/*   */*   */*****):
+
+JAWABAN:
+  for i = 1 to 4 do
+    for j = 1 to 5 do
+      if (i == 1 or i == 4 or j == 1 or j == 5) then
+        print("*", end="")
+      else
+        print(" ", end="")
+    print()
+
+[SOAL 10 — Trace Output]
+Tentukan output dari pseudocode berikut:
+  i = 1
+  while i <= 16 do
+    if (i mod 3 == 0) then print(i)
+    i = i + 1
+
+JAWABAN:
+Cek setiap i dari 1 s/d 16:
+- i=3:  3 mod 3 = 0 ✓ → print(3)
+- i=6:  6 mod 3 = 0 ✓ → print(6)
+- i=9:  9 mod 3 = 0 ✓ → print(9)
+- i=12: 12 mod 3 = 0 ✓ → print(12)
+- i=15: 15 mod 3 = 0 ✓ → print(15)
+Output: 3, 6, 9, 12, 15
+
+[SOAL 11 — DO-WHILE vs WHILE]
+Apa perbedaan output dari dua pseudocode berikut?
+Kode A:
+  i = 10
+  while i < 5 do
+    print(i)
+    i = i + 1
+
+Kode B:
+  i = 10
+  do
+    print(i)
+    i = i + 1
+  while i < 5
+
+JAWABAN:
+Kode A: kondisi 10 < 5 = False dari awal → body TIDAK PERNAH dijalankan.
+Output: (tidak ada output)
+
+Kode B: body dijalankan dulu sebelum cek kondisi → print(10), i=11.
+Lalu cek 11 < 5 = False → berhenti.
+Output: 10
+
+Kesimpulan: do-while selalu menjalankan body minimal 1 kali, while tidak.
+
+[SOAL 12 — Perulangan Faktorial]
+Tuliskan pseudocode untuk menghitung n! (n faktorial)!
+
+JAWABAN:
+  read(n)
+  hasil = 1
+  for i = 1 to n do
+    hasil = hasil * i
+  print(hasil)
+
+Contoh trace n=5:
+i=1: hasil=1×1=1
+i=2: hasil=1×2=2
+i=3: hasil=2×3=6
+i=4: hasil=6×4=24
+i=5: hasil=24×5=120
+Output: 120
+
+================================================================
+END OF GROUND TRUTH DETAIL — PERTEMUAN 11
+================================================================

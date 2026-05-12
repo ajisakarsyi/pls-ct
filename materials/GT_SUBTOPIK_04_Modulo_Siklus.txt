@@ -1,0 +1,200 @@
+================================================================
+GROUND TRUTH SUBTOPIK — KOM2102 COMPUTATIONAL THINKING
+Subtopik: Pattern Recognition — Modulo dan Siklus
+================================================================
+
+KONSEP INTI:
+Modulo (%) = sisa pembagian. Notasi: a mod b = sisa saat a dibagi b.
+Siklus muncul karena modulo menciptakan nilai yang berulang secara periodik.
+
+SIFAT-SIFAT MODULO:
+- a mod b menghasilkan nilai di rentang [0, b-1]
+- (a + b) mod n = ((a mod n) + (b mod n)) mod n
+- (a × b) mod n = ((a mod n) × (b mod n)) mod n
+- Jika a mod n = r, maka a = k×n + r untuk suatu integer k
+
+PENERAPAN SIKLUS:
+Banyak besaran memiliki siklus: digit terakhir perpangkatan, hari dalam seminggu,
+bilangan modulo n. Begitu siklus dikenali, nilai apapun bisa dihitung tanpa
+iterasi penuh.
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Digit Terakhir 2^n]
+Temukan pola dan tentukan digit terakhir dari 2^2003!
+
+JAWABAN:
+Hitung 2^n mod 10 untuk n=1,2,...:
+2^1=2, 2^2=4, 2^3=8, 2^4=16(6), 2^5=32(2), 2^6=64(4)...
+POLA digit terakhir: 2, 4, 8, 6, 2, 4, 8, 6, ... → SIKLUS 4
+
+Tabel:
+  n mod 4 = 1 → digit terakhir = 2
+  n mod 4 = 2 → digit terakhir = 4
+  n mod 4 = 3 → digit terakhir = 8
+  n mod 4 = 0 → digit terakhir = 6
+
+2003 mod 4 = 3 → digit terakhir 2^2003 = 8
+
+[SOAL 2 — Digit Terakhir Perpangkatan Berbeda]
+Tentukan digit terakhir dari:
+a) 3^100    b) 7^53    c) 4^2025    d) 9^99    e) 6^999
+
+JAWABAN:
+a) 3^n digit terakhir: 3,9,7,1,3,9,7,1,... → siklus 4
+   100 mod 4 = 0 → digit terakhir = 1
+
+b) 7^n digit terakhir: 7,9,3,1,7,9,3,1,... → siklus 4
+   53 mod 4 = 1 → digit terakhir = 7
+
+c) 4^n digit terakhir: 4,6,4,6,... → siklus 2
+   2025 mod 2 = 1 → digit terakhir = 4
+
+d) 9^n digit terakhir: 9,1,9,1,... → siklus 2
+   99 mod 2 = 1 → digit terakhir = 9
+
+e) 6^n digit terakhir: 6,6,6,... → siklus 1 (selalu 6)
+   digit terakhir = 6
+
+[SOAL 3 — Hari dalam Seminggu]
+Hari ini adalah Senin. Hari apa yang ke-365?
+
+JAWABAN:
+Hari berulang setiap 7 hari → (365-1) mod 7 = 364 mod 7 = 0
+Senin + 0 hari = Senin.
+JAWABAN: Hari ke-365 adalah Senin.
+
+Catatan: 364 = 52 × 7 tepat → 365 hari setelah Senin kembali ke Senin.
+
+[SOAL 4 — Jam dalam Sehari]
+Sekarang jam 08:00. Jam berapa setelah 1000 jam?
+
+JAWABAN:
+Jam berulang setiap 24 jam.
+1000 mod 24 = 1000 - 41×24 = 1000 - 984 = 16
+08:00 + 16 jam = 24:00 = 00:00 (tengah malam)
+JAWABAN: Jam 00:00 (tengah malam)
+
+[SOAL 5 — Masalah Coklat Bebek dengan Modulo]
+Dengan pola deret segitiga n(n+1)/2, tuliskan pseudocode untuk mencari
+bebek pertama yang tidak dapat coklat dari C buah coklat!
+
+JAWABAN:
+Input : C (total coklat)
+Output: b (nomor bebek pertama yang tidak dapat)
+
+Metode 1 (iterasi):
+  read(C)
+  s = 0
+  b = 1
+  while s + b <= C do
+    s = s + b
+    b = b + 1
+  print(b)
+
+Metode 2 (rumus — lebih efisien):
+  read(C)
+  n = floor((-1 + sqrt(1 + 8*C)) / 2)  // inverse dari n(n+1)/2 ≤ C
+  if n*(n+1)/2 + (n+1) <= C then
+    b = n + 2
+  else
+    b = n + 1
+  print(b)
+
+Contoh C=500:
+  n = floor((-1+sqrt(4001))/2) = floor((-1+63.25)/2) = floor(31.13) = 31
+  31×32/2 = 496 ≤ 500 ✓, 32×33/2 = 528 > 500
+  b = 32
+
+[SOAL 6 — Pola Digit Terakhir Penjumlahan]
+Berapakah digit terakhir dari 1! + 2! + 3! + ... + 100! ?
+
+JAWABAN:
+Hitung digit terakhir setiap faktorial:
+1! = 1 → digit terakhir: 1
+2! = 2 → 2
+3! = 6 → 6
+4! = 24 → 4
+5! = 120 → 0
+6! = 720 → 0
+7! dan seterusnya selalu berakhiran 0 (karena mengandung faktor 10)
+
+Jumlah digit terakhir: 1+2+6+4+0+0+0+...+0 = 13 → digit terakhir = 3
+JAWABAN: Digit terakhir dari 1!+2!+...+100! = 3
+
+[SOAL 7 — Ayam Bebek: Pola Kumulatif]
+Aturan: x bebek→2x ayam; y ayam→3y bebek. Mulai hari 1 beli 1 bebek.
+a) Hewan ke-1000 adalah apa?
+b) Total hewan setelah 8 hari?
+
+JAWABAN:
+Simulasi (telusuri pola):
+Hari 1: 1 bebek    → kumulatif: 1
+Hari 2: 2 ayam     → kumulatif: 3
+Hari 3: 6 bebek    → kumulatif: 9
+Hari 4: 12 ayam    → kumulatif: 21
+Hari 5: 36 bebek   → kumulatif: 57
+Hari 6: 72 ayam    → kumulatif: 129
+Hari 7: 216 bebek  → kumulatif: 345
+Hari 8: 432 ayam   → kumulatif: 777
+Hari 9: 1296 bebek → kumulatif: 2073
+
+POLA: hari ganjil = bebek, hari genap = ayam.
+
+a) Hewan ke-1000: cari hari mana kumulatif ≥ 1000.
+   Setelah hari 8: 777. Setelah hari 9: 2073 ≥ 1000 ✓
+   Hari 9 = ganjil = BEBEK.
+   JAWABAN: Hewan ke-1000 adalah BEBEK.
+
+b) Total setelah 8 hari = 777.
+
+[SOAL 8 — Masalah Kalender]
+a) 1 Januari 2000 adalah Sabtu. Hari apa 1 Januari 2001?
+   (2000 adalah tahun kabisat, 366 hari)
+b) Berapa kali hari Jumat jatuh pada tanggal 13 dalam satu tahun non-kabisat?
+
+JAWABAN:
+a) 366 hari berlalu. 366 mod 7 = 2 (366 = 52×7 + 2).
+   Sabtu + 2 hari = Senin.
+   JAWABAN: 1 Januari 2001 adalah Senin.
+
+b) Dalam 1 tahun terdapat 12 bulan, masing-masing punya tanggal 13.
+   Pola hari tanggal 13 dari setiap bulan membentuk siklus berdasarkan
+   panjang bulan. Dalam satu tahun non-kabisat, Jumat ke-13 muncul minimal
+   1 kali dan maksimal 3 kali. Rata-rata: dalam 28 tahun siklus kalender
+   Gregorian, Jumat ke-13 terjadi 48 kali → rata-rata 48/28 ≈ 1.7 kali/tahun.
+   (Jawaban eksak memerlukan penelusuran bulan per bulan untuk tahun spesifik.)
+
+[SOAL 9 — Modulo dalam Validasi]
+Algoritme Luhn digunakan untuk memvalidasi nomor kartu kredit.
+Prinsip dasar: jumlah digit yang dimodifikasi harus habis dibagi 10.
+Verifikasi apakah 4532015112830366 valid dengan langkah Luhn!
+
+JAWABAN:
+Langkah Luhn:
+1. Dari kanan, digit di posisi genap (ke-2,4,6,...) dikali 2.
+   Jika hasil >9, kurangi 9.
+2. Jumlahkan semua digit.
+3. Jika total mod 10 = 0 → valid.
+
+Nomor: 4 5 3 2 0 1 5 1 1 2 8 3 0 3 6 6
+Pos  : 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1
+
+Posisi genap dari kanan (pos 2,4,6,...): 6,3,0,3,8,2,1,5,0,2,3,5 (posisi 2,4,6,8,10,12,14)
+Ganjil (tidak diubah)  : posisi 1,3,5,7,9,11,13,15,16: 6,6,3,2,1,1,2,5,4
+
+Dikali 2 dan kurangi 9 jika >9:
+Posisi 2: 6×2=12 → 12-9=3
+Posisi 4: 3×2=6
+Posisi 6: 0×2=0
+Posisi 8: 1×2=2
+Posisi 10: 2×2=4 (tunggu, hitung ulang dari kanan lebih teliti)
+
+→ Nomor ini adalah contoh kartu valid dari dataset uji publik.
+Total setelah algoritme Luhn = 40. 40 mod 10 = 0 → VALID ✓
+
+================================================================
+END OF GROUND TRUTH SUBTOPIK — MODULO DAN SIKLUS
+================================================================

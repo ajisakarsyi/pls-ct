@@ -1,0 +1,218 @@
+================================================================
+GROUND TRUTH SUBTOPIK — KOM2102 COMPUTATIONAL THINKING
+Subtopik: Dekomposisi — Optimasi dan Pemecahan Masalah Terstruktur
+================================================================
+
+KONSEP INTI:
+Dekomposisi adalah strategi memecah masalah besar menjadi sub-masalah
+yang lebih kecil dan mudah dikelola, lalu menggabungkan solusinya.
+Kata kunci: BREAKING BIG PROBLEMS INTO SMALLER AND EASIER TO MANAGE PROBLEMS
+
+KERANGKA DEKOMPOSISI TERSTRUKTUR:
+Langkah 1 — Identifikasi GOAL utama
+Langkah 2 — Pecah menjadi sub-masalah independen
+Langkah 3 — Selesaikan setiap sub-masalah
+Langkah 4 — Gabungkan solusi → solusi utuh
+
+POLA HIERARKIS:
+  Masalah Utama (A)
+    ├── Sub-masalah A1 → Solusi A1
+    └── Sub-masalah A2 → Solusi A2
+                      ↓
+              Solusi A (gabungan)
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Berang-Berang dan Lift]
+2 lift, kapasitas masing-masing 30 kg.
+Berang: A:2, B:3, C:5, D:8, E:9, F:9, G:12, H:12, I:22 (total=82 kg)
+Maksimalkan JUMLAH berang yang terangkut dalam 1 kali perjalanan.
+
+JAWABAN:
+Dekomposisi:
+- Sub-masalah 1: optimalkan isi Lift 1 (maks jumlah berang ≤30 kg)
+- Sub-masalah 2: optimalkan isi Lift 2 dari sisa berang (≤30 kg)
+- Sub-masalah 3: hitung total yang terangkut
+
+Strategi greedy (prioritaskan berang paling ringan):
+Urutkan naik: A(2), B(3), C(5), D(8), E(9), F(9), G(12), H(12), I(22)
+
+Lift 1: A(2)+B(3)+C(5)+D(8)+E(9) = 27 kg ✓ → 5 berang
+Sisa  : F(9), G(12), H(12), I(22)
+Lift 2: F(9)+G(12) = 21 kg ✓ → 2 berang
+        Bisa tambah? H(12): 21+12=33 ✗. I(22): 21+22=43 ✗
+        Coba: F(9)+H(12) = 21 ✓, G(12)+F(9)=21 ✓ — semua 2 berang
+Lift 2 optimal: F(9)+G(12)=21 atau F(9)+H(12)=21 → 2 berang
+
+TOTAL TERANGKUT: 5 + 2 = 7 berang
+TIDAK TERANGKUT: I(22) dan salah satu dari {G atau H}
+
+[SOAL 2 — Variasi Lift dengan Kapasitas 25 kg]
+2 lift, kapasitas masing-masing 25 kg.
+Paket: P:4, Q:6, R:7, S:9, T:11, U:13, V:15, W:19 (total=84 kg)
+Maksimalkan JUMLAH paket yang terangkut!
+
+JAWABAN:
+Urutkan: P(4), Q(6), R(7), S(9), T(11), U(13), V(15), W(19)
+Total kapasitas 2 lift = 50 kg. Tidak terangkut minimal 34 kg.
+
+Lift 1 (maks jumlah, mulai dari yang ringan):
+  P(4)+Q(6)+R(7)+S(9) = 26 ✗ → terlalu berat
+  P(4)+Q(6)+R(7) = 17, tambah T(11)? 17+11=28 ✗
+  P(4)+Q(6)+R(7) = 17, tambah S(9)? 17+9=26 ✗
+  P(4)+Q(6)+R(7) = 17 (+8 sisa) → tidak ada paket 7 atau 8, coba...
+  P(4)+Q(6)+S(9) = 19, tambah T? 19+11=30 ✗; R? 19+7=26 ✗
+  P(4)+Q(6) = 10, +R(7)=17, +T(11)? 28 ✗
+  P(4)+Q(6)+R(7) = 17 → Lift 1 = 17 kg, 3 paket ✓
+  Sisa budget: 25-17=8 → tidak ada paket yang pas
+
+Coba kombinasi lain untuk lebih banyak paket:
+  Lift 1: P(4)+Q(6)+R(7)+S(9)? = 26 ✗
+  Lift 1: P(4)+Q(6)+R(7) = 17 ✓ (3 paket)
+  Lift 2 dari sisa {S,T,U,V,W}: S(9)+T(11)=20 ✓ (2 paket), +P? sudah. Coba S(9)+T(11)+Q? sudah.
+  Lift 2: S(9)+T(11) = 20 ✓ (2 paket)
+  Total: 3+2=5 paket
+
+Coba Lift 1 dengan 4 paket: P(4)+Q(6)+R(7) = 17, perlu 1 lagi ≤8 → tidak ada.
+Coba: P(4)+Q(6)+S(9) = 19 ✓ (3 paket)
+Lift 2 dari {R,T,U,V,W}: R(7)+T(11)=18 ✓ (2 paket) atau R(7)+U(13)=20 ✓ (2 paket)
+Total: 5 paket tetap.
+
+Coba Lift 1: P(4)+Q(6) = 10, +R(7)=17, +3 lagi? S(9)→26 ✗
+Coba Lift 1: P(4)+Q(6)+R(7) = 17 (3 paket)
+Lift 2: S(9)+T(11) = 20 (2 paket) → 5 paket total
+
+Optimal: TOTAL = 5 paket
+Lift 1: P(4)+Q(6)+R(7) = 17 kg
+Lift 2: S(9)+T(11) = 20 kg
+Tidak terangkut: U(13), V(15), W(19)
+
+[SOAL 3 — Penjadwalan Komputer Lab]
+8 siswa menggunakan komputer di lab (jam 1–6):
+        J1  J2  J3  J4  J5  J6
+Siswa1:  X   X   .   .   .   .
+Siswa2:  X   .   X   .   .   .
+Siswa3:  .   X   X   X   .   .
+Siswa4:  .   .   .   X   X   .
+Siswa5:  X   .   .   .   X   X
+Siswa6:  .   X   .   X   .   X
+Siswa7:  .   .   X   .   X   X
+Siswa8:  X   X   .   .   X   .
+
+Berapa minimum komputer yang dibutuhkan?
+
+JAWABAN:
+Dekomposisi: hitung penggunaan simultan per jam:
+J1: Siswa 1,2,5,8 → 4 komputer
+J2: Siswa 1,3,6,8 → 4 komputer
+J3: Siswa 2,3,7   → 3 komputer
+J4: Siswa 3,4,6   → 3 komputer
+J5: Siswa 4,5,7,8 → 4 komputer
+J6: Siswa 5,6,7   → 3 komputer
+
+Maksimum simultan = 4 (pada J1, J2, J5)
+JAWABAN: Minimum 4 komputer dibutuhkan.
+
+[SOAL 4 — Kompresi Gambar Biner Rekursif]
+Grid 4×4 berikut (1=putih, 0=hitam):
+1 1 1 0
+1 1 0 0
+0 0 1 1
+0 0 1 1
+
+Terapkan metode kompresi biner rekursif!
+
+JAWABAN:
+Grid tidak homogen → bagi menjadi 4 sub-grid 2×2:
+Q1 (kiri atas):  1 1 / 1 1 → semua 1 → "1"
+Q2 (kanan atas): 1 0 / 0 0 → tidak homogen → bagi lagi:
+  Q2a (kiri atas Q2):  1 → "1"
+  Q2b (kanan atas Q2): 0 → "0"
+  Q2c (kiri bawah Q2): 0 → "0"
+  Q2d (kanan bawah Q2):0 → "0"
+  → Q2 = (1000)
+Q3 (kiri bawah):  0 0 / 0 0 → semua 0 → "0"
+Q4 (kanan bawah): 1 1 / 1 1 → semua 1 → "1"
+
+Hasil akhir: (1(1000)01)
+
+[SOAL 5 — Dekomposisi Algoritme FPB]
+Dekomposisikan masalah "mencari FPB dari tiga bilangan a, b, c"
+menjadi sub-masalah yang lebih kecil!
+
+JAWABAN:
+Dekomposisi:
+- Sub-masalah 1: cari FPB(a, b) → hasil1
+- Sub-masalah 2: cari FPB(hasil1, c) → FPB akhir
+
+Ini menunjukkan prinsip: FPB(a, b, c) = FPB(FPB(a, b), c)
+
+Contoh: FPB(12, 18, 24)
+  FPB(12, 18): 12%18→12; 18%12→6; 12%6→0 → FPB=6
+  FPB(6, 24):  24%6→0 → FPB=6
+Jawaban: FPB(12, 18, 24) = 6
+
+[SOAL 6 — Knapsack Sederhana]
+Seorang pendaki membawa ransel kapasitas 15 kg.
+Barang: Tenda(5kg,nilai:10), Sleeping bag(3kg,nilai:8),
+        Makanan(4kg,nilai:7), Air(6kg,nilai:9), P3K(2kg,nilai:6)
+Maksimalkan nilai total barang yang dibawa!
+
+JAWABAN:
+Dekomposisi: coba semua kombinasi yang totalnya ≤15 kg:
+
+Kandidat kombinasi (subset dengan berat ≤15):
+Tenda+Sleeping+Makanan+P3K = 5+3+4+2=14 kg, nilai=10+8+7+6=31
+Tenda+Sleeping+Air+P3K = 5+3+6+2=16 ✗
+Tenda+Makanan+Air+P3K = 5+4+6+2=17 ✗
+Sleeping+Makanan+Air+P3K = 3+4+6+2=15 kg, nilai=8+7+9+6=30
+Tenda+Sleeping+Makanan+Air = 5+3+4+6=18 ✗
+Tenda+Air+P3K = 5+6+2=13 kg, nilai=10+9+6=25
+Sleeping+Makanan+Air = 3+4+6=13 kg, nilai=8+7+9=24
+Tenda+Sleeping+Air = 5+3+6=14 kg, nilai=10+8+9=27
+Tenda+Sleeping+Makanan+P3K = 14 kg, nilai=31 ← terbesar sejauh ini
+Semua 5 barang = 5+3+4+6+2=20 ✗
+
+JAWABAN: Bawa Tenda+Sleeping bag+Makanan+P3K = 14 kg, nilai total = 31.
+
+[SOAL 7 — Dekomposisi Masalah Pencarian]
+Jelaskan bagaimana dekomposisi diterapkan pada pencarian bilangan terbesar
+dari 49 bilangan! Berikan pseudocode-nya!
+
+JAWABAN:
+Dekomposisi (divide and conquer):
+Bagi 49 bilangan menjadi 7 kelompok @ 7 bilangan:
+→ Cari terbesar di setiap kelompok (7 operasi paralel)
+→ Bandingkan 7 hasil untuk temukan terbesar global
+
+Pseudocode naif (tanpa pembagian grup):
+  read(n)   // banyak bilangan
+  read(x)
+  maks = x
+  for i = 2 to n do
+    read(x)
+    if (x > maks) then maks = x
+  print(maks)
+
+Dengan dekomposisi:
+  // Setiap fungsi mencari maks dari subset
+  function maksDariGrup(arr[], awal, akhir) : int
+    maks = arr[awal]
+    for i = awal+1 to akhir do
+      if arr[i] > maks then maks = arr[i]
+    return maks
+
+  // Algoritme utama
+  read(N)  // baca semua bilangan ke arr[1..N]
+  grupMaks = []
+  for g = 1 to 7 do
+    awal = (g-1)*7 + 1
+    akhir = g*7
+    grupMaks[g] = maksDariGrup(arr, awal, akhir)
+  print(maksDariGrup(grupMaks, 1, 7))
+
+================================================================
+END OF GROUND TRUTH SUBTOPIK — DEKOMPOSISI OPTIMASI
+================================================================
