@@ -18,9 +18,13 @@ from app.core.cognitive import cognitive_label
 from app.core.prompts import (
     CHAT_PROMPT_TEMPLATE,
     CHAT_CODE_PROMPT_TEMPLATE,
+    CHECK_UNDERSTANDING_LEAD,
     FOLLOWUP_PROMPT_TEMPLATE,
-    EVALUATE_PROMPT_TEMPLATE,
+    EVALUATE_PROMPT_WITH_QUESTION,
+    EVALUATE_PROMPT_WITHOUT_QUESTION,
     FEEDBACK_PROMPT_TEMPLATE,
+    SCAFFOLD_LEVELS,
+    SCAFFOLD_DEFAULT,
 )
 from app.services.llm import query_llm
 from app.services.rag import retrieve, chunks_to_context
@@ -33,29 +37,9 @@ from app.utils.code_detector import is_code_like
 
 logger = logging.getLogger(__name__)
 
-# Scaffolding levels indexed by wrong_count
-_SCAFFOLD: Dict[int, Tuple[str, str]] = {
-    0: (
-        "Evaluasi Awal",
-        "Tunjukkan bagian yang kurang tepat secara umum (1-2 kalimat). "
-        "Jangan jelaskan terlalu banyak — cukup arahkan.",
-    ),
-    1: (
-        "Petunjuk Terarah",
-        "Berikan petunjuk spesifik tentang konsep yang salah (2-3 kalimat). "
-        "Sebutkan aspek mana yang perlu diperbaiki tanpa memberi jawaban langsung.",
-    ),
-    2: (
-        "Dukungan Remedial",
-        "Uraikan konsep yang salah secara bertahap dalam 3 poin singkat. "
-        "Boleh memberi contoh kecil untuk memperjelas.",
-    ),
-}
-_DEFAULT_SCAFFOLD = (
-    "Panduan Langkah-demi-Langkah",
-    "Jelaskan ulang konsep secara lengkap dengan analogi sederhana, maksimal 3 paragraf. "
-    "Pastikan mahasiswa memahami di mana letak kesalahannya.",
-)
+# Scaffolding levels sourced from app.core.prompts (SCAFFOLD_LEVELS, SCAFFOLD_DEFAULT)
+_SCAFFOLD        = SCAFFOLD_LEVELS
+_DEFAULT_SCAFFOLD = SCAFFOLD_DEFAULT
 
 
 def generate_reply(
@@ -83,6 +67,7 @@ def generate_reply(
     prompt   = template.format(
         label=label, history=history_txt, code=cognitive_code,
         context=context, message=message,
+        check_understanding_lead=CHECK_UNDERSTANDING_LEAD,
     )
 
     reply   = query_llm(prompt)
@@ -173,33 +158,18 @@ def _strict_evaluate(
     context: str, history_txt: str, label: str, cognitive_code: str,
 ) -> Tuple[bool, str]:
     if active_question and active_question.strip():
-        evaluation_scope = (
-            f"PERTANYAAN YANG SEDANG DIJAWAB:\n{active_question}\n\n"
-            f"KONTEKS MATERI (penjelasan tutor sebelumnya):\n{correct_answer[:800]}"
-        )
-        task_instruction = (
-            "TUGAS PENILAIAN:\n"
-            "1. Fokus pada pertanyaan yang sedang dijawab — BUKAN penjelasan tutor secara keseluruhan.\n"
-            "2. Hitung atau verifikasi kebenaran jawaban mahasiswa terhadap pertanyaan tersebut.\n"
-            "3. Untuk soal numerik/matematis: periksa apakah hasil akhirnya benar secara matematis.\n"
-            "4. Untuk soal konseptual: periksa apakah jawaban mencakup poin utama yang ditanyakan.\n"
-            "5. JANGAN menolak jawaban benar hanya karena singkat atau tidak menjelaskan proses."
+        prompt = EVALUATE_PROMPT_WITH_QUESTION.format(
+            label=label, code=cognitive_code, context=context, history=history_txt,
+            active_question=active_question,
+            correct_answer=correct_answer[:800],
+            answer=answer,
         )
     else:
-        evaluation_scope = f"KUNCI / REFERENSI (penjelasan tutor):\n{correct_answer[:800]}"
-        task_instruction = (
-            "TUGAS PENILAIAN:\n"
-            "1. Bandingkan jawaban mahasiswa dengan penjelasan tutor secara konseptual.\n"
-            "2. Jawaban BENAR jika mencakup konsep utama, meskipun dengan kata berbeda.\n"
-            "3. Jawaban SALAH jika konsep utama hilang, keliru, atau tidak relevan.\n"
-            "4. Jangan anggap benar hanya karena terdengar logis — harus sesuai kunci."
+        prompt = EVALUATE_PROMPT_WITHOUT_QUESTION.format(
+            label=label, code=cognitive_code, context=context, history=history_txt,
+            correct_answer=correct_answer[:800],
+            answer=answer,
         )
-
-    prompt = EVALUATE_PROMPT_TEMPLATE.format(
-        label=label, code=cognitive_code, context=context, history=history_txt,
-        evaluation_scope=evaluation_scope, answer=answer,
-        task_instruction=task_instruction,
-    )
 
     raw   = query_llm(prompt)
     match = re.search(r"HASIL:\s*(BENAR|SALAH)", raw, re.IGNORECASE)
@@ -217,7 +187,7 @@ def _generate_followup(
     original_question: str, tutor_reply: str, context: str, label: str,
 ) -> str:
     prompt = FOLLOWUP_PROMPT_TEMPLATE.format(
-        label=label, reply=tutor_reply[:600], context=context,
+        label=label, original_question=original_question, reply=tutor_reply[:600], context=context,
     )
     result = query_llm(prompt).strip()
     lines  = [ln.strip() for ln in result.split("\n") if ln.strip()]
