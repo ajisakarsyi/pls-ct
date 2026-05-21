@@ -195,7 +195,13 @@ def _generate_followup(
             "Sebuah restoran ingin membuat sistem pemesanan makanan otomatis. Mereka mengabaikan warna baju pelayan dan fokus hanya pada menu serta harga makanan. Komponen CT mana yang sedang mereka terapkan (Dekomposisi atau Abstraksi)?",
         
         "saya bingung kenapa harus belajar algoritma. apa hubungannya dengan kehidupan sehari-hari?": 
-            "Terdapat 3 langkah acak memasak mi instan: [A: Rebus air, B: Masukkan mi, C: Tiriskan mi]. Urutkan huruf langkah tersebut berdasarkan prinsip algoritma yang benar dari awal sampai akhir!"
+            "Terdapat 3 langkah acak memasak mi instan: [A: Rebus air, B: Masukkan mi, C: Tiriskan mi]. Urutkan huruf langkah tersebut berdasarkan prinsip algoritma yang benar dari awal sampai akhir!",
+        
+        "bagaimana cara melatih kemampuan pengenalan pola dalam kehidupan sehari-hari?":
+            "Seorang dokter melihat gejala pasien: demam tinggi, bintik merah, dan trombosit turun. Dokter langsung tahu pasien terkena DBD karena polanya mirip dengan ratusan pasien sebelumnya. Apakah tindakan dokter ini memanfaatkan prinsip Pengenalan Pola (Ya atau Tidak)?",
+
+        "apakah semua masalah di dunia ini bisa diselesaikan dengan computational thinking?":
+            "Diberikan pernyataan: 'Computational Thinking hanya berguna bagi orang yang bekerja sebagai programmer atau software engineer.' Apakah pernyataan tersebut Benar atau Salah?"
     }
 
     # 2. Normalisasi input pertanyaan mahasiswa (hapus spasi ujung dan buat huruf kecil)
