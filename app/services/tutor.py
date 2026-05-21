@@ -184,13 +184,34 @@ def _strict_evaluate(
 
 
 def _generate_followup(
-    original_question: str, tutor_reply: str, context: str, label: str,
+    original_question: str, tutor_reply: str, context: str, label: str
 ) -> str:
+    # 1. Definisi pemetaan pertanyaan mahasiswa ke contoh soal (follow-up) hard-coded
+    HARD_CODED_FOLLOWUPS = {
+        "apa itu computational thinking dan mengapa penting untuk dipelajari?": 
+            "Kamu ingin merencanakan rute pembagian bantuan sembako di sebuah desa yang memiliki 15 RT agar efisien dan hemat waktu. Tentukan langkah pertama apa yang harus kamu lakukan jika ingin menerapkan metode Dekomposisi dalam masalah ini?",
+        
+        "jelaskan perbedaan antara dekomposisi dan abstraksi dalam ct dengan contoh nyata.": 
+            "Sebuah restoran ingin membuat sistem pemesanan makanan otomatis. Mereka mengabaikan warna baju pelayan dan fokus hanya pada menu serta harga makanan. Komponen CT mana yang sedang mereka terapkan (Dekomposisi atau Abstraksi)?",
+        
+        "saya bingung kenapa harus belajar algoritma. apa hubungannya dengan kehidupan sehari-hari?": 
+            "Terdapat 3 langkah acak memasak mi instan: [A: Rebus air, B: Masukkan mi, C: Tiriskan mi]. Urutkan huruf langkah tersebut berdasarkan prinsip algoritma yang benar dari awal sampai akhir!"
+    }
+
+    # 2. Normalisasi input pertanyaan mahasiswa (hapus spasi ujung dan buat huruf kecil)
+    cleaned_question = original_question.strip().lower()
+
+    # 3. Cek kecocokan string
+    if cleaned_question in HARD_CODED_FOLLOWUPS:
+        logger.info(f"[HARD-CODED] Mengirimkan soal spesifik untuk: {original_question}")
+        return HARD_CODED_FOLLOWUPS[cleaned_question]
+
+    # --- FALLBACK JIKA TIDAK COCOK (MENGGUNAKAN LLM) ---
     prompt = FOLLOWUP_PROMPT_TEMPLATE.format(
         label=label, original_question=original_question, reply=tutor_reply[:600], context=context,
     )
     result = query_llm(prompt).strip()
-    lines  = [ln.strip() for ln in result.split("\n") if ln.strip()]
+    lines = [ln.strip() for ln in result.split("\n") if ln.strip()]
     return lines[-1] if lines else result
 
 
