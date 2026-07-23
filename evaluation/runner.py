@@ -39,14 +39,24 @@ import requests
 
 from evaluation.faithfulness import detect_hallucination, evaluate_faithfulness
 from evaluation.metrics import (
+    THETA_COVERAGE,
+    THETA_RETRIEVAL,
     chunk_relevance_score,
     cosine_similarity,
+    coverage_detail,
     coverage_score,
     mean_similarity,
+    mean_similarity_detail,
     precision_at_k,
+    precision_at_k_detail,
     recall_at_k,
+    recall_at_k_detail,
     source_diversity,
+    source_diversity_detail,
 )
+from evaluation.excel_report import build_excel
+from app.core import verbose as V
+from topics import topic_of
 
 def _load_test_cases():
     """
@@ -83,9 +93,23 @@ _HERE         = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MATERIALS_DIR = os.getenv("MATERIALS_DIR", os.path.join(_HERE, "materials"))
 
 TOP_K               = 6
-RELEVANCE_THRESHOLD = 0.25
-COVERAGE_THRESHOLD  = 0.20
+# ── PERBAIKAN REVISI PASCA-SIDANG (item 6) ────────────────────────────────
+# Sebelumnya ambang TERTUKAR: COVERAGE_THRESHOLD = 0.20 < RELEVANCE_THRESHOLD,
+# padahal skripsi (Pers. 8) mendefinisikan θc = θ + 0,10 = 0,35 — ambang
+# Coverage harus LEBIH KETAT dari θ. Inilah sebab Coverage 1,00 di Tabel 18.
+# Kini keduanya diimpor dari evaluation/metrics.py sebagai sumber tunggal.
+RELEVANCE_THRESHOLD = THETA_RETRIEVAL   # θ  = 0,25 (Pers. 2 & 4)
+COVERAGE_THRESHOLD  = THETA_COVERAGE    # θc = 0,35 (Pers. 8)
 RAG_CHUNK_SIZE      = 1200
+
+def _eval_limit() -> int:
+    """Batas jumlah kasus uji untuk smoke test (env EVAL_LIMIT, 0 = semua).
+    Dibaca saat run_evaluation() dipanggil, bukan saat impor modul, agar
+    flag --limit dari scripts/run_evaluation.py tetap berlaku."""
+    try:
+        return int(os.getenv("EVAL_LIMIT", "0"))
+    except ValueError:
+        return 0
 
 PACE_MIN        = float(os.getenv("PACE_MIN",        "1.0"))
 PACE_MAX        = float(os.getenv("PACE_MAX",        "3.0"))
@@ -178,22 +202,36 @@ def _load_and_embed_file(path: str, fname: str) -> List[Dict]:
         logger.warning("Cannot read %s: %s", path, exc)
         return []
     chunks = []
+    n_chunks = (len(text) + RAG_CHUNK_SIZE - 1) // RAG_CHUNK_SIZE
+    V.step(f"Chunking {fname}: {len(text)} char → {n_chunks} chunk "
+           f"@ {RAG_CHUNK_SIZE} char | topik: {topic_of(fname, MATERIALS_DIR)}")
     for start in range(0, len(text), RAG_CHUNK_SIZE):
         chunk_text = text[start: start + RAG_CHUNK_SIZE]
         emb = _ollama_embed(chunk_text)
         if emb is not None:
             chunks.append({"text": chunk_text, "source": fname, "embedding": emb})
+    V.step(f"Embedding {fname}: {len(chunks)}/{n_chunks} chunk "
+           f"berhasil di-embed ({OLLAMA_EMBED_MODEL}, 768 dim)")
     _chunk_cache[fname] = chunks
     return chunks
 
 
 def _retrieve_local(query: str, cognitive_code: str,
                     k: int = TOP_K) -> List[Dict]:
+    """
+    Ambil Top-K chunk paling relevan dari MATERIALS_DIR.
+
+    Setiap chunk yang dikembalikan MEMBAWA hasil perhitungannya sendiri
+    (revisi pasca-sidang — retrieval dilakukan SEKALI per kasus, skornya
+    dipakai bersama oleh generate & seluruh metrik):
+      "score" : cosine similarity chunk terhadap query
+      "topic" : topik materi hasil resolusi header file (topics.topic_of)
+    """
     if not os.path.isdir(MATERIALS_DIR):
         logger.error("MATERIALS_DIR not found: %s", MATERIALS_DIR)
         return []
     all_chunks: List[Dict] = []
-    for fname in os.listdir(MATERIALS_DIR):
+    for fname in sorted(os.listdir(MATERIALS_DIR)):
         if fname.lower().endswith((".txt", ".md")):
             all_chunks.extend(_load_and_embed_file(
                 os.path.join(MATERIALS_DIR, fname), fname
@@ -203,11 +241,23 @@ def _retrieve_local(query: str, cognitive_code: str,
     q_emb = _ollama_embed(query)
     if q_emb is None:
         return []
-    return sorted(
+    scored = sorted(
         all_chunks,
         key=lambda c: float(np.dot(q_emb, c["embedding"])),
         reverse=True,
     )[:k]
+    out = []
+    for c in scored:
+        out.append({
+            **c,
+            "score": round(float(np.dot(q_emb, c["embedding"])), 4),
+            "topic": topic_of(c["source"], MATERIALS_DIR),
+        })
+    if V.enabled():
+        V.section(f"RETRIEVAL Top-{k} (dari {len(all_chunks)} chunk, "
+                  f"{len(_chunk_cache)} file)")
+        V.chunk_table(out, THETA_RETRIEVAL, THETA_COVERAGE)
+    return out
 
 
 def _chunks_to_context(chunks: List[Dict], max_chars: int = 600) -> str:
@@ -242,13 +292,20 @@ def _cognitive_label(code: str) -> str:
 # ══════════════════════════════════════════════════════════════════════════
 
 def _chat_with_rag(query: str,
-                   cognitive_code: str) -> Tuple[Optional[str], List[Dict]]:
+                   cognitive_code: str,
+                   chunks: Optional[List[Dict]] = None,
+                   ) -> Tuple[Optional[str], List[Dict]]:
     """
-    Kondisi A: retrieve Top-K chunk dari dokumen GT, sertakan sebagai
-    konteks dalam prompt bersama profil kognitif pengguna.
+    Kondisi A: sertakan Top-K chunk GT sebagai konteks dalam prompt
+    bersama profil kognitif pengguna.
+
+    Revisi pasca-sidang: bila *chunks* sudah diberikan (hasil retrieval
+    di awal kasus), TIDAK melakukan retrieval ulang — retrieval hanya
+    terjadi SEKALI per kasus dan skornya konsisten untuk semua metrik.
     Returns (reply_str, chunks).
     """
-    chunks  = _retrieve_local(query, cognitive_code)
+    if chunks is None:
+        chunks = _retrieve_local(query, cognitive_code)
     context = _chunks_to_context(chunks)
     label   = _cognitive_label(cognitive_code)
 
@@ -266,6 +323,8 @@ def _chat_with_rag(query: str,
         f"- Jawab dalam Bahasa Indonesia yang jelas dan akademis.\n"
         f"- JANGAN mengarang fakta di luar materi referensi."
     )
+    V.prompt_echo("PROMPT KONDISI A (RAG + profil kognitif + instruksi tutor)",
+                  prompt)
     reply = _ollama_generate(prompt)
     return reply, chunks
 
@@ -301,6 +360,8 @@ def _chat_without_rag(query: str, cognitive_code: str) -> Optional[str]:
         f"{query}\n\n"
         f"Berikan jawaban dalam Bahasa Indonesia."
     )
+    V.prompt_echo("PROMPT KONDISI B (buta — TANPA konteks RAG, TANPA profil, "
+                  "TANPA instruksi tutor; identik Lampiran 4)", prompt)
     return _ollama_generate(prompt)
 
 
@@ -356,51 +417,99 @@ def _evaluate_locally(question: str, gt_reference: str,
 # ══════════════════════════════════════════════════════════════════════════
 
 def _eval_retrieval(query: str, keywords: List[str],
-                    cognitive_code: str, k: int = TOP_K) -> Dict:
+                    cognitive_code: str, k: int = TOP_K,
+                    retrieved: Optional[List[Dict]] = None) -> Dict:
+    """
+    Metrik retrieval Kondisi A — REVISI PASCA-SIDANG:
+
+    1. Precision@K, MeanSim, Coverage, Diversity dihitung dari SKOR CHUNK
+       NYATA hasil retrieval (sesuai contoh perhitungan Pers. 2, 6, 8, 10
+       di skripsi) — bukan lagi dari skor kata kunci. Skor kata kunci
+       hanya fallback bila retrieval gagal (ditandai "precision_basis").
+    2. Recall@K tetap berbasis kata kunci relevan R sesuai Pers. 4:
+       kata kunci "ditemukan" bila sim(query, keyword) ≥ θ.
+    3. *retrieved* menerima chunk yang SUDAH diambil di awal kasus —
+       retrieval tidak diulang; skor konsisten dengan konteks generate.
+    4. Setiap metrik menyertakan dict *_detail berisi rumus + substitusi
+       angka (direkam ke Excel sheet "Perhitungan Detail" dan dicetak ke
+       terminal bila LOGICT_VERBOSE=1).
+    """
     q_emb = _ollama_embed(query)
     if q_emb is None:
         return {"error": "Ollama embed failed — is Ollama running?"}
 
+    # ── Recall@K: kata kunci R (Pers. 4) ───────────────────────────────
     kw_embs = [(kw, _ollama_embed(kw)) for kw in keywords]
     kw_embs = [(kw, e) for kw, e in kw_embs if e is not None]
     if not kw_embs:
         return {"error": "Failed to embed keywords"}
-
-    scored = sorted(
+    scored_kw = sorted(
         [{"keyword": kw, "score": float(np.dot(q_emb, e))} for kw, e in kw_embs],
         key=lambda x: x["score"], reverse=True,
     )
-    top_scores  = [s["score"] for s in scored[:k]]
-    top_sources = [s["keyword"] for s in scored[:k]]
+    kw_scores = [s["score"] for s in scored_kw]
 
-    real_chunk_scores:  List[float] = []
-    real_chunk_sources: List[str]   = []
-    try:
-        retrieved = _retrieve_local(query, cognitive_code, k=k)
-        if retrieved:
-            for chunk in retrieved:
-                real_chunk_scores.append(float(np.dot(q_emb, chunk["embedding"])))
-                real_chunk_sources.append(chunk["source"])
-    except Exception as exc:
-        logger.debug("real chunk score calc failed: %s", exc)
+    # ── Skor chunk nyata (retrieval sudah dilakukan sekali di awal kasus) ─
+    if retrieved is None:
+        try:
+            retrieved = _retrieve_local(query, cognitive_code, k=k)
+        except Exception as exc:
+            logger.debug("retrieval failed: %s", exc)
+            retrieved = []
+    real_chunk_scores  = [float(c.get("score", np.dot(q_emb, c["embedding"])))
+                          for c in (retrieved or [])]
+    real_chunk_sources = [c["source"] for c in (retrieved or [])]
 
-    ms_scores   = real_chunk_scores  if real_chunk_scores  else top_scores
-    cov_scores  = real_chunk_scores  if real_chunk_scores  else top_scores
-    div_sources = real_chunk_sources if real_chunk_sources else top_sources
+    if real_chunk_scores:
+        base_scores, base_sources = real_chunk_scores, real_chunk_sources
+        precision_basis = "skor chunk nyata (sesuai contoh Pers. 2 skripsi)"
+    else:  # fallback darurat — retrieval kosong
+        base_scores, base_sources = kw_scores, [s["keyword"] for s in scored_kw]
+        precision_basis = "FALLBACK skor kata kunci (retrieval kosong!)"
+
+    p_det   = precision_at_k_detail(base_scores, k, RELEVANCE_THRESHOLD)
+    r_det   = recall_at_k_detail(kw_scores, len(keywords), k, RELEVANCE_THRESHOLD)
+    ms_det  = mean_similarity_detail(base_scores)
+    cov_det = coverage_detail(base_scores, COVERAGE_THRESHOLD)
+    div_det = source_diversity_detail(base_sources)
+
+    chunks_detail = [{
+        "rank":       i + 1,
+        "source":     c["source"],
+        "topic":      c.get("topic") or topic_of(c["source"], MATERIALS_DIR),
+        "score":      round(float(c.get("score", 0.0)), 4),
+        "ge_theta":   float(c.get("score", 0.0)) >= RELEVANCE_THRESHOLD,
+        "ge_theta_c": float(c.get("score", 0.0)) >= COVERAGE_THRESHOLD,
+        "preview":    (c.get("text") or "")[:220].replace("\n", " "),
+    } for i, c in enumerate(retrieved or [])]
+
+    if V.enabled():
+        V.section("PERHITUNGAN METRIK RETRIEVAL (Kondisi A)")
+        for d in (p_det, r_det, ms_det, cov_det, div_det):
+            V.calc(d["calc_str"])
+        V.note(f"basis Precision/MeanSim/Coverage/Diversity: {precision_basis}")
 
     return {
-        "top_k_scores":      [round(s, 4) for s in top_scores],
-        "top_k_keywords":    top_sources,
-        "precision_at_k":    round(precision_at_k(top_scores, k, RELEVANCE_THRESHOLD), 4),
-        "recall_at_k":       round(recall_at_k(top_scores, len(keywords), k, RELEVANCE_THRESHOLD), 4),
-        "mean_similarity":   round(mean_similarity(ms_scores), 4),
-        "coverage":          round(coverage_score(cov_scores, COVERAGE_THRESHOLD), 4),
+        # nilai akhir (dipakai agregat & CSV)
+        "precision_at_k":    p_det["value"],
+        "recall_at_k":       r_det["value"],
+        "mean_similarity":   ms_det["value"],
+        "coverage":          cov_det["value"],
+        "source_diversity":  div_det["value"],
         "chunk_relevance":   round(chunk_relevance_score(real_chunk_scores), 4)
                              if real_chunk_scores else None,
-        "source_diversity":  round(source_diversity(div_sources), 4),
-        "real_chunk_scores": [round(s, 4) for s in real_chunk_scores],
-        "detail_scores":     [{"keyword": s["keyword"], "score": round(s["score"], 4)}
-                              for s in scored],
+        # transparansi penuh (Excel "Perhitungan Detail" + terminal)
+        "precision_basis":         precision_basis,
+        "precision_detail":        p_det,
+        "recall_detail":           r_det,
+        "mean_sim_detail":         ms_det,
+        "coverage_detail":         cov_det,
+        "source_diversity_detail": div_det,
+        "chunks_detail":           chunks_detail,
+        "real_chunk_scores":       [round(s, 4) for s in real_chunk_scores],
+        "keyword_scores":          [{"keyword": s["keyword"],
+                                     "score": round(s["score"], 4)}
+                                    for s in scored_kw],
     }
 
 
@@ -423,20 +532,29 @@ def run_evaluation() -> List[Dict]:
     Faithfulness Kondisi B menggunakan chunk GT dari Kondisi A sebagai
     referensi — sesuai metodologi Bab 3.4.6 skripsi.
     """
+    limit = _eval_limit()
+    cases = TEST_CASES[:limit] if limit > 0 else TEST_CASES
+
     print("\n" + "=" * 70)
     print("  RAG EVALUATION  [KONDISI A (RAG) vs KONDISI B (Baseline)]")
-    print(f"  {len(TEST_CASES)} test cases | Top-K={TOP_K}")
-    print(f"  Faithfulness: LLM-as-Judge Entailment (v4)")
-    print(f"  Kondisi B   : Prompt buta (tanpa RAG, tanpa profil, tanpa CT label)")
+    print(f"  {len(cases)} test cases | Top-K={TOP_K}"
+          + (f"  (EVAL_LIMIT={limit} dari {len(TEST_CASES)})"
+             if limit > 0 else ""))
+    print(f"  Ambang    : θ={RELEVANCE_THRESHOLD} (Precision/Recall)  "
+          f"θc={COVERAGE_THRESHOLD} (Coverage) — REVISI: ambang tidak lagi tertukar")
+    print(f"  Chunk     : {RAG_CHUNK_SIZE} char  |  Konteks/chunk: 600 char")
+    print(f"  Faithfulness: 0,70×Entailment (LLM-as-Judge) + 0,30×KWoverlap")
+    print(f"  Kondisi B : Prompt buta (tanpa RAG, tanpa profil, tanpa CT label)")
     print(f"  LLM  : ollama/{OLLAMA_CHAT_MODEL}")
-    print(f"  Embed: ollama/{OLLAMA_EMBED_MODEL}")
+    print(f"  Embed: ollama/{OLLAMA_EMBED_MODEL} (768 dim)")
+    print(f"  Verbose: {'AKTIF (LOGICT_VERBOSE=1)' if V.enabled() else 'nonaktif — set LOGICT_VERBOSE=1 untuk detail penuh'}")
     print(f"  Start: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 70 + "\n")
 
     results: List[Dict] = []
 
-    for idx, tc in enumerate(TEST_CASES, 1):
-        print(f"[{idx:02d}/{len(TEST_CASES)}] {tc['query'][:65]}…")
+    for idx, tc in enumerate(cases, 1):
+        print(f"[{idx:02d}/{len(cases)}] {tc['query'][:65]}…")
         print(f"          {tc['cognitive']} | {tc.get('query_type','')} | "
               f"{tc.get('context_note','')}")
 
@@ -449,10 +567,25 @@ def run_evaluation() -> List[Dict]:
             "timestamp":    datetime.now().isoformat(),
         }
 
-        # ── A-1: Retrieval ──────────────────────────────────────────────
+        # ── A-0: Retrieval SEKALI per kasus (revisi pasca-sidang) ───────
+        # Chunk yang sama dipakai untuk (a) metrik retrieval, (b) konteks
+        # generate Kondisi A, dan (c) referensi GT Faithfulness A & B —
+        # skor konsisten, tanpa retrieval ganda.
+        print("  [A-0] Retrieval Top-K (sekali per kasus)…")
+        rag_chunks: List[Dict] = []
+        try:
+            rag_chunks = _retrieve_local(tc["query"], tc["cognitive"])
+        except Exception as exc:
+            logger.error("_retrieve_local error: %s", exc)
+        for c in rag_chunks:
+            print(f"        #{c.get('score', 0):.4f}  {c['source']}  "
+                  f"[{c.get('topic', '?')}]")
+
+        # ── A-1: Retrieval metrics ──────────────────────────────────────
         print("  [A-1] Retrieval metrics…")
         result["retrieval"] = _eval_retrieval(
-            tc["query"], tc["relevant_keywords"], tc["cognitive"]
+            tc["query"], tc["relevant_keywords"], tc["cognitive"],
+            retrieved=rag_chunks,
         )
         if "precision_at_k" in result["retrieval"]:
             r  = result["retrieval"]
@@ -460,16 +593,19 @@ def run_evaluation() -> List[Dict]:
             print(f"        P@{TOP_K}={r['precision_at_k']:.3f}  "
                   f"R@{TOP_K}={r['recall_at_k']:.3f}  "
                   f"MeanSim={r['mean_similarity']:.3f}  "
-                  f"Cov={r['coverage']:.3f}"
+                  f"Cov={r['coverage']:.3f} (θc={COVERAGE_THRESHOLD})  "
+                  f"Div={r['source_diversity']:.3f}"
                   + (f"  ChunkRel={cr:.3f}" if cr else ""))
         else:
             print(f"        ⚠️  {result['retrieval'].get('error')}")
 
-        # ── A-2: Generate dengan RAG ────────────────────────────────────
+        # ── A-2: Generate dengan RAG (chunk hasil A-0) ──────────────────
         print(f"  [A-2] RAG + generate (ollama/{OLLAMA_CHAT_MODEL})…")
-        reply_a, rag_chunks = None, []
+        reply_a = None
         try:
-            reply_a, rag_chunks = _chat_with_rag(tc["query"], tc["cognitive"])
+            reply_a, rag_chunks = _chat_with_rag(
+                tc["query"], tc["cognitive"], chunks=rag_chunks
+            )
         except Exception as exc:
             logger.error("_chat_with_rag error: %s", exc)
 
@@ -481,6 +617,8 @@ def run_evaluation() -> List[Dict]:
         gt_reference   = " | ".join(c["text"][:300] for c in rag_chunks[:3]) \
                          if rag_chunks else ""
         result["retrieved_sources"] = [c["source"] for c in rag_chunks] if rag_chunks else []
+        result["retrieved_topics"]  = [f"{c['source']} → {c.get('topic', '?')}"
+                                       for c in rag_chunks] if rag_chunks else []
 
         if reply_a:
             print(f"        ✅ {len(reply_a)} chars")
@@ -496,15 +634,26 @@ def run_evaluation() -> List[Dict]:
             print(f"        score={faith_a['faithfulness_score']:.3f} "
                   f"({faith_a['method']})"
                   + (f"  entailment={ent_a:.3f}" if ent_a is not None else ""))
+            if faith_a.get("calc_str"):
+                print(f"        {faith_a['calc_str']}")
+            if V.enabled():
+                for i, d in enumerate(faith_a.get("entailment_detail") or [], 1):
+                    verdict = ("YA" if d.get("supported") is True
+                               else "TIDAK" if d.get("supported") is False
+                               else "?")
+                    V.calc(f"klaim {i}: [{verdict}] {d.get('claim', '')[:100]}")
 
-            # A-4: Hallucination
+            # A-4: Hallucination — pakai faith_a (TANPA entailment ulang)
             print("  [A-4] Hallucination…")
             hall_a = detect_hallucination(
-                reply_a, gt_chunks_text, tc["query"], _ollama_embed_list
+                reply_a, gt_chunks_text, tc["query"], _ollama_embed_list,
+                precomputed_faith=faith_a,
             )
             result["kondisi_a"]["hallucination"] = hall_a
             print(f"        risk={hall_a['hallucination_risk']:.3f} "
                   f"[{hall_a['risk_label']}]")
+            if hall_a.get("calc_str"):
+                print(f"        {hall_a['calc_str']}")
 
             # A-5: Answer quality
             print(f"  [A-5] Answer quality…")
@@ -554,18 +703,29 @@ def run_evaluation() -> List[Dict]:
             print(f"        score={faith_b['faithfulness_score']:.3f} "
                   f"({faith_b['method']})"
                   + (f"  entailment={ent_b:.3f}" if ent_b is not None else ""))
+            if faith_b.get("calc_str"):
+                print(f"        {faith_b['calc_str']}")
+            if V.enabled():
+                for i, d in enumerate(faith_b.get("entailment_detail") or [], 1):
+                    verdict = ("YA" if d.get("supported") is True
+                               else "TIDAK" if d.get("supported") is False
+                               else "?")
+                    V.calc(f"klaim {i}: [{verdict}] {d.get('claim', '')[:100]}")
 
-            # B-3: Hallucination — vs chunk GT dari Kondisi A
+            # B-3: Hallucination — pakai faith_b (TANPA entailment ulang)
             print("  [B-3] Hallucination (vs chunk GT Kondisi A)…")
             if gt_chunks_text:
                 hall_b = detect_hallucination(
-                    reply_b, gt_chunks_text, tc["query"], _ollama_embed_list
+                    reply_b, gt_chunks_text, tc["query"], _ollama_embed_list,
+                    precomputed_faith=faith_b,
                 )
             else:
                 hall_b = {"hallucination_risk": 1.0, "risk_label": "TINGGI"}
             result["kondisi_b"]["hallucination"] = hall_b
             print(f"        risk={hall_b['hallucination_risk']:.3f} "
                   f"[{hall_b['risk_label']}]")
+            if hall_b.get("calc_str"):
+                print(f"        {hall_b['calc_str']}")
 
             # B-4: Answer quality
             print(f"  [B-4] Answer quality…")
@@ -596,7 +756,7 @@ def run_evaluation() -> List[Dict]:
 
         results.append(result)
         print()
-        if idx < len(TEST_CASES):
+        if idx < len(cases):
             _think_pause()
 
     return results
@@ -853,13 +1013,42 @@ def save_results(
     aggregates: Dict,
     offline: Dict,
     output_dir: str,
-) -> Tuple[str, str, str, str]:
+) -> Tuple[str, str, str, str, str]:
+    """
+    Simpan hasil evaluasi. Revisi pasca-sidang menambahkan eval_TS.xlsx
+    (evaluation/excel_report.py) yang merekam SETIAP perhitungan metrik,
+    respons LLM utuh A vs B, chunk (file+topik), lokasi frasa uncertainty/
+    contradiction, verdict entailment per klaim, dan leksikon revisi.
+
+    Returns (json, csv, txt, responses_csv, xlsx).
+    """
     os.makedirs(output_dir, exist_ok=True)
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     json_path     = os.path.join(output_dir, f"eval_{ts}.json")
     csv_path      = os.path.join(output_dir, f"eval_{ts}.csv")
     txt_path      = os.path.join(output_dir, f"eval_{ts}.txt")
+    xlsx_path     = os.path.join(output_dir, f"eval_{ts}.xlsx")
     response_path = _save_response_log(results, output_dir, ts)
+
+    eval_config = {
+        "model_llm":            f"ollama/{OLLAMA_CHAT_MODEL}",
+        "model_embedding":      f"ollama/{OLLAMA_EMBED_MODEL} (768 dim)",
+        "K (Top-K)":            TOP_K,
+        "θ  (Precision/Recall, Pers. 2 & 4)": RELEVANCE_THRESHOLD,
+        "θc (Coverage, Pers. 8)":             COVERAGE_THRESHOLD,
+        "ukuran chunk (char)":  RAG_CHUNK_SIZE,
+        "konteks per chunk di prompt (char)": 600,
+        "bobot Faithfulness":   "0,70×Entailment + 0,30×KWoverlap (Pers. 15)",
+        "bobot HallRisk":       "0,65×(1-F) + 0,20×Contradiction + 0,15×Uncertainty (Pers. 18)",
+        "Kondisi B":            "prompt buta Lampiran 4 (tanpa RAG/profil/instruksi)",
+        "jumlah kasus":         len(results),
+        "timestamp":            ts,
+    }
+    try:
+        build_excel(results, aggregates, eval_config, xlsx_path)
+    except Exception as exc:                             # jangan gugurkan run
+        logger.error("Gagal membuat laporan Excel: %s", exc)
+        xlsx_path = f"(gagal: {exc})"
 
     with open(json_path, "w", encoding="utf-8") as fh:
         json.dump(
@@ -1003,4 +1192,4 @@ def save_results(
     with open(txt_path, "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines))
 
-    return json_path, csv_path, txt_path, response_path
+    return json_path, csv_path, txt_path, response_path, xlsx_path

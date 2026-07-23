@@ -139,6 +139,15 @@ Syarat wajib pertanyaan:
 - Singkat: soal yang diberikan harus berisi skenario dengan nilai konkret + pertanyaan.
 - Diakhiri tanda tanya (?).
 
+FORMAT KELUARAN (WAJIB DIPATUHI):
+- Keluaran = teks soal itu sendiri, TIDAK ADA yang lain.
+- JANGAN menulis judul, nomor soal ("Pertanyaan 1", "Soal:"), kata pengantar
+  ("Berikut soal…"), atau penutup.
+- JANGAN menulis catatan/keterangan dalam bentuk apa pun — termasuk
+  "(Note: ...)", "Catatan:", instruksi kepada penilai/sistem, atau
+  keterangan format jawaban yang diharapkan.
+- JANGAN menggunakan bahasa Inggris. Seluruh keluaran dalam Bahasa Indonesia.
+
 Tulis HANYA pertanyaannya, tanpa penjelasan tambahan.\
 """
 

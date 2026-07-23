@@ -290,6 +290,149 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ===========================================================
+  // 8b. KONDISI A/B (revisi pasca-sidang item 1)
+  // ===========================================================
+  const cognitiveRow = document.getElementById("cognitiveRow");
+
+  const getActiveMode = () => {
+    const checked = document.querySelector('input[name="modeRadio"]:checked');
+    return checked ? checked.value : "A";
+  };
+
+  // Mode B: sembunyikan elemen alur tutor yang tidak relevan
+  // (profil kognitif, RL badge, followup, evaluasi jawaban)
+  const applyModeVisibility = () => {
+    const isB = getActiveMode() === "B";
+    if (cognitiveRow)    cognitiveRow.style.display    = isB ? "none" : "flex";
+    if (rlBadge && isB)  rlBadge.style.display         = "none";
+    if (isB) {
+      clearFollowups();
+      if (answerSection)  answerSection.style.display  = "none";
+      if (historySection) historySection.style.display = "none";
+    }
+  };
+  document.querySelectorAll('input[name="modeRadio"]').forEach((r) =>
+    r.addEventListener("change", applyModeVisibility)
+  );
+
+  // ===========================================================
+  // 8c. PANEL DETAIL TRANSPARANSI (revisi item 2 & 3)
+  //     Ditempel di bawah setiap jawaban: chunk yang dipakai
+  //     (file + topik + skor + ambang), metrik live dengan rumus,
+  //     bukti no_rag_proof (mode B), dan prompt yang dikirim.
+  // ===========================================================
+  const fmtNum = (v) => (v == null ? "—" : Number(v).toFixed(4));
+
+  const buildTransparencyHtml = (data) => {
+    const isB   = data.mode === "B";
+    const parts = [];
+
+    // — status kondisi —
+    parts.push(
+      `<p><span class="mode-chip ${isB ? "b" : "a"}">KONDISI ${data.mode}</span>` +
+      (isB
+        ? `RAG <span class="no">TIDAK DIPAKAI</span> — prompt buta Lampiran 4.`
+        : `RAG <span class="ok">DIPAKAI</span> — jawaban dibangun dari chunk di bawah.`) +
+      `</p>`
+    );
+
+    // — bukti Kondisi B —
+    if (isB && data.no_rag_proof) {
+      const p = data.no_rag_proof;
+      parts.push(
+        `<p><b>Bukti LLM murni (no_rag_proof):</b></p>` +
+        `<table><tr><th>guard aktif</th><th>upaya retrieval diblokir</th>` +
+        `<th>upaya embedding diblokir</th></tr>` +
+        `<tr><td class="ok">${p.guard_enforced ? "✓ ya" : "✗"}</td>` +
+        `<td>${p.retrieval_calls_blocked}</td>` +
+        `<td>${p.embedding_calls_blocked}</td></tr></table>` +
+        `<p class="na-line">Nilai 0 = tidak ada satu pun jalur kode yang mencoba ` +
+        `menyentuh RAG selama jawaban ini dibuat. Guard tetap akan melempar ` +
+        `error bila ada yang mencoba.</p>`
+      );
+    }
+
+    // — chunk yang dipakai (mode A) —
+    if (!isB && Array.isArray(data.retrieved) && data.retrieved.length) {
+      const lm = data.live_metrics || {};
+      const th  = lm.theta   != null ? lm.theta   : 0.25;
+      const thc = lm.theta_c != null ? lm.theta_c : 0.35;
+      const rows = data.retrieved.map((c) =>
+        `<tr><td>${c.rank}</td><td>${escapeHtml(c.source || "—")}</td>` +
+        `<td>${escapeHtml(c.topic || "—")}</td><td>${fmtNum(c.score)}</td>` +
+        `<td>${c.score >= th  ? '<span class="ok">✓</span>' : '<span class="no">✗</span>'}</td>` +
+        `<td>${c.score >= thc ? '<span class="ok">✓</span>' : '<span class="no">✗</span>'}</td></tr>`
+      ).join("");
+      parts.push(
+        `<p><b>Chunk materi yang dipakai menjawab (Top-K):</b></p>` +
+        `<table><tr><th>#</th><th>file sumber</th><th>topik</th><th>skor cosine</th>` +
+        `<th>≥ θ=${th}</th><th>≥ θc=${thc}</th></tr>${rows}</table>`
+      );
+    }
+
+    // — metrik live —
+    const lm = data.live_metrics;
+    if (lm) {
+      const calcs = [];
+      ["precision_detail", "coverage_detail", "mean_sim_detail",
+       "source_diversity_detail"].forEach((k) => {
+        if (lm[k] && lm[k].calc_str)
+          calcs.push(`<div class="calc-line">∴ ${escapeHtml(lm[k].calc_str)}</div>`);
+      });
+      if (lm.faithfulness_live && lm.faithfulness_live.calc_str)
+        calcs.push(`<div class="calc-line">∴ ${escapeHtml(lm.faithfulness_live.calc_str)}</div>`);
+      if (calcs.length)
+        parts.push(`<p><b>Metrik live jawaban ini (rumus + substitusi):</b></p>` + calcs.join(""));
+
+      const lex = [];
+      if (lm.uncertainty)
+        lex.push(`<div class="calc-line">Uncertainty = ${lm.uncertainty.value} — ` +
+                 `${escapeHtml(lm.uncertainty.keterangan || "")}</div>`);
+      if (lm.contradiction)
+        lex.push(`<div class="calc-line">Contradiction = ${lm.contradiction.value} — ` +
+                 `${escapeHtml(lm.contradiction.keterangan || "")}</div>`);
+      const matches = []
+        .concat((lm.uncertainty?.matches || []).map((m) => ["Uncertainty", m]))
+        .concat((lm.contradiction?.matches || []).map((m) => ["Contradiction", m]));
+      if (matches.length) {
+        const mrows = matches.map(([jenis, m]) =>
+          `<tr><td>${jenis}</td><td>${escapeHtml(m.phrase)}</td>` +
+          `<td>${(m.sentence_index ?? 0) + 1}</td><td>${m.char_start}–${m.char_end}</td>` +
+          `<td>${escapeHtml(m.sentence || "")}</td></tr>`).join("");
+        lex.push(`<table><tr><th>jenis</th><th>frasa</th><th>kalimat ke-</th>` +
+                 `<th>posisi</th><th>kutipan</th></tr>${mrows}</table>`);
+      }
+      if (lex.length) parts.push(lex.join(""));
+
+      if (lm.not_computed && Object.keys(lm.not_computed).length) {
+        const na = Object.entries(lm.not_computed).map(([k, v]) =>
+          `<div class="na-line">• ${escapeHtml(k)}: ${escapeHtml(v)}</div>`).join("");
+        parts.push(`<p><b>Tidak dihitung live (dengan alasan):</b></p>` + na);
+      }
+    }
+
+    // — prompt yang dikirim —
+    if (data.prompt_sent) {
+      parts.push(
+        `<p><b>Prompt persis yang dikirim ke LLM${isB ? " (perhatikan: tidak ada konteks/profil/instruksi)" : ""}:</b></p>` +
+        `<pre class="prompt-echo">${escapeHtml(data.prompt_sent)}</pre>`
+      );
+    }
+
+    return `<details class="transparency"><summary>🔍 Detail Transparansi — ` +
+           `Kondisi ${data.mode}${isB ? " (bukti LLM murni)" : " (chunk, skor & metrik live)"}` +
+           `</summary><div class="tr-body">${parts.join("")}</div></details>`;
+  };
+
+  const appendTransparency = (data) => {
+    if (!chatBox || !data || !data.mode) return;
+    const div = document.createElement("div");
+    div.innerHTML = buildTransparencyHtml(data);
+    chatBox.appendChild(div.firstChild);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  };
+
+  // ===========================================================
   // 9. Kirim pertanyaan ke /chat
   // ===========================================================
   const sendQuestion = async () => {
@@ -310,11 +453,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (evalBtn)    evalBtn.disabled = false;
 
     try {
+      // Kondisi eksperimen (revisi pasca-sidang): A = RAG, B = LLM murni
+      const mode        = getActiveMode();
       // Demo mode: kirim cognitive jika dipilih manual (override RL)
-      // Jika null → RL Agent yang memilih (perilaku normal)
+      // Jika null → RL Agent yang memilih (perilaku normal). Mode B:
+      // profil tidak dipakai sama sekali.
       const demoCognitive = getActiveCognitive();
-      const chatPayload   = { message, session_id: "default" };
-      if (demoCognitive) chatPayload.cognitive = demoCognitive;
+      const chatPayload   = { message, session_id: "default", mode };
+      if (mode === "A" && demoCognitive) chatPayload.cognitive = demoCognitive;
 
       const res = await fetch("/chat", {
         method: "POST",
@@ -330,20 +476,32 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      updateRlBadge(data);
+      const isB = data.mode === "B";
+      if (isB) {
+        if (rlBadge) rlBadge.style.display = "none";
+      } else {
+        updateRlBadge(data);
+      }
 
+      const chip  = `<span class="mode-chip ${isB ? "b" : "a"}">KONDISI ${data.mode || "A"}</span>`;
+      const who   = isB ? "LLM murni (tanpa RAG)" : `Tutor (${escapeHtml(data.cognitive || "—")})`;
       appendBubble(
         "bot",
-        `<b>Tutor (${escapeHtml(data.cognitive || "—")}):</b><br>${renderMarkdown(data.reply || "")}`
+        `${chip}<b>${who}:</b><br>${renderMarkdown(data.reply || "")}`
       );
 
-      if (data.followup_question) {
+      // Panel transparansi: chunk+topik+skor, metrik live, no_rag_proof, prompt
+      appendTransparency(data);
+
+      if (!isB && data.followup_question) {
         appendFollowupCard(data.followup_question);
       }
 
       correctAnswer = data.reply || "";
-      if (answerSection)  answerSection.style.display  = "block";
-      if (historySection) historySection.style.display = "block";
+      if (!isB) {
+        if (answerSection)  answerSection.style.display  = "block";
+        if (historySection) historySection.style.display = "block";
+      }
 
     } catch (err) {
       if (loading) loading.remove();

@@ -46,16 +46,84 @@
       font-size: 0.9rem;
       min-width: 260px;
     }
+
+    /* ── TOGGLE KONDISI A/B (revisi pasca-sidang item 1) ───── */
+    .mode-row {
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      background: #f7f9fb;
+    }
+    .mode-row .mode-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+    .mode-option { display:block; margin: 4px 0; font-size: 0.88rem; cursor:pointer; }
+    .mode-option input { margin-right: 6px; }
+    .mode-option .mode-desc { color:#555; font-size: 0.8rem; margin-left: 22px; display:block; }
+
+    .mode-chip {
+      display:inline-block; padding:2px 8px; border-radius:10px;
+      font-size:0.72rem; font-weight:700; margin-right:6px; vertical-align:middle;
+    }
+    .mode-chip.a { background:#dcefe2; color:#116329; }
+    .mode-chip.b { background:#ffe9d6; color:#953800; }
+
+    /* ── PANEL DETAIL TRANSPARANSI (revisi item 2 & 3) ─────── */
+    details.transparency {
+      margin: 6px 0 14px 0;
+      border: 1px dashed #b6c2cf;
+      border-radius: 6px;
+      background: #fbfcfe;
+      font-size: 0.8rem;
+    }
+    details.transparency > summary {
+      cursor: pointer; padding: 6px 10px; font-weight: 600; color:#33475b;
+    }
+    details.transparency .tr-body { padding: 4px 12px 10px 12px; }
+    details.transparency table {
+      border-collapse: collapse; width: 100%; margin: 6px 0;
+    }
+    details.transparency th, details.transparency td {
+      border: 1px solid #dde3ea; padding: 3px 6px; text-align:left;
+      font-size: 0.75rem; vertical-align: top;
+    }
+    details.transparency th { background:#eef2f6; }
+    details.transparency .ok  { color:#116329; font-weight:700; }
+    details.transparency .no  { color:#953800; font-weight:700; }
+    details.transparency pre.prompt-echo {
+      white-space: pre-wrap; background:#f1f3f5; border-radius:4px;
+      padding:8px; max-height: 220px; overflow:auto; font-size:0.72rem;
+    }
+    details.transparency .calc-line { font-family: monospace; font-size:0.74rem; }
+    details.transparency .na-line   { color:#8a6d3b; font-size:0.74rem; }
   </style>
 </head>
 <body>
   <div class="container">
 
     <h1>Personalized Learning System</h1>
-    <p class="subtitle">Ditenagai oleh <b>GPT API + RAG Kognitif</b> · LT dipilih otomatis oleh <b>RL Agent</b></p>
+    <p class="subtitle">Ditenagai oleh <b>LLM lokal (Ollama) + RAG Kognitif</b> · LT dipilih otomatis oleh <b>RL Agent</b></p>
+
+    <!-- ── TOGGLE KONDISI EKSPERIMEN SKRIPSI (revisi pasca-sidang) ── -->
+    <div class="mode-row">
+      <div class="mode-title">Kondisi Eksperimen (sesuai skripsi Bab 3.4.6)</div>
+      <label class="mode-option">
+        <input type="radio" name="modeRadio" value="A" checked>
+        <b>Kondisi A — LLM + RAG</b> (chatbot lengkap)
+        <span class="mode-desc">Jawaban dibangun dari Top-K chunk materi GT + profil kognitif + instruksi tutor. Chunk yang dipakai, skornya, dan metrik live ditampilkan.</span>
+      </label>
+      <label class="mode-option">
+        <input type="radio" name="modeRadio" value="B">
+        <b>Kondisi B — LLM murni (tanpa RAG)</b> (baseline)
+        <span class="mode-desc">Prompt buta persis Lampiran 4: tanpa konteks materi, tanpa profil kognitif, tanpa instruksi tutor, tanpa riwayat. NoRAGGuard memblokir semua retrieval/embedding secara teknis dan melaporkan buktinya (no_rag_proof).</span>
+      </label>
+    </div>
 
     <!-- Dropdown sederhana: pilih profil kognitif manual (kosong = otomatis oleh RL Agent) -->
-    <div class="cognitive-row">
+    <div class="cognitive-row" id="cognitiveRow">
       <label for="cognitiveSelect">Profil Kognitif:</label>
       <select id="cognitiveSelect">
         <!-- Diisi oleh script.js -->

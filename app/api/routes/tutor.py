@@ -44,7 +44,34 @@ def chat(req: ChatRequest) -> ChatResponse:
 
     The selected cognitive code is returned in the response so the
     frontend can display what the agent chose.
+
+    REVISI PASCA-SIDANG (item 1): field ``mode`` memilih kondisi skripsi.
+    mode="B" → LLM murni: RL DILEWATI seluruhnya (tidak ada pemilihan LT,
+    tidak ada profil), prompt buta Lampiran 4, NoRAGGuard aktif; respons
+    membawa no_rag_proof + prompt_sent + live_metrics sebagai bukti.
     """
+    # ── KONDISI B: LLM murni — lewati RL & profil sepenuhnya ─────────────
+    if str(req.mode).upper() == "B":
+        result = generate_reply(
+            message        = req.message,
+            cognitive_code = "",          # tidak dipakai pada mode B
+            session_id     = req.session_id,
+            mode           = "B",
+        )
+        return ChatResponse(
+            reply             = result["reply"],
+            followup_question = result["followup_question"],
+            cognitive         = result["cognitive"],      # "—"
+            session_id        = req.session_id,
+            mode              = "B",
+            rag_used          = False,
+            retrieved         = result["retrieved"],
+            live_metrics      = result["live_metrics"],
+            no_rag_proof      = result["no_rag_proof"],
+            prompt_sent       = result["prompt_sent"],
+        )
+
+    # ── KONDISI A: alur asli (RL memilih LT → RAG → tutor) ───────────────
     # req.cognitive is None for cold-start (no user input)
     cognitive_code, rl_lt, rl_selected, rl_phase = rl_select_cognitive(
         session_id          = req.session_id,
@@ -62,6 +89,7 @@ def chat(req: ChatRequest) -> ChatResponse:
         session_id     = req.session_id,
         rl_selected    = rl_selected,
         rl_phase       = rl_phase,
+        mode           = "A",
     )
 
     phase_info = {
@@ -78,6 +106,12 @@ def chat(req: ChatRequest) -> ChatResponse:
         followup_question = result["followup_question"],
         cognitive         = cognitive_code,
         session_id        = req.session_id,
+        mode              = "A",
+        rag_used          = True,
+        retrieved         = result.get("retrieved"),
+        live_metrics      = result.get("live_metrics"),
+        no_rag_proof      = None,
+        prompt_sent       = result.get("prompt_sent"),
         rl_selected_lt    = rl_lt,
         rl_selected       = rl_selected,
         rl_epsilon        = round(agent.epsilon, 4),

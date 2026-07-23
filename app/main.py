@@ -108,9 +108,10 @@ def create_app() -> FastAPI:
     # ── Startup ───────────────────────────────────────────────────────────
     @app.on_event("startup")
     async def on_startup():
+        from app.core import verbose as V
         from app.services.llm import probe_and_set_chat_provider
 
-        # 1. Decide chat provider (ChatAnywhere if key OK, else Ollama)
+        # 1. Decide chat provider (OpenAI-compatible bila key valid, else Ollama)
         provider = probe_and_set_chat_provider()
 
         # 2. Build RAG index
@@ -121,6 +122,27 @@ def create_app() -> FastAPI:
             "━━ Server ready ━━  chat=%s | embed=%s | cognitive_types=%d",
             provider, settings.embedding_provider, len(VALID_COGNITIVE_TYPES),
         )
+        # ── Echo konfigurasi eksperimen skripsi (revisi pasca-sidang) ────
+        V.banner("KONFIGURASI EKSPERIMEN SKRIPSI — LogiCT (revisi pasca-sidang)")
+        V.kv("Kondisi demo", "A = LLM+RAG+profil (default) | B = LLM murni "
+                             "(toggle di UI / field 'mode' pada POST /chat)")
+        V.kv("LLM", f"{provider} → "
+             f"{settings.ollama_chat_model if provider == 'ollama' else settings.chat_model}")
+        V.kv("Embedding", f"{settings.embedding_provider} → "
+                          f"{settings.ollama_embed_model} (768 dim)")
+        V.kv("Top-K (Pers. 2)", settings.rag_top_k)
+        V.kv("Ukuran chunk", f"{settings.rag_embed_chunk_size} char "
+                             f"(konteks/chunk di prompt: {settings.rag_chunk_max_chars} char)")
+        V.kv("θ  (Pers. 2 & 4)", settings.theta_retrieval)
+        V.kv("θc (Pers. 8)", settings.theta_coverage)
+        V.kv("Live metrics", "AKTIF" if settings.demo_live_metrics else "nonaktif")
+        V.kv("Faithfulness live", "AKTIF (DEMO_FULL_METRICS=1 — lambat)"
+             if settings.demo_full_metrics else
+             "nonaktif (set DEMO_FULL_METRICS=1 utk entailment live)")
+        V.kv("Verbose terminal", "AKTIF" if V.enabled() else
+             "nonaktif (set LOGICT_VERBOSE=1)")
+        V.note("Semua aktivitas latar (chunking, embedding, retrieval, "
+               "perhitungan metrik, prompt) dicetak di terminal ini.")
         logger.info("  Tutoring UI    → http://%s:%s/", settings.host, settings.port)
         logger.info("  Asah Otak      → http://%s:%s/asah-otak", settings.host, settings.port)
         logger.info("  Admin panel    → http://%s:%s/admin/questions", settings.host, settings.port)

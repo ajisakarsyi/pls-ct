@@ -21,9 +21,12 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
+from app.core import verbose as V
 from app.core.cognitive import VALID_COGNITIVE_TYPES
 from app.core.config import get_settings
+from app.core.rag_guard import assert_rag_allowed
 from app.services.llm import get_embedding
+from topics import topic_of
 
 logger = logging.getLogger(__name__)
 _settings = get_settings()
@@ -120,6 +123,9 @@ def _embed_file(path: str, fname: str) -> List[Dict]:
     out: List[Dict] = []
     # chunk_size dari config — default 1200 karakter (rag_embed_chunk_size)
     chunk_size = _settings.rag_embed_chunk_size
+    n_expected = (len(text) + chunk_size - 1) // chunk_size
+    V.step(f"Chunking {fname}: {len(text)} char → {n_expected} chunk "
+           f"@ {chunk_size} char | topik: {topic_of(fname, _settings.materials_dir)}")
     for i, chunk in enumerate(
         text[j: j + chunk_size] for j in range(0, len(text), chunk_size)
     ):
@@ -134,6 +140,8 @@ def _embed_file(path: str, fname: str) -> List[Dict]:
             # Skip chunk ini, lanjut ke chunk berikutnya.
             # Satu chunk gagal tidak boleh membatalkan seluruh file.
             continue
+    V.step(f"Embedding {fname}: {len(out)}/{n_expected} chunk berhasil "
+           f"({_settings.ollama_embed_model}, dinormalisasi L2)")
     return out
 
 
@@ -145,7 +153,8 @@ def _numpy_search(
     scores = [float(np.dot(q_emb, c["embedding"])) for c in chunks]
     indices = np.argsort(scores)[::-1][:top_k]
     return [
-        {"text": chunks[i]["text"], "source": chunks[i]["source"], "score": scores[i]}
+        {"text": chunks[i]["text"], "source": chunks[i]["source"],
+         "chunk_id": chunks[i].get("chunk_id"), "score": scores[i]}
         for i in indices
         if scores[i] > 0
     ]
@@ -156,7 +165,8 @@ def _faiss_search(
 ) -> List[Dict]:
     D, I = index.search(q_emb.reshape(1, -1), top_k)
     return [
-        {"text": chunks[int(i)]["text"], "source": chunks[int(i)]["source"], "score": float(s)}
+        {"text": chunks[int(i)]["text"], "source": chunks[int(i)]["source"],
+         "chunk_id": chunks[int(i)].get("chunk_id"), "score": float(s)}
         for i, s in zip(I[0], D[0])
         if i >= 0 and s > 0
     ]
@@ -273,7 +283,16 @@ def retrieve(query: str, cognitive_code: str, k: int = None) -> List[Dict]:
     Return up to *k* most relevant chunks for *query* given the student's
     cognitive type.  Falls back to the global index if the per-type index
     doesn't fill the quota.
+
+    REVISI PASCA-SIDANG:
+      • assert_rag_allowed() — bila permintaan sedang berjalan dalam
+        Kondisi B (NoRAGGuard aktif), panggilan ini langsung melempar
+        RAGBlockedError dan tercatat di no_rag_proof (bukti item 2).
+      • Setiap chunk hasil kini membawa "score" (cosine, 4 desimal) dan
+        "topic" (resolusi header file materi) — dipakai metrik live,
+        panel transparansi UI, dan tabel verbose terminal (item 3).
     """
+    assert_rag_allowed("retrieval")
     if k is None:
         # k = rag_top_k dari config (default 6)
         # K=6 dipilih berdasarkan keseimbangan cakupan konteks vs panjang prompt
@@ -310,8 +329,19 @@ def retrieve(query: str, cognitive_code: str, k: int = None) -> List[Dict]:
         if key not in seen:
             seen.add(key)
             out.append(r)
+    out = out[:k]
 
-    return out[:k]
+    # ── LANGKAH 5: Perkaya hasil (revisi pasca-sidang) ────────────────
+    for r in out:
+        r["score"] = round(float(r.get("score", 0.0)), 4)
+        r["topic"] = topic_of(r["source"], _settings.materials_dir)
+
+    if V.enabled():
+        V.section(f"RETRIEVAL Top-{k} untuk query ({len(query)} char) "
+                  f"| kognitif {code}")
+        V.chunk_table(out, _settings.theta_retrieval, _settings.theta_coverage)
+
+    return out
 
 
 def chunks_to_context(chunks: List[Dict], max_chars: int = None) -> str:

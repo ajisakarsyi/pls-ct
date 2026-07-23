@@ -115,6 +115,21 @@ def main():
         "--batch", choices=["1", "2", "all"], default="all",
         help="Batch test case: 1=eval-001..110, 2=eval-201..300, all=gabungan (default).",
     )
+    parser.add_argument(
+        "--limit", type=int, default=int(os.getenv("EVAL_LIMIT", "0")),
+        help="Batasi jumlah kasus uji (smoke test), mis. --limit 3. 0 = semua.",
+    )
+    parser.add_argument(
+        "--verbose", action="store_true",
+        help="Paksa mode transparansi terminal AKTIF (default sudah aktif): "
+             "chunking, embedding, tabel chunk (file+topik+skor), rumus+"
+             "substitusi tiap metrik, verdict entailment per klaim, echo prompt "
+             "kedua kondisi. Set LOGICT_PROMPT_ECHO=full untuk prompt utuh.",
+    )
+    parser.add_argument(
+        "--quiet", action="store_true",
+        help="Matikan mode transparansi terminal (LOGICT_VERBOSE=0).",
+    )
     args = parser.parse_args()
 
     # Propagate to env so runner.py picks them up
@@ -125,6 +140,11 @@ def main():
     os.environ["PACE_MIN"]         = str(args.pace_min)
     os.environ["PACE_MAX"]         = str(args.pace_max)
     os.environ["TEST_BATCH"]       = args.batch
+    os.environ["EVAL_LIMIT"]       = str(args.limit)
+    if args.verbose:
+        os.environ["LOGICT_VERBOSE"] = "1"
+    if args.quiet:
+        os.environ["LOGICT_VERBOSE"] = "0"
 
     print("\n" + "=" * 60)
     print("  CSIPBLLM — RAG Evaluation Suite (Ollama local mode)")
@@ -146,7 +166,7 @@ def main():
     history_path = os.path.join(settings.history_dir, "conversation_log.json")
     offline = run_offline_analysis(history_path)
 
-    json_path, csv_path, txt_path, response_path = save_results(
+    json_path, csv_path, txt_path, response_path, xlsx_path = save_results(
         results, aggregate, offline, settings.eval_results_dir
     )
 
@@ -155,6 +175,7 @@ def main():
     print(f"   CSV       : {csv_path}")
     print(f"   Report    : {txt_path}")
     print(f"   Responses : {response_path}")  # full LLM replies for thesis justification
+    print(f"   Excel     : {xlsx_path}")      # SEMUA perhitungan detail (revisi pasca-sidang)
 
     ret = aggregate.get("retrieval", {})
     gen = aggregate.get("generation", {})

@@ -55,18 +55,16 @@ _STOPWORDS_ID = {
     "jika", "meski", "walaupun", "setelah", "sebelum", "sehingga",
 }
 
-_UNCERTAINTY_PHRASES = [
-    "saya tidak yakin", "saya tidak tahu", "mungkin", "kemungkinan",
-    "tampaknya", "sepertinya", "belum pasti", "tidak pasti",
-    "perlu dicatat", "tergantung pada", "bisa jadi",
-    "namun perlu", "perlu diingat",
-]
-
-_CONTRADICTION_PATTERNS = [
-    r"\bbertentangan\b", r"\bsebaliknya\b", r"\bkeliru\b",
-    r"\bsalah besar\b", r"\btidak benar\b", r"\btidak tepat\b",
-    r"\bmenyesatkan\b",
-]
+# ── Leksikon Uncertainty & Contradiction ───────────────────────────────────
+# REVISI PASCA-SIDANG: daftar frasa dipindahkan ke evaluation/lexicon.py
+# (satu sumber kebenaran, dipakai juga oleh demo & laporan Excel) dan
+# diperbarui — lihat docstring lexicon.py untuk rincian perubahan frasa.
+from evaluation.lexicon import (          # noqa: E402
+    UNCERTAINTY_PHRASES   as _UNCERTAINTY_PHRASES,
+    CONTRADICTION_PHRASES as _CONTRADICTION_PHRASES,
+    uncertainty_scan,
+    contradiction_scan,
+)
 
 # ── Ollama helper (tanpa import dari runner untuk menghindari circular) ─────
 def _ollama_generate_local(prompt: str, base_url: str = "http://localhost:11434",
@@ -136,16 +134,35 @@ def _keyword_overlap(answer: str, context: str) -> float:
     Formula (Pers. 3.13): KWoverlap = (|Stems(ans) ∩ Stems(ctx)| / |Stems(ctx)|)^0.65
     ═══════════════════════════════════════════════════════════════
     """
-    raw_ctx = re.findall(r'\b\w{4,}\b', context.lower())
+    return _keyword_overlap_detail(answer, context)["value"]
+
+
+def _keyword_overlap_detail(answer: str, context: str) -> Dict:
+    """
+    Versi transparan _keyword_overlap: kembalikan seluruh besaran antara
+    (|Stems(ans) ∩ Stems(ctx)|, |Stems(ctx)|, rasio mentah, hasil ^0,65)
+    untuk log terminal dan sheet "Perhitungan Detail" di Excel.
+    """
+    raw_ctx = re.findall(r'\b\w{4,}\b', (context or "").lower())
     ctx_stems = {_normalize_word(w) for w in raw_ctx if w not in _STOPWORDS_ID}
     if not ctx_stems:
-        return 0.0
-    ans_words = re.findall(r'\b\w{4,}\b', answer.lower())
+        return {"value": 0.0, "overlap_count": 0, "ctx_stem_count": 0,
+                "raw_ratio": 0.0,
+                "calc_str": "KWoverlap = 0 (konteks kosong)"}
+    ans_words = re.findall(r'\b\w{4,}\b', (answer or "").lower())
     ans_stems = {_normalize_word(w) for w in ans_words}
     overlap = len(ctx_stems & ans_stems)
     raw = overlap / len(ctx_stems)
     # Eksponen 0.65: sublinear scaling (Manning et al. 2008, Section 6.4.1)
-    return min(raw ** 0.65, 1.0)
+    value = min(raw ** 0.65, 1.0)
+    return {
+        "value": value,
+        "overlap_count": overlap,
+        "ctx_stem_count": len(ctx_stems),
+        "raw_ratio": round(raw, 4),
+        "calc_str": (f"KWoverlap = (|∩|/|ctx|)^0,65 = ({overlap}/{len(ctx_stems)})"
+                     f"^0,65 = {raw:.4f}^0,65 = {value:.4f}"),
+    }
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -227,7 +244,7 @@ def _entailment_score(
     for claim in claims:
         verdict = _judge_single_claim(claim, context_str)
         results.append({
-            "claim":     claim[:120],
+            "claim":     claim[:220],
             "supported": verdict,
         })
         if pause_sec > 0:
@@ -345,7 +362,8 @@ def evaluate_faithfulness(
         }
 
     context_concat = " ".join(retrieved_chunks)
-    kw_overlap = _keyword_overlap(answer, context_concat)
+    kw_detail  = _keyword_overlap_detail(answer, context_concat)
+    kw_overlap = kw_detail["value"]
 
     # ── Coba LLM-as-Judge entailment ────────────────────────────────────
     entailment_result = None
@@ -369,12 +387,20 @@ def evaluate_faithfulness(
         return {
             "faithfulness_score": score,
             "keyword_overlap":    round(kw_overlap, 4),
+            "kw_overlap_detail":  kw_detail,
             "entailment_score":   round(ent_score, 4),
             "embedding_sim":      None,
             "method":             method,
             "entailment_detail":  entailment_result.get("detail", []),
             "claims_supported":   entailment_result["supported"],
             "claims_evaluated":   entailment_result["total_evaluated"],
+            "calc_str": (
+                f"Faithfulness = 0,70×Entailment + 0,30×KWoverlap = "
+                f"0,70×{ent_score:.4f} + 0,30×{kw_overlap:.4f} = {score:.4f}  "
+                f"(entailment: {entailment_result['supported']}/"
+                f"{entailment_result['total_evaluated']} klaim didukung; "
+                f"{kw_detail['calc_str']})"
+            ),
         }
 
     # ── Fallback ke sentence-level embedding ────────────────────────────
@@ -411,6 +437,7 @@ def detect_hallucination(
     retrieved_chunks: List[str],
     query: str,
     get_emb_fn: Optional[Callable] = None,
+    precomputed_faith: Optional[Dict] = None,
 ) -> Dict:
     """
     ═══════════════════════════════════════════════════════════════
@@ -442,31 +469,45 @@ def detect_hallucination(
     Hallucination risk ∈ [0, 1].
     Semakin rendah proporsi klaim yang didukung chunk GT,
     semakin tinggi risiko halusinasi.
-    """
-    faith = evaluate_faithfulness(answer, retrieved_chunks, get_emb_fn)
 
-    # OutOfContext = 1 - Faithfulness (komplemen matematis dari Persamaan 3.14)
+    REVISI PASCA-SIDANG:
+      1. `precomputed_faith` — runner kini meneruskan hasil
+         evaluate_faithfulness() yang SUDAH dihitung, sehingga (a) nilai
+         Faithfulness pada laporan dan nilai yang dipakai OutOfContext
+         dijamin identik, dan (b) entailment LLM-as-Judge tidak dihitung
+         dua kali per kondisi (menghemat ± m panggilan Ollama per kasus).
+      2. Contradiction dihitung sebagai PROPORSI KALIMAT yang memuat frasa
+         kontradiksi kuat — persis definisi Persamaan 18 skripsi
+         ("proporsi kalimat dengan frasa kontradiksi kuat"); implementasi
+         lama (+0,2 per pola unik) tidak sesuai definisi tersebut.
+      3. Setiap frasa Uncertainty/Contradiction yang terdeteksi dilaporkan
+         BESERTA LOKASINYA (kalimat ke-N, posisi karakter) untuk log
+         terminal dan sheet Excel "Uncertainty & Contradiction".
+    """
+    faith = precomputed_faith if precomputed_faith is not None else \
+        evaluate_faithfulness(answer, retrieved_chunks, get_emb_fn)
+
+    # OutOfContext = 1 - Faithfulness (komplemen matematis dari Persamaan 15)
     out_of_context = 1.0 - faith["faithfulness_score"]
 
-    # Komponen Contradiction: terinspirasi dari deteksi kontradiksi ARES
-    # (Saad-Falcon et al. 2024) — disederhanakan ke pencocokan pola regex
-    contradiction = 0.0
-    answer_lower = answer.lower()
-    for pat in _CONTRADICTION_PATTERNS:
-        if re.search(pat, answer_lower):
-            contradiction = min(contradiction + 0.2, 1.0)
+    # Komponen Contradiction (Pers. 18): proporsi kalimat berfrasa
+    # kontradiksi kuat — leksikon revisi di evaluation/lexicon.py,
+    # terinspirasi deteksi kontradiksi ARES (Saad-Falcon et al. 2024).
+    con = contradiction_scan(answer)
+    contradiction = con["value"]
 
-    # Komponen Uncertainty: sinyal keraguan leksikal dari respons LLM
-    uncertainty = 0.2 if any(p in answer_lower for p in _UNCERTAINTY_PHRASES) else 0.0
+    # Komponen Uncertainty (Pers. 18): biner 0,20 bila ada frasa keraguan.
+    unc = uncertainty_scan(answer)
+    uncertainty = unc["value"]
 
-    # Formula Hallucination Risk (Persamaan 3.17)
+    # Formula Hallucination Risk (Persamaan 18)
     risk = round(
         0.65 * out_of_context +
         0.20 * contradiction  +
         0.15 * uncertainty,
         4,
     )
-    # Threshold diturunkan dari kategori Faithfulness (lihat skripsi Bab 3.4.7)
+    # Threshold diturunkan dari kategori Faithfulness (lihat skripsi Bab 3)
     risk_label = "TINGGI" if risk >= 0.55 else "SEDANG" if risk >= 0.32 else "RENDAH"
 
     return {
@@ -474,7 +515,17 @@ def detect_hallucination(
         "risk_label":          risk_label,
         "out_of_context":      round(out_of_context, 4),
         "contradiction_score": round(contradiction, 4),
-        "uncertainty_flag":    bool(uncertainty),
+        "contradiction_matches":     con["matches"],
+        "contradiction_n_sentences": con["n_sentences"],
+        "contradiction_n_flagged":   con["n_flagged_sentences"],
+        "uncertainty_flag":    bool(unc["flag"]),
+        "uncertainty_value":   uncertainty,
+        "uncertainty_matches": unc["matches"],
+        "calc_str": (
+            f"Risk = 0,65×OutOfContext + 0,20×Contradiction + 0,15×Uncertainty "
+            f"= 0,65×{out_of_context:.4f} + 0,20×{contradiction:.4f} + "
+            f"0,15×{uncertainty:.2f} = {risk:.4f} [{risk_label}]"
+        ),
         "faithfulness":        faith["faithfulness_score"],
         "faithfulness_method": faith.get("method", ""),
     }

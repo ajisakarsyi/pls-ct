@@ -22,8 +22,10 @@ from typing import List
 import numpy as np
 from openai import OpenAI
 
+from app.core import verbose as V
 from app.core.config import get_settings
 from app.core.prompts import SYSTEM_PROMPT
+from app.core.rag_guard import assert_rag_allowed
 from app.utils.latex import normalize_latex
 
 logger    = logging.getLogger(__name__)
@@ -32,11 +34,26 @@ _settings = get_settings()
 _provider_lock         = threading.Lock()
 _active_chat_provider: str = "openai"   # overwritten by probe_and_set_chat_provider()
 
-import os as _os
-_openai_client = OpenAI(
-    api_key  = _settings.openai_api_key or _os.environ.get('OPENAI_API_KEY', 'sk-HvdbctsMMXV8xGgFJW4pxrHiuVmIP2qortZ0ULNjjxbV4MP4'),
-    base_url = _settings.openai_api_base,
-)
+# ── REVISI PASCA-SIDANG (KEAMANAN) ────────────────────────────────────────
+# API key TIDAK lagi tertanam di kode. Key ChatAnywhere lama yang pernah
+# hardcoded di sini & di config.py sudah dihapus dan harus dianggap BOCOR —
+# segera revoke. Client OpenAI hanya dibuat bila env OPENAI_API_KEY di-set.
+_openai_client = None
+if _settings.openai_api_key:
+    _openai_client = OpenAI(
+        api_key=_settings.openai_api_key,
+        base_url=_settings.openai_api_base,
+    )
+
+
+def _require_openai_client() -> OpenAI:
+    if _openai_client is None:
+        raise RuntimeError(
+            "Provider OpenAI diminta tetapi env OPENAI_API_KEY tidak di-set. "
+            "Set key lewat environment, atau gunakan CHAT_PROVIDER=ollama "
+            "(default sesuai skripsi)."
+        )
+    return _openai_client
 
 _QUOTA_PATTERNS = (
     "429", "quota", "rate limit", "insufficient_quota",
@@ -73,8 +90,15 @@ def probe_and_set_chat_provider() -> str:
         logger.info("Chat provider: ChatAnywhere (forced by config)")
         return "openai"
 
+    # AUTO: tanpa key → langsung Ollama (tidak ada lagi key tertanam)
+    if _openai_client is None:
+        with _provider_lock:
+            _active_chat_provider = "ollama"
+        logger.info("Chat provider: Ollama (OPENAI_API_KEY tidak di-set)")
+        return "ollama"
+
     # AUTO: probe with a 1-token call
-    logger.info("Probing ChatAnywhere API key…")
+    logger.info("Probing OpenAI-compatible API key…")
     try:
         _openai_client.chat.completions.create(
             model=_settings.chat_model,
@@ -114,12 +138,39 @@ def query_llm(prompt: str) -> str:
     Send prompt to the active chat provider and return the normalised response.
     Automatically falls back to Ollama on quota errors mid-session.
     """
-    if get_active_provider() == "openai":
+    provider = get_active_provider()
+    V.step(f"query_llm → provider={provider} "
+           f"model={_settings.chat_model if provider == 'openai' else _settings.ollama_chat_model} "
+           f"| panjang prompt: {len(prompt)} char")
+    if provider == "openai":
         return _chat_openai(prompt)
     return _chat_ollama(prompt)
 
 
+def query_llm_ollama_raw(prompt: str) -> str:
+    """
+    KONDISI B (revisi pasca-sidang item 1-2): kirim prompt APA ADANYA
+    langsung ke Ollama lokal.
+
+    Jaminan "murni tanpa bantuan":
+      • TANPA SYSTEM_PROMPT tutor — berbeda dari query_llm() yang jalur
+        OpenAI-nya menyisipkan SYSTEM_PROMPT sebagai system message.
+      • TANPA fallback ke provider OpenAI — model & jalur identik dengan
+        yang dipakai evaluasi skripsi (llama3 lokal).
+      • Prompt yang dikirim = prompt yang di-echo ke terminal & UI
+        (field prompt_sent), sehingga dosen bisa memverifikasi tidak ada
+        konteks tersembunyi.
+    """
+    V.step(f"query_llm_ollama_raw (Kondisi B) → ollama/"
+           f"{_settings.ollama_chat_model} | panjang prompt: {len(prompt)} char "
+           f"| TANPA system prompt, TANPA fallback")
+    return _chat_ollama(prompt)
+
+
 def _chat_openai(prompt: str) -> str:
+    if _openai_client is None:
+        logger.warning("OPENAI_API_KEY tidak di-set — memakai Ollama.")
+        return _chat_ollama(prompt)
     for attempt in range(_settings.chat_retries):
         try:
             resp = _openai_client.chat.completions.create(
@@ -191,7 +242,13 @@ def get_embedding(text: str) -> List[float]:
          (rag.py sudah handle error ini dengan log + skip chunk).
 
     Tidak pernah mencoba ChatAnywhere jika Ollama berjalan normal.
+
+    BUKTI KONDISI B (revisi pasca-sidang item 2): saat mode B aktif,
+    assert_rag_allowed() melempar RAGBlockedError sehingga TIDAK ADA
+    embedding yang bisa dihitung — dan setiap upaya tercatat sebagai
+    embedding_calls_blocked pada no_rag_proof.
     """
+    assert_rag_allowed("embedding")
     try:
         return _embed_ollama(text)
     except Exception as ollama_exc:
@@ -229,7 +286,7 @@ def _embed_ollama(text: str) -> List[float]:
 
 
 def _embed_openai(text: str) -> List[float]:
-    resp = _openai_client.embeddings.create(
+    resp = _require_openai_client().embeddings.create(
         model=_settings.embedding_model,
         input=text,
     )
