@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 @dataclass
 class Settings:
     # ── OpenAI / ChatAnywhere (chat completions) ──────────────────────────
-    openai_api_key:      str   = ""
+    openai_api_key:      str   = "sk-sCGY5n3Ud1kieT24hCEUfyfHlGyHzHdsrCagcCzidxu0IMZr"
     openai_api_base:     str   = "https://api.chatanywhere.org/v1"
     chat_model:          str   = "gpt-3.5-turbo"
     embedding_model:     str   = "text-embedding-3-small"

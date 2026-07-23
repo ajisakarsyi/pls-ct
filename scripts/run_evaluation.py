@@ -111,6 +111,10 @@ def main():
     parser.add_argument("--pace-min",    type=float, default=float(os.getenv("PACE_MIN", "2.5")))
     parser.add_argument("--pace-max",    type=float, default=float(os.getenv("PACE_MAX", "5.5")))
     parser.add_argument("--skip-checks", action="store_true", help="Skip pre-flight connectivity checks")
+    parser.add_argument(
+        "--batch", choices=["1", "2", "all"], default="all",
+        help="Batch test case: 1=eval-001..110, 2=eval-201..300, all=gabungan (default).",
+    )
     args = parser.parse_args()
 
     # Propagate to env so runner.py picks them up
@@ -120,6 +124,7 @@ def main():
     os.environ["OLLAMA_EMBED_MODEL"]= args.embed_model
     os.environ["PACE_MIN"]         = str(args.pace_min)
     os.environ["PACE_MAX"]         = str(args.pace_max)
+    os.environ["TEST_BATCH"]       = args.batch
 
     print("\n" + "=" * 60)
     print("  CSIPBLLM — RAG Evaluation Suite (Ollama local mode)")
@@ -141,14 +146,15 @@ def main():
     history_path = os.path.join(settings.history_dir, "conversation_log.json")
     offline = run_offline_analysis(history_path)
 
-    json_path, csv_path, txt_path = save_results(
+    json_path, csv_path, txt_path, response_path = save_results(
         results, aggregate, offline, settings.eval_results_dir
     )
 
     print("\n✅  Evaluation complete.")
-    print(f"   JSON   : {json_path}")
-    print(f"   CSV    : {csv_path}")
-    print(f"   Report : {txt_path}")
+    print(f"   JSON      : {json_path}")
+    print(f"   CSV       : {csv_path}")
+    print(f"   Report    : {txt_path}")
+    print(f"   Responses : {response_path}")  # full LLM replies for thesis justification
 
     ret = aggregate.get("retrieval", {})
     gen = aggregate.get("generation", {})

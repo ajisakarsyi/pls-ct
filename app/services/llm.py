@@ -8,9 +8,10 @@ Chat routing (set once at startup via probe_and_set_chat_provider):
   CHAT_PROVIDER=openai → always ChatAnywhere/OpenAI
   CHAT_PROVIDER=ollama → always local Ollama
 
-Embeddings:
-  EMBEDDING_PROVIDER=openai  → OpenAI/ChatAnywhere embedding API  (default)
-  EMBEDDING_PROVIDER=ollama  → local Ollama nomic-embed-text
+Embeddings: ALWAYS Ollama-first.
+  get_embedding() tries Ollama first, auto-falls back to OpenAI/ChatAnywhere only
+  if Ollama is unreachable (e.g. ollama serve not running).
+  This means RAG indexing never burns ChatAnywhere quota unless Ollama is down.
 """
 
 import logging
@@ -33,7 +34,7 @@ _active_chat_provider: str = "openai"   # overwritten by probe_and_set_chat_prov
 
 import os as _os
 _openai_client = OpenAI(
-    api_key  = _settings.openai_api_key or _os.environ.get('OPENAI_API_KEY', 'sk-placeholder'),
+    api_key  = _settings.openai_api_key or _os.environ.get('OPENAI_API_KEY', 'sk-HvdbctsMMXV8xGgFJW4pxrHiuVmIP2qortZ0ULNjjxbV4MP4'),
     base_url = _settings.openai_api_base,
 )
 
@@ -174,33 +175,45 @@ def _chat_ollama(prompt: str) -> str:
     return "[ERROR] Semua LLM tidak tersedia. Jalankan: ollama serve"
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# EMBEDDINGS — Ollama-first, auto-fallback to ChatAnywhere jika Ollama mati
+# ══════════════════════════════════════════════════════════════════════════════
+
 def get_embedding(text: str) -> List[float]:
     """
     Return a normalised L2 embedding vector.
-    Uses OpenAI/ChatAnywhere by default; Ollama if EMBEDDING_PROVIDER=ollama.
+
+    Strategi (Ollama-first):
+      1. Coba Ollama lokal terlebih dahulu — gratis, tidak ada kuota.
+      2. Jika Ollama tidak bisa dijangkau (ConnectionError / timeout),
+         fallback ke OpenAI/ChatAnywhere.
+      3. Jika ChatAnywhere juga 429 / quota habis → raise langsung
+         (rag.py sudah handle error ini dengan log + skip chunk).
+
+    Tidak pernah mencoba ChatAnywhere jika Ollama berjalan normal.
     """
-    provider = getattr(_settings, "embedding_provider", "openai").lower()
-
-    if provider == "ollama":
+    try:
         return _embed_ollama(text)
-    return _embed_openai(text)
-
-
-def _embed_openai(text: str) -> List[float]:
-    resp = _openai_client.embeddings.create(
-        model=_settings.embedding_model,
-        input=text,
-    )
-    vec  = np.array(resp.data[0].embedding, dtype="float32")
-    norm = np.linalg.norm(vec)
-    if norm:
-        vec /= norm
-    return vec.tolist()
+    except Exception as ollama_exc:
+        # Hanya fallback ke OpenAI jika Ollama benar-benar tidak bisa dijangkau.
+        # Jika Ollama running tapi model belum di-pull, error-nya bukan ConnectionError
+        # tapi HTTP 404 — itu tetap dianggap "Ollama tidak tersedia" dan fallback ke OpenAI.
+        logger.warning(
+            "Ollama embedding gagal (%s) — fallback ke ChatAnywhere.",
+            ollama_exc,
+        )
+        try:
+            return _embed_openai(text)
+        except Exception as openai_exc:
+            # Keduanya gagal — lempar error asli Ollama agar rag.py tahu
+            raise RuntimeError(
+                f"Embedding gagal total. Ollama: {ollama_exc} | ChatAnywhere: {openai_exc}"
+            ) from ollama_exc
 
 
 def _embed_ollama(text: str) -> List[float]:
     import requests as _req
-    base_url   = getattr(_settings, "ollama_base_url",    "http://localhost:11434")
+    base_url    = getattr(_settings, "ollama_base_url",    "http://localhost:11434")
     embed_model = getattr(_settings, "ollama_embed_model", "nomic-embed-text")
     resp = _req.post(
         f"{base_url}/api/embeddings",
@@ -209,6 +222,18 @@ def _embed_ollama(text: str) -> List[float]:
     )
     resp.raise_for_status()
     vec  = np.array(resp.json()["embedding"], dtype="float32")
+    norm = np.linalg.norm(vec)
+    if norm:
+        vec /= norm
+    return vec.tolist()
+
+
+def _embed_openai(text: str) -> List[float]:
+    resp = _openai_client.embeddings.create(
+        model=_settings.embedding_model,
+        input=text,
+    )
+    vec  = np.array(resp.data[0].embedding, dtype="float32")
     norm = np.linalg.norm(vec)
     if norm:
         vec /= norm

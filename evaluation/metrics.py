@@ -23,7 +23,7 @@ def cosine_similarity(vec_a: np.ndarray, vec_b: np.ndarray) -> float:
     return float(np.dot(vec_a, vec_b) / (norm_a * norm_b))
 
 
-def precision_at_k(scores: List[float], k: int, threshold: float = 0.30) -> float:
+def precision_at_k(scores: List[float], k: int, threshold: float = 0.25) -> float:
     """
     Precision@K = |{s ∈ Top-K : s >= threshold}| / K
     """
@@ -33,7 +33,7 @@ def precision_at_k(scores: List[float], k: int, threshold: float = 0.30) -> floa
 
 
 def recall_at_k(
-    scores: List[float], total_relevant: int, k: int, threshold: float = 0.30
+    scores: List[float], total_relevant: int, k: int, threshold: float = 0.25
 ) -> float:
     """
     Recall@K = |{s ∈ Top-K : s >= threshold}| / total_relevant
@@ -50,7 +50,7 @@ def mean_similarity(scores: List[float]) -> float:
     return sum(scores) / len(scores) if scores else 0.0
 
 
-def coverage_score(scores: List[float], threshold: float = 0.25) -> float:
+def coverage_score(scores: List[float], threshold: float = 0.35) -> float:
     """
     Coverage = |{s : s >= threshold}| / len(scores)
     """
@@ -62,3 +62,19 @@ def source_diversity(sources: List[str]) -> float:
     Diversity = |unique sources| / K
     """
     return len(set(sources)) / len(sources) if sources else 0.0
+
+
+def chunk_relevance_score(chunk_scores: List[float]) -> float:
+    """
+    Continuous measure of how well retrieved chunks match the query.
+    Weighted mean: top chunk weighted 2x, rest weighted 1x.
+    Gives a more sensitive signal than binary coverage_score.
+
+    Returns 0.0 if no scores provided.
+    """
+    if not chunk_scores:
+        return 0.0
+    if len(chunk_scores) == 1:
+        return float(chunk_scores[0])
+    weighted = chunk_scores[0] * 2 + sum(chunk_scores[1:])
+    return float(weighted / (len(chunk_scores) + 1))

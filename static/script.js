@@ -45,6 +45,65 @@ document.addEventListener("DOMContentLoaded", () => {
   const rlEpsText        = document.getElementById("rlEpsText");
 
   // ===========================================================
+  // 2b. Dropdown Profil Kognitif (sederhana)
+  // "Otomatis" → null → RL Agent yang memilih
+  // Pilihan lain → kode profil dikirim langsung ke /chat
+  // ===========================================================
+  const cognitiveSelect = document.getElementById("cognitiveSelect");
+
+  // ── Populate dropdown: opsi otomatis + 48 kombinasi profil kognitif ──
+  // Kode dihasilkan persis sama dengan VALID_COGNITIVE_TYPES
+  // di app/core/cognitive.py:
+  //   f"{n}{pt}{ag}{ir}" for n in ["1".."6"]
+  //                       for pt in ["P","T"]
+  //                       for ag in ["A","G"]
+  //                       for ir in ["I","R"]
+  const LEVEL_DESC = {
+    "1": "Lvl 1 – Remember",
+    "2": "Lvl 2 – Understand",
+    "3": "Lvl 3 – Apply",
+    "4": "Lvl 4 – Analyze",
+    "5": "Lvl 5 – Evaluate",
+    "6": "Lvl 6 – Create",
+  };
+  const PT_MAP = { P: "Pragmatis", T: "Teoritis"  };
+  const AG_MAP = { A: "Analitis",  G: "Global"    };
+  const IR_MAP = { I: "Intuitif",  R: "Reflektif" };
+
+  if (cognitiveSelect) {
+    const autoOpt = document.createElement("option");
+    autoOpt.value = "";
+    autoOpt.textContent = "Otomatis (RL Agent)";
+    cognitiveSelect.appendChild(autoOpt);
+
+    ["1","2","3","4","5","6"].forEach(lvl => {
+      ["P","T"].forEach(pt => {
+        ["A","G"].forEach(ag => {
+          ["I","R"].forEach(ir => {
+            const code  = `${lvl}${pt}${ag}${ir}`;
+            const label = `${code} — ${LEVEL_DESC[lvl]}, ${PT_MAP[pt]}, ${AG_MAP[ag]}, ${IR_MAP[ir]}`;
+            const opt   = document.createElement("option");
+            opt.value       = code;
+            opt.textContent = label;
+            cognitiveSelect.appendChild(opt);
+          });
+        });
+      });
+    });
+    cognitiveSelect.value = ""; // default: otomatis
+  }
+
+  // Helper: cognitive yang akan dikirim ke /chat
+  // "" (Otomatis) → null → RL Agent pilih sendiri
+  // Selain itu     → kode profil terpilih
+  const getActiveCognitive = () => {
+    if (cognitiveSelect && cognitiveSelect.value) {
+      return cognitiveSelect.value;
+    }
+    return null;
+  };
+
+  // ===========================================================
   // 3. State global
   // ===========================================================
   let correctAnswer  = "";   // penjelasan tutor (konteks)
@@ -251,10 +310,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (evalBtn)    evalBtn.disabled = false;
 
     try {
+      // Demo mode: kirim cognitive jika dipilih manual (override RL)
+      // Jika null → RL Agent yang memilih (perilaku normal)
+      const demoCognitive = getActiveCognitive();
+      const chatPayload   = { message, session_id: "default" };
+      if (demoCognitive) chatPayload.cognitive = demoCognitive;
+
       const res = await fetch("/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, session_id: "default" }),
+        body: JSON.stringify(chatPayload),
       });
 
       const data = await res.json();

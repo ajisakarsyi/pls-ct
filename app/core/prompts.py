@@ -15,19 +15,11 @@ Catatan migrasi (main → mvp):
     · Jawaban harus eksak & konkret (bukan esai/konseptual terbuka)
     · Wajib ada nilai/mock-data spesifik dalam skenario
     · DILARANG istilah teknis baru di luar materi referensi
-    · [FIX v2] Ditambahkan {active_topic} agar soal terikat topik sesi aktif
 - EVALUATE_PROMPT_TEMPLATE dipecah:
     · EVALUATE_PROMPT_WITH_QUESTION  → ada pertanyaan followup spesifik
     · EVALUATE_PROMPT_WITHOUT_QUESTION → evaluasi berbasis penjelasan tutor umum
     · Penilaian naik ke 2-3 kalimat (sebelumnya tidak dispesifikkan)
 - FEEDBACK_PROMPT_TEMPLATE tidak berubah struktur
-- [FIX v2] INTENT_CLASSIFIER_PROMPT ditambahkan:
-    · Mendeteksi apakah pesan mahasiswa adalah jawaban soal, permintaan soal baru,
-      protes/komplain, atau pertanyaan baru di luar konteks soal aktif
-    · Dipakai di route /evaluate sebelum dispatch ke evaluator
-- [FIX v2] TOPIC_EXTRACTOR_PROMPT ditambahkan:
-    · Mengekstrak topik aktif sesi dari history untuk di-cache per session_id
-    · Dipakai di generate_reply() sebelum _generate_followup()
 """
 
 # ============================================================
@@ -120,17 +112,11 @@ INSTRUKSI WAJIB:
 # ============================================================
 # FOLLOWUP PROMPT — SOAL LANJUTAN TEKNIKAL
 # Menghasilkan SATU soal studi kasus dengan jawaban eksak.
-# [FIX v2] Ditambahkan {active_topic} agar soal WAJIB berkaitan
-# dengan topik yang sedang dibahas, bukan topik acak lainnya.
-# Dipakai hanya ketika tidak ada hard-coded followup yang cocok.
 # ============================================================
 FOLLOWUP_PROMPT_TEMPLATE = """\
 Kamu adalah tutor universitas di Indonesia yang sedang merancang soal latihan teknikal.
 
 Tipe kognitif mahasiswa: {label}
-
-TOPIK AKTIF SESI INI (WAJIB diikuti):
-{active_topic}
 
 Pertanyaan awal mahasiswa:
 {original_question}
@@ -144,7 +130,6 @@ Materi referensi:
 TUGAS:
 Buat SATU soal lanjutan dengan jawaban eksak (bukan esai atau konseptual terbuka) untuk mengukur pemahaman topik di atas.
 Syarat wajib pertanyaan:
-- TOPIK TERIKAT: Soal HARUS berkaitan langsung dengan topik "{active_topic}". JANGAN membuat soal dari topik lain meskipun kamu mengetahuinya.
 - JAWABAN PASTI & KONKRET: Pertanyaan harus menghasilkan jawaban berupa satu angka pasti, urutan nama/data spesifik, atau nilai output yang mudah divalidasi oleh sistem grading.
 - ADA NILAI & BATASAN: Masukkan variabel dengan batasan (constraints) atau nilai input yang jelas di dalam skenario (contoh: array [5,2,9], batasan n=3, atau urutan data tertentu).
 - BUKAN TEORI: Harus berupa soal tracing, hitungan, atau eksekusi logika berdasarkan konsep yang diajarkan.
@@ -163,7 +148,7 @@ Tulis HANYA pertanyaannya, tanpa penjelasan tambahan.\
 #
 # Dua varian berdasarkan apakah ada pertanyaan followup aktif:
 #   · EVALUATE_PROMPT_WITH_QUESTION    → ada active_question spesifik
-#   · EVALUATE_PROMPT_WITHOUT_QUESTION → evaluasi berbasis penjelasan tutor umum
+#   · EVALUATE_PROMPT_WITHOUT_QUESTION → evaluasi konseptual umum
 #
 # Variabel bersama:
 #   {label}              — label tipe kognitif mahasiswa
@@ -277,66 +262,6 @@ Instruksi umpan balik: {feedback_instruction}
 
 Gunakan \\(...\\) untuk matematika inline dan \\[...\\] untuk persamaan blok.
 JANGAN tambahkan pertanyaan di akhir — pertanyaan lanjutan akan dibuat terpisah.\
-"""
-
-
-# ============================================================
-# [FIX v2] INTENT CLASSIFIER PROMPT
-#
-# Mendeteksi intent dari pesan mahasiswa ketika ada soal aktif.
-# Dipakai di route /evaluate SEBELUM memanggil evaluator.
-#
-# Output yang diharapkan: SATU huruf kapital: A, B, C, atau D.
-#
-#   A → Mahasiswa sedang menjawab soal aktif
-#   B → Mahasiswa meminta soal baru / topik baru / navigasi
-#   C → Mahasiswa komplain, protes, atau mempertanyakan relevansi soal
-#   D → Mahasiswa bertanya hal lain (bukan menjawab soal)
-# ============================================================
-INTENT_CLASSIFIER_PROMPT = """\
-Kamu bertugas menentukan intent dari pesan mahasiswa.
-
-Soal yang sedang aktif:
-"{active_question}"
-
-Pesan mahasiswa:
-"{message}"
-
-Tentukan intent mahasiswa dari pilihan berikut:
-A - Mahasiswa sedang MENJAWAB soal yang aktif di atas (jawaban bisa benar, salah, atau parsial)
-B - Mahasiswa MEMINTA soal baru, meminta topik berbeda, atau ingin lanjut ke hal lain
-C - Mahasiswa KOMPLAIN, PROTES, atau mempertanyakan relevansi/kesesuaian soal
-D - Mahasiswa mengajukan PERTANYAAN BARU yang tidak berkaitan dengan soal aktif
-
-Aturan penilaian:
-- Jika pesan mengandung angka, kode, urutan data, atau penjelasan langsung → kemungkinan besar A
-- Jika pesan mengandung kata "berikan", "kasih", "minta", "soal lagi", "lanjut", "topik lain" → B
-- Jika pesan mengandung kata "kok", "kenapa", "tidak relevan", "salah soal", "saya perbaiki" → C
-- Jika pesan adalah pertanyaan baru yang dimulai dengan "apa", "bagaimana", "jelaskan", "apa itu" → D
-
-Jawab HANYA dengan satu huruf: A, B, C, atau D. Tidak ada penjelasan.\
-"""
-
-
-# ============================================================
-# [FIX v2] TOPIC EXTRACTOR PROMPT
-#
-# Mengekstrak topik utama yang sedang dibahas dari riwayat percakapan.
-# Dipanggil di generate_reply() dan hasilnya di-cache per session_id.
-# Output: string singkat berisi nama topik, maks 5 kata.
-# ============================================================
-TOPIC_EXTRACTOR_PROMPT = """\
-Baca riwayat percakapan berikut dan identifikasi topik utama yang sedang dibahas.
-
-Riwayat percakapan:
-{history}
-
-Pertanyaan terbaru mahasiswa:
-{message}
-
-Tulis HANYA nama topik utamanya dalam 1-5 kata, tanpa penjelasan.
-Contoh output yang benar: "stack dan queue", "rekursi", "sorting algoritma", "dekomposisi CT"
-JANGAN tulis kalimat panjang. JANGAN tulis penjelasan.\
 """
 
 

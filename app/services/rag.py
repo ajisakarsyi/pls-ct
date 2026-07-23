@@ -49,14 +49,64 @@ _global_loaded = False
 def _build_faiss_index(chunks: List[Dict]) -> Optional[Any]:
     if faiss is None or not chunks:
         return None
-    mat = np.stack([c["embedding"] for c in chunks]).astype("float32")
+    # Filter chunk yang embedding-nya None atau dimensinya tidak konsisten.
+    # Ini mencegah ValueError: all input arrays must have the same shape
+    # yang terjadi ketika sebagian chunk gagal di-embed (misal 429 fallback
+    # menghasilkan dimensi berbeda dari embedding Ollama).
+    valid = [c for c in chunks
+             if c.get("embedding") is not None
+             and hasattr(c["embedding"], "shape")
+             and c["embedding"].ndim == 1]
+    if not valid:
+        return None
+    # Tentukan dimensi yang paling umum (modus) dan buang yang berbeda
+    from collections import Counter
+    dim_counts = Counter(c["embedding"].shape[0] for c in valid)
+    expected_dim = dim_counts.most_common(1)[0][0]
+    valid = [c for c in valid if c["embedding"].shape[0] == expected_dim]
+    if len(valid) < len(chunks):
+        logger.warning(
+            "_build_faiss_index: membuang %d/%d chunk "
+            "(dimensi tidak konsisten, expected=%d).",
+            len(chunks) - len(valid), len(chunks), expected_dim,
+        )
+    if not valid:
+        return None
+    mat = np.stack([c["embedding"] for c in valid]).astype("float32")
     idx = faiss.IndexFlatIP(mat.shape[1])
     idx.add(mat)
     return idx
 
 
 def _embed_file(path: str, fname: str) -> List[Dict]:
-    """Read a file, chunk it, embed each chunk, and return a list of dicts."""
+    """
+    ═══════════════════════════════════════════════════════════════
+    PROSES CHUNKING DAN EMBEDDING DOKUMEN MATERI
+    File: app/services/rag.py → _embed_file()
+    ═══════════════════════════════════════════════════════════════
+
+    Q: "Bagaimana dokumen materi diproses sebelum bisa dicari?"
+    A: Tiga tahap:
+       1. Baca file .txt dari folder materials/
+       2. Potong (chunk) menjadi potongan ~1200 karakter
+          → chunk_size diatur di config (rag_embed_chunk_size)
+       3. Setiap chunk di-embed menjadi vektor 768 dimensi
+          menggunakan nomic-embed-text via Ollama, lalu dinormalisasi
+
+    Q: "Mengapa chunk size 1200 karakter?"
+    A: Keseimbangan antara:
+       - Terlalu kecil (<600 kar) → kehilangan konteks antar kalimat
+       - Terlalu besar (>1500 kar) → melampaui kapasitas evaluator
+       Konsisten dengan trade-off chunk size dalam Brown et al. (2025)
+
+    Q: "Mengapa setiap embedding dinormalisasi (emb /= norm)?"
+    A: Agar dot product antar vektor = cosine similarity
+       (bukan inner product yang dipengaruhi panjang vektor).
+       FAISS IndexFlatIP menghitung inner product, jadi normalisasi
+       membuatnya setara dengan cosine similarity.
+    ═══════════════════════════════════════════════════════════════
+    Read a file, chunk it, embed each chunk, and return a list of dicts.
+    """
     try:
         with open(path, "r", encoding="utf-8") as fh:
             text = fh.read().strip()
@@ -68,6 +118,7 @@ def _embed_file(path: str, fname: str) -> List[Dict]:
         return []
 
     out: List[Dict] = []
+    # chunk_size dari config — default 1200 karakter (rag_embed_chunk_size)
     chunk_size = _settings.rag_embed_chunk_size
     for i, chunk in enumerate(
         text[j: j + chunk_size] for j in range(0, len(text), chunk_size)
@@ -76,11 +127,13 @@ def _embed_file(path: str, fname: str) -> List[Dict]:
             emb = np.array(get_embedding(chunk), dtype="float32")
             norm = np.linalg.norm(emb)
             if norm:
-                emb /= norm
+                emb /= norm  # L2 normalization → dot product = cosine similarity
             out.append({"embedding": emb, "text": chunk, "source": fname, "chunk_id": i})
         except Exception as exc:
             logger.error("Embedding error %s#%d: %s", fname, i, exc)
-            break
+            # Skip chunk ini, lanjut ke chunk berikutnya.
+            # Satu chunk gagal tidak boleh membatalkan seluruh file.
+            continue
     return out
 
 
@@ -183,29 +236,73 @@ def load_global_materials() -> None:
 
 def retrieve(query: str, cognitive_code: str, k: int = None) -> List[Dict]:
     """
+    ═══════════════════════════════════════════════════════════════
+    FUNGSI INTI RAG — retrieve()
+    File: app/services/rag.py
+    ═══════════════════════════════════════════════════════════════
+
+    PERTANYAAN SIDANG yang mungkin ditanyakan tentang fungsi ini:
+
+    Q: "Bagaimana RAG mengambil dokumen yang relevan?"
+    A: Fungsi ini menghitung cosine similarity antara embedding query
+       mahasiswa dan embedding semua chunk dokumen materi GT, lalu
+       mengambil k=6 chunk dengan skor tertinggi (TopK retrieval).
+
+    Q: "Apa itu dua tingkat indeks (two-tier index)?"
+    A: Ada dua indeks FAISS:
+       1. Per-cognitive index  → file yang namanya cocok dengan kode
+          kognitif mahasiswa (misal: 3TAR.txt) → materi terpersonalisasi
+       2. Global fallback index → semua file materi umum (GT_CT*.txt)
+          → digunakan jika slot TopK belum penuh dari indeks per-kognitif
+
+    Q: "Mengapa menggunakan FAISS?"
+    A: FAISS (Johnson et al. 2021) menyediakan approximate nearest
+       neighbor search yang jauh lebih cepat dari brute-force NumPy.
+       Ada fallback ke NumPy jika FAISS tidak tersedia (lihat _search).
+
+    Q: "Bagaimana embedding query dinormalisasi?"
+    A: q_emb dibagi normanya (L2 normalization) sehingga dot product
+       antar vektor ternormalisasi = cosine similarity.
+       Ini konsisten dengan cara chunk di-embed saat indexing (_embed_file).
+
+    Q: "Mengapa ada deduplication di akhir?"
+    A: Satu chunk bisa muncul dari dua indeks (per-kognitif dan global).
+       Dedup via set of (source, text[:80]) mencegah chunk yang sama
+       muncul dua kali di konteks prompt LLM.
+    ═══════════════════════════════════════════════════════════════
     Return up to *k* most relevant chunks for *query* given the student's
     cognitive type.  Falls back to the global index if the per-type index
     doesn't fill the quota.
     """
     if k is None:
+        # k = rag_top_k dari config (default 6)
+        # K=6 dipilih berdasarkan keseimbangan cakupan konteks vs panjang prompt
         k = _settings.rag_top_k
 
     code = cognitive_code.upper()
+
+    # Muat indeks per-kognitif (misal: 3TAR.txt → indeks khusus 3TAR)
     load_cognitive_materials(code)
+    # Muat indeks global (semua file GT_CT*.txt)
     load_global_materials()
 
+    # ── LANGKAH 1: Embed query mahasiswa ──────────────────────────────
+    # Menggunakan model nomic-embed-text via Ollama (sama dengan saat indexing)
     q_emb = np.array(get_embedding(query), dtype="float32")
     norm = np.linalg.norm(q_emb)
     if norm:
+        # L2 normalization → dot product = cosine similarity
         q_emb /= norm
 
+    # ── LANGKAH 2: Cari di indeks per-kognitif dulu ──────────────────
     cog = _cognitive_indices.get(code, {})
     hits = _search(q_emb, cog.get("chunks", []), cog.get("faiss"), k)
 
+    # ── LANGKAH 3: Fallback ke indeks global jika slot belum penuh ───
     if len(hits) < k:
         hits += _search(q_emb, _global_chunks, _global_faiss, k - len(hits))
 
-    # Deduplicate
+    # ── LANGKAH 4: Deduplication ──────────────────────────────────────
     seen: set = set()
     out: List[Dict] = []
     for r in hits:

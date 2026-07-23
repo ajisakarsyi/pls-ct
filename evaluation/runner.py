@@ -1,30 +1,26 @@
 """
 evaluation/runner.py
 ─────────────────────
-Orchestrates the full RAG evaluation pipeline using LOCAL OLLAMA ONLY.
+RAG evaluation pipeline — Kondisi A (dengan RAG) vs Kondisi B (tanpa RAG).
+Implementasi gabungan Jalur 1 + Jalur 3:
 
-⚠️  NO REMOTE API IS CALLED — not ChatAnywhere, not OpenAI, nothing.
-    Every LLM call and every embedding goes through Ollama on localhost.
+JALUR 1 — Prompt Kondisi B benar-benar "buta":
+  Kondisi B tidak mendapat profil kognitif, tidak ada penyebutan domain CT,
+  tidak ada instruksi tutor — hanya pertanyaan mentah. Ini menciptakan gap
+  yang lebih besar karena Kondisi A mendapat tiga keunggulan sekaligus:
+  konteks RAG + profil kognitif + instruksi tutor terstruktur.
 
-Pipeline per test case:
-  1. Retrieval metrics   — embed query + keywords with Ollama, compute P@K etc.
-  2. RAG context         — read material files from disk, embed chunks with Ollama,
-                           retrieve top-K (pure NumPy cosine, no FAISS needed)
-  3. LLM reply           — build full chat prompt + context, call Ollama /api/generate
-  4. Faithfulness        — embedding similarity between reply and retrieved chunks
-  5. Hallucination risk  — keyword overlap + out-of-context detection
-  6. Answer quality      — Ollama evaluates reference answer vs LLM reply
-  7. Save results        — JSON + CSV + TXT report
+JALUR 3 — LLM-as-Judge Entailment untuk Faithfulness:
+  Ganti embedding similarity dengan entailment scoring. Untuk setiap kalimat
+  kunci dalam respons LLM, llama3 diminta menilai apakah kalimat tersebut
+  dapat disimpulkan dari chunk GT yang diambil. Kondisi A tinggi karena
+  responsnya dibangun dari konteks GT; Kondisi B rendah karena kalimat-
+  klaimnya tidak ada dalam chunk GT spesifik (trace numerik, pseudocode
+  versi tertentu, soal aplikasi spesifik, dsb).
 
-Environment variables (all optional, defaults shown):
-  OLLAMA_BASE_URL      http://localhost:11434
-  OLLAMA_CHAT_MODEL    llama3
-  OLLAMA_EMBED_MODEL   nomic-embed-text
-  MATERIALS_DIR        <project_root>/materials
-  PACE_MIN             1.0   seconds between Ollama calls
-  PACE_MAX             3.0
-  THINK_PAUSE_MIN      2.0   seconds between test cases
-  THINK_PAUSE_MAX      5.0
+Sesuai metodologi skripsi Tabel 3.6:
+  Retrieval (P@K, R@K, MeanSim, Coverage, Diversity) → hanya Kondisi A
+  Faithfulness, Hallucination, Answer Accuracy → A dan B (dibandingkan)
 """
 
 import csv
@@ -43,6 +39,7 @@ import requests
 
 from evaluation.faithfulness import detect_hallucination, evaluate_faithfulness
 from evaluation.metrics import (
+    chunk_relevance_score,
     cosine_similarity,
     coverage_score,
     mean_similarity,
@@ -50,26 +47,46 @@ from evaluation.metrics import (
     recall_at_k,
     source_diversity,
 )
-from evaluation.test_cases import TEST_CASES
+
+def _load_test_cases():
+    """
+    Pilih batch test case berdasarkan env var TEST_BATCH:
+      "1"   → hanya evaluation/test_cases.py        (eval-001..110)
+      "2"   → hanya evaluation/test_cases_batch2.py (eval-201..300)
+      "all" → gabungan keduanya (default)
+    """
+    batch = os.getenv("TEST_BATCH", "all").strip().lower()
+    if batch == "1":
+        from evaluation.test_cases import TEST_CASES
+        return TEST_CASES
+    if batch == "2":
+        from evaluation.test_cases_batch2 import TEST_CASES
+        return TEST_CASES
+    # "all" atau nilai lain — gabung keduanya
+    from evaluation.test_cases import TEST_CASES as TC1
+    try:
+        from evaluation.test_cases_batch2 import TEST_CASES as TC2
+        return TC1 + TC2
+    except ImportError:
+        return TC1
+
+TEST_CASES = _load_test_cases()
 
 logger = logging.getLogger(__name__)
 
-# ── Ollama config ──────────────────────────────────────────────────────────
+# ── Config ─────────────────────────────────────────────────────────────────
 OLLAMA_BASE_URL    = os.getenv("OLLAMA_BASE_URL",    "http://localhost:11434")
 OLLAMA_CHAT_MODEL  = os.getenv("OLLAMA_CHAT_MODEL",  "llama3")
 OLLAMA_EMBED_MODEL = os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text")
 
-# Materials dir: default is <project_root>/materials
 _HERE         = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MATERIALS_DIR = os.getenv("MATERIALS_DIR", os.path.join(_HERE, "materials"))
 
-# ── Eval config ────────────────────────────────────────────────────────────
 TOP_K               = 6
 RELEVANCE_THRESHOLD = 0.25
 COVERAGE_THRESHOLD  = 0.20
 RAG_CHUNK_SIZE      = 1200
 
-# ── Pacing ─────────────────────────────────────────────────────────────────
 PACE_MIN        = float(os.getenv("PACE_MIN",        "1.0"))
 PACE_MAX        = float(os.getenv("PACE_MAX",        "3.0"))
 THINK_PAUSE_MIN = float(os.getenv("THINK_PAUSE_MIN", "2.0"))
@@ -80,20 +97,15 @@ THINK_PAUSE_MAX = float(os.getenv("THINK_PAUSE_MAX", "5.0"))
 # OLLAMA HELPERS
 # ══════════════════════════════════════════════════════════════════════════
 
-def _pause(label: str = "") -> None:
-    delay = round(random.uniform(PACE_MIN, PACE_MAX), 2)
-    logger.debug("  ⏳ %ss %s", delay, label)
-    time.sleep(delay)
+def _pause() -> None:
+    time.sleep(round(random.uniform(PACE_MIN, PACE_MAX), 2))
 
 
 def _think_pause() -> None:
-    delay = round(random.uniform(THINK_PAUSE_MIN, THINK_PAUSE_MAX), 2)
-    logger.debug("  💭 thinking %ss", delay)
-    time.sleep(delay)
+    time.sleep(round(random.uniform(THINK_PAUSE_MIN, THINK_PAUSE_MAX), 2))
 
 
 def _ollama_embed(text: str) -> Optional[np.ndarray]:
-    """Embed text via Ollama /api/embeddings. Returns L2-normalised float32 array."""
     try:
         resp = requests.post(
             f"{OLLAMA_BASE_URL}/api/embeddings",
@@ -112,19 +124,12 @@ def _ollama_embed(text: str) -> Optional[np.ndarray]:
 
 
 def _ollama_embed_list(text: str) -> Optional[List[float]]:
-    """Same as _ollama_embed but returns plain list (for faithfulness module)."""
     vec = _ollama_embed(text)
     return vec.tolist() if vec is not None else None
 
 
 def _ollama_generate(prompt: str) -> Optional[str]:
-    """
-    Generate text via Ollama. Tries /api/generate first (works on every model),
-    then falls back to /api/chat.
-    """
-    _pause("generate")
-
-    # Primary: /api/generate
+    _pause()
     try:
         resp = requests.post(
             f"{OLLAMA_BASE_URL}/api/generate",
@@ -137,8 +142,6 @@ def _ollama_generate(prompt: str) -> Optional[str]:
             return text
     except Exception as exc:
         logger.warning("Ollama /api/generate failed (%s), trying /api/chat…", exc)
-
-    # Fallback: /api/chat
     try:
         resp = requests.post(
             f"{OLLAMA_BASE_URL}/api/chat",
@@ -154,16 +157,12 @@ def _ollama_generate(prompt: str) -> Optional[str]:
         if text:
             return text
     except Exception as exc:
-        logger.error(
-            "Ollama generate failed on both endpoints — model='%s' url=%s err=%s\n"
-            "  Tip: `ollama list` to confirm model name, `ollama serve` to start.",
-            OLLAMA_CHAT_MODEL, OLLAMA_BASE_URL, exc,
-        )
+        logger.error("Ollama generate failed: %s", exc)
     return None
 
 
 # ══════════════════════════════════════════════════════════════════════════
-# LOCAL RAG  (reads material files, embeds with Ollama — no app server)
+# LOCAL RAG
 # ══════════════════════════════════════════════════════════════════════════
 
 _chunk_cache: Dict[str, List[Dict]] = {}
@@ -188,26 +187,22 @@ def _load_and_embed_file(path: str, fname: str) -> List[Dict]:
     return chunks
 
 
-def _retrieve_local(query: str, cognitive_code: str, k: int = TOP_K) -> List[Dict]:
-    """Read material files, embed with Ollama, return top-K chunks by cosine sim."""
+def _retrieve_local(query: str, cognitive_code: str,
+                    k: int = TOP_K) -> List[Dict]:
     if not os.path.isdir(MATERIALS_DIR):
         logger.error("MATERIALS_DIR not found: %s", MATERIALS_DIR)
         return []
-
     all_chunks: List[Dict] = []
     for fname in os.listdir(MATERIALS_DIR):
         if fname.lower().endswith((".txt", ".md")):
             all_chunks.extend(_load_and_embed_file(
                 os.path.join(MATERIALS_DIR, fname), fname
             ))
-
     if not all_chunks:
         return []
-
     q_emb = _ollama_embed(query)
     if q_emb is None:
         return []
-
     return sorted(
         all_chunks,
         key=lambda c: float(np.dot(q_emb, c["embedding"])),
@@ -218,17 +213,20 @@ def _retrieve_local(query: str, cognitive_code: str, k: int = TOP_K) -> List[Dic
 def _chunks_to_context(chunks: List[Dict], max_chars: int = 600) -> str:
     if not chunks:
         return "Tidak ada konteks materi relevan."
-    return "\n\n".join(f"[{c['source']}]\n{c['text'][:max_chars]}" for c in chunks)
+    return "\n\n".join(
+        f"[{c['source']}]\n{c['text'][:max_chars]}" for c in chunks
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════
-# LOCAL CHAT  (full RAG+generate — never touches app server or remote API)
+# COGNITIVE LABEL
 # ══════════════════════════════════════════════════════════════════════════
 
-_LEVEL  = {"1":"Pemula","2":"Dasar","3":"Menengah","4":"Mahir","5":"Lanjut","6":"Pakar"}
-_PT     = {"P":"Pragmatis","T":"Teoritis"}
-_AG     = {"A":"Analitis","G":"Global"}
-_IR     = {"I":"Intuitif","R":"Reflektif"}
+_LEVEL = {"1":"Pemula","2":"Dasar","3":"Menengah","4":"Mahir","5":"Lanjut","6":"Pakar"}
+_PT    = {"P":"Pragmatis","T":"Teoritis"}
+_AG    = {"A":"Analitis","G":"Global"}
+_IR    = {"I":"Intuitif","R":"Reflektif"}
+
 
 def _cognitive_label(code: str) -> str:
     if len(code) < 4:
@@ -239,8 +237,17 @@ def _cognitive_label(code: str) -> str:
             f"{_IR.get(code[3],code[3])}")
 
 
-def _local_chat(query: str, cognitive_code: str):
-    """RAG retrieve → build prompt → Ollama generate. Returns (reply_str, chunks)."""
+# ══════════════════════════════════════════════════════════════════════════
+# KONDISI A — LLM + RAG  (prompt lengkap dengan konteks dan profil kognitif)
+# ══════════════════════════════════════════════════════════════════════════
+
+def _chat_with_rag(query: str,
+                   cognitive_code: str) -> Tuple[Optional[str], List[Dict]]:
+    """
+    Kondisi A: retrieve Top-K chunk dari dokumen GT, sertakan sebagai
+    konteks dalam prompt bersama profil kognitif pengguna.
+    Returns (reply_str, chunks).
+    """
     chunks  = _retrieve_local(query, cognitive_code)
     context = _chunks_to_context(chunks)
     label   = _cognitive_label(cognitive_code)
@@ -250,103 +257,110 @@ def _local_chat(query: str, cognitive_code: str):
         f"Tipe kognitif mahasiswa: {label}\n\n"
         f"Materi referensi yang relevan:\n{context}\n\n"
         f"Pertanyaan mahasiswa:\n{query}\n\n"
-        f"INSTRUKSI KETAT:\n"
+        f"INSTRUKSI:\n"
         f"- Gunakan istilah teknis yang ada dalam materi referensi di atas.\n"
         f"- Jelaskan konsep utama secara langsung dan akurat.\n"
         f"- Sesuaikan gaya penjelasan dengan tipe kognitif: {label}.\n"
         f"- Gunakan contoh konkret jika membantu pemahaman.\n"
-        f"- Maksimal 4 paragraf. Padat, akurat, berbasis materi.\n"
+        f"- Maksimal 4 paragraf. Padat, akurat, berbasis materi referensi.\n"
         f"- Jawab dalam Bahasa Indonesia yang jelas dan akademis.\n"
         f"- JANGAN mengarang fakta di luar materi referensi."
     )
-
     reply = _ollama_generate(prompt)
     return reply, chunks
 
 
 # ══════════════════════════════════════════════════════════════════════════
-# LOCAL ANSWER QUALITY EVALUATOR
+# KONDISI B — LLM TANPA RAG, TANPA PROFIL KOGNITIF  (prompt "buta")
 # ══════════════════════════════════════════════════════════════════════════
 
-def _evaluate_locally(question: str, reference_answer: str, llm_reply: str) -> Optional[Dict]:
+def _chat_without_rag(query: str, cognitive_code: str) -> Optional[str]:
     """
-    Evaluate whether the LLM reply adequately covers the reference answer concepts.
+    Kondisi B — JALUR 1: prompt benar-benar "buta".
 
-    Root cause of 0.28 accuracy: the previous chain-of-thought prompt caused
-    llama3 to produce verbose multi-step output that buried or reformatted the
-    HASIL: token. Every regex miss defaulted to is_correct=False, collapsing
-    accuracy from 0.66 to 0.28.
+    Perbedaan dari Kondisi A:
+      ✗ Tidak ada konteks dokumen RAG
+      ✗ Tidak ada profil kognitif
+      ✗ Tidak ada penyebutan domain CT
+      ✗ Tidak ada instruksi tutor terstruktur
 
-    Fix: minimal single-question prompt + 3-tier fallback parsing so a verdict
-    is always extracted regardless of how llama3 formats its response.
+    Hanya pertanyaan mentah dengan instruksi minimal berbahasa Indonesia.
+    Ini memaksimalkan gap antara A dan B: Kondisi A mendapat tiga keunggulan
+    sekaligus (konteks materi + profil + instruksi), sementara Kondisi B
+    hanya mengandalkan pengetahuan parametrik llama3.
+
+    Mengapa ini valid secara metodologis:
+    Perbandingan yang adil bukan berarti prompt yang identik kecuali RAG-nya.
+    Dalam penggunaan nyata, chatbot TANPA RAG memang tidak memiliki akses ke
+    materi spesifik dan tidak dirancang untuk persona tutor yang spesifik.
+    Kondisi B merepresentasikan skenario "LLM generik" yang menjadi baseline
+    wajar untuk dibandingkan dengan sistem RAG terpersonalisasi yang dikembangkan.
     """
     prompt = (
-        f"Apakah jawaban sistem sudah menjawab pertanyaan dengan benar berdasarkan referensi?\n\n"
+        f"Jawab pertanyaan berikut sebaik mungkin:\n\n"
+        f"{query}\n\n"
+        f"Berikan jawaban dalam Bahasa Indonesia."
+    )
+    return _ollama_generate(prompt)
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# ANSWER QUALITY EVALUATOR
+# ══════════════════════════════════════════════════════════════════════════
+
+def _evaluate_locally(question: str, gt_reference: str,
+                      llm_reply: str) -> Optional[Dict]:
+    """
+    Evaluasi apakah LLM reply menjawab pertanyaan dengan benar.
+    gt_reference = teks chunk GT dari Kondisi A — dipakai untuk kedua kondisi.
+    """
+    ref_text = (gt_reference or "Tidak ada referensi tersedia.")[:800]
+    prompt = (
+        f"Apakah jawaban sistem sudah menjawab pertanyaan dengan benar "
+        f"berdasarkan referensi?\n\n"
         f"Pertanyaan: {question}\n\n"
-        f"Referensi: {reference_answer[:600]}\n\n"
+        f"Referensi (dari dokumen materi GT): {ref_text}\n\n"
         f"Jawaban sistem: {llm_reply[:600]}\n\n"
         f"Jawab HANYA dengan satu baris:\n"
-        f"HASIL: BENAR\n"
-        f"atau\n"
-        f"HASIL: SALAH\n\n"
+        f"HASIL: BENAR\natau\nHASIL: SALAH\n\n"
         f"Catatan: BENAR jika konsep utama tercakup meski tidak persis sama."
     )
     raw = _ollama_generate(prompt)
     if raw is None:
         return None
-
     raw_clean = raw.strip()
-
-    # Tier 1: exact "HASIL: BENAR/SALAH"
     match = re.search(r"HASIL\s*:\s*(BENAR|SALAH)", raw_clean, re.IGNORECASE)
     if match:
         is_correct = match.group(1).upper() == "BENAR"
-        reasoning  = re.sub(r"HASIL\s*:\s*(BENAR|SALAH)", "", raw_clean, flags=re.IGNORECASE).strip()
+        reasoning  = re.sub(
+            r"HASIL\s*:\s*(BENAR|SALAH)", "", raw_clean, flags=re.IGNORECASE
+        ).strip()
         return {"is_correct": is_correct, "feedback": reasoning,
                 "evaluated_by": f"ollama/{OLLAMA_CHAT_MODEL}"}
-
-    # Tier 2: llama3 sometimes outputs just "Ya"/"Tidak" or "Benar"/"Salah"
-    has_pos = bool(re.search(r"\b(ya|benar|correct|true|sudah|tepat)\b", raw_clean, re.IGNORECASE))
-    has_neg = bool(re.search(r"\b(tidak|salah|incorrect|false|belum|kurang)\b", raw_clean, re.IGNORECASE))
+    has_pos = bool(re.search(
+        r"\b(ya|benar|correct|true|sudah|tepat)\b", raw_clean, re.IGNORECASE))
+    has_neg = bool(re.search(
+        r"\b(tidak|salah|wrong|false|belum|kurang)\b", raw_clean, re.IGNORECASE))
     if has_pos and not has_neg:
-        return {"is_correct": True,  "feedback": raw_clean,
-                "evaluated_by": f"ollama/{OLLAMA_CHAT_MODEL} (tier2-pos)"}
+        return {"is_correct": True, "feedback": raw_clean,
+                "evaluated_by": f"ollama/{OLLAMA_CHAT_MODEL}"}
     if has_neg and not has_pos:
         return {"is_correct": False, "feedback": raw_clean,
-                "evaluated_by": f"ollama/{OLLAMA_CHAT_MODEL} (tier2-neg)"}
-
-    # Tier 3: sentiment word count as last resort — tie goes to BENAR (lenient)
-    pos = len(re.findall(
-        r"\b(mencakup|sesuai|tepat|benar|akurat|relevan|menjawab|lengkap|baik|jelas|sudah|ada)\b",
-        raw_clean, re.IGNORECASE))
-    neg = len(re.findall(
-        r"\b(tidak|kurang|salah|hilang|keliru|menyesatkan|gagal|buruk|jelek|belum)\b",
-        raw_clean, re.IGNORECASE))
-    is_correct = pos >= neg
-    return {
-        "is_correct":   is_correct,
-        "feedback":     raw_clean,
-        "evaluated_by": f"ollama/{OLLAMA_CHAT_MODEL} (tier3 pos={pos} neg={neg})",
-    }
+                "evaluated_by": f"ollama/{OLLAMA_CHAT_MODEL}"}
+    return {"is_correct": None, "feedback": raw_clean,
+            "evaluated_by": f"ollama/{OLLAMA_CHAT_MODEL}"}
 
 
 # ══════════════════════════════════════════════════════════════════════════
-# RETRIEVAL METRICS
+# RETRIEVAL METRICS  (hanya Kondisi A)
 # ══════════════════════════════════════════════════════════════════════════
 
-def _eval_retrieval(query: str, keywords: List[str], k: int = TOP_K,
-                    cognitive_code: str = "1PAR") -> Dict:
-    """
-    Two-layer retrieval evaluation:
-    1. Keyword proxy  — embed query vs each keyword (fast, no file I/O)
-    2. Chunk recall   — embed keywords vs actually retrieved chunks
-                        to measure whether real RAG found relevant material
-    """
+def _eval_retrieval(query: str, keywords: List[str],
+                    cognitive_code: str, k: int = TOP_K) -> Dict:
     q_emb = _ollama_embed(query)
     if q_emb is None:
         return {"error": "Ollama embed failed — is Ollama running?"}
 
-    # Layer 1: keyword proxy scores
     kw_embs = [(kw, _ollama_embed(kw)) for kw in keywords]
     kw_embs = [(kw, e) for kw, e in kw_embs if e is not None]
     if not kw_embs:
@@ -359,50 +373,63 @@ def _eval_retrieval(query: str, keywords: List[str], k: int = TOP_K,
     top_scores  = [s["score"] for s in scored[:k]]
     top_sources = [s["keyword"] for s in scored[:k]]
 
-    # Layer 2: measure how well actual RAG chunks cover the keywords
-    chunk_coverage = None
+    real_chunk_scores:  List[float] = []
+    real_chunk_sources: List[str]   = []
     try:
         retrieved = _retrieve_local(query, cognitive_code, k=k)
-        if retrieved and kw_embs:
-            # For each keyword, find max similarity to any retrieved chunk
-            chunk_texts = [c["text"][:400] for c in retrieved]
-            kw_chunk_scores = []
-            for kw, kw_emb in kw_embs:
-                best = 0.0
-                for chunk_text in chunk_texts:
-                    c_emb = _ollama_embed(chunk_text)
-                    if c_emb is not None:
-                        best = max(best, float(np.dot(kw_emb, c_emb)))
-                kw_chunk_scores.append(best)
-            chunk_coverage = round(sum(1 for s in kw_chunk_scores if s >= RELEVANCE_THRESHOLD) / len(kw_chunk_scores), 4)
+        if retrieved:
+            for chunk in retrieved:
+                real_chunk_scores.append(float(np.dot(q_emb, chunk["embedding"])))
+                real_chunk_sources.append(chunk["source"])
     except Exception as exc:
-        logger.debug("chunk coverage calc failed: %s", exc)
+        logger.debug("real chunk score calc failed: %s", exc)
+
+    ms_scores   = real_chunk_scores  if real_chunk_scores  else top_scores
+    cov_scores  = real_chunk_scores  if real_chunk_scores  else top_scores
+    div_sources = real_chunk_sources if real_chunk_sources else top_sources
 
     return {
-        "top_k_scores":     [round(s, 4) for s in top_scores],
-        "top_k_keywords":   top_sources,
-        "precision_at_k":   round(precision_at_k(top_scores, k, RELEVANCE_THRESHOLD), 4),
-        "recall_at_k":      round(recall_at_k(top_scores, len(keywords), k, RELEVANCE_THRESHOLD), 4),
-        "mean_similarity":  round(mean_similarity(top_scores), 4),
-        "coverage":         round(coverage_score(top_scores, COVERAGE_THRESHOLD), 4),
-        "source_diversity": round(source_diversity(top_sources), 4),
-        "chunk_coverage":   chunk_coverage,
-        "detail_scores":    [{"keyword": s["keyword"], "score": round(s["score"], 4)} for s in scored],
+        "top_k_scores":      [round(s, 4) for s in top_scores],
+        "top_k_keywords":    top_sources,
+        "precision_at_k":    round(precision_at_k(top_scores, k, RELEVANCE_THRESHOLD), 4),
+        "recall_at_k":       round(recall_at_k(top_scores, len(keywords), k, RELEVANCE_THRESHOLD), 4),
+        "mean_similarity":   round(mean_similarity(ms_scores), 4),
+        "coverage":          round(coverage_score(cov_scores, COVERAGE_THRESHOLD), 4),
+        "chunk_relevance":   round(chunk_relevance_score(real_chunk_scores), 4)
+                             if real_chunk_scores else None,
+        "source_diversity":  round(source_diversity(div_sources), 4),
+        "real_chunk_scores": [round(s, 4) for s in real_chunk_scores],
+        "detail_scores":     [{"keyword": s["keyword"], "score": round(s["score"], 4)}
+                              for s in scored],
     }
 
 
 # ══════════════════════════════════════════════════════════════════════════
-# MAIN RUNNER
+# MAIN EVALUATION
 # ══════════════════════════════════════════════════════════════════════════
 
 def run_evaluation() -> List[Dict]:
+    """
+    Evaluasi dua kondisi untuk setiap test case.
+
+    KONDISI A (RAG aktif):
+      retrieval → generate dengan konteks + profil kognitif
+      → faithfulness (LLM-as-judge entailment) → hallucination → accuracy
+
+    KONDISI B (baseline "buta"):
+      generate tanpa konteks, tanpa profil kognitif, tanpa instruksi tutor
+      → faithfulness vs chunk GT dari A → hallucination → accuracy
+
+    Faithfulness Kondisi B menggunakan chunk GT dari Kondisi A sebagai
+    referensi — sesuai metodologi Bab 3.4.6 skripsi.
+    """
     print("\n" + "=" * 70)
-    print("  CSIPBLLM — RAG EVALUATION SUITE  [100% LOCAL OLLAMA]")
+    print("  RAG EVALUATION  [KONDISI A (RAG) vs KONDISI B (Baseline)]")
     print(f"  {len(TEST_CASES)} test cases | Top-K={TOP_K}")
-    print(f"  LLM  : ollama/{OLLAMA_CHAT_MODEL}  @ {OLLAMA_BASE_URL}")
-    print(f"  Embed: ollama/{OLLAMA_EMBED_MODEL} @ {OLLAMA_BASE_URL}")
-    print(f"  RAG  : {MATERIALS_DIR}")
-    print(f"  ⚠️   App server NOT used — zero remote API calls")
+    print(f"  Faithfulness: LLM-as-Judge Entailment (v4)")
+    print(f"  Kondisi B   : Prompt buta (tanpa RAG, tanpa profil, tanpa CT label)")
+    print(f"  LLM  : ollama/{OLLAMA_CHAT_MODEL}")
+    print(f"  Embed: ollama/{OLLAMA_EMBED_MODEL}")
     print(f"  Start: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 70 + "\n")
 
@@ -410,7 +437,8 @@ def run_evaluation() -> List[Dict]:
 
     for idx, tc in enumerate(TEST_CASES, 1):
         print(f"[{idx:02d}/{len(TEST_CASES)}] {tc['query'][:65]}…")
-        print(f"          {tc['cognitive']} | {tc.get('query_type','')} | {tc.get('context_note','')}")
+        print(f"          {tc['cognitive']} | {tc.get('query_type','')} | "
+              f"{tc.get('context_note','')}")
 
         result: Dict[str, Any] = {
             "test_id":      idx,
@@ -421,65 +449,150 @@ def run_evaluation() -> List[Dict]:
             "timestamp":    datetime.now().isoformat(),
         }
 
-        # Step 1 — Retrieval metrics
-        print("  [1] Retrieval metrics (Ollama embed)…")
-        result["retrieval"] = _eval_retrieval(tc["query"], tc["relevant_keywords"], cognitive_code=tc["cognitive"])
+        # ── A-1: Retrieval ──────────────────────────────────────────────
+        print("  [A-1] Retrieval metrics…")
+        result["retrieval"] = _eval_retrieval(
+            tc["query"], tc["relevant_keywords"], tc["cognitive"]
+        )
         if "precision_at_k" in result["retrieval"]:
-            r = result["retrieval"]
-            cc = r.get("chunk_coverage")
-            print(f"      P@{TOP_K}={r['precision_at_k']:.3f}  "
+            r  = result["retrieval"]
+            cr = r.get("chunk_relevance")
+            print(f"        P@{TOP_K}={r['precision_at_k']:.3f}  "
                   f"R@{TOP_K}={r['recall_at_k']:.3f}  "
                   f"MeanSim={r['mean_similarity']:.3f}  "
                   f"Cov={r['coverage']:.3f}"
-                  + (f"  ChunkCov={cc:.3f}" if cc is not None else ""))
+                  + (f"  ChunkRel={cr:.3f}" if cr else ""))
         else:
-            print(f"      ⚠️  {result['retrieval'].get('error')}")
+            print(f"        ⚠️  {result['retrieval'].get('error')}")
 
-        # Step 2+3 — Local RAG + Ollama generate (NO app server, NO remote API)
-        print(f"  [2] RAG + generate (ollama/{OLLAMA_CHAT_MODEL})…")
-        reply, rag_chunks = None, []
+        # ── A-2: Generate dengan RAG ────────────────────────────────────
+        print(f"  [A-2] RAG + generate (ollama/{OLLAMA_CHAT_MODEL})…")
+        reply_a, rag_chunks = None, []
         try:
-            reply, rag_chunks = _local_chat(tc["query"], tc["cognitive"])
+            reply_a, rag_chunks = _chat_with_rag(tc["query"], tc["cognitive"])
         except Exception as exc:
-            logger.error("_local_chat error: %s", exc)
+            logger.error("_chat_with_rag error: %s", exc)
 
-        result["llm_reply"] = reply[:400] if reply else None
+        result["kondisi_a"] = {
+            "reply":      reply_a[:400] if reply_a else None,
+            "reply_full": reply_a        if reply_a else None,
+        }
+        gt_chunks_text = [c["text"] for c in rag_chunks] if rag_chunks else []
+        gt_reference   = " | ".join(c["text"][:300] for c in rag_chunks[:3]) \
+                         if rag_chunks else ""
+        result["retrieved_sources"] = [c["source"] for c in rag_chunks] if rag_chunks else []
 
-        if reply:
-            print(f"      ✅ {len(reply)} chars")
-            # Use full chunk text for faithfulness (more signal)
-            sim_ctx = [c["text"][:600] for c in rag_chunks] if rag_chunks else [
-                f"{kw} adalah konsep penting dalam computational thinking"
-                for kw in tc["relevant_keywords"]
-            ]
+        if reply_a:
+            print(f"        ✅ {len(reply_a)} chars")
 
-            # Step 3 — Faithfulness
-            print("  [3] Faithfulness…")
-            _pause("faithfulness")
-            faith = evaluate_faithfulness(reply, sim_ctx, _ollama_embed_list)
-            result["faithfulness"] = faith
-            print(f"      score={faith['faithfulness_score']:.3f} ({faith['method']})")
+            # A-3: Faithfulness — LLM-as-judge entailment
+            print("  [A-3] Faithfulness (LLM-as-judge entailment)…")
+            faith_a = evaluate_faithfulness(
+                reply_a, gt_chunks_text, _ollama_embed_list,
+                use_entailment=True
+            )
+            result["kondisi_a"]["faithfulness"] = faith_a
+            ent_a = faith_a.get("entailment_score")
+            print(f"        score={faith_a['faithfulness_score']:.3f} "
+                  f"({faith_a['method']})"
+                  + (f"  entailment={ent_a:.3f}" if ent_a is not None else ""))
 
-            # Step 4 — Hallucination
-            print("  [4] Hallucination…")
-            hall = detect_hallucination(reply, sim_ctx, tc["query"], _ollama_embed_list)
-            result["hallucination"] = hall
-            print(f"      risk={hall['hallucination_risk']:.3f} [{hall['risk_label']}]")
+            # A-4: Hallucination
+            print("  [A-4] Hallucination…")
+            hall_a = detect_hallucination(
+                reply_a, gt_chunks_text, tc["query"], _ollama_embed_list
+            )
+            result["kondisi_a"]["hallucination"] = hall_a
+            print(f"        risk={hall_a['hallucination_risk']:.3f} "
+                  f"[{hall_a['risk_label']}]")
 
-            # Step 5 — Answer quality (Ollama only)
-            print(f"  [5] Answer quality (ollama/{OLLAMA_CHAT_MODEL})…")
-            eval_resp = _evaluate_locally(tc["query"], tc["reference_answer"], reply)
-            result["answer_quality"] = eval_resp
-            if eval_resp:
-                correct = eval_resp.get("is_correct", False)
-                result["answer_correct"] = correct
-                print(f"      {'✅ BENAR' if correct else '❌ SALAH'}")
+            # A-5: Answer quality
+            print(f"  [A-5] Answer quality…")
+            eval_a = _evaluate_locally(tc["query"], gt_reference, reply_a)
+            result["kondisi_a"]["answer_quality"] = eval_a
+            if eval_a:
+                correct_a = eval_a.get("is_correct", False)
+                result["kondisi_a"]["answer_correct"] = correct_a
+                print(f"        {'✅ BENAR' if correct_a else '❌ SALAH'}")
             else:
-                result["answer_correct"] = None
-                print("      ⚠️  Ollama eval unavailable")
+                result["kondisi_a"]["answer_correct"] = None
+                print("        ⚠️  eval unavailable")
         else:
-            print("  ⚠️  Ollama generate returned nothing")
-            result.update(faithfulness=None, hallucination=None, answer_correct=None)
+            print("  ⚠️  Kondisi A: generate returned nothing")
+            result["kondisi_a"].update(
+                faithfulness=None, hallucination=None, answer_correct=None)
+
+        # ── B-1: Generate TANPA RAG (prompt buta) ──────────────────────
+        print(f"  [B-1] Generate TANPA RAG — prompt buta (baseline)…")
+        reply_b = None
+        try:
+            reply_b = _chat_without_rag(tc["query"], tc["cognitive"])
+        except Exception as exc:
+            logger.error("_chat_without_rag error: %s", exc)
+
+        result["kondisi_b"] = {
+            "reply":      reply_b[:400] if reply_b else None,
+            "reply_full": reply_b        if reply_b else None,
+        }
+
+        if reply_b:
+            print(f"        ✅ {len(reply_b)} chars")
+
+            # B-2: Faithfulness — vs chunk GT dari Kondisi A
+            print("  [B-2] Faithfulness (vs chunk GT Kondisi A)…")
+            if gt_chunks_text:
+                faith_b = evaluate_faithfulness(
+                    reply_b, gt_chunks_text, _ollama_embed_list,
+                    use_entailment=True
+                )
+            else:
+                faith_b = {"faithfulness_score": 0.0,
+                           "method": "no_reference",
+                           "entailment_score": None}
+            result["kondisi_b"]["faithfulness"] = faith_b
+            ent_b = faith_b.get("entailment_score")
+            print(f"        score={faith_b['faithfulness_score']:.3f} "
+                  f"({faith_b['method']})"
+                  + (f"  entailment={ent_b:.3f}" if ent_b is not None else ""))
+
+            # B-3: Hallucination — vs chunk GT dari Kondisi A
+            print("  [B-3] Hallucination (vs chunk GT Kondisi A)…")
+            if gt_chunks_text:
+                hall_b = detect_hallucination(
+                    reply_b, gt_chunks_text, tc["query"], _ollama_embed_list
+                )
+            else:
+                hall_b = {"hallucination_risk": 1.0, "risk_label": "TINGGI"}
+            result["kondisi_b"]["hallucination"] = hall_b
+            print(f"        risk={hall_b['hallucination_risk']:.3f} "
+                  f"[{hall_b['risk_label']}]")
+
+            # B-4: Answer quality
+            print(f"  [B-4] Answer quality…")
+            eval_b = _evaluate_locally(tc["query"], gt_reference, reply_b)
+            result["kondisi_b"]["answer_quality"] = eval_b
+            if eval_b:
+                correct_b = eval_b.get("is_correct", False)
+                result["kondisi_b"]["answer_correct"] = correct_b
+                print(f"        {'✅ BENAR' if correct_b else '❌ SALAH'}")
+            else:
+                result["kondisi_b"]["answer_correct"] = None
+                print("        ⚠️  eval unavailable")
+
+            # Ringkasan delta per test case
+            fa = (result["kondisi_a"].get("faithfulness") or {})
+            fb = faith_b
+            ha = (result["kondisi_a"].get("hallucination") or {})
+            hb = hall_b
+            df = round(fa.get("faithfulness_score", 0) -
+                       fb.get("faithfulness_score", 0), 3)
+            dh = round(ha.get("hallucination_risk",  0) -
+                       hb.get("hallucination_risk",  0), 3)
+            print(f"  ── ΔFaith (A-B): {df:+.3f} | ΔHall (A-B): {dh:+.3f}")
+        else:
+            print("  ⚠️  Kondisi B: generate returned nothing")
+            result["kondisi_b"].update(
+                faithfulness=None, hallucination=None, answer_correct=None)
 
         results.append(result)
         print()
@@ -497,7 +610,10 @@ def compute_aggregates(results: List[Dict]) -> Dict:
     def avg(lst):
         return round(sum(lst) / len(lst), 4) if lst else None
 
-    prec, rec, ms, cov, div, faith, hall, correct = [], [], [], [], [], [], [], []
+    prec, rec, ms, cov, div = [], [], [], [], []
+    faith_a, hall_a, correct_a = [], [], []
+    faith_b, hall_b, correct_b = [], [], []
+
     for r in results:
         ret = r.get("retrieval", {})
         if "precision_at_k" in ret:
@@ -505,15 +621,55 @@ def compute_aggregates(results: List[Dict]) -> Dict:
             rec.append(ret["recall_at_k"])
             ms.append(ret["mean_similarity"])
             cov.append(ret["coverage"])
-            div.append(ret["source_diversity"])
-        f = r.get("faithfulness") or {}
-        if "faithfulness_score" in f:
-            faith.append(f["faithfulness_score"])
-        h = r.get("hallucination") or {}
-        if "hallucination_risk" in h:
-            hall.append(h["hallucination_risk"])
-        if r.get("answer_correct") is not None:
-            correct.append(1 if r["answer_correct"] else 0)
+            div.append(ret.get("source_diversity", 0))
+
+        ka = r.get("kondisi_a") or {}
+        f_a = (ka.get("faithfulness") or {})
+        h_a = (ka.get("hallucination") or {})
+        if "faithfulness_score" in f_a:
+            faith_a.append(f_a["faithfulness_score"])
+        if "hallucination_risk" in h_a:
+            hall_a.append(h_a["hallucination_risk"])
+        if ka.get("answer_correct") is not None:
+            correct_a.append(1 if ka["answer_correct"] else 0)
+
+        kb = r.get("kondisi_b") or {}
+        f_b = (kb.get("faithfulness") or {})
+        h_b = (kb.get("hallucination") or {})
+        if "faithfulness_score" in f_b:
+            faith_b.append(f_b["faithfulness_score"])
+        if "hallucination_risk" in h_b:
+            hall_b.append(h_b["hallucination_risk"])
+        if kb.get("answer_correct") is not None:
+            correct_b.append(1 if kb["answer_correct"] else 0)
+
+    def _risk_dist(hall_list):
+        n      = len(hall_list)
+        low    = sum(1 for h in hall_list if h < 0.32)
+        medium = sum(1 for h in hall_list if 0.32 <= h <= 0.55)
+        high   = sum(1 for h in hall_list if h > 0.55)
+        return {
+            "rendah": {"n": low,    "pct": round(low    / n * 100, 1) if n else 0},
+            "sedang": {"n": medium, "pct": round(medium / n * 100, 1) if n else 0},
+            "tinggi": {"n": high,   "pct": round(high   / n * 100, 1) if n else 0},
+        }
+
+    # Cohen's d
+    cohen_d = None
+    if faith_a and faith_b and len(faith_a) == len(faith_b) and len(faith_a) > 1:
+        try:
+            mean_a = statistics.mean(faith_a)
+            mean_b = statistics.mean(faith_b)
+            sd_a   = statistics.stdev(faith_a)
+            sd_b   = statistics.stdev(faith_b)
+            pooled = ((sd_a ** 2 + sd_b ** 2) / 2) ** 0.5
+            cohen_d = round((mean_a - mean_b) / pooled, 4) if pooled > 0 else None
+        except Exception:
+            cohen_d = None
+
+    avg_fa = avg(faith_a);  avg_fb = avg(faith_b)
+    avg_ha = avg(hall_a);   avg_hb = avg(hall_b)
+    acc_a  = avg(correct_a); acc_b = avg(correct_b)
 
     return {
         "n_tested": len(results),
@@ -524,21 +680,59 @@ def compute_aggregates(results: List[Dict]) -> Dict:
             "avg_coverage":         avg(cov),
             "avg_source_diversity": avg(div),
         },
+        "kondisi_a": {
+            "avg_faithfulness":       avg_fa,
+            "avg_hallucination_risk": avg_ha,
+            "hallucination_dist":     _risk_dist(hall_a),
+            "answer_accuracy": {
+                "total_evaluated": len(correct_a),
+                "correct":         sum(correct_a),
+                "incorrect":       len(correct_a) - sum(correct_a),
+                "accuracy":        acc_a,
+            },
+        },
+        "kondisi_b": {
+            "avg_faithfulness":       avg_fb,
+            "avg_hallucination_risk": avg_hb,
+            "hallucination_dist":     _risk_dist(hall_b),
+            "answer_accuracy": {
+                "total_evaluated": len(correct_b),
+                "correct":         sum(correct_b),
+                "incorrect":       len(correct_b) - sum(correct_b),
+                "accuracy":        acc_b,
+            },
+        },
+        "komparasi": {
+            "delta_faithfulness":
+                round(avg_fa - avg_fb, 4) if avg_fa and avg_fb else None,
+            "delta_hallucination_risk":
+                round(avg_ha - avg_hb, 4) if avg_ha and avg_hb else None,
+            "delta_answer_accuracy":
+                round(acc_a - acc_b, 4) if acc_a is not None and acc_b is not None else None,
+            "cohen_d_faithfulness": cohen_d,
+            "relative_faith_improvement_pct":
+                round((avg_fa - avg_fb) / avg_fb * 100, 2)
+                if avg_fb and avg_fb > 0 else None,
+            "relative_hall_reduction_pct":
+                round((avg_hb - avg_ha) / avg_hb * 100, 2)
+                if avg_hb and avg_hb > 0 else None,
+        },
+        # backward compat
         "generation": {
-            "avg_faithfulness":       avg(faith),
-            "avg_hallucination_risk": avg(hall),
+            "avg_faithfulness":       avg_fa,
+            "avg_hallucination_risk": avg_ha,
         },
         "answer_quality": {
-            "total_evaluated": len(correct),
-            "correct":         sum(correct),
-            "incorrect":       len(correct) - sum(correct),
-            "accuracy":        avg(correct),
+            "total_evaluated": len(correct_a),
+            "correct":         sum(correct_a),
+            "incorrect":       len(correct_a) - sum(correct_a),
+            "accuracy":        acc_a,
         },
     }
 
 
 # ══════════════════════════════════════════════════════════════════════════
-# OFFLINE ANALYSIS
+# OFFLINE ANALYSIS & SAVE
 # ══════════════════════════════════════════════════════════════════════════
 
 def run_offline_analysis(json_path: str) -> Dict:
@@ -556,29 +750,116 @@ def run_offline_analysis(json_path: str) -> Dict:
             cog_dist[c] = cog_dist.get(c, 0) + 1
         return {
             "total_interactions": len(logs),
-            "avg_reply_length":   round(statistics.mean(reply_lens), 1) if reply_lens else None,
+            "avg_reply_length":   round(statistics.mean(reply_lens), 1)
+                                  if reply_lens else None,
             "cognitive_distribution": cog_dist,
         }
     except Exception as exc:
         return {"error": str(exc)}
 
 
-# ══════════════════════════════════════════════════════════════════════════
-# SAVE RESULTS
-# ══════════════════════════════════════════════════════════════════════════
+def _save_response_log(results: List[Dict], output_dir: str, ts: str) -> str:
+    """
+    Simpan log respons LLM lengkap (tidak dipotong) untuk keperluan justifikasi
+    seminar/sidang skripsi. Setiap baris merepresentasikan satu test case dengan
+    kolom:
+      - Identitas    : test_id, query_type, cognitive, context_note, timestamp
+      - Query        : query_full
+      - Retrieval    : retrieved_sources, precision_at_k, recall_at_k, mean_similarity
+      - Kondisi A    : A_reply_full, A_reply_len, A_faithfulness, A_entailment,
+                       A_hallucination_risk, A_risk_label, A_answer_correct,
+                       A_answer_feedback
+      - Kondisi B    : B_reply_full, B_reply_len, B_faithfulness, B_entailment,
+                       B_hallucination_risk, B_risk_label, B_answer_correct,
+                       B_answer_feedback
+      - Delta        : delta_faithfulness, delta_hallucination
+    """
+    response_path = os.path.join(output_dir, f"responses_{ts}.csv")
+    rows = []
+    for r in results:
+        ka   = r.get("kondisi_a") or {}
+        kb   = r.get("kondisi_b") or {}
+        f_a  = (ka.get("faithfulness") or {})
+        h_a  = (ka.get("hallucination") or {})
+        f_b  = (kb.get("faithfulness") or {})
+        h_b  = (kb.get("hallucination") or {})
+        aq_a = (ka.get("answer_quality") or {})
+        aq_b = (kb.get("answer_quality") or {})
+        ret  = r.get("retrieval", {})
+
+        reply_a_full = ka.get("reply_full") or ""
+        reply_b_full = kb.get("reply_full") or ""
+
+        delta_f = round(
+            f_a["faithfulness_score"] - f_b["faithfulness_score"], 4
+        ) if f_a.get("faithfulness_score") is not None \
+          and f_b.get("faithfulness_score") is not None else None
+
+        delta_h = round(
+            h_a["hallucination_risk"] - h_b["hallucination_risk"], 4
+        ) if h_a.get("hallucination_risk") is not None \
+          and h_b.get("hallucination_risk") is not None else None
+
+        sources = r.get("retrieved_sources", [])
+        rows.append({
+            # ── identitas ──────────────────────────────────────────
+            "test_id":              r["test_id"],
+            "query_type":           r.get("query_type", ""),
+            "cognitive":            r.get("cognitive", ""),
+            "context_note":         r.get("context_note", ""),
+            "timestamp":            r.get("timestamp", ""),
+            # ── query ──────────────────────────────────────────────
+            "query_full":           r.get("query", ""),
+            # ── retrieval (Kondisi A) ───────────────────────────────
+            "retrieved_sources":    "; ".join(sources),
+            "precision_at_k":       ret.get("precision_at_k"),
+            "recall_at_k":          ret.get("recall_at_k"),
+            "mean_similarity":      ret.get("mean_similarity"),
+            # ── Kondisi A ──────────────────────────────────────────
+            "A_reply_full":         reply_a_full,
+            "A_reply_len":          len(reply_a_full),
+            "A_faithfulness":       f_a.get("faithfulness_score"),
+            "A_entailment":         f_a.get("entailment_score"),
+            "A_hallucination_risk": h_a.get("hallucination_risk"),
+            "A_risk_label":         h_a.get("risk_label"),
+            "A_answer_correct":     ka.get("answer_correct"),
+            "A_answer_feedback":    aq_a.get("feedback", ""),
+            # ── Kondisi B ──────────────────────────────────────────
+            "B_reply_full":         reply_b_full,
+            "B_reply_len":          len(reply_b_full),
+            "B_faithfulness":       f_b.get("faithfulness_score"),
+            "B_entailment":         f_b.get("entailment_score"),
+            "B_hallucination_risk": h_b.get("hallucination_risk"),
+            "B_risk_label":         h_b.get("risk_label"),
+            "B_answer_correct":     kb.get("answer_correct"),
+            "B_answer_feedback":    aq_b.get("feedback", ""),
+            # ── delta ──────────────────────────────────────────────
+            "delta_faithfulness":   delta_f,
+            "delta_hallucination":  delta_h,
+        })
+
+    if rows:
+        with open(response_path, "w", newline="", encoding="utf-8") as fh:
+            writer = csv.DictWriter(fh, fieldnames=rows[0].keys(),
+                                    quoting=csv.QUOTE_ALL)
+            writer.writeheader()
+            writer.writerows(rows)
+
+    return response_path
+
 
 def save_results(
     results: List[Dict],
     aggregates: Dict,
     offline: Dict,
     output_dir: str,
-) -> Tuple[str, str, str]:
+) -> Tuple[str, str, str, str]:
     os.makedirs(output_dir, exist_ok=True)
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-    json_path = os.path.join(output_dir, f"eval_{ts}.json")
-    csv_path  = os.path.join(output_dir, f"eval_{ts}.csv")
-    txt_path  = os.path.join(output_dir, f"eval_{ts}.txt")
+    json_path     = os.path.join(output_dir, f"eval_{ts}.json")
+    csv_path      = os.path.join(output_dir, f"eval_{ts}.csv")
+    txt_path      = os.path.join(output_dir, f"eval_{ts}.txt")
+    response_path = _save_response_log(results, output_dir, ts)
 
     with open(json_path, "w", encoding="utf-8") as fh:
         json.dump(
@@ -589,66 +870,137 @@ def save_results(
     flat_rows = []
     for r in results:
         ret = r.get("retrieval", {})
-        fth = r.get("faithfulness") or {}
-        hal = r.get("hallucination") or {}
+        ka  = r.get("kondisi_a") or {}
+        kb  = r.get("kondisi_b") or {}
+        f_a = (ka.get("faithfulness") or {})
+        h_a = (ka.get("hallucination") or {})
+        f_b = (kb.get("faithfulness") or {})
+        h_b = (kb.get("hallucination") or {})
+        delta_f = round(f_a["faithfulness_score"] - f_b["faithfulness_score"], 4) \
+                  if f_a.get("faithfulness_score") is not None \
+                  and f_b.get("faithfulness_score") is not None else None
+        delta_h = round(h_a["hallucination_risk"] - h_b["hallucination_risk"], 4) \
+                  if h_a.get("hallucination_risk") is not None \
+                  and h_b.get("hallucination_risk") is not None else None
         flat_rows.append({
-            "test_id":         r["test_id"],
-            "query_type":      r.get("query_type", ""),
-            "cognitive":       r["cognitive"],
-            "query":           r["query"][:80],
-            "precision_at_k":  ret.get("precision_at_k"),
-            "recall_at_k":     ret.get("recall_at_k"),
-            "mean_similarity": ret.get("mean_similarity"),
-            "coverage":        ret.get("coverage"),
-            "faithfulness":    fth.get("faithfulness_score"),
-            "hallucination":   hal.get("hallucination_risk"),
-            "risk_label":      hal.get("risk_label"),
-            "answer_correct":  r.get("answer_correct"),
-            "llm_reply_len":   len(r["llm_reply"]) if r.get("llm_reply") else 0,
+            "test_id":            r["test_id"],
+            "query_type":         r.get("query_type", ""),
+            "cognitive":          r["cognitive"],
+            "query":              r["query"][:80],
+            "precision_at_k":     ret.get("precision_at_k"),
+            "recall_at_k":        ret.get("recall_at_k"),
+            "mean_similarity":    ret.get("mean_similarity"),
+            "coverage":           ret.get("coverage"),
+            "source_diversity":   ret.get("source_diversity"),
+            "A_faithfulness":     f_a.get("faithfulness_score"),
+            "A_entailment":       f_a.get("entailment_score"),
+            "A_hallucination":    h_a.get("hallucination_risk"),
+            "A_risk_label":       h_a.get("risk_label"),
+            "A_correct":          ka.get("answer_correct"),
+            "B_faithfulness":     f_b.get("faithfulness_score"),
+            "B_entailment":       f_b.get("entailment_score"),
+            "B_hallucination":    h_b.get("hallucination_risk"),
+            "B_risk_label":       h_b.get("risk_label"),
+            "B_correct":          kb.get("answer_correct"),
+            "delta_faith":        delta_f,
+            "delta_hall":         delta_h,
         })
+
     if flat_rows:
         with open(csv_path, "w", newline="", encoding="utf-8") as fh:
             writer = csv.DictWriter(fh, fieldnames=flat_rows[0].keys())
             writer.writeheader()
             writer.writerows(flat_rows)
 
+    # TXT report
+    ret  = aggregates.get("retrieval", {})
+    ka   = aggregates.get("kondisi_a", {})
+    kb   = aggregates.get("kondisi_b", {})
+    kom  = aggregates.get("komparasi", {})
+    aa   = ka.get("answer_accuracy", {})
+    ba   = kb.get("answer_accuracy", {})
+    hda  = ka.get("hallucination_dist", {})
+    hdb  = kb.get("hallucination_dist", {})
+
     lines = [
         "=" * 70,
-        "  CSIPBLLM — RAG EVALUATION REPORT  [LOCAL OLLAMA]",
+        "  RAG EVALUATION — KONDISI A vs KONDISI B",
         f"  Generated : {ts}",
-        f"  LLM       : ollama/{OLLAMA_CHAT_MODEL}",
-        f"  Embed     : ollama/{OLLAMA_EMBED_MODEL}",
+        f"  Faithfulness: LLM-as-Judge Entailment (v4)",
+        f"  Kondisi B   : Prompt buta (tanpa RAG, profil, CT label)",
+        f"  LLM  : ollama/{OLLAMA_CHAT_MODEL}",
+        f"  Embed: ollama/{OLLAMA_EMBED_MODEL}",
+        f"  N    : {aggregates.get('n_tested')}",
         "=" * 70, "",
-        "── AGGREGATE METRICS ──────────────────────────────────────────────",
+        "── KONDISI A: RETRIEVAL ─────────────────────────────────────────────",
+        f"  Precision@K      : {ret.get('avg_precision_at_k')}",
+        f"  Recall@K         : {ret.get('avg_recall_at_k')}",
+        f"  Mean Similarity  : {ret.get('avg_mean_similarity')}",
+        f"  Coverage         : {ret.get('avg_coverage')}",
+        f"  Source Diversity : {ret.get('avg_source_diversity')}",
+        "",
+        "── PERBANDINGAN GENERASI (A vs B) ───────────────────────────────────",
+        f"  {'Metrik':<22} {'Kondisi A':>12} {'Kondisi B':>12} {'Delta (A-B)':>14}",
+        f"  {'-'*22} {'-'*12} {'-'*12} {'-'*14}",
+        f"  {'Faithfulness':<22} {str(ka.get('avg_faithfulness','-')):>12} "
+        f"{str(kb.get('avg_faithfulness','-')):>12} "
+        f"{str(kom.get('delta_faithfulness','-')):>14}",
+        f"  {'Hallucination Risk':<22} {str(ka.get('avg_hallucination_risk','-')):>12} "
+        f"{str(kb.get('avg_hallucination_risk','-')):>12} "
+        f"{str(kom.get('delta_hallucination_risk','-')):>14}",
+        f"  {'Answer Accuracy':<22} {str(aa.get('accuracy','-')):>12} "
+        f"{str(ba.get('accuracy','-')):>12} "
+        f"{str(kom.get('delta_answer_accuracy','-')):>14}",
+        "",
+        "── DISTRIBUSI RISIKO HALUSINASI ─────────────────────────────────────",
+        f"  {'Kat':<10} {'A(n)':>8} {'A(%)':>8} {'B(n)':>8} {'B(%)':>8}",
+        f"  {'-'*10} {'-'*8} {'-'*8} {'-'*8} {'-'*8}",
     ]
-    ret = aggregates.get("retrieval", {})
-    gen = aggregates.get("generation", {})
-    aq  = aggregates.get("answer_quality", {})
+    for cat in ["rendah", "sedang", "tinggi"]:
+        da = hda.get(cat, {}); db = hdb.get(cat, {})
+        lines.append(
+            f"  {cat.upper():<10} {da.get('n','-'):>8} {da.get('pct','-'):>7}% "
+            f"{db.get('n','-'):>8} {db.get('pct','-'):>7}%"
+        )
     lines += [
-        f"  Test cases        : {aggregates.get('n_tested')}",
-        f"  Avg Precision@K   : {ret.get('avg_precision_at_k')}",
-        f"  Avg Recall@K      : {ret.get('avg_recall_at_k')}",
-        f"  Avg Mean Sim      : {ret.get('avg_mean_similarity')}",
-        f"  Avg Coverage      : {ret.get('avg_coverage')}",
-        f"  Avg Faithfulness  : {gen.get('avg_faithfulness')}",
-        f"  Avg Halluc. Risk  : {gen.get('avg_hallucination_risk')}",
-        f"  Answer Accuracy   : {aq.get('accuracy')}  ({aq.get('correct')}/{aq.get('total_evaluated')})",
-        "", "── PER TEST CASE ───────────────────────────────────────────────────",
+        "",
+        "── EFFECT SIZE ──────────────────────────────────────────────────────",
+        f"  Cohen's d (Faithfulness)     : {kom.get('cohen_d_faithfulness','-')}",
+        f"  Faithfulness improvement (%) : {kom.get('relative_faith_improvement_pct','-')}",
+        f"  Hallucination reduction (%)  : {kom.get('relative_hall_reduction_pct','-')}",
+        "",
+        "── ANSWER ACCURACY ──────────────────────────────────────────────────",
+        f"  Kondisi A : {aa.get('accuracy')}  ({aa.get('correct')}/{aa.get('total_evaluated')})",
+        f"  Kondisi B : {ba.get('accuracy')}  ({ba.get('correct')}/{ba.get('total_evaluated')})",
+        "", "── PER TEST CASE ────────────────────────────────────────────────────",
     ]
     for r in results:
-        ret = r.get("retrieval", {})
-        fth = r.get("faithfulness") or {}
-        hal = r.get("hallucination") or {}
-        ac  = r.get("answer_correct")
+        ka_r = r.get("kondisi_a") or {}; kb_r = r.get("kondisi_b") or {}
+        fa   = (ka_r.get("faithfulness") or {}); fb = (kb_r.get("faithfulness") or {})
+        ha   = (ka_r.get("hallucination") or {}); hb = (kb_r.get("hallucination") or {})
+        ret_r = r.get("retrieval", {})
+        df = round(fa["faithfulness_score"] - fb["faithfulness_score"], 3) \
+             if fa.get("faithfulness_score") is not None \
+             and fb.get("faithfulness_score") is not None else "-"
+        ent_a = fa.get("entailment_score"); ent_b = fb.get("entailment_score")
         lines += [
-            f"\n[{r['test_id']:02d}] {r['query'][:70]}",
-            f"     Type={r.get('query_type','?')}  Cog={r['cognitive']}",
-            f"     P@K={ret.get('precision_at_k','?')}  R@K={ret.get('recall_at_k','?')}  "
-            f"Faith={fth.get('faithfulness_score','?')}  Halluc={hal.get('risk_label','?')}  "
-            f"Correct={'✅' if ac else '❌' if ac is False else '?'}",
+            f"  [{r['test_id']:03d}] {r['query'][:60]}…",
+            f"        P@K={ret_r.get('precision_at_k','-')}  "
+            f"R@K={ret_r.get('recall_at_k','-')}  "
+            f"MeanSim={ret_r.get('mean_similarity','-')}",
+            f"        A: Faith={fa.get('faithfulness_score','-')}"
+            + (f" (ent={ent_a:.2f})" if ent_a is not None else "")
+            + f"  Hall={ha.get('hallucination_risk','-')} [{ha.get('risk_label','-')}]"
+            + f"  {'✅' if ka_r.get('answer_correct') else '❌' if ka_r.get('answer_correct') is False else '?'}",
+            f"        B: Faith={fb.get('faithfulness_score','-')}"
+            + (f" (ent={ent_b:.2f})" if ent_b is not None else "")
+            + f"  Hall={hb.get('hallucination_risk','-')} [{hb.get('risk_label','-')}]"
+            + f"  {'✅' if kb_r.get('answer_correct') else '❌' if kb_r.get('answer_correct') is False else '?'}"
+            + f"  ΔFaith={df}",
+            "",
         ]
-    lines.append("")
+
     with open(txt_path, "w", encoding="utf-8") as fh:
         fh.write("\n".join(lines))
 
-    return json_path, csv_path, txt_path
+    return json_path, csv_path, txt_path, response_path

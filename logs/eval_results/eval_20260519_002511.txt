@@ -1,0 +1,602 @@
+======================================================================
+  RAG EVALUATION — KONDISI A vs KONDISI B
+  Generated : 20260519_002511
+  Faithfulness: LLM-as-Judge Entailment (v4)
+  Kondisi B   : Prompt buta (tanpa RAG, profil, CT label)
+  LLM  : ollama/llama3
+  Embed: ollama/nomic-embed-text
+  N    : 110
+======================================================================
+
+── KONDISI A: RETRIEVAL ─────────────────────────────────────────────
+  Precision@K      : 0.9803
+  Recall@K         : 0.9909
+  Mean Similarity  : 0.7432
+  Coverage         : 1.0
+  Source Diversity : 0.8015
+
+── PERBANDINGAN GENERASI (A vs B) ───────────────────────────────────
+  Metrik                    Kondisi A    Kondisi B    Delta (A-B)
+  ---------------------- ------------ ------------ --------------
+  Faithfulness                 0.6954       0.6709         0.0245
+  Hallucination Risk           0.2158       0.2312        -0.0154
+  Answer Accuracy              0.9271       0.9468        -0.0197
+
+── DISTRIBUSI RISIKO HALUSINASI ─────────────────────────────────────
+  Kat            A(n)     A(%)     B(n)     B(%)
+  ---------- -------- -------- -------- --------
+  RENDAH           96    87.3%       91    82.7%
+  SEDANG           13    11.8%       19    17.3%
+  TINGGI            1     0.9%        0     0.0%
+
+── EFFECT SIZE ──────────────────────────────────────────────────────
+  Cohen's d (Faithfulness)     : 0.1806
+  Faithfulness improvement (%) : 3.65
+  Hallucination reduction (%)  : 6.66
+
+── ANSWER ACCURACY ──────────────────────────────────────────────────
+  Kondisi A : 0.9271  (89/96)
+  Kondisi B : 0.9468  (89/94)
+
+── PER TEST CASE ────────────────────────────────────────────────────
+  [001] Saya sudah baca definisi Computational Thinking dari berbaga…
+        P@K=0.8333  R@K=1.0  MeanSim=0.7326
+        A: Faith=0.7776 (ent=1.00)  Hall=0.2503 [RENDAH]  ✅
+        B: Faith=0.6412 (ent=0.83)  Hall=0.2332 [RENDAH]  ✅  ΔFaith=0.136
+
+  [002] Di catatan saya tulis AADP = Abstraksi → Algoritme → Dekompo…
+        P@K=0.8333  R@K=1.0  MeanSim=0.7021
+        A: Faith=0.7675 (ent=1.00)  Hall=0.257 [RENDAH]  ✅
+        B: Faith=0.6397 (ent=0.83)  Hall=0.2342 [RENDAH]  ❌  ΔFaith=0.128
+
+  [003] Dosen bilang kita hidup di era VUCA dan CT itu penting untuk…
+        P@K=0.8333  R@K=1.0  MeanSim=0.7304
+        A: Faith=0.7644 (ent=1.00)  Hall=0.1531 [RENDAH]  ✅
+        B: Faith=0.6387 (ent=0.83)  Hall=0.189 [RENDAH]  ✅  ΔFaith=0.126
+
+  [004] Di silabus ada materi CT dan materi ICT Literacy. Saya bingu…
+        P@K=0.8333  R@K=1.0  MeanSim=0.7023
+        A: Faith=0.7716 (ent=1.00)  Hall=0.1885 [RENDAH]  ✅
+        B: Faith=0.7598 (ent=1.00)  Hall=0.1561 [RENDAH]  ✅  ΔFaith=0.012
+
+  [005] Teman saya bilang saya punya digital footprint besar karena …
+        P@K=0.8333  R@K=1.0  MeanSim=0.7051
+        A: Faith=0.3637 (ent=0.50)  Hall=0.4894 [SEDANG]  ✅
+        B: Faith=0.5304 (ent=0.67)  Hall=0.4111 [SEDANG]  ✅  ΔFaith=-0.167
+
+  [006] Di slide ada dua istilah: 'ICT Literacy' dan 'Literacy with …
+        P@K=0.8333  R@K=1.0  MeanSim=0.7368
+        A: Faith=0.4131 (ent=0.50)  Hall=0.4115 [SEDANG]  ✅
+        B: Faith=0.6353 (ent=0.83)  Hall=0.3887 [SEDANG]  ✅  ΔFaith=-0.222
+
+  [007] Saya buat aplikasi untuk tugas dan kumpulkan data nama dan e…
+        P@K=0.8333  R@K=1.0  MeanSim=0.7467
+        A: Faith=0.7636 (ent=1.00)  Hall=0.1537 [RENDAH]  ✅
+        B: Faith=0.7683 (ent=1.00)  Hall=0.1806 [RENDAH]  ✅  ΔFaith=-0.005
+
+  [008] Waktu kerja kelompok, kami bagi tugas: saya bikin bagian A, …
+        P@K=0.8333  R@K=1.0  MeanSim=0.7125
+        A: Faith=0.7849 (ent=1.00)  Hall=0.1398 [RENDAH]  ✅
+        B: Faith=0.7599 (ent=1.00)  Hall=0.1561 [RENDAH]  ✅  ΔFaith=0.025
+
+  [009] Ada soal: 2 lift kapasitas masing-masing 30 kg. Ada 9 berang…
+        P@K=1.0  R@K=1.0  MeanSim=0.8058
+        A: Faith=0.8188 (ent=1.00)  Hall=0.1178 [RENDAH]  ✅
+        B: Faith=0.7801 (ent=1.00)  Hall=0.2188 [RENDAH]  ✅  ΔFaith=0.039
+
+  [010] Waktu belajar fungsi, dosen bilang setiap fungsi seharusnya …
+        P@K=1.0  R@K=1.0  MeanSim=0.7584
+        A: Faith=0.731 (ent=1.00)  Hall=0.1749 [RENDAH]  ✅
+        B: Faith=0.7749 (ent=1.00)  Hall=0.1763 [RENDAH]  ✅  ΔFaith=-0.044
+
+  [011] Kalau saya dekomposisi masalah, sampai seberapa dalam saya h…
+        P@K=0.8333  R@K=1.0  MeanSim=0.75
+        A: Faith=0.7751 (ent=1.00)  Hall=0.1462 [RENDAH]  ✅
+        B: Faith=0.7638 (ent=1.00)  Hall=0.1535 [RENDAH]  ✅  ΔFaith=0.011
+
+  [012] Dari soal lift 2 buah kapasitas 30 kg dengan 9 berang (A:2, …
+        P@K=1.0  R@K=1.0  MeanSim=0.7722
+        A: Faith=0.8047 (ent=1.00)  Hall=0.1569 [RENDAH]  ✅
+        B: Faith=0.6521 (ent=0.83)  Hall=0.3019 [RENDAH]  ✅  ΔFaith=0.153
+
+  [013] Saya bikin model data untuk sistem nilai mahasiswa dan saya …
+        P@K=1.0  R@K=1.0  MeanSim=0.7324
+        A: Faith=0.7763 (ent=1.00)  Hall=0.2154 [RENDAH]  ?
+        B: Faith=0.771 (ent=1.00)  Hall=0.1788 [RENDAH]  ?  ΔFaith=0.005
+
+  [014] Di slide abstraksi ada istilah 'helicopter view'. Saya tidak…
+        P@K=0.8333  R@K=1.0  MeanSim=0.7
+        A: Faith=0.7261 (ent=1.00)  Hall=0.178 [RENDAH]  ?
+        B: Faith=0.7616 (ent=1.00)  Hall=0.155 [RENDAH]  ?  ΔFaith=-0.036
+
+  [015] Waktu analisis data nilai ujian, saya buang semua outlier du…
+        P@K=1.0  R@K=1.0  MeanSim=0.7266
+        A: Faith=0.7652 (ent=1.00)  Hall=0.1526 [RENDAH]  ✅
+        B: Faith=0.7819 (ent=1.00)  Hall=0.1718 [RENDAH]  ✅  ΔFaith=-0.017
+
+  [016] Soal: bebek ke-n mendapat n coklat. Total coklat 500 buah. B…
+        P@K=0.8333  R@K=1.0  MeanSim=0.78
+        A: Faith=0.7954 (ent=1.00)  Hall=0.133 [RENDAH]  ✅
+        B: Faith=0.3958 (ent=0.50)  Hall=0.3927 [SEDANG]  ✅  ΔFaith=0.4
+
+  [017] Soal ujian: tentukan digit terakhir dari 2 pangkat 2003. Say…
+        P@K=1.0  R@K=1.0  MeanSim=0.728
+        A: Faith=0.748 (ent=1.00)  Hall=0.1638 [RENDAH]  ✅
+        B: Faith=0.7594 (ent=1.00)  Hall=0.2322 [RENDAH]  ✅  ΔFaith=-0.011
+
+  [018] Saya pikir pattern recognition di CT hanya untuk data angka …
+        P@K=0.8333  R@K=1.0  MeanSim=0.6998
+        A: Faith=0.7887 (ent=1.00)  Hall=0.1373 [RENDAH]  ✅
+        B: Faith=0.7576 (ent=1.00)  Hall=0.1576 [RENDAH]  ✅  ΔFaith=0.031
+
+  [019] Saya lihat data absensi dan nemu pola: nilai turun setiap mi…
+        P@K=1.0  R@K=1.0  MeanSim=0.7713
+        A: Faith=0.532 (ent=0.67)  Hall=0.3042 [RENDAH]  ✅
+        B: Faith=0.6443 (ent=0.83)  Hall=0.307 [RENDAH]  ✅  ΔFaith=-0.112
+
+  [020] Diberikan barisan: 3, 6, 12, 24, 48. Dosen minta saya identi…
+        P@K=1.0  R@K=1.0  MeanSim=0.7485
+        A: Faith=0.7499 (ent=1.00)  Hall=0.1626 [RENDAH]  ✅
+        B: Faith=0.5658 (ent=0.75)  Hall=0.2822 [RENDAH]  ✅  ΔFaith=0.184
+
+  [021] Di tugas saya bikin flowchart karena saya kira itu lebih for…
+        P@K=1.0  R@K=1.0  MeanSim=0.7543
+        A: Faith=0.7919 (ent=1.00)  Hall=0.1753 [RENDAH]  ✅
+        B: Faith=0.7721 (ent=1.00)  Hall=0.1481 [RENDAH]  ✅  ΔFaith=0.02
+
+  [022] Saya diminta menulis pseudocode algoritme Euclidean untuk me…
+        P@K=1.0  R@K=1.0  MeanSim=0.788
+        A: Faith=0.7766 (ent=1.00)  Hall=0.1452 [RENDAH]  ✅
+        B: Faith=0.6557 (ent=0.83)  Hall=0.1779 [RENDAH]  ✅  ΔFaith=0.121
+
+  [023] Saya sudah buat algoritme untuk cari nilai terbesar dari arr…
+        P@K=1.0  R@K=1.0  MeanSim=0.7361
+        A: Faith=0.779 (ent=1.00)  Hall=0.1736 [RENDAH]  ✅
+        B: Faith=0.7651 (ent=1.00)  Hall=0.1527 [RENDAH]  ✅  ΔFaith=0.014
+
+  [024] Saya buat algoritme FPB Euclidean dan ingin tahu kompleksita…
+        P@K=1.0  R@K=1.0  MeanSim=0.7666
+        A: Faith=0.7779 (ent=1.00)  Hall=0.326 [SEDANG]  ✅
+        B: Faith=0.795 (ent=1.00)  Hall=0.1632 [RENDAH]  ✅  ΔFaith=-0.017
+
+  [025] Di pseudocode saya selalu tulis 'int x = 5' karena terbiasa …
+        P@K=1.0  R@K=1.0  MeanSim=0.7957
+        A: Faith=0.784 (ent=1.00)  Hall=0.2563 [RENDAH]  ?
+        B: Faith=0.7467 (ent=1.00)  Hall=0.1646 [RENDAH]  ✅  ΔFaith=0.037
+
+  [026] Soal: hitung nilai ekspresi berikut: (8 + 4) / (2 * 3) - 1. …
+        P@K=1.0  R@K=1.0  MeanSim=0.7711
+        A: Faith=0.7774 (ent=1.00)  Hall=0.1447 [RENDAH]  ✅
+        B: Faith=0.6269 (ent=0.83)  Hall=0.3183 [RENDAH]  ✅  ΔFaith=0.15
+
+  [027] Saya sederhanakan ekspresi: NOT (A OR B) menjadi NOT A AND N…
+        P@K=1.0  R@K=1.0  MeanSim=0.7142
+        A: Faith=0.276 (ent=0.33)  Hall=0.3948 [SEDANG]  ✅
+        B: Faith=0.4545 (ent=0.60)  Hall=0.4456 [SEDANG]  ✅  ΔFaith=-0.178
+
+  [028] Di pseudocode CT, kalau saya tulis 7 / 2, hasilnya 3 atau 3.…
+        P@K=1.0  R@K=1.0  MeanSim=0.7934
+        A: Faith=0.7782 (ent=1.00)  Hall=0.1442 [RENDAH]  ?
+        B: Faith=0.7413 (ent=1.00)  Hall=0.1982 [RENDAH]  ?  ΔFaith=0.037
+
+  [029] Tugas: buat tabel kebenaran untuk ekspresi (A AND NOT B) OR …
+        P@K=1.0  R@K=1.0  MeanSim=0.7408
+        A: Faith=0.7447 (ent=1.00)  Hall=0.1959 [RENDAH]  ✅
+        B: Faith=0.7338 (ent=1.00)  Hall=0.203 [RENDAH]  ?  ΔFaith=0.011
+
+  [030] Di materi variabel dan tipe data, kita belajar integer, floa…
+        P@K=1.0  R@K=1.0  MeanSim=0.7704
+        A: Faith=0.7802 (ent=1.00)  Hall=0.1429 [RENDAH]  ✅
+        B: Faith=0.5216 (ent=0.67)  Hall=0.311 [RENDAH]  ✅  ΔFaith=0.259
+
+  [031] Trace pseudocode ini untuk input x=-3, y=5:
+  if (x > 0) the…
+        P@K=1.0  R@K=1.0  MeanSim=0.826
+        A: Faith=0.7504 (ent=1.00)  Hall=0.276 [RENDAH]  ✅
+        B: Faith=0.7428 (ent=1.00)  Hall=0.3488 [SEDANG]  ✅  ΔFaith=0.008
+
+  [032] Saya harus cek: apakah suhu > 35 DAN kelembaban > 80. Saya b…
+        P@K=1.0  R@K=1.0  MeanSim=0.7911
+        A: Faith=0.7663 (ent=1.00)  Hall=0.1519 [RENDAH]  ✅
+        B: Faith=0.6383 (ent=0.83)  Hall=0.2351 [RENDAH]  ✅  ΔFaith=0.128
+
+  [033] Di else-if untuk konversi nilai: A(>=85), B(>=70), C(>=55), …
+        P@K=1.0  R@K=1.0  MeanSim=0.7956
+        A: Faith=0.7737 (ent=1.00)  Hall=0.1471 [RENDAH]  ✅
+        B: Faith=0.7611 (ent=1.00)  Hall=0.1553 [RENDAH]  ✅  ΔFaith=0.013
+
+  [034] Trace pseudocode konversi nilai untuk input nilai=68:
+  if (…
+        P@K=1.0  R@K=1.0  MeanSim=0.8441
+        A: Faith=0.7805 (ent=1.00)  Hall=0.1727 [RENDAH]  ✅
+        B: Faith=0.7405 (ent=1.00)  Hall=0.1987 [RENDAH]  ✅  ΔFaith=0.04
+
+  [035] Saya mau buat program yang minta input terus sampai user mas…
+        P@K=1.0  R@K=1.0  MeanSim=0.7312
+        A: Faith=0.556 (ent=0.67)  Hall=0.2128 [RENDAH]  ✅
+        B: Faith=0.5369 (ent=0.67)  Hall=0.301 [RENDAH]  ✅  ΔFaith=0.019
+
+  [036] Saya diminta baca semua baris file CSV sampai habis. Saya ti…
+        P@K=1.0  R@K=1.0  MeanSim=0.6936
+        A: Faith=0.5978 (ent=0.83)  Hall=0.2614 [RENDAH]  ?
+        B: Faith=0.6364 (ent=0.83)  Hall=0.3421 [SEDANG]  ✅  ΔFaith=-0.039
+
+  [037] Saya diminta tulis pseudocode untuk cetak 10 bilangan genap …
+        P@K=1.0  R@K=0.8571  MeanSim=0.7828
+        A: Faith=0.6482 (ent=0.83)  Hall=0.2287 [RENDAH]  ?
+        B: Faith=0.5292 (ent=0.67)  Hall=0.4519 [SEDANG]  ✅  ΔFaith=0.119
+
+  [038] Di slide perulangan ada istilah 'sentinel value'. Katanya in…
+        P@K=1.0  R@K=1.0  MeanSim=0.7039
+        A: Faith=0.6568 (ent=0.83)  Hall=0.2531 [RENDAH]  ✅
+        B: Faith=0.7801 (ent=1.00)  Hall=0.1429 [RENDAH]  ✅  ΔFaith=-0.123
+
+  [039] Trace pseudocode berikut untuk input n=4523:
+  jumlah = 0
+  …
+        P@K=1.0  R@K=1.0  MeanSim=0.8233
+        A: Faith=0.7205 (ent=0.83)  Hall=0.1817 [RENDAH]  ?
+        B: Faith=0.7874 (ent=1.00)  Hall=0.1382 [RENDAH]  ❌  ΔFaith=-0.067
+
+  [040] Di C++ dan Java ada do-while loop yang eksekusi body setidak…
+        P@K=1.0  R@K=1.0  MeanSim=0.7631
+        A: Faith=0.7875 (ent=1.00)  Hall=0.214 [RENDAH]  ✅
+        B: Faith=0.7762 (ent=1.00)  Hall=0.1455 [RENDAH]  ?  ΔFaith=0.011
+
+  [041] Saya bisa buat segitiga bintang biasa (1 bintang di baris pe…
+        P@K=1.0  R@K=1.0  MeanSim=0.7298
+        A: Faith=0.6525 (ent=0.83)  Hall=0.2259 [RENDAH]  ✅
+        B: Faith=0.295 (ent=0.33)  Hall=0.4583 [SEDANG]  ✅  ΔFaith=0.357
+
+  [042] Saya punya nested loop: luar 5 iterasi, dalam 3 iterasi. Say…
+        P@K=1.0  R@K=1.0  MeanSim=0.7793
+        A: Faith=0.7923 (ent=1.00)  Hall=0.135 [RENDAH]  ✅
+        B: Faith=0.7525 (ent=1.00)  Hall=0.1909 [RENDAH]  ✅  ΔFaith=0.04
+
+  [043] Tugas: cetak matriks identitas 3x3 dengan pseudocode nested …
+        P@K=1.0  R@K=1.0  MeanSim=0.7667
+        A: Faith=0.7677 (ent=1.00)  Hall=0.151 [RENDAH]  ✅
+        B: Faith=0.289 (ent=0.33)  Hall=0.3863 [SEDANG]  ✅  ΔFaith=0.479
+
+  [044] Dosen bilang nested loop selalu O(n²). Tapi saya punya neste…
+        P@K=1.0  R@K=1.0  MeanSim=0.7893
+        A: Faith=0.7152 (ent=1.00)  Hall=0.1851 [RENDAH]  ✅
+        B: Faith=0.7589 (ent=1.00)  Hall=0.1567 [RENDAH]  ?  ΔFaith=-0.044
+
+  [045] Di Python, def bisa return nilai atau tidak — keduanya sama-…
+        P@K=1.0  R@K=1.0  MeanSim=0.7477
+        A: Faith=0.7736 (ent=1.00)  Hall=0.1772 [RENDAH]  ✅
+        B: Faith=0.7867 (ent=1.00)  Hall=0.1386 [RENDAH]  ✅  ΔFaith=-0.013
+
+  [046] Tugas: tulis tiga fungsi untuk luas persegi panjang, segitig…
+        P@K=1.0  R@K=1.0  MeanSim=0.7978
+        A: Faith=0.8197 (ent=1.00)  Hall=0.2231 [RENDAH]  ✅
+        B: Faith=0.5373 (ent=0.67)  Hall=0.2549 [RENDAH]  ✅  ΔFaith=0.282
+
+  [047] Saya punya variabel x = 10 di program utama. Di dalam fungsi…
+        P@K=1.0  R@K=1.0  MeanSim=0.7359
+        A: Faith=0.5124 (ent=0.67)  Hall=0.3569 [SEDANG]  ✅
+        B: Faith=0.531 (ent=0.67)  Hall=0.3049 [RENDAH]  ✅  ΔFaith=-0.019
+
+  [048] Rekursi itu fungsi yang memanggil dirinya sendiri. Tapi kala…
+        P@K=1.0  R@K=1.0  MeanSim=0.7078
+        A: Faith=0.7747 (ent=1.00)  Hall=0.2223 [RENDAH]  ✅
+        B: Faith=0.7733 (ent=1.00)  Hall=0.1774 [RENDAH]  ✅  ΔFaith=0.001
+
+  [049] Di Python ada konsep fungsi yang menerima fungsi lain sebaga…
+        P@K=1.0  R@K=1.0  MeanSim=0.7193
+        A: Faith=0.8019 (ent=1.00)  Hall=0.1288 [RENDAH]  ✅
+        B: Faith=0.6419 (ent=0.83)  Hall=0.1569 [RENDAH]  ✅  ΔFaith=0.16
+
+  [050] Saya tulis fungsi rekursif tapi program saya crash dengan er…
+        P@K=1.0  R@K=1.0  MeanSim=0.6905
+        A: Faith=0.6317 (ent=0.67)  Hall=0.2394 [RENDAH]  ❌
+        B: Faith=0.7739 (ent=1.00)  Hall=0.187 [RENDAH]  ?  ΔFaith=-0.142
+
+  [051] Saya diminta trace faktorial(4) secara lengkap dan tunjukkan…
+        P@K=1.0  R@K=1.0  MeanSim=0.7428
+        A: Faith=0.7496 (ent=1.00)  Hall=0.1628 [RENDAH]  ❌
+        B: Faith=0.3932 (ent=0.50)  Hall=0.4244 [SEDANG]  ✅  ΔFaith=0.356
+
+  [052] Saya buat Fibonacci rekursif dan berjalan normal untuk Fib(1…
+        P@K=1.0  R@K=1.0  MeanSim=0.7254
+        A: Faith=0.6564 (ent=0.83)  Hall=0.2992 [RENDAH]  ✅
+        B: Faith=0.531 (ent=0.67)  Hall=0.2291 [RENDAH]  ❌  ΔFaith=0.125
+
+  [053] Hitung Fib(6) menggunakan definisi rekursif: Fib(1)=1, Fib(2…
+        P@K=1.0  R@K=1.0  MeanSim=0.7742
+        A: Faith=0.4231 (ent=0.50)  Hall=0.2991 [RENDAH]  ✅
+        B: Faith=0.2118 (ent=0.25)  Hall=0.5123 [SEDANG]  ✅  ΔFaith=0.211
+
+  [054] Dosen bilang faktorial rekursif O(n) tapi Fibonacci rekursif…
+        P@K=1.0  R@K=1.0  MeanSim=0.7188
+        A: Faith=0.5323 (ent=0.67)  Hall=0.304 [RENDAH]  ✅
+        B: Faith=0.7536 (ent=1.00)  Hall=0.1602 [RENDAH]  ✅  ΔFaith=-0.221
+
+  [055] Di Python saya pakai list untuk segalanya dan tidak pernah a…
+        P@K=1.0  R@K=1.0  MeanSim=0.6989
+        A: Faith=0.6536 (ent=0.83)  Hall=0.1494 [RENDAH]  ✅
+        B: Faith=0.7608 (ent=1.00)  Hall=0.1855 [RENDAH]  ✅  ΔFaith=-0.107
+
+  [056] Kalau Python list sudah bisa melakukan semua yang array bisa…
+        P@K=1.0  R@K=1.0  MeanSim=0.715
+        A: Faith=0.7741 (ent=1.00)  Hall=0.2168 [RENDAH]  ✅
+        B: Faith=0.659 (ent=0.83)  Hall=0.2516 [RENDAH]  ✅  ΔFaith=0.115
+
+  [057] Saya baca tentang linked list di internet dan katanya lebih …
+        P@K=1.0  R@K=1.0  MeanSim=0.6788
+        A: Faith=0.4278 (ent=0.50)  Hall=0.4478 [SEDANG]  ✅
+        B: Faith=0.5265 (ent=0.67)  Hall=0.3836 [SEDANG]  ✅  ΔFaith=-0.099
+
+  [058] Saya punya list nilai [75, 82, 60, 91, 55, 88, 70]. Saya dim…
+        P@K=1.0  R@K=1.0  MeanSim=0.7332
+        A: Faith=0.426 (ent=0.50)  Hall=0.4031 [SEDANG]  ✅
+        B: Faith=0.2934 (ent=0.33)  Hall=0.4593 [SEDANG]  ?  ΔFaith=0.133
+
+  [059] Simulasikan stack dengan operasi berurutan:
+PUSH(7), PUSH(2)…
+        P@K=1.0  R@K=0.8571  MeanSim=0.7852
+        A: Faith=0.668 (ent=0.83)  Hall=0.1399 [RENDAH]  ✅
+        B: Faith=0.7481 (ent=1.00)  Hall=0.2396 [RENDAH]  ✅  ΔFaith=-0.08
+
+  [060] Simulasikan queue dengan operasi:
+ENQUEUE(P), ENQUEUE(Q), EN…
+        P@K=1.0  R@K=0.8571  MeanSim=0.7708
+        A: Faith=0.7349 (ent=1.00)  Hall=0.1723 [RENDAH]  ✅
+        B: Faith=0.744 (ent=1.00)  Hall=0.2423 [RENDAH]  ✅  ΔFaith=-0.009
+
+  [061] Saya mau buat fitur undo di aplikasi teks editor saya. Setia…
+        P@K=1.0  R@K=1.0  MeanSim=0.7269
+        A: Faith=0.7706 (ent=1.00)  Hall=0.1791 [RENDAH]  ✅
+        B: Faith=0.786 (ent=1.00)  Hall=0.1391 [RENDAH]  ✅  ΔFaith=-0.015
+
+  [062] Soal: periksa apakah ekspresi '((a+b)*(c-d))' seimbang kurun…
+        P@K=1.0  R@K=0.8571  MeanSim=0.7524
+        A: Faith=0.4851 (ent=0.67)  Hall=0.2589 [RENDAH]  ✅
+        B: Faith=0.6374 (ent=0.83)  Hall=0.2357 [RENDAH]  ?  ΔFaith=-0.152
+
+  [063] Di slide stack ada pseudocode implementasi dengan array dan …
+        P@K=1.0  R@K=1.0  MeanSim=0.6837
+        A: Faith=0.2931 (ent=0.33)  Hall=0.4136 [SEDANG]  ✅
+        B: Faith=0.6544 (ent=0.83)  Hall=0.3004 [RENDAH]  ✅  ΔFaith=-0.361
+
+  [064] Dosen bilang tree itu 'graph khusus'. Tapi kalau tree adalah…
+        P@K=1.0  R@K=1.0  MeanSim=0.7182
+        A: Faith=0.783 (ent=1.00)  Hall=0.171 [RENDAH]  ?
+        B: Faith=0.7753 (ent=1.00)  Hall=0.2219 [RENDAH]  ✅  ΔFaith=0.008
+
+  [065] Graph: A-B(4), A-C(2), B-D(3), C-D(5), D-E(1). Cari jarak te…
+        P@K=1.0  R@K=1.0  MeanSim=0.7734
+        A: Faith=0.8202 (ent=1.00)  Hall=0.1169 [RENDAH]  ❌
+        B: Faith=0.7544 (ent=1.00)  Hall=0.1596 [RENDAH]  ?  ΔFaith=0.066
+
+  [066] Graph: A→B, A→C, B→D, B→E, C→F. Saya trace BFS dari A dan da…
+        P@K=1.0  R@K=0.8571  MeanSim=0.7314
+        A: Faith=0.7734 (ent=1.00)  Hall=0.1473 [RENDAH]  ✅
+        B: Faith=0.7538 (ent=1.00)  Hall=0.19 [RENDAH]  ✅  ΔFaith=0.02
+
+  [067] Di slide graph ada directed dan undirected. Dosen minta pili…
+        P@K=1.0  R@K=1.0  MeanSim=0.745
+        A: Faith=0.7834 (ent=1.00)  Hall=0.2166 [RENDAH]  ?
+        B: Faith=0.7633 (ent=1.00)  Hall=0.1539 [RENDAH]  ✅  ΔFaith=0.02
+
+  [068] Saya baca tentang Binary Search Tree (BST) di internet. Apak…
+        P@K=1.0  R@K=1.0  MeanSim=0.66
+        A: Faith=0.5205 (ent=0.67)  Hall=0.2359 [RENDAH]  ✅
+        B: Faith=0.5032 (ent=0.67)  Hall=0.2771 [RENDAH]  ✅  ΔFaith=0.017
+
+  [069] Tentukan kompleksitas waktu dari:
+a) x = arr[5]
+b) for i=1 t…
+        P@K=1.0  R@K=0.8571  MeanSim=0.7827
+        A: Faith=0.7853 (ent=1.00)  Hall=0.1696 [RENDAH]  ✅
+        B: Faith=0.7702 (ent=1.00)  Hall=0.1794 [RENDAH]  ✅  ΔFaith=0.015
+
+  [070] Program saya punya satu nested loop O(n²) dan satu loop bias…
+        P@K=1.0  R@K=1.0  MeanSim=0.7694
+        A: Faith=0.8099 (ent=1.00)  Hall=0.1536 [RENDAH]  ❌
+        B: Faith=0.7314 (ent=1.00)  Hall=0.2046 [RENDAH]  ✅  ΔFaith=0.078
+
+  [071] Tentukan Big-O pseudocode ini:
+  for i=1 to n do
+    j=1
+   …
+        P@K=1.0  R@K=1.0  MeanSim=0.7803
+        A: Faith=0.7577 (ent=1.00)  Hall=0.1575 [RENDAH]  ✅
+        B: Faith=0.6521 (ent=0.83)  Hall=0.1503 [RENDAH]  ?  ΔFaith=0.106
+
+  [072] Saya punya 100.000 data yang perlu diurutkan. Bubble sort te…
+        P@K=1.0  R@K=1.0  MeanSim=0.702
+        A: Faith=0.7527 (ent=1.00)  Hall=0.1907 [RENDAH]  ✅
+        B: Faith=0.7729 (ent=1.00)  Hall=0.2176 [RENDAH]  ✅  ΔFaith=-0.02
+
+  [073] Saya hanya tahu time complexity. Tapi dosen juga tanya space…
+        P@K=1.0  R@K=1.0  MeanSim=0.6443
+        A: Faith=0.7839 (ent=1.00)  Hall=0.2563 [RENDAH]  ?
+        B: Faith=0.6629 (ent=0.83)  Hall=0.1733 [RENDAH]  ✅  ΔFaith=0.121
+
+  [074] Saya baca bahwa append ke Python list itu O(1) amortized, bu…
+        P@K=1.0  R@K=1.0  MeanSim=0.693
+        A: Faith=0.3975 (ent=0.50)  Hall=0.3916 [SEDANG]  ✅
+        B: Faith=0.5278 (ent=0.67)  Hall=0.1853 [RENDAH]  ✅  ΔFaith=-0.13
+
+  [075] Array terurut: [3, 7, 12, 18, 25, 31, 44, 56, 67, 89]. Cari …
+        P@K=1.0  R@K=0.8571  MeanSim=0.7417
+        A: Faith=0.4135 (ent=0.50)  Hall=0.3054 [RENDAH]  ✅
+        B: Faith=0.6284 (ent=0.83)  Hall=0.2415 [RENDAH]  ✅  ΔFaith=-0.215
+
+  [076] Saya coba binary search untuk array [5, 3, 8, 1, 9] dan hasi…
+        P@K=1.0  R@K=1.0  MeanSim=0.7219
+        A: Faith=0.7909 (ent=1.00)  Hall=0.2418 [RENDAH]  ❌
+        B: Faith=0.748 (ent=1.00)  Hall=0.2548 [RENDAH]  ✅  ΔFaith=0.043
+
+  [077] Trace bubble sort untuk array [5, 2, 8, 1, 9] — tunjukkan se…
+        P@K=1.0  R@K=1.0  MeanSim=0.7295
+        A: Faith=0.7838 (ent=1.00)  Hall=0.2164 [RENDAH]  ✅
+        B: Faith=0.5249 (ent=0.67)  Hall=0.4605 [SEDANG]  ✅  ΔFaith=0.259
+
+  [078] Trace selection sort untuk array [4, 7, 2, 9, 1, 5]. Saya ti…
+        P@K=1.0  R@K=1.0  MeanSim=0.7452
+        A: Faith=0.7125 (ent=0.83)  Hall=0.141 [RENDAH]  ✅
+        B: Faith=0.6179 (ent=0.80)  Hall=0.1574 [RENDAH]  ✅  ΔFaith=0.095
+
+  [079] Teman saya selalu pakai binary search karena katanya lebih c…
+        P@K=1.0  R@K=1.0  MeanSim=0.7037
+        A: Faith=0.7948 (ent=1.00)  Hall=0.1334 [RENDAH]  ✅
+        B: Faith=0.7688 (ent=1.00)  Hall=0.1803 [RENDAH]  ✅  ΔFaith=0.026
+
+  [080] Saya mau buat sistem pencarian kontak dari 10.000 data. Dose…
+        P@K=1.0  R@K=1.0  MeanSim=0.7672
+        A: Faith=0.7761 (ent=1.00)  Hall=0.1455 [RENDAH]  ✅
+        B: Faith=0.55 (ent=0.67)  Hall=0.3225 [SEDANG]  ✅  ΔFaith=0.226
+
+  [081] Waktu belajar rekursi, dosen bilang setiap pemanggilan rekur…
+        P@K=1.0  R@K=1.0  MeanSim=0.7613
+        A: Faith=0.773 (ent=1.00)  Hall=0.1775 [RENDAH]  ✅
+        B: Faith=0.6547 (ent=0.83)  Hall=0.1786 [RENDAH]  ✅  ΔFaith=0.118
+
+  [082] Dosen bilang kita bisa gunakan pattern recognition untuk lan…
+        P@K=1.0  R@K=1.0  MeanSim=0.736
+        A: Faith=0.7847 (ent=1.00)  Hall=0.1399 [RENDAH]  ✅
+        B: Faith=0.7789 (ent=1.00)  Hall=0.1737 [RENDAH]  ✅  ΔFaith=0.006
+
+  [083] Kalau abstraksi adalah 'sembunyikan detail yang tidak perlu'…
+        P@K=1.0  R@K=1.0  MeanSim=0.7496
+        A: Faith=0.7731 (ent=1.00)  Hall=0.1775 [RENDAH]  ✅
+        B: Faith=0.7531 (ent=1.00)  Hall=0.2305 [RENDAH]  ✅  ΔFaith=0.02
+
+  [084] Dosen bilang DFS di graph biasanya diimplementasikan rekursi…
+        P@K=1.0  R@K=1.0  MeanSim=0.7263
+        A: Faith=0.7269 (ent=1.00)  Hall=0.405 [SEDANG]  ✅
+        B: Faith=0.7693 (ent=1.00)  Hall=0.18 [RENDAH]  ✅  ΔFaith=-0.042
+
+  [085] Saya diminta cek apakah kata 'katak' adalah palindrom tanpa …
+        P@K=1.0  R@K=1.0  MeanSim=0.7207
+        A: Faith=0.788 (ent=1.00)  Hall=0.1378 [RENDAH]  ✅
+        B: Faith=0.7863 (ent=1.00)  Hall=0.1389 [RENDAH]  ✅  ΔFaith=0.002
+
+  [086] Saya buat program cek bilangan prima dengan loop dari 2 samp…
+        P@K=1.0  R@K=1.0  MeanSim=0.6829
+        A: Faith=0.7591 (ent=1.00)  Hall=0.1566 [RENDAH]  ?
+        B: Faith=0.6489 (ent=0.83)  Hall=0.1524 [RENDAH]  ?  ΔFaith=0.11
+
+  [087] Tugas: hitung berapa digit bilangan 98765 tanpa mengubahnya …
+        P@K=1.0  R@K=1.0  MeanSim=0.7912
+        A: Faith=0.7814 (ent=1.00)  Hall=0.1421 [RENDAH]  ✅
+        B: Faith=0.5394 (ent=0.67)  Hall=0.3294 [SEDANG]  ✅  ΔFaith=0.242
+
+  [088] Saya diminta desain sistem antrian loket bank: nasabah biasa…
+        P@K=1.0  R@K=1.0  MeanSim=0.6936
+        A: Faith=0.4079 (ent=0.50)  Hall=0.4149 [SEDANG]  ✅
+        B: Faith=0.2862 (ent=0.33)  Hall=0.4181 [SEDANG]  ✅  ΔFaith=0.122
+
+  [089] Soal ujian: tulis fungsi rekursif untuk C(5,2) menggunakan s…
+        P@K=1.0  R@K=1.0  MeanSim=0.7611
+        A: Faith=0.5084 (ent=0.67)  Hall=0.3195 [RENDAH]  ?
+        B: Faith=0.5111 (ent=0.67)  Hall=0.1661 [RENDAH]  ✅  ΔFaith=-0.003
+
+  [090] Saya punya data nilai ujian 30.000 mahasiswa yang hampir ter…
+        P@K=1.0  R@K=1.0  MeanSim=0.7311
+        A: Faith=0.779 (ent=1.00)  Hall=0.1436 [RENDAH]  ✅
+        B: Faith=0.7633 (ent=1.00)  Hall=0.1939 [RENDAH]  ✅  ΔFaith=0.016
+
+  [091] Fungsi saya punya dua return: pertama di dalam if, kedua di …
+        P@K=1.0  R@K=1.0  MeanSim=0.7095
+        A: Faith=0.7713 (ent=1.00)  Hall=0.1487 [RENDAH]  ❌
+        B: Faith=0.7454 (ent=1.00)  Hall=0.1655 [RENDAH]  ✅  ΔFaith=0.026
+
+  [092] Fungsi faktorial saya hanya punya base case n==0. Teman bila…
+        P@K=1.0  R@K=1.0  MeanSim=0.7626
+        A: Faith=0.7767 (ent=1.00)  Hall=0.1451 [RENDAH]  ✅
+        B: Faith=0.7508 (ent=1.00)  Hall=0.192 [RENDAH]  ✅  ΔFaith=0.026
+
+  [093] Program saya sudah jalan 5 menit untuk input besar dan belum…
+        P@K=1.0  R@K=1.0  MeanSim=0.7193
+        A: Faith=0.8139 (ent=1.00)  Hall=0.151 [RENDAH]  ✅
+        B: Faith=0.7806 (ent=1.00)  Hall=0.2485 [RENDAH]  ✅  ΔFaith=0.033
+
+  [094] Trace rekursif untuk fungsi:
+  function f(n): if n<=2 return…
+        P@K=1.0  R@K=1.0  MeanSim=0.796
+        A: Faith=0.7824 (ent=1.00)  Hall=0.1814 [RENDAH]  ✅
+        B: Faith=0.7479 (ent=1.00)  Hall=0.1639 [RENDAH]  ❌  ΔFaith=0.034
+
+  [095] Tulis pseudocode untuk membaca 5 bilangan dari input dan tam…
+        P@K=1.0  R@K=1.0  MeanSim=0.792
+        A: Faith=0.6943 (ent=0.83)  Hall=0.2287 [RENDAH]  ✅
+        B: Faith=0.7616 (ent=1.00)  Hall=0.195 [RENDAH]  ✅  ΔFaith=-0.067
+
+  [096] Di fungsi saya, saya ubah nilai parameter dan berharap nilai…
+        P@K=1.0  R@K=1.0  MeanSim=0.7379
+        A: Faith=0.7842 (ent=1.00)  Hall=0.1403 [RENDAH]  ✅
+        B: Faith=0.7659 (ent=1.00)  Hall=0.1522 [RENDAH]  ✅  ΔFaith=0.018
+
+  [097] Di program saya, kalau user masukkan huruf padahal yang diha…
+        P@K=1.0  R@K=1.0  MeanSim=0.7268
+        A: Faith=0.5431 (ent=0.67)  Hall=0.297 [RENDAH]  ✅
+        B: Faith=0.6537 (ent=0.83)  Hall=0.1492 [RENDAH]  ?  ΔFaith=-0.111
+
+  [098] Soal: hari ini Senin. Hari apa 1000 hari dari sekarang? Dose…
+        P@K=1.0  R@K=1.0  MeanSim=0.7251
+        A: Faith=0.6629 (ent=0.83)  Hall=0.2191 [RENDAH]  ✅
+        B: Faith=0.7515 (ent=1.00)  Hall=0.1615 [RENDAH]  ✅  ΔFaith=-0.089
+
+  [099] Saya diminta buat pseudocode sistem login dengan maksimal 3 …
+        P@K=1.0  R@K=1.0  MeanSim=0.7441
+        A: Faith=0.7701 (ent=1.00)  Hall=0.1494 [RENDAH]  ❌
+        B: Faith=0.7606 (ent=1.00)  Hall=0.1556 [RENDAH]  ?  ΔFaith=0.009
+
+  [100] Saya mau representasikan peta kota dengan ratusan persimpang…
+        P@K=1.0  R@K=1.0  MeanSim=0.6747
+        A: Faith=0.6644 (ent=0.83)  Hall=0.1723 [RENDAH]  ✅
+        B: Faith=0.6632 (ent=0.83)  Hall=0.2131 [RENDAH]  ✅  ΔFaith=0.001
+
+  [101] Soal: tentukan digit terakhir dari 3^100. Saya coba hitung 3…
+        P@K=1.0  R@K=1.0  MeanSim=0.8025
+        A: Faith=0.802 (ent=1.00)  Hall=0.1587 [RENDAH]  ✅
+        B: Faith=0.758 (ent=1.00)  Hall=0.1873 [RENDAH]  ✅  ΔFaith=0.044
+
+  [102] Dosen bilang algoritme binary search O(log n) sangat efisien…
+        P@K=1.0  R@K=1.0  MeanSim=0.7409
+        A: Faith=0.8085 (ent=1.00)  Hall=0.1545 [RENDAH]  ✅
+        B: Faith=0.7661 (ent=1.00)  Hall=0.182 [RENDAH]  ✅  ΔFaith=0.042
+
+  [103] Rekursi itu fungsi yang memanggil dirinya sendiri. Tapi dose…
+        P@K=0.8333  R@K=1.0  MeanSim=0.7069
+        A: Faith=0.1883 (ent=0.17)  Hall=0.5576 [TINGGI]  ?
+        B: Faith=0.4098 (ent=0.50)  Hall=0.4136 [SEDANG]  ❌  ΔFaith=-0.222
+
+  [104] Diberikan barisan: 1, 3, 7, 13, 21, 31. Saya hitung selisihn…
+        P@K=1.0  R@K=1.0  MeanSim=0.7505
+        A: Faith=0.714 (ent=1.00)  Hall=0.1859 [RENDAH]  ✅
+        B: Faith=0.7624 (ent=1.00)  Hall=0.1544 [RENDAH]  ✅  ΔFaith=-0.048
+
+  [105] Saya lihat di kode server web ada while(true) yang jalan ter…
+        P@K=1.0  R@K=1.0  MeanSim=0.699
+        A: Faith=0.7819 (ent=1.00)  Hall=0.1418 [RENDAH]  ?
+        B: Faith=0.7648 (ent=1.00)  Hall=0.1529 [RENDAH]  ✅  ΔFaith=0.017
+
+  [106] Di soal abstraksi, dosen minta saya identifikasi PROBLEM, GO…
+        P@K=1.0  R@K=1.0  MeanSim=0.7112
+        A: Faith=0.5258 (ent=0.67)  Hall=0.3841 [SEDANG]  ✅
+        B: Faith=0.6409 (ent=0.83)  Hall=0.3492 [SEDANG]  ✅  ΔFaith=-0.115
+
+  [107] Tugas: buat pseudocode untuk menampilkan semua faktor bilang…
+        P@K=1.0  R@K=1.0  MeanSim=0.8261
+        A: Faith=0.596 (ent=0.67)  Hall=0.2167 [RENDAH]  ✅
+        B: Faith=0.7563 (ent=1.00)  Hall=0.1584 [RENDAH]  ?  ΔFaith=-0.16
+
+  [108] Saya diminta desain penyimpanan data nilai 500 mahasiswa unt…
+        P@K=1.0  R@K=1.0  MeanSim=0.7708
+        A: Faith=0.6591 (ent=0.83)  Hall=0.2216 [RENDAH]  ✅
+        B: Faith=0.7758 (ent=1.00)  Hall=0.1457 [RENDAH]  ✅  ΔFaith=-0.117
+
+  [109] Saya butuh cari nama mahasiswa dari NIM-nya dengan cepat O(1…
+        P@K=1.0  R@K=1.0  MeanSim=0.7277
+        A: Faith=0.5138 (ent=0.67)  Hall=0.346 [SEDANG]  ✅
+        B: Faith=0.6446 (ent=0.83)  Hall=0.261 [RENDAH]  ✅  ΔFaith=-0.131
+
+  [110] Saya diminta rancang algoritme sederhana untuk mengurutkan d…
+        P@K=1.0  R@K=1.0  MeanSim=0.7662
+        A: Faith=0.7638 (ent=1.00)  Hall=0.1535 [RENDAH]  ✅
+        B: Faith=0.7803 (ent=1.00)  Hall=0.1428 [RENDAH]  ?  ΔFaith=-0.016

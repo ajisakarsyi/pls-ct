@@ -1,0 +1,127 @@
+test_id,query_type,cognitive,query,precision_at_k,recall_at_k,mean_similarity,coverage,source_diversity,A_faithfulness,A_entailment,A_hallucination,A_risk_label,A_correct,B_faithfulness,B_entailment,B_hallucination,B_risk_label,B_correct,delta_faith,delta_hall
+1,gap,2PAR,Saya sudah baca definisi Computational Thinking dari berbagai sumber dan semuany,0.8333,1.0,0.7326,1.0,1.0,0.7776,1.0,0.2503,RENDAH,True,0.6412,0.8333,0.2332,RENDAH,True,0.1364,0.0171
+2,confusion,1TAR,Di catatan saya tulis AADP = Abstraksi → Algoritme → Dekomposisi → Pattern Recog,0.8333,1.0,0.7021,1.0,1.0,0.7675,1.0,0.257,RENDAH,True,0.6397,0.8333,0.2342,RENDAH,False,0.1278,0.0228
+3,out_of_scope,3TGI,Dosen bilang kita hidup di era VUCA dan CT itu penting untuk karir. Tapi saya ma,0.8333,1.0,0.7304,1.0,1.0,0.7644,1.0,0.1531,RENDAH,True,0.6387,0.8333,0.189,RENDAH,True,0.1257,-0.0359
+4,cross_topic,2TAI,Di silabus ada materi CT dan materi ICT Literacy. Saya bingung — apakah ICT Lite,0.8333,1.0,0.7023,1.0,1.0,0.7716,1.0,0.1885,RENDAH,True,0.7598,1.0,0.1561,RENDAH,True,0.0118,0.0324
+5,confusion,3PAR,Teman saya bilang saya punya digital footprint besar karena sering pakai Instagr,0.8333,1.0,0.7051,1.0,0.6667,0.3637,0.5,0.4894,SEDANG,True,0.5304,0.6667,0.4111,SEDANG,True,-0.1667,0.0783
+6,gap,2PAI,Di slide ada dua istilah: 'ICT Literacy' dan 'Literacy with ICT'. Keduanya terli,0.8333,1.0,0.7368,1.0,0.6667,0.4131,0.5,0.4115,SEDANG,True,0.6353,0.8333,0.3887,SEDANG,True,-0.2222,0.0228
+7,out_of_scope,4TAI,Saya buat aplikasi untuk tugas dan kumpulkan data nama dan email teman. Dari mat,0.8333,1.0,0.7467,1.0,0.6667,0.7636,1.0,0.1537,RENDAH,True,0.7683,1.0,0.1806,RENDAH,True,-0.0047,-0.0269
+8,confusion,1PAI,"Waktu kerja kelompok, kami bagi tugas: saya bikin bagian A, teman bikin bagian B",0.8333,1.0,0.7125,1.0,0.8333,0.7849,1.0,0.1398,RENDAH,True,0.7599,1.0,0.1561,RENDAH,True,0.025,-0.0163
+9,application,2PAR,"Ada soal: 2 lift kapasitas masing-masing 30 kg. Ada 9 berang dengan berat: A=2, ",1.0,1.0,0.8058,1.0,0.8333,0.8188,1.0,0.1178,RENDAH,True,0.7801,1.0,0.2188,RENDAH,True,0.0387,-0.101
+10,cross_topic,3TAI,"Waktu belajar fungsi, dosen bilang setiap fungsi seharusnya hanya melakukan satu",1.0,1.0,0.7584,1.0,0.6667,0.731,1.0,0.1749,RENDAH,True,0.7749,1.0,0.1763,RENDAH,True,-0.0439,-0.0014
+11,gap,4PGR,"Kalau saya dekomposisi masalah, sampai seberapa dalam saya harus memecahnya? Mis",0.8333,1.0,0.75,1.0,0.8333,0.7751,1.0,0.1462,RENDAH,True,0.7638,1.0,0.1535,RENDAH,True,0.0113,-0.0073
+12,application,3PAI,"Dari soal lift 2 buah kapasitas 30 kg dengan 9 berang (A:2, B:3, C:5, D:8, E:9, ",1.0,1.0,0.7722,1.0,0.6667,0.8047,1.0,0.1569,RENDAH,True,0.6521,0.8333,0.3019,RENDAH,True,0.1526,-0.145
+13,confusion,4TAI,Saya bikin model data untuk sistem nilai mahasiswa dan saya buang semua field ke,1.0,1.0,0.7324,1.0,0.8333,0.7763,1.0,0.2154,RENDAH,,0.771,1.0,0.1788,RENDAH,,0.0053,0.0366
+14,gap,2TGI,Di slide abstraksi ada istilah 'helicopter view'. Saya tidak ngerti maksudnya — ,0.8333,1.0,0.7,1.0,1.0,0.7261,1.0,0.178,RENDAH,,0.7616,1.0,0.155,RENDAH,,-0.0355,0.023
+15,cross_topic,5TGR,"Waktu analisis data nilai ujian, saya buang semua outlier dulu baru cari pola. A",1.0,1.0,0.7266,1.0,0.8333,0.7652,1.0,0.1526,RENDAH,True,0.7819,1.0,0.1718,RENDAH,True,-0.0167,-0.0192
+16,application,3PGR,Soal: bebek ke-n mendapat n coklat. Total coklat 500 buah. Bebek nomor berapa ya,0.8333,1.0,0.78,1.0,0.8333,0.7954,1.0,0.133,RENDAH,True,0.3958,0.5,0.3927,SEDANG,True,0.3996,-0.2597
+17,application,4TGR,Soal ujian: tentukan digit terakhir dari 2 pangkat 2003. Saya tidak mungkin hitu,1.0,1.0,0.728,1.0,0.8333,0.748,1.0,0.1638,RENDAH,True,0.7594,1.0,0.2322,RENDAH,True,-0.0114,-0.0684
+18,confusion,5PAR,Saya pikir pattern recognition di CT hanya untuk data angka atau deret matematik,0.8333,1.0,0.6998,1.0,1.0,0.7887,1.0,0.1373,RENDAH,True,0.7576,1.0,0.1576,RENDAH,True,0.0311,-0.0203
+19,gap,4PGI,Saya lihat data absensi dan nemu pola: nilai turun setiap minggu ke-5. Tapi baga,1.0,1.0,0.7713,1.0,0.8333,0.532,0.6667,0.3042,RENDAH,True,0.6443,0.8333,0.307,RENDAH,True,-0.1123,-0.0028
+20,application,3TGR,"Diberikan barisan: 3, 6, 12, 24, 48. Dosen minta saya identifikasi jenis deret, ",1.0,1.0,0.7485,1.0,1.0,0.7499,1.0,0.1626,RENDAH,True,0.5658,0.75,0.2822,RENDAH,True,0.1841,-0.1196
+21,confusion,2PAI,Di tugas saya bikin flowchart karena saya kira itu lebih formal dan benar dari p,1.0,1.0,0.7543,1.0,0.8333,0.7919,1.0,0.1753,RENDAH,True,0.7721,1.0,0.1481,RENDAH,True,0.0198,0.0272
+22,application,3PAR,Saya diminta menulis pseudocode algoritme Euclidean untuk mencari FPB dua bilang,1.0,1.0,0.788,1.0,1.0,0.7766,1.0,0.1452,RENDAH,True,0.6557,0.8333,0.1779,RENDAH,True,0.1209,-0.0327
+23,gap,1TGR,Saya sudah buat algoritme untuk cari nilai terbesar dari array dan bisa jalan. T,1.0,1.0,0.7361,1.0,1.0,0.779,1.0,0.1736,RENDAH,True,0.7651,1.0,0.1527,RENDAH,True,0.0139,0.0209
+24,out_of_scope,5TAI,Saya buat algoritme FPB Euclidean dan ingin tahu kompleksitasnya Big-O. Apakah E,1.0,1.0,0.7666,1.0,0.8333,0.7779,1.0,0.326,SEDANG,True,0.795,1.0,0.1632,RENDAH,True,-0.0171,0.1628
+25,confusion,2TGI,Di pseudocode saya selalu tulis 'int x = 5' karena terbiasa dari C++. Tapi teman,1.0,1.0,0.7957,1.0,1.0,0.784,1.0,0.2563,RENDAH,,0.7467,1.0,0.1646,RENDAH,True,0.0373,0.0917
+26,application,2PAR,Soal: hitung nilai ekspresi berikut: (8 + 4) / (2 * 3) - 1. Dan juga: 15 % 4 * 2,1.0,1.0,0.7711,1.0,0.6667,0.7774,1.0,0.1447,RENDAH,True,0.6269,0.8333,0.3183,RENDAH,True,0.1505,-0.1736
+27,confusion,4TGI,Saya sederhanakan ekspresi: NOT (A OR B) menjadi NOT A AND NOT B. Tapi teman say,1.0,1.0,0.7142,1.0,1.0,0.276,0.3333,0.3948,SEDANG,True,0.4545,0.6,0.4456,SEDANG,True,-0.1785,-0.0508
+28,gap,3TAI,"Di pseudocode CT, kalau saya tulis 7 / 2, hasilnya 3 atau 3.5? Di Python hasilny",1.0,1.0,0.7934,1.0,0.8333,0.7782,1.0,0.1442,RENDAH,,0.7413,1.0,0.1982,RENDAH,,0.0369,-0.054
+29,application,3PGI,Tugas: buat tabel kebenaran untuk ekspresi (A AND NOT B) OR (NOT A AND B). Saya ,1.0,1.0,0.7408,1.0,1.0,0.7447,1.0,0.1959,RENDAH,True,0.7338,1.0,0.203,RENDAH,,0.0109,-0.0071
+30,out_of_scope,4PAI,"Di materi variabel dan tipe data, kita belajar integer, float, boolean, string, ",1.0,1.0,0.7704,1.0,0.6667,0.7802,1.0,0.1429,RENDAH,True,0.5216,0.6667,0.311,RENDAH,True,0.2586,-0.1681
+31,application,3PGR,"Trace pseudocode ini untuk input x=-3, y=5:
+  if (x > 0) then
+    if (y > 0) the",1.0,1.0,0.826,1.0,0.5,0.7504,1.0,0.276,RENDAH,True,0.7428,1.0,0.3488,SEDANG,True,0.0076,-0.0728
+32,confusion,4PAR,Saya harus cek: apakah suhu > 35 DAN kelembaban > 80. Saya buat nested if — if s,1.0,1.0,0.7911,1.0,0.8333,0.7663,1.0,0.1519,RENDAH,True,0.6383,0.8333,0.2351,RENDAH,True,0.128,-0.0832
+33,gap,2TAR,"Di else-if untuk konversi nilai: A(>=85), B(>=70), C(>=55), D(lainnya). Nilai sa",1.0,1.0,0.7956,1.0,0.8333,0.7737,1.0,0.1471,RENDAH,True,0.7611,1.0,0.1553,RENDAH,True,0.0126,-0.0082
+34,application,2PGI,"Trace pseudocode konversi nilai untuk input nilai=68:
+  if (nilai>=85) then prin",1.0,1.0,0.8441,1.0,0.6667,0.7805,1.0,0.1727,RENDAH,True,0.7405,1.0,0.1987,RENDAH,True,0.04,-0.026
+35,cross_topic,3TAR,Saya mau buat program yang minta input terus sampai user masukkan angka valid (1,1.0,1.0,0.7312,1.0,0.5,0.556,0.6667,0.2128,RENDAH,True,0.5369,0.6667,0.301,RENDAH,True,0.0191,-0.0882
+36,confusion,2PAI,Saya diminta baca semua baris file CSV sampai habis. Saya tidak tahu ada berapa ,1.0,1.0,0.6936,1.0,0.8333,0.5978,0.8333,0.2614,RENDAH,,0.6364,0.8333,0.3421,SEDANG,True,-0.0386,-0.0807
+37,application,2TGR,"Saya diminta tulis pseudocode untuk cetak 10 bilangan genap pertama (2, 4, ..., ",1.0,0.8571,0.7828,1.0,1.0,0.6482,0.8333,0.2287,RENDAH,,0.5292,0.6667,0.4519,SEDANG,True,0.119,-0.2232
+38,gap,3PAI,Di slide perulangan ada istilah 'sentinel value'. Katanya ini alternatif dari wh,1.0,1.0,0.7039,1.0,1.0,0.6568,0.8333,0.2531,RENDAH,True,0.7801,1.0,0.1429,RENDAH,True,-0.1233,0.1102
+39,application,3TGR,"Trace pseudocode berikut untuk input n=4523:
+  jumlah = 0
+  while (n > 0) do
+   ",1.0,1.0,0.8233,1.0,0.6667,0.7205,0.8333,0.1817,RENDAH,,0.7874,1.0,0.1382,RENDAH,False,-0.0669,0.0435
+40,out_of_scope,4TGI,Di C++ dan Java ada do-while loop yang eksekusi body setidaknya satu kali. Di ps,1.0,1.0,0.7631,1.0,0.8333,0.7875,1.0,0.214,RENDAH,True,0.7762,1.0,0.1455,RENDAH,,0.0113,0.0685
+41,application,2PAR,"Saya bisa buat segitiga bintang biasa (1 bintang di baris pertama, semakin banya",1.0,1.0,0.7298,1.0,1.0,0.6525,0.8333,0.2259,RENDAH,True,0.295,0.3333,0.4583,SEDANG,True,0.3575,-0.2324
+42,confusion,3PAR,"Saya punya nested loop: luar 5 iterasi, dalam 3 iterasi. Saya kira total iterasi",1.0,1.0,0.7793,1.0,0.8333,0.7923,1.0,0.135,RENDAH,True,0.7525,1.0,0.1909,RENDAH,True,0.0398,-0.0559
+43,application,4PAI,Tugas: cetak matriks identitas 3x3 dengan pseudocode nested loop. Saya tahu diag,1.0,1.0,0.7667,1.0,1.0,0.7677,1.0,0.151,RENDAH,True,0.289,0.3333,0.3863,SEDANG,True,0.4787,-0.2353
+44,gap,5TGR,Dosen bilang nested loop selalu O(n²). Tapi saya punya nested loop: luar dari 1 ,1.0,1.0,0.7893,1.0,0.6667,0.7152,1.0,0.1851,RENDAH,True,0.7589,1.0,0.1567,RENDAH,,-0.0437,0.0284
+45,confusion,3TAR,"Di Python, def bisa return nilai atau tidak — keduanya sama-sama 'fungsi'. Tapi ",1.0,1.0,0.7477,1.0,0.6667,0.7736,1.0,0.1772,RENDAH,True,0.7867,1.0,0.1386,RENDAH,True,-0.0131,0.0386
+46,application,2PAI,"Tugas: tulis tiga fungsi untuk luas persegi panjang, segitiga, dan lingkaran. La",1.0,1.0,0.7978,1.0,0.8333,0.8197,1.0,0.2231,RENDAH,True,0.5373,0.6667,0.2549,RENDAH,True,0.2824,-0.0318
+47,gap,3TAI,Saya punya variabel x = 10 di program utama. Di dalam fungsi saya ubah x = 99. S,1.0,1.0,0.7359,1.0,1.0,0.5124,0.6667,0.3569,SEDANG,True,0.531,0.6667,0.3049,RENDAH,True,-0.0186,0.052
+48,cross_topic,4TGI,Rekursi itu fungsi yang memanggil dirinya sendiri. Tapi kalau rekursi adalah fun,1.0,1.0,0.7078,1.0,0.8333,0.7747,1.0,0.2223,RENDAH,True,0.7733,1.0,0.1774,RENDAH,True,0.0014,0.0449
+49,out_of_scope,5PAI,Di Python ada konsep fungsi yang menerima fungsi lain sebagai parameter — disebu,1.0,1.0,0.7193,1.0,0.6667,0.8019,1.0,0.1288,RENDAH,True,0.6419,0.8333,0.1569,RENDAH,True,0.16,-0.0281
+50,confusion,3PAI,Saya tulis fungsi rekursif tapi program saya crash dengan error 'maximum recursi,1.0,1.0,0.6905,1.0,1.0,0.6317,0.6667,0.2394,RENDAH,False,0.7739,1.0,0.187,RENDAH,,-0.1422,0.0524
+51,application,3TGR,Saya diminta trace faktorial(4) secara lengkap dan tunjukkan call stack di fase ,1.0,1.0,0.7428,1.0,0.8333,0.7496,1.0,0.1628,RENDAH,False,0.3932,0.5,0.4244,SEDANG,True,0.3564,-0.2616
+52,confusion,5TAR,Saya buat Fibonacci rekursif dan berjalan normal untuk Fib(10). Tapi waktu saya ,1.0,1.0,0.7254,1.0,1.0,0.6564,0.8333,0.2992,RENDAH,True,0.531,0.6667,0.2291,RENDAH,False,0.1254,0.0701
+53,application,3TGI,"Hitung Fib(6) menggunakan definisi rekursif: Fib(1)=1, Fib(2)=1, Fib(n)=Fib(n-1)",1.0,1.0,0.7742,1.0,0.8333,0.4231,0.5,0.2991,RENDAH,True,0.2118,0.25,0.5123,SEDANG,True,0.2113,-0.2132
+54,cross_topic,5TGI,Dosen bilang faktorial rekursif O(n) tapi Fibonacci rekursif O(2^n). Keduanya re,1.0,1.0,0.7188,1.0,1.0,0.5323,0.6667,0.304,RENDAH,True,0.7536,1.0,0.1602,RENDAH,True,-0.2213,0.1438
+55,confusion,4TGR,Di Python saya pakai list untuk segalanya dan tidak pernah ada masalah. Tapi di ,1.0,1.0,0.6989,1.0,1.0,0.6536,0.8333,0.1494,RENDAH,True,0.7608,1.0,0.1855,RENDAH,True,-0.1072,-0.0361
+56,gap,5PAR,"Kalau Python list sudah bisa melakukan semua yang array bisa — tambah elemen, ak",1.0,1.0,0.715,1.0,0.6667,0.7741,1.0,0.2168,RENDAH,True,0.659,0.8333,0.2516,RENDAH,True,0.1151,-0.0348
+57,out_of_scope,4TGI,Saya baca tentang linked list di internet dan katanya lebih efisien dari array u,1.0,1.0,0.6788,1.0,0.8333,0.4278,0.5,0.4478,SEDANG,True,0.5265,0.6667,0.3836,SEDANG,True,-0.0987,0.0642
+58,application,3PAI,"Saya punya list nilai [75, 82, 60, 91, 55, 88, 70]. Saya diminta hitung rata-rat",1.0,1.0,0.7332,1.0,0.6667,0.426,0.5,0.4031,SEDANG,True,0.2934,0.3333,0.4593,SEDANG,,0.1326,-0.0562
+59,application,2TGI,"Simulasikan stack dengan operasi berurutan:
+PUSH(7), PUSH(2), PUSH(5), POP, PUSH",1.0,0.8571,0.7852,1.0,0.6667,0.668,0.8333,0.1399,RENDAH,True,0.7481,1.0,0.2396,RENDAH,True,-0.0801,-0.0997
+60,application,2PAR,"Simulasikan queue dengan operasi:
+ENQUEUE(P), ENQUEUE(Q), ENQUEUE(R), DEQUEUE, E",1.0,0.8571,0.7708,1.0,0.5,0.7349,1.0,0.1723,RENDAH,True,0.744,1.0,0.2423,RENDAH,True,-0.0091,-0.07
+61,confusion,3TAI,Saya mau buat fitur undo di aplikasi teks editor saya. Setiap aksi disimpan dan ,1.0,1.0,0.7269,1.0,0.6667,0.7706,1.0,0.1791,RENDAH,True,0.786,1.0,0.1391,RENDAH,True,-0.0154,0.04
+62,application,5TGI,Soal: periksa apakah ekspresi '((a+b)*(c-d))' seimbang kurungnya. Dosen minta pa,1.0,0.8571,0.7524,1.0,0.6667,0.4851,0.6667,0.2589,RENDAH,True,0.6374,0.8333,0.2357,RENDAH,,-0.1523,0.0232
+63,gap,4TGR,Di slide stack ada pseudocode implementasi dengan array dan variabel 'top'. Saya,1.0,1.0,0.6837,1.0,1.0,0.2931,0.3333,0.4136,SEDANG,True,0.6544,0.8333,0.3004,RENDAH,True,-0.3613,0.1132
+64,confusion,4TGI,"Dosen bilang tree itu 'graph khusus'. Tapi kalau tree adalah graph, kenapa diaja",1.0,1.0,0.7182,1.0,0.5,0.783,1.0,0.171,RENDAH,,0.7753,1.0,0.2219,RENDAH,True,0.0077,-0.0509
+65,application,3TGI,"Graph: A-B(4), A-C(2), B-D(3), C-D(5), D-E(1). Cari jarak terpendek dari A ke E ",1.0,1.0,0.7734,1.0,1.0,0.8202,1.0,0.1169,RENDAH,False,0.7544,1.0,0.1596,RENDAH,,0.0658,-0.0427
+66,comparative,4TGI,"Graph: A→B, A→C, B→D, B→E, C→F. Saya trace BFS dari A dan dapat: A, B, C, D, E, ",1.0,0.8571,0.7314,1.0,1.0,0.7734,1.0,0.1473,RENDAH,True,0.7538,1.0,0.19,RENDAH,True,0.0196,-0.0427
+67,gap,3PAR,Di slide graph ada directed dan undirected. Dosen minta pilih jenis graph yang t,1.0,1.0,0.745,1.0,0.6667,0.7834,1.0,0.2166,RENDAH,,0.7633,1.0,0.1539,RENDAH,True,0.0201,0.0627
+68,out_of_scope,5PGR,Saya baca tentang Binary Search Tree (BST) di internet. Apakah BST diajarkan di ,1.0,1.0,0.66,1.0,0.8333,0.5205,0.6667,0.2359,RENDAH,True,0.5032,0.6667,0.2771,RENDAH,True,0.0173,-0.0412
+69,application,3PAI,"Tentukan kompleksitas waktu dari:
+a) x = arr[5]
+b) for i=1 to n: print(arr[i])
+c",1.0,0.8571,0.7827,1.0,0.5,0.7853,1.0,0.1696,RENDAH,True,0.7702,1.0,0.1794,RENDAH,True,0.0151,-0.0098
+70,confusion,4PAR,Program saya punya satu nested loop O(n²) dan satu loop biasa O(n) yang berjalan,1.0,1.0,0.7694,1.0,0.6667,0.8099,1.0,0.1536,RENDAH,False,0.7314,1.0,0.2046,RENDAH,True,0.0785,-0.051
+71,application,5TGI,"Tentukan Big-O pseudocode ini:
+  for i=1 to n do
+    j=1
+    while (j < n) do
+  ",1.0,1.0,0.7803,1.0,0.6667,0.7577,1.0,0.1575,RENDAH,True,0.6521,0.8333,0.1503,RENDAH,,0.1056,0.0072
+72,comparative,5PAR,Saya punya 100.000 data yang perlu diurutkan. Bubble sort terasa lambat. Dosen m,1.0,1.0,0.702,1.0,0.3333,0.7527,1.0,0.1907,RENDAH,True,0.7729,1.0,0.2176,RENDAH,True,-0.0202,-0.0269
+73,gap,4TGR,Saya hanya tahu time complexity. Tapi dosen juga tanya space complexity dari alg,1.0,1.0,0.6443,1.0,0.6667,0.7839,1.0,0.2563,RENDAH,,0.6629,0.8333,0.1733,RENDAH,True,0.121,0.083
+74,out_of_scope,6TGR,"Saya baca bahwa append ke Python list itu O(1) amortized, bukan O(1) biasa. Apa ",1.0,1.0,0.693,1.0,1.0,0.3975,0.5,0.3916,SEDANG,True,0.5278,0.6667,0.1853,RENDAH,True,-0.1303,0.2063
+75,application,3TGR,"Array terurut: [3, 7, 12, 18, 25, 31, 44, 56, 67, 89]. Cari angka 25. Saya trace",1.0,0.8571,0.7417,1.0,0.8333,0.4135,0.5,0.3054,RENDAH,True,0.6284,0.8333,0.2415,RENDAH,True,-0.2149,0.0639
+76,confusion,2PAI,"Saya coba binary search untuk array [5, 3, 8, 1, 9] dan hasilnya salah — elemen ",1.0,1.0,0.7219,1.0,1.0,0.7909,1.0,0.2418,RENDAH,False,0.748,1.0,0.2548,RENDAH,True,0.0429,-0.013
+77,application,2TAI,"Trace bubble sort untuk array [5, 2, 8, 1, 9] — tunjukkan semua pertukaran di se",1.0,1.0,0.7295,1.0,0.5,0.7838,1.0,0.2164,RENDAH,True,0.5249,0.6667,0.4605,SEDANG,True,0.2589,-0.2441
+78,application,3PGI,"Trace selection sort untuk array [4, 7, 2, 9, 1, 5]. Saya tidak yakin cara kerja",1.0,1.0,0.7452,1.0,0.3333,0.7125,0.8333,0.141,RENDAH,True,0.6179,0.8,0.1574,RENDAH,True,0.0946,-0.0164
+79,comparative,4PAI,Teman saya selalu pakai binary search karena katanya lebih cepat. Tapi dosen bil,1.0,1.0,0.7037,1.0,0.8333,0.7948,1.0,0.1334,RENDAH,True,0.7688,1.0,0.1803,RENDAH,True,0.026,-0.0469
+80,cross_topic,6PAR,Saya mau buat sistem pencarian kontak dari 10.000 data. Dosen minta saya dekompo,1.0,1.0,0.7672,1.0,0.8333,0.7761,1.0,0.1455,RENDAH,True,0.55,0.6667,0.3225,SEDANG,True,0.2261,-0.177
+81,cross_topic,5TGR,"Waktu belajar rekursi, dosen bilang setiap pemanggilan rekursif disimpan di 'cal",1.0,1.0,0.7613,1.0,0.3333,0.773,1.0,0.1775,RENDAH,True,0.6547,0.8333,0.1786,RENDAH,True,0.1183,-0.0011
+82,cross_topic,5PAI,Dosen bilang kita bisa gunakan pattern recognition untuk langsung tahu Big-O dar,1.0,1.0,0.736,1.0,1.0,0.7847,1.0,0.1399,RENDAH,True,0.7789,1.0,0.1737,RENDAH,True,0.0058,-0.0338
+83,cross_topic,4TAI,"Kalau abstraksi adalah 'sembunyikan detail yang tidak perlu', apakah setiap fung",1.0,1.0,0.7496,1.0,0.5,0.7731,1.0,0.1775,RENDAH,True,0.7531,1.0,0.2305,RENDAH,True,0.02,-0.053
+84,cross_topic,5TGI,Dosen bilang DFS di graph biasanya diimplementasikan rekursif. Saya paham rekurs,1.0,1.0,0.7263,1.0,1.0,0.7269,1.0,0.405,SEDANG,True,0.7693,1.0,0.18,RENDAH,True,-0.0424,0.225
+85,application,4TAI,Saya diminta cek apakah kata 'katak' adalah palindrom tanpa pakai fungsi string ,1.0,1.0,0.7207,1.0,0.6667,0.788,1.0,0.1378,RENDAH,True,0.7863,1.0,0.1389,RENDAH,True,0.0017,-0.0011
+86,application,5TGR,Saya buat program cek bilangan prima dengan loop dari 2 sampai n. Untuk n=1.000.,1.0,1.0,0.6829,1.0,1.0,0.7591,1.0,0.1566,RENDAH,,0.6489,0.8333,0.1524,RENDAH,,0.1102,0.0042
+87,application,3PAR,Tugas: hitung berapa digit bilangan 98765 tanpa mengubahnya ke string. Hanya bol,1.0,1.0,0.7912,1.0,1.0,0.7814,1.0,0.1421,RENDAH,True,0.5394,0.6667,0.3294,SEDANG,True,0.242,-0.1873
+88,scenario,5PAI,"Saya diminta desain sistem antrian loket bank: nasabah biasa antri normal, lansi",1.0,1.0,0.6936,1.0,1.0,0.4079,0.5,0.4149,SEDANG,True,0.2862,0.3333,0.4181,SEDANG,True,0.1217,-0.0032
+89,scenario,5PGR,"Soal ujian: tulis fungsi rekursif untuk C(5,2) menggunakan sifat Pascal: C(n,k) ",1.0,1.0,0.7611,1.0,0.6667,0.5084,0.6667,0.3195,RENDAH,,0.5111,0.6667,0.1661,RENDAH,True,-0.0027,0.1534
+90,scenario,5TAI,Saya punya data nilai ujian 30.000 mahasiswa yang hampir terurut — hanya beberap,1.0,1.0,0.7311,1.0,0.6667,0.779,1.0,0.1436,RENDAH,True,0.7633,1.0,0.1939,RENDAH,True,0.0157,-0.0503
+91,confusion,2PAI,"Fungsi saya punya dua return: pertama di dalam if, kedua di akhir. Untuk input t",1.0,1.0,0.7095,1.0,0.6667,0.7713,1.0,0.1487,RENDAH,False,0.7454,1.0,0.1655,RENDAH,True,0.0259,-0.0168
+92,confusion,4TGI,Fungsi faktorial saya hanya punya base case n==0. Teman bilang harus tambahkan n,1.0,1.0,0.7626,1.0,1.0,0.7767,1.0,0.1451,RENDAH,True,0.7508,1.0,0.192,RENDAH,True,0.0259,-0.0469
+93,gap,3TAI,Program saya sudah jalan 5 menit untuk input besar dan belum selesai. Apakah itu,1.0,1.0,0.7193,1.0,0.6667,0.8139,1.0,0.151,RENDAH,True,0.7806,1.0,0.2485,RENDAH,True,0.0333,-0.0975
+94,application,3TGR,"Trace rekursif untuk fungsi:
+  function f(n): if n<=2 return 1 else return f(n-1",1.0,1.0,0.796,1.0,0.5,0.7824,1.0,0.1814,RENDAH,True,0.7479,1.0,0.1639,RENDAH,False,0.0345,0.0175
+95,application,2TGI,Tulis pseudocode untuk membaca 5 bilangan dari input dan tampilkan nilai terbesa,1.0,1.0,0.792,1.0,1.0,0.6943,0.8333,0.2287,RENDAH,True,0.7616,1.0,0.195,RENDAH,True,-0.0673,0.0337
+96,gap,3TAI,"Di fungsi saya, saya ubah nilai parameter dan berharap nilai aslinya ikut beruba",1.0,1.0,0.7379,1.0,0.5,0.7842,1.0,0.1403,RENDAH,True,0.7659,1.0,0.1522,RENDAH,True,0.0183,-0.0119
+97,out_of_scope,4PAR,"Di program saya, kalau user masukkan huruf padahal yang diharapkan angka, progra",1.0,1.0,0.7268,1.0,1.0,0.5431,0.6667,0.297,RENDAH,True,0.6537,0.8333,0.1492,RENDAH,,-0.1106,0.1478
+98,cross_topic,2PGR,Soal: hari ini Senin. Hari apa 1000 hari dari sekarang? Dosen bilang ini tentang,1.0,1.0,0.7251,1.0,0.8333,0.6629,0.8333,0.2191,RENDAH,True,0.7515,1.0,0.1615,RENDAH,True,-0.0886,0.0576
+99,application,3TAR,Saya diminta buat pseudocode sistem login dengan maksimal 3 percobaan. Lebih dar,1.0,1.0,0.7441,1.0,1.0,0.7701,1.0,0.1494,RENDAH,False,0.7606,1.0,0.1556,RENDAH,,0.0095,-0.0062
+100,scenario,5PAR,Saya mau representasikan peta kota dengan ratusan persimpangan dan ribuan jalan.,1.0,1.0,0.6747,1.0,0.8333,0.6644,0.8333,0.1723,RENDAH,True,0.6632,0.8333,0.2131,RENDAH,True,0.0012,-0.0408
+101,application,4PGR,"Soal: tentukan digit terakhir dari 3^100. Saya coba hitung 3^1=3, 3^2=9, 3^3=27,",1.0,1.0,0.8025,1.0,0.5,0.802,1.0,0.1587,RENDAH,True,0.758,1.0,0.1873,RENDAH,True,0.044,-0.0286
+102,confusion,5TAR,Dosen bilang algoritme binary search O(log n) sangat efisien. Tapi untuk array b,1.0,1.0,0.7409,1.0,0.6667,0.8085,1.0,0.1545,RENDAH,True,0.7661,1.0,0.182,RENDAH,True,0.0424,-0.0275
+103,gap,5TGR,Rekursi itu fungsi yang memanggil dirinya sendiri. Tapi dosen menyebut ada 'reku,0.8333,1.0,0.7069,1.0,0.8333,0.1883,0.1667,0.5576,TINGGI,,0.4098,0.5,0.4136,SEDANG,False,-0.2215,0.144
+104,application,4TGR,"Diberikan barisan: 1, 3, 7, 13, 21, 31. Saya hitung selisihnya: 2, 4, 6, 8, 10 —",1.0,1.0,0.7505,1.0,0.6667,0.714,1.0,0.1859,RENDAH,True,0.7624,1.0,0.1544,RENDAH,True,-0.0484,0.0315
+105,confusion,3PAR,Saya lihat di kode server web ada while(true) yang jalan terus tanpa henti. Kata,1.0,1.0,0.699,1.0,1.0,0.7819,1.0,0.1418,RENDAH,,0.7648,1.0,0.1529,RENDAH,True,0.0171,-0.0111
+106,cross_topic,3PGR,"Di soal abstraksi, dosen minta saya identifikasi PROBLEM, GOAL, BATASAN, dan DAT",1.0,1.0,0.7112,1.0,0.8333,0.5258,0.6667,0.3841,SEDANG,True,0.6409,0.8333,0.3492,SEDANG,True,-0.1151,0.0349
+107,application,3PAI,Tugas: buat pseudocode untuk menampilkan semua faktor bilangan n. Contoh: faktor,1.0,1.0,0.8261,1.0,0.8333,0.596,0.6667,0.2167,RENDAH,True,0.7563,1.0,0.1584,RENDAH,,-0.1603,0.0583
+108,scenario,5PAR,Saya diminta desain penyimpanan data nilai 500 mahasiswa untuk 10 mata kuliah. D,1.0,1.0,0.7708,1.0,0.6667,0.6591,0.8333,0.2216,RENDAH,True,0.7758,1.0,0.1457,RENDAH,True,-0.1167,0.0759
+109,out_of_scope,6PAI,Saya butuh cari nama mahasiswa dari NIM-nya dengan cepat O(1). Di Python saya pa,1.0,1.0,0.7277,1.0,1.0,0.5138,0.6667,0.346,SEDANG,True,0.6446,0.8333,0.261,RENDAH,True,-0.1308,0.085
+110,cross_topic,6TGR,Saya diminta rancang algoritme sederhana untuk mengurutkan dan mencari nama maha,1.0,1.0,0.7662,1.0,0.8333,0.7638,1.0,0.1535,RENDAH,True,0.7803,1.0,0.1428,RENDAH,,-0.0165,0.0107

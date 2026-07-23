@@ -28,12 +28,39 @@
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" async></script>
+
+  <style>
+    /* ── PROFIL KOGNITIF (dropdown sederhana) ─────────────── */
+    .cognitive-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .cognitive-row label {
+      font-size: 0.9rem;
+    }
+    #cognitiveSelect {
+      padding: 6px 10px;
+      font-size: 0.9rem;
+      min-width: 260px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
 
     <h1>Personalized Learning System</h1>
     <p class="subtitle">Ditenagai oleh <b>GPT API + RAG Kognitif</b> · LT dipilih otomatis oleh <b>RL Agent</b></p>
+
+    <!-- Dropdown sederhana: pilih profil kognitif manual (kosong = otomatis oleh RL Agent) -->
+    <div class="cognitive-row">
+      <label for="cognitiveSelect">Profil Kognitif:</label>
+      <select id="cognitiveSelect">
+        <!-- Diisi oleh script.js -->
+      </select>
+    </div>
 
     <!-- PERTANYAAN -->
     <section class="question-section">

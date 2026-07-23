@@ -1,1085 +1,1700 @@
 """
 evaluation/test_cases.py
 ─────────────────────────
-Test-case dataset for the RAG evaluation suite.
+110 test case REALISTIS untuk RAG evaluation suite.
+Dokumen ground truth: pls-ct-main/materials/
 
-Design principles for these queries
-────────────────────────────────────
-1. HUMAN-LIKE FRAMING — questions read like a real student typing into a chat:
-   hesitation markers, partial context ("I just learned…"), scenario setups,
-   follow-up style ("wait, so…"), and occasional Indonesian mixing.
+TIDAK ADA reference_answer — evaluasi step 5 menggunakan chunk GT yang
+di-retrieve oleh RAG (lihat runner.py yang sudah di-patch).
 
-2. CT TECHNICALITY — every question maps to a concrete Computational Thinking
-   concept (decomposition, abstraction, pattern recognition, algorithm design,
-   complexity, data structures).
+DESAIN relevant_keywords:
+  Setiap test case punya 5–7 keyword dengan campuran:
+  - 2–3 keyword yang genuinely relevan ke pertanyaan (ada di GT)
+  - 1–2 keyword "false trail" — istilah CT lain yang semantically nearby
+    tapi bukan yang dicari (membuat P@K dan R@K tidak trivially 1.0)
+  - Kadang 1 keyword yang sama sekali tidak ada di GT (out-of-scope)
 
-3. QUERY TYPES — five archetypes that cover the range of real student behaviour:
-   • conceptual    — "what is / apa itu" — basic definitional
-   • comparative   — "what's the diff / apa bedanya" — two concepts side-by-side
-   • scenario      — grounded in a real mini-problem the student is solving
-   • confusion     — student states a misconception and asks for clarification
-   • application   — student wants to apply something they just learned
+DESAIN pertanyaan:
+  - Ditulis dari perspektif mahasiswa yang BENAR-BENAR bingung
+  - ~35% pertanyaan cross-topik: menyentuh lebih dari satu materi
+  - ~25% out-of-scope parsial: sudut pandang atau implementasi tidak langsung ada di GT
+  - ~40% in-scope tapi ambiguous: topik ada tapi pertanyaannya dari sisi yang tricky
 
-Each entry:
-  query             — the raw question sent to /chat
-  reference_answer  — ground-truth used by the Ollama local evaluator
-  relevant_keywords — terms that SHOULD appear in retrieved material chunks
-  cognitive         — 4-char cognitive type code
-  session_id        — unique ID for this eval run
-  query_type        — archetype label (for reporting)
-  context_note      — short human-readable note on the scenario
+Cara run:
+  set MATERIALS_DIR=C:\\path\\to\\pls-ct-main\\materials
+  python scripts/run_evaluation.py
 """
 
 from typing import Dict, List
 
 TEST_CASES: List[Dict] = [
 
-    # ── 1. Conceptual — Algoritma ──────────────────────────────────────────
-    {
-        "query": (
-            "Pak, saya baru mulai belajar CT nih dan masih bingung. "
-            "Jadi kalau dibilang 'algoritma' itu sebenernya maksudnya apa sih? "
-            "Apa bedanya sama langkah-langkah biasa yang kita tulis di kertas?"
-        ),
-        "reference_answer": (
-            "Algoritma adalah urutan instruksi yang terdefinisi jelas, terbatas, dan "
-            "pasti berhenti untuk menyelesaikan suatu masalah. Berbeda dari langkah biasa, "
-            "algoritma harus deterministik, tidak ambigu, dan menghasilkan output yang benar."
-        ),
-        "relevant_keywords": ["algoritma", "instruksi", "urutan", "deterministik", "langkah"],
-        "cognitive": "1PAR",
-        "session_id": "eval-001",
-        "query_type": "conceptual",
-        "context_note": "Mahasiswa baru pertama kali dengar istilah 'algoritma' dalam konteks CT",
-    },
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 1 — PENDAHULUAN & DEFINISI CT (GT_CT01, GT_DETAIL_PT01)
+    # ══════════════════════════════════════════════════════════════════════
 
-    # ── 2. Scenario — Dekomposisi ──────────────────────────────────────────
+    # 001 | gap — mahasiswa tidak tahu bedanya CT dengan "berpikir logis" biasa
     {
         "query": (
-            "Oke jadi saya lagi ngerjain tugas bikin aplikasi absensi mahasiswa. "
-            "Masalahnya gede banget, saya gak tau mulai dari mana. "
-            "Kata teman saya pakai 'dekomposisi' bisa bantu — bisa dijelasin caranya "
-            "kalau diterapin ke kasus absensi ini?"
+            "Saya sudah baca definisi Computational Thinking dari berbagai sumber "
+            "dan semuanya bilang CT itu tentang 'formulasi masalah dan solusi'. "
+            "Tapi berpikir logis yang saya pelajari di matematika SMA juga tentang "
+            "formulasi masalah. Jadi bedanya apa CT dengan berpikir logis biasa?"
         ),
-        "reference_answer": (
-            "Dekomposisi adalah teknik memecah masalah besar menjadi sub-masalah yang lebih kecil "
-            "dan mudah dikelola. Untuk aplikasi absensi: pecah menjadi (1) input data mahasiswa, "
-            "(2) pencatatan kehadiran, (3) penyimpanan data, (4) laporan. Setiap bagian bisa "
-            "dikerjakan dan diuji secara terpisah."
-        ),
-        "relevant_keywords": ["dekomposisi", "sub-masalah", "bagian", "pecah", "modular"],
+        "relevant_keywords": ["computational thinking", "formulasi masalah", "berpikir logis", "algoritme", "abstraksi"],
         "cognitive": "2PAR",
+        "session_id": "eval-001",
+        "query_type": "gap",
+        "context_note": "Mahasiswa tidak bisa membedakan CT dengan berpikir logis SMA",
+    },
+
+    # 002 | confusion — salah kira AADP itu urutan langkah prosedural
+    {
+        "query": (
+            "Di catatan saya tulis AADP = Abstraksi → Algoritme → Dekomposisi → Pattern Recognition "
+            "dan saya kerjakan soal dengan urutan itu. Tapi nilai saya jelek. "
+            "Kata teman, AADP bukan urutan. Lalu AADP itu apa sebenarnya?"
+        ),
+        "relevant_keywords": ["AADP", "pilar", "dekomposisi", "urutan langkah", "pseudocode"],
+        "cognitive": "1TAR",
         "session_id": "eval-002",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa menghadapi proyek nyata dan mencari cara memulai",
-    },
-
-    # ── 3. Confusion — Rekursi vs Iterasi ─────────────────────────────────
-    {
-        "query": (
-            "Saya agak bingung nih. Katanya rekursi itu fungsi yang manggil dirinya sendiri, "
-            "tapi kan itu keliatannya bakal jalan terus dong tanpa henti? "
-            "Terus bedanya sama loop while apa, bukannya keduanya 'ngulang' sesuatu?"
-        ),
-        "reference_answer": (
-            "Rekursi berhenti karena ada base case — kondisi yang menghentikan pemanggilan diri. "
-            "Tanpa base case, memang terjadi stack overflow. Perbedaan dengan iterasi: rekursi "
-            "menyimpan state di call stack (memori lebih besar), iterasi di loop variable. "
-            "Rekursi lebih elegan untuk masalah hirarkis (tree, fractal), iterasi lebih efisien."
-        ),
-        "relevant_keywords": ["rekursi", "base case", "iterasi", "stack", "perulangan"],
-        "cognitive": "3TGR",
-        "session_id": "eval-003",
         "query_type": "confusion",
-        "context_note": "Mahasiswa punya miskonsepsi bahwa rekursi = infinite loop",
+        "context_note": "Mahasiswa salah mengira AADP adalah urutan prosedural",
     },
 
-    # ── 4. Application — Bubble Sort ──────────────────────────────────────
+    # 003 | out-of-scope — tanya tentang era VUCA dari sudut pandang karir, bukan CT
     {
         "query": (
-            "Saya nemu array [64, 25, 12, 22, 11] dan disuruh sort manual pakai bubble sort. "
-            "Tapi saya gak yakin mekanismenya — setiap iterasi itu yang bergerak elemennya yang "
-            "mana? Bisa tolong jelasin langkah pertamanya buat array itu?"
+            "Dosen bilang kita hidup di era VUCA dan CT itu penting untuk karir. "
+            "Tapi saya mau jadi dokter, bukan programmer. "
+            "Apakah CT relevan untuk dokter di era VUCA, "
+            "atau ini hanya penting untuk orang teknik saja?"
         ),
-        "reference_answer": (
-            "Bubble sort membandingkan dua elemen berdampingan dan menukar jika yang kiri lebih besar. "
-            "Iterasi pertama pada [64,25,12,22,11]: bandingkan 64>25 → tukar → [25,64,12,22,11], "
-            "64>12 → tukar → [25,12,64,22,11], 64>22 → tukar → [25,12,22,64,11], "
-            "64>11 → tukar → [25,12,22,11,64]. Elemen terbesar 'menggelembung' ke akhir."
-        ),
-        "relevant_keywords": ["bubble sort", "bandingkan", "tukar", "elemen", "iterasi"],
-        "cognitive": "2PAI",
-        "session_id": "eval-004",
-        "query_type": "application",
-        "context_note": "Mahasiswa mengerjakan contoh konkret, butuh trace langkah per langkah",
-    },
-
-    # ── 5. Conceptual — Abstraksi ──────────────────────────────────────────
-    {
-        "query": (
-            "Dalam materi CT pilar keempat itu abstraksi. Tapi saya masih blur — "
-            "abstraksi itu berarti kita 'sembunyiin' detail yang gak penting kan? "
-            "Tapi gimana kita tau detail mana yang penting dan mana yang bisa diabaikan?"
-        ),
-        "reference_answer": (
-            "Abstraksi adalah proses mengidentifikasi dan menyimpan hanya informasi yang relevan "
-            "untuk tujuan tertentu, mengabaikan detail yang tidak mempengaruhi solusi. "
-            "Cara menentukan: tanyakan 'apakah detail ini mengubah output/solusi?' — jika tidak, "
-            "abaikan. Contoh: peta jalan hanya tampilkan nama jalan, bukan warna aspal."
-        ),
-        "relevant_keywords": ["abstraksi", "relevan", "detail", "sederhanakan", "informasi"],
-        "cognitive": "4TAI",
-        "session_id": "eval-005",
-        "query_type": "conceptual",
-        "context_note": "Mahasiswa paham definisi tapi bingung cara praktis menerapkan abstraksi",
-    },
-
-    # ── 6. Scenario — Pattern Recognition ─────────────────────────────────
-    {
-        "query": (
-            "Pak saya lagi analisis data nilai ujian 100 mahasiswa. "
-            "Banyak yang dapat nilai rendah di soal nomor 3 dan 7 yang keduanya soal rekursi. "
-            "Ini ada hubungannya sama pattern recognition di CT? Atau saya terlalu GR?"
-        ),
-        "reference_answer": (
-            "Itu tepat — kamu sedang menerapkan pattern recognition. Kamu mengidentifikasi pola "
-            "berulang (nilai rendah pada soal rekursi) dari data besar. Pattern recognition dalam CT "
-            "adalah kemampuan mengenali kesamaan, tren, atau keterulangan yang bisa dimanfaatkan "
-            "untuk solusi yang lebih umum dan efisien."
-        ),
-        "relevant_keywords": ["pattern recognition", "pola", "kesamaan", "tren", "identifikasi"],
+        "relevant_keywords": ["VUCA", "computational thinking", "karir", "dokter", "dekomposisi"],
         "cognitive": "3TGI",
+        "session_id": "eval-003",
+        "query_type": "out_of_scope",
+        "context_note": "Mahasiswa tidak berlatar teknik mempertanyakan relevansi CT untuk karir non-teknik",
+    },
+
+    # 004 | cross_topic — CT + ICT literacy dicampur jadi satu pertanyaan
+    {
+        "query": (
+            "Di silabus ada materi CT dan materi ICT Literacy. "
+            "Saya bingung — apakah ICT Literacy itu bagian dari CT "
+            "atau CT bagian dari ICT Literacy? "
+            "Atau keduanya hal yang sama sekali berbeda?"
+        ),
+        "relevant_keywords": ["ICT literacy", "computational thinking", "literasi digital", "AADP", "teknologi"],
+        "cognitive": "2TAI",
+        "session_id": "eval-004",
+        "query_type": "cross_topic",
+        "context_note": "Mahasiswa bingung hubungan hierarki CT dan ICT Literacy",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 2 — ICT LITERACY & ETIKA (GT_CT02, GT_DETAIL_PT02)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 005 | confusion — salah paham digital footprint hanya dari upload
+    {
+        "query": (
+            "Teman saya bilang saya punya digital footprint besar karena sering pakai Instagram. "
+            "Tapi saya hampir tidak pernah posting — saya hanya scroll dan nonton video orang lain. "
+            "Apa betul saya tetap punya digital footprint meski tidak pernah upload apapun?"
+        ),
+        "relevant_keywords": ["digital footprint", "jejak digital", "media sosial", "privasi", "algoritme"],
+        "cognitive": "3PAR",
+        "session_id": "eval-005",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa kira digital footprint hanya dari konten yang diunggah",
+    },
+
+    # 006 | gap — mahasiswa tidak tahu bedanya LwICT dengan ICT Literacy
+    {
+        "query": (
+            "Di slide ada dua istilah: 'ICT Literacy' dan 'Literacy with ICT'. "
+            "Keduanya terlihat sama — intinya kan paham teknologi. "
+            "Kenapa perlu dua istilah berbeda untuk hal yang sama?"
+        ),
+        "relevant_keywords": ["ICT literacy", "LwICT", "literasi", "digital", "computational thinking"],
+        "cognitive": "2PAI",
         "session_id": "eval-006",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa menemukan pola dalam data nyata dan ragu itu termasuk CT",
+        "query_type": "gap",
+        "context_note": "Mahasiswa tidak paham perbedaan antara ICT Literacy dan LwICT",
     },
 
-    # ── 7. Comparative — Big-O ────────────────────────────────────────────
+    # 007 | out-of-scope — tanya implementasi kebijakan privasi spesifik (tidak ada di GT)
     {
         "query": (
-            "Saya baca kalau binary search itu O(log n) dan linear search O(n). "
-            "Tapi kalau arraynya cuma 10 elemen, bedanya kan gak kerasa dong? "
-            "Kapan sih penting buat peduli sama Big-O notation ini?"
+            "Saya buat aplikasi untuk tugas dan kumpulkan data nama dan email teman. "
+            "Dari materi etika digital, apakah saya perlu minta izin dulu sebelum menyimpan data mereka? "
+            "Dan kalau sudah terlanjur, apa yang harus saya lakukan?"
         ),
-        "reference_answer": (
-            "Untuk n=10 memang perbedaannya kecil. Big-O penting saat n besar: O(n) pada n=1.000.000 "
-            "= 1 juta operasi vs O(log n) = 20 operasi. Big-O mengukur laju pertumbuhan, bukan "
-            "kecepatan absolut. Jadi untuk data kecil, pertimbangkan juga overhead algoritma; "
-            "untuk data besar, Big-O menjadi faktor penentu."
-        ),
-        "relevant_keywords": ["Big-O", "kompleksitas", "log n", "pertumbuhan", "efisiensi"],
-        "cognitive": "5PAI",
+        "relevant_keywords": ["etika digital", "privasi", "data pribadi", "izin", "dekomposisi"],
+        "cognitive": "4TAI",
         "session_id": "eval-007",
-        "query_type": "comparative",
-        "context_note": "Mahasiswa mempertanyakan relevansi Big-O pada skala kecil",
+        "query_type": "out_of_scope",
+        "context_note": "Mahasiswa tanya prosedur konkret perlindungan data — detail regulasi tidak ada di GT",
     },
 
-    # ── 8. Confusion — Array vs List ──────────────────────────────────────
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 3 — DEKOMPOSISI (GT_CT03, GT_DETAIL_PT03, GT_SUBTOPIK_01)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 008 | confusion — mahasiswa kira dekomposisi = membagi tugas ke orang berbeda
     {
         "query": (
-            "Di Python saya selalu pakai list, tapi dosen bilang itu beda sama array. "
-            "Saya lihat di internet ada yang bilang list Python itu 'dynamic array'. "
-            "Jadi sebenernya mereka sama atau beda? Saya makin bingung."
+            "Waktu kerja kelompok, kami bagi tugas: saya bikin bagian A, teman bikin bagian B. "
+            "Kata saya itu dekomposisi, tapi teman saya bilang itu bukan dekomposisi CT. "
+            "Lalu apa bedanya 'bagi tugas' biasa dengan dekomposisi dalam CT?"
         ),
-        "reference_answer": (
-            "Array klasik adalah blok memori berurutan bertipe sama dengan ukuran tetap. "
-            "Python list adalah dynamic array — bisa berisi berbagai tipe, ukuran bisa berubah, "
-            "tapi di balik layar tetap menggunakan array dengan resizing otomatis. "
-            "Perbedaan praktis: array (numpy) lebih efisien untuk operasi numerik massal; "
-            "Python list lebih fleksibel tapi ada overhead."
-        ),
-        "relevant_keywords": ["array", "list", "memori", "tipe", "dynamic", "indeks"],
-        "cognitive": "2TGI",
+        "relevant_keywords": ["dekomposisi", "sub-masalah", "modular", "pembagian tugas", "abstraksi"],
+        "cognitive": "1PAI",
         "session_id": "eval-008",
         "query_type": "confusion",
-        "context_note": "Mahasiswa bingung karena Python list dan array tampak serupa",
+        "context_note": "Mahasiswa kira bagi tugas kelompok = dekomposisi CT",
     },
 
-    # ── 9. Application — Pseudocode ───────────────────────────────────────
+    # 009 | application — soal lift berang-berang (ada di GT_SUBTOPIK_01)
     {
         "query": (
-            "Tugas saya harus bikin pseudocode sebelum coding. "
-            "Masalahnya saya gak tau formatnya harus sedetail apa — "
-            "apakah harus mirip Python, atau boleh pakai bahasa Indonesia semua? "
-            "Ada aturan resmi gak untuk pseudocode?"
+            "Ada soal: 2 lift kapasitas masing-masing 30 kg. "
+            "Ada 9 berang dengan berat: A=2, B=3, C=5, D=8, E=9, F=9, G=12, H=12, I=22 kg. "
+            "Bagaimana dekomposisi masalah ini untuk memaksimalkan jumlah berang yang terangkut?"
         ),
-        "reference_answer": (
-            "Pseudocode tidak punya standar baku — tujuannya adalah keterbacaan manusia, bukan "
-            "eksekusi mesin. Boleh bahasa Indonesia, campuran, atau mirip Python. Yang penting: "
-            "setiap langkah jelas dan tidak ambigu, struktur kontrol (if/loop) dinyatakan eksplisit, "
-            "dan variabel dinamai bermakna. Hindari detail sintaks bahasa tertentu."
-        ),
-        "relevant_keywords": ["pseudocode", "algoritma", "langkah", "struktur", "keterbacaan"],
-        "cognitive": "1PAR",
+        "relevant_keywords": ["dekomposisi", "optimasi", "lift", "sub-masalah", "rekursi", "greedy"],
+        "cognitive": "2PAR",
         "session_id": "eval-009",
         "query_type": "application",
-        "context_note": "Mahasiswa kebingungan soal standar penulisan pseudocode",
+        "context_note": "Soal lift berang-berang ada di GT_SUBTOPIK_01 — apakah RAG retrieve dokumen yang tepat",
     },
 
-    # ── 10. Comparative — Linked List vs Array ────────────────────────────
+    # 010 | cross_topic — dekomposisi + fungsi (mahasiswa nyambungkan keduanya)
     {
         "query": (
-            "Kalau saya mau bikin daftar kontak di aplikasi yang sering insert/delete data, "
-            "lebih baik pakai linked list atau array? "
-            "Saya dengar linked list lebih bagus untuk insert tapi saya gak paham kenapa."
+            "Waktu belajar fungsi, dosen bilang setiap fungsi seharusnya hanya melakukan satu hal. "
+            "Itu berhubungan dengan dekomposisi kan? "
+            "Tapi saya bingung — apakah fungsi dalam pemrograman itu implementasi dari dekomposisi CT?"
         ),
-        "reference_answer": (
-            "Linked list unggul untuk insert/delete karena hanya mengubah pointer — O(1) jika "
-            "posisi diketahui. Array harus menggeser semua elemen — O(n). Tapi linked list lebih "
-            "lambat untuk akses acak (O(n) vs O(1) array). Untuk daftar kontak dengan banyak "
-            "insert/delete: linked list. Untuk akses cepat berdasarkan indeks: array."
-        ),
-        "relevant_keywords": ["linked list", "pointer", "node", "insert", "array", "akses"],
-        "cognitive": "3PAI",
+        "relevant_keywords": ["fungsi", "dekomposisi", "modularitas", "DRY", "abstraksi", "sub-masalah"],
+        "cognitive": "3TAI",
         "session_id": "eval-010",
-        "query_type": "comparative",
-        "context_note": "Mahasiswa sedang memilih struktur data untuk kasus konkret",
+        "query_type": "cross_topic",
+        "context_note": "Mahasiswa menghubungkan konsep fungsi dengan dekomposisi CT",
     },
 
-    # ── 11. Application — Binary Search ───────────────────────────────────
+    # 011 | gap — mahasiswa tidak tahu kapan dekomposisi berhenti (level berapa)
     {
         "query": (
-            "Saya coba implementasi binary search tapi hasilnya kadang salah. "
-            "Array saya sudah diurutkan: [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]. "
-            "Kalau saya cari angka 23, langkah-langkahnya gimana seharusnya?"
+            "Kalau saya dekomposisi masalah, sampai seberapa dalam saya harus memecahnya? "
+            "Misalnya 'bikin kue' — apakah saya pecah sampai level 'gerakkan jari untuk ngaduk' "
+            "atau cukup sampai 'campurkan bahan'? "
+            "Apa ada kriteria kapan dekomposisi sudah cukup?"
         ),
-        "reference_answer": (
-            "Binary search pada [2,5,8,12,16,23,38,56,72,91] mencari 23: "
-            "mid=(0+9)/2=4 → arr[4]=16 < 23 → cari kanan. "
-            "mid=(5+9)/2=7 → arr[7]=56 > 23 → cari kiri. "
-            "mid=(5+6)/2=5 → arr[5]=23 = target → ditemukan di indeks 5. "
-            "Total 3 perbandingan vs 6 untuk linear search."
-        ),
-        "relevant_keywords": ["binary search", "tengah", "terurut", "indeks", "perbandingan"],
-        "cognitive": "4PAR",
-        "session_id": "eval-011",
-        "query_type": "application",
-        "context_note": "Mahasiswa debugging implementasi binary search dengan trace manual",
-    },
-
-    # ── 12. Conceptual — Stack ────────────────────────────────────────────
-    {
-        "query": (
-            "Saya dengar stack itu kayak 'tumpukan piring' — yang terakhir masuk, pertama keluar. "
-            "Tapi di dunia nyata, di mana stack ini beneran dipake? "
-            "Kayaknya abstrak banget kalau cuma diibaratkan piring."
-        ),
-        "reference_answer": (
-            "Stack digunakan di: (1) function call stack — setiap pemanggilan fungsi push frame, "
-            "return pop frame; (2) undo/redo di text editor; (3) evaluasi ekspresi matematika; "
-            "(4) navigasi browser (back button). Prinsip LIFO memastikan konteks terakhir "
-            "selalu yang pertama diselesaikan — kritikal untuk rekursi."
-        ),
-        "relevant_keywords": ["stack", "LIFO", "push", "pop", "call stack", "rekursi"],
-        "cognitive": "2TAI",
-        "session_id": "eval-012",
-        "query_type": "conceptual",
-        "context_note": "Mahasiswa minta contoh dunia nyata agar konsep stack lebih konkret",
-    },
-
-    # ── 13. Application — Flowchart ───────────────────────────────────────
-    {
-        "query": (
-            "Saya mau gambar flowchart untuk sistem login — user input username+password, "
-            "kalau salah 3 kali dikunci. Simbol apa yang harus saya pakai untuk "
-            "bagian 'cek password' dan 'hitung percobaan gagal'-nya?"
-        ),
-        "reference_answer": (
-            "Untuk sistem login: gunakan belah ketupat (diamond) untuk keputusan 'password benar?' "
-            "dan 'percobaan >= 3?'. Gunakan persegi panjang (rectangle) untuk proses 'increment "
-            "counter' dan 'kunci akun'. Oval untuk Start/End. Panah menghubungkan alur dengan "
-            "label Ya/Tidak pada tiap diamond."
-        ),
-        "relevant_keywords": ["flowchart", "simbol", "diamond", "keputusan", "proses", "alur"],
-        "cognitive": "1TGR",
-        "session_id": "eval-013",
-        "query_type": "application",
-        "context_note": "Mahasiswa mengerjakan flowchart untuk sistem nyata",
-    },
-
-    # ── 14. Scenario — Queue ──────────────────────────────────────────────
-    {
-        "query": (
-            "Saya lagi bikin simulasi antrian di klinik — pasien datang, didaftarkan, "
-            "dipanggil dokter satu-satu. Teman saya bilang pakai queue. "
-            "Itu FIFO kan? Jadi kalau pasien ke-3 datang, dia dipanggil ke-3 juga? "
-            "Terus bagaimana kalau ada pasien prioritas?"
-        ),
-        "reference_answer": (
-            "Benar, queue adalah FIFO — pasien ke-3 dipanggil ke-3. Untuk prioritas, "
-            "gunakan priority queue: setiap elemen punya nilai prioritas, elemen prioritas "
-            "tertinggi di-dequeue duluan terlepas dari urutan masuk. "
-            "Implementasi dengan min-heap atau sorted linked list."
-        ),
-        "relevant_keywords": ["queue", "FIFO", "antrian", "enqueue", "dequeue", "prioritas"],
-        "cognitive": "3TAR",
-        "session_id": "eval-014",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa membangun simulasi antrian dan menemukan kasus edge priority",
-    },
-
-    # ── 15. Comparative — Selection Sort vs Bubble Sort ───────────────────
-    {
-        "query": (
-            "Jadi tadi kita bahas bubble sort. Sekarang saya baca tentang selection sort. "
-            "Keduanya O(n²) kan? Jadi apa gunanya belajar keduanya kalau sama-sama lambat? "
-            "Kapan saya pilih selection sort over bubble sort?"
-        ),
-        "reference_answer": (
-            "Meskipun sama-sama O(n²), selection sort membuat lebih sedikit swap (selalu tepat n-1 swap) "
-            "vs bubble sort yang bisa swap O(n²) kali. Ini penting jika operasi tukar itu mahal "
-            "(misal menulis ke disk atau SSD). Bubble sort lebih bagus jika data hampir terurut "
-            "(bisa O(n) dengan optimasi). Belajar keduanya melatih analisis trade-off algoritma."
-        ),
-        "relevant_keywords": ["selection sort", "bubble sort", "swap", "perbandingan", "trade-off"],
+        "relevant_keywords": ["dekomposisi", "sub-masalah", "granularitas", "abstraksi", "goal"],
         "cognitive": "4PGR",
-        "session_id": "eval-015",
-        "query_type": "comparative",
-        "context_note": "Mahasiswa mempertanyakan manfaat mempelajari dua algoritma O(n²)",
+        "session_id": "eval-011",
+        "query_type": "gap",
+        "context_note": "Mahasiswa tidak tahu stopping criterion untuk dekomposisi",
     },
 
-    # ── 16. Confusion — Rekursi Base Case ─────────────────────────────────
-    {
-        "query": (
-            "Saya coba bikin fungsi faktorial rekursif tapi dapat RecursionError. "
-            "Kodenya: def faktorial(n): return n * faktorial(n-1). "
-            "Apa yang salah? Saya pikir n pasti akan mencapai 1 sendiri."
-        ),
-        "reference_answer": (
-            "Masalahnya: tidak ada base case. Ketika n=1, fungsi masih memanggil faktorial(0), "
-            "lalu faktorial(-1), dan seterusnya tanpa henti sampai stack overflow. "
-            "Perbaikan: tambahkan if n <= 1: return 1. Base case adalah kondisi penghenti "
-            "yang HARUS ada di setiap fungsi rekursif."
-        ),
-        "relevant_keywords": ["rekursif", "base case", "stack overflow", "faktorial", "kondisi berhenti"],
-        "cognitive": "3TGI",
-        "session_id": "eval-016",
-        "query_type": "confusion",
-        "context_note": "Mahasiswa debugging RecursionError karena lupa base case",
-    },
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 4 — ABSTRAKSI (GT_CT04, GT_DETAIL_PT04, GT_SUBTOPIK_02)
+    # ══════════════════════════════════════════════════════════════════════
 
-    # ── 17. Scenario — Tree ───────────────────────────────────────────────
+    # 012 | application — soal abstraksi lift berang-berang (ada di GT_SUBTOPIK_02)
     {
         "query": (
-            "Saya disuruh representasikan struktur folder sistem file (folder bisa punya "
-            "subfolder dan file di dalamnya) sebagai struktur data. "
-            "Dosen bilang pakai tree. Kenapa tree cocok untuk ini? "
-            "Node-nya itu apa dan edge-nya apa?"
+            "Dari soal lift 2 buah kapasitas 30 kg dengan 9 berang (A:2, B:3, C:5, D:8, E:9, F:9, G:12, H:12, I:22), "
+            "dosen minta saya lakukan abstraksi dulu sebelum cari solusi. "
+            "Apa yang dimaksud abstraksi untuk soal ini — apa yang perlu difokuskan dan diabaikan?"
         ),
-        "reference_answer": (
-            "Tree cocok karena sistem file bersifat hierarki — satu root, tiap node bisa punya "
-            "nol atau lebih anak. Node = folder atau file; edge = relasi 'berisi'. "
-            "Root = folder paling atas (/). Folder = internal node (punya anak); "
-            "File = leaf node (tidak punya anak). Traversal DFS cocok untuk list semua file."
-        ),
-        "relevant_keywords": ["tree", "node", "edge", "hierarki", "akar", "leaf", "traversal"],
-        "cognitive": "3PGI",
-        "session_id": "eval-017",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa memodelkan sistem file nyata menggunakan tree",
-    },
-
-    # ── 18. Conceptual — Variabel dan Tipe Data ───────────────────────────
-    {
-        "query": (
-            "Pertanyaan basic tapi saya mau mastiin paham beneran — "
-            "kalau saya tulis umur = 20 di Python, tipe datanya otomatis int. "
-            "Tapi di bahasa lain katanya harus deklarasi dulu. "
-            "Ini bedanya static typing vs dynamic typing? Mana yang lebih aman?"
-        ),
-        "reference_answer": (
-            "Benar. Dynamic typing (Python): tipe ditentukan saat runtime — fleksibel tapi "
-            "error tipe baru muncul saat dieksekusi. Static typing (Java, C): tipe harus "
-            "dideklarasikan — lebih verbose tapi error terdeteksi saat kompilasi. "
-            "'Lebih aman' bergantung konteks: static typing lebih aman untuk sistem besar; "
-            "dynamic lebih produktif untuk prototipe cepat."
-        ),
-        "relevant_keywords": ["tipe data", "variabel", "static", "dynamic", "deklarasi", "runtime"],
-        "cognitive": "2TGR",
-        "session_id": "eval-018",
-        "query_type": "conceptual",
-        "context_note": "Mahasiswa mengobservasi perbedaan Python vs bahasa lain",
-    },
-
-    # ── 19. Application — If-Else ─────────────────────────────────────────
-    {
-        "query": (
-            "Saya bikin program nilai — A kalau >= 85, B kalau >= 70, C kalau >= 55, D sisanya. "
-            "Saya pakai 4 if terpisah tapi kadang nilai 90 muncul sebagai A dan B sekaligus. "
-            "Salah di mana? Apa bedanya pakai if berulang vs if-elif-else?"
-        ),
-        "reference_answer": (
-            "4 if terpisah dievaluasi semua secara independen — nilai 90 memenuhi >= 85 DAN >= 70 "
-            "sehingga keduanya dieksekusi. Dengan if-elif-else: begitu satu kondisi true, blok "
-            "lainnya dilewati. Gunakan: if nilai >= 85: A elif nilai >= 70: B elif nilai >= 55: C "
-            "else: D. Ini mutual exclusive — hanya satu cabang yang jalan."
-        ),
-        "relevant_keywords": ["if", "elif", "else", "kondisi", "percabangan", "mutual exclusive"],
-        "cognitive": "2TAR",
-        "session_id": "eval-019",
-        "query_type": "confusion",
-        "context_note": "Mahasiswa debugging bug logika karena salah pakai if vs elif",
-    },
-
-    # ── 20. Comparative — For vs While ────────────────────────────────────
-    {
-        "query": (
-            "Kapan saya harus pakai for dan kapan while? "
-            "Guru saya bilang 'pakai for kalau tau jumlah iterasinya', tapi "
-            "saya bisa aja hitung dulu terus pakai for. Jadi apa bedanya beneran secara CT?"
-        ),
-        "reference_answer": (
-            "Secara CT: for loop mengekspresikan iterasi yang terbatas dan terdefinisi — "
-            "jumlah langkah diketahui sebelum loop dimulai, membuat niat kode lebih jelas. "
-            "While lebih tepat saat kondisi berhenti bergantung pada state yang berubah "
-            "(baca file sampai EOF, validasi input user). Secara teknis keduanya bisa saling "
-            "menggantikan, tapi keterbacaan dan kejelasan niat berbeda."
-        ),
-        "relevant_keywords": ["for", "while", "iterasi", "kondisi", "perulangan", "bounded"],
-        "cognitive": "4TAR",
-        "session_id": "eval-020",
-        "query_type": "comparative",
-        "context_note": "Mahasiswa mempertanyakan perbedaan semantik for vs while, bukan hanya sintaks",
-    },
-
-    # ── 21. Scenario — Insertion Sort ─────────────────────────────────────
-    {
-        "query": (
-            "Saya lagi debugging program sorting buat nilai ujian. "
-            "Ada teman yang saran pakai insertion sort karena 'data sudah hampir urut'. "
-            "Kenapa 'hampir urut' itu jadi alasan milih insertion sort? "
-            "Bukannya tetap O(n²)?"
-        ),
-        "reference_answer": (
-            "Insertion sort punya best-case O(n) ketika data sudah hampir urut — "
-            "setiap elemen hanya perlu digeser sedikit atau tidak sama sekali. "
-            "Berbeda dari bubble/selection sort yang tetap O(n²) meski data sudah terurut. "
-            "Jadi untuk data yang 'nearly sorted', insertion sort jauh lebih cepat dalam praktik "
-            "meski secara worst-case tetap O(n²)."
-        ),
-        "relevant_keywords": ["insertion sort", "nearly sorted", "best case", "geser", "O(n)"],
-        "cognitive": "4PAI",
-        "session_id": "eval-021",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa mendapat saran teman dan ingin memahami alasannya secara teknis",
-    },
-
-    # ── 22. Conceptual — Hash Table ───────────────────────────────────────
-    {
-        "query": (
-            "Saya sering dengar 'hash table' atau 'dictionary' di Python. "
-            "Katanya lookup-nya O(1) — itu beneran? Masa iya secepat itu? "
-            "Gimana cara kerjanya di balik layar biar bisa O(1)?"
-        ),
-        "reference_answer": (
-            "Hash table menyimpan pasangan key-value menggunakan fungsi hash yang mengkonversi "
-            "key menjadi indeks array. Lookup O(1) rata-rata karena langsung menuju indeks tanpa "
-            "iterasi. Kasus terburuk O(n) saat banyak collision (banyak key ke indeks sama). "
-            "Python dict adalah implementasi hash table dengan open addressing dan resizing otomatis."
-        ),
-        "relevant_keywords": ["hash table", "hash function", "collision", "lookup", "O(1)", "dictionary"],
-        "cognitive": "3TGR",
-        "session_id": "eval-022",
-        "query_type": "conceptual",
-        "context_note": "Mahasiswa skeptis dengan klaim O(1) dan ingin memahami mekanismenya",
-    },
-
-    # ── 23. Confusion — Pass by Value vs Reference ────────────────────────
-    {
-        "query": (
-            "Saya bikin fungsi yang harusnya ubah nilai variabel, "
-            "tapi setelah fungsinya selesai, variabel di luar fungsi gak berubah. "
-            "Padahal saya yakin sudah assign di dalam fungsi. "
-            "Ini ada hubungannya sama pass by value vs reference?"
-        ),
-        "reference_answer": (
-            "Ya, ini pass by value. Untuk tipe primitif (int, float, string), Python mengoper "
-            "salinan nilai — perubahan di dalam fungsi tidak mempengaruhi variabel asal. "
-            "Untuk object mutable (list, dict), Python mengoper referensi — perubahan isi "
-            "object terlihat di luar. Solusi: return nilai dari fungsi, atau gunakan global/nonlocal."
-        ),
-        "relevant_keywords": ["pass by value", "referensi", "fungsi", "variabel", "mutable", "scope"],
-        "cognitive": "3PAR",
-        "session_id": "eval-023",
-        "query_type": "confusion",
-        "context_note": "Mahasiswa bingung kenapa perubahan dalam fungsi tidak terefleksi di luar",
-    },
-
-    # ── 24. Application — Merge Sort ──────────────────────────────────────
-    {
-        "query": (
-            "Di kuliah tadi dijelasin merge sort pakai divide and conquer. "
-            "Saya paham konsepnya: bagi dua, sort masing-masing, lalu gabung. "
-            "Tapi bagian 'merge' itu konkretnya gimana? "
-            "Kalau saya punya [1,3,5] dan [2,4,6] cara gabungnya step by step?"
-        ),
-        "reference_answer": (
-            "Merge dua array terurut [1,3,5] dan [2,4,6]: bandingkan elemen terdepan masing-masing, "
-            "ambil yang terkecil. 1<2 → ambil 1; 3>2 → ambil 2; 3<4 → ambil 3; 5>4 → ambil 4; "
-            "5<6 → ambil 5; sisa [6] → tambahkan. Hasil: [1,2,3,4,5,6]. "
-            "Proses merge selalu O(n) karena tiap elemen dibandingkan tepat sekali."
-        ),
-        "relevant_keywords": ["merge sort", "divide and conquer", "merge", "gabung", "terurut"],
-        "cognitive": "2TAI",
-        "session_id": "eval-024",
-        "query_type": "application",
-        "context_note": "Mahasiswa memahami konsep tapi butuh trace konkret langkah merge",
-    },
-
-    # ── 25. Comparative — DFS vs BFS ──────────────────────────────────────
-    {
-        "query": (
-            "Saya baca tentang DFS dan BFS untuk graph traversal. "
-            "Keduanya bisa mengunjungi semua node kan? "
-            "Terus kapan saya pilih DFS dan kapan BFS? "
-            "Ada kasus di mana satu jauh lebih baik dari yang lain?"
-        ),
-        "reference_answer": (
-            "DFS (stack/rekursi) cocok untuk: menemukan path yang ada, topological sort, "
-            "deteksi siklus, dan masalah yang butuh eksplorasi mendalam. "
-            "BFS (queue) cocok untuk: jalur terpendek di unweighted graph, level-order traversal, "
-            "dan menemukan node terdekat. BFS menjamin jalur terpendek; DFS tidak. "
-            "DFS hemat memori untuk graph dalam; BFS hemat untuk graph lebar."
-        ),
-        "relevant_keywords": ["DFS", "BFS", "graph", "traversal", "jalur terpendek", "stack", "queue"],
-        "cognitive": "5TGR",
-        "session_id": "eval-025",
-        "query_type": "comparative",
-        "context_note": "Mahasiswa ingin kriteria pemilihan DFS vs BFS untuk kasus nyata",
-    },
-
-    # ── 26. Scenario — Kompleksitas Nested Loop ───────────────────────────
-    {
-        "query": (
-            "Saya bikin program cari semua pasangan elemen yang jumlahnya sama dengan target. "
-            "Kodenya pakai loop for di dalam for lagi. "
-            "Teman bilang kode saya 'O(n kuadrat)' dan itu jelek. "
-            "Emang sejelek apa? Dan bisa dioptimasi gak?"
-        ),
-        "reference_answer": (
-            "Nested loop O(n²) berarti untuk n=1000 butuh ~1 juta operasi — lambat untuk data besar. "
-            "Untuk masalah two-sum, bisa dioptimasi ke O(n) dengan hash set: iterasi sekali, "
-            "untuk setiap elemen cek apakah (target - elemen) sudah ada di set. "
-            "Ini trade-off: O(n) waktu tapi O(n) memori tambahan untuk hash set."
-        ),
-        "relevant_keywords": ["nested loop", "O(n²)", "optimasi", "hash set", "two-sum", "kompleksitas"],
-        "cognitive": "4PAR",
-        "session_id": "eval-026",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa mendapat feedback kode lambat dan ingin tahu cara optimasinya",
-    },
-
-    # ── 27. Conceptual — Abstraksi Fungsi ─────────────────────────────────
-    {
-        "query": (
-            "Dosen bilang 'fungsi itu bentuk abstraksi'. "
-            "Saya paham fungsi bisa dipanggil berulang, tapi hubungannya sama abstraksi gimana? "
-            "Apa yang diabstraksi oleh sebuah fungsi?"
-        ),
-        "reference_answer": (
-            "Fungsi mengabstraksi detail implementasi — pemanggil tidak perlu tahu bagaimana "
-            "tugas diselesaikan, cukup tahu input dan output yang diharapkan. "
-            "Ini adalah abstraksi prosedural: nama fungsi merepresentasikan operasi tanpa "
-            "mengekspos cara kerjanya. Memungkinkan decomposisi dan reuse tanpa duplikasi kode."
-        ),
-        "relevant_keywords": ["abstraksi", "fungsi", "implementasi", "prosedural", "encapsulation", "reuse"],
-        "cognitive": "3TGI",
-        "session_id": "eval-027",
-        "query_type": "conceptual",
-        "context_note": "Mahasiswa mencoba menghubungkan konsep fungsi dengan pilar abstraksi CT",
-    },
-
-    # ── 28. Application — Binary Tree Traversal ───────────────────────────
-    {
-        "query": (
-            "Saya punya binary tree: root=1, kiri=2, kanan=3, kiri.kiri=4, kiri.kanan=5. "
-            "Kalau saya traversal inorder, preorder, dan postorder, "
-            "urutannya bakal beda-beda ya? Bisa tolong tunjukin hasilnya untuk tree itu?"
-        ),
-        "reference_answer": (
-            "Untuk tree: 1(root), 2(kiri), 3(kanan), 4(kiri.kiri), 5(kiri.kanan). "
-            "Inorder (kiri-root-kanan): 4, 2, 5, 1, 3. "
-            "Preorder (root-kiri-kanan): 1, 2, 4, 5, 3. "
-            "Postorder (kiri-kanan-root): 4, 5, 2, 3, 1. "
-            "Inorder pada BST menghasilkan urutan sorted."
-        ),
-        "relevant_keywords": ["binary tree", "inorder", "preorder", "postorder", "traversal", "BST"],
+        "relevant_keywords": ["abstraksi", "goal", "batasan", "data", "dekomposisi", "formulasi"],
         "cognitive": "3PAI",
-        "session_id": "eval-028",
+        "session_id": "eval-012",
         "query_type": "application",
-        "context_note": "Mahasiswa ingin verifikasi hasil traversal pada tree konkret",
+        "context_note": "Soal abstraksi lift berang-berang ada di GT_SUBTOPIK_02",
     },
 
-    # ── 29. Confusion — Pointer dan Referensi ─────────────────────────────
+    # 013 | confusion — mahasiswa kira abstraksi = menyederhanakan = membuang semua detail
     {
         "query": (
-            "Di C++ ada pointer, di Java ada referensi, di Python katanya juga referensi. "
-            "Saya bingung — ini sama aja atau beda? "
-            "Kenapa di Python saya gak pernah pakai tanda * atau & tapi katanya pakai referensi?"
+            "Saya bikin model data untuk sistem nilai mahasiswa dan saya buang semua field "
+            "kecuali nama dan NIM karena 'itu abstraksi'. Tapi dosen bilang abstraksi saya salah. "
+            "Katanya nilai ujian, kehadiran itu juga penting. "
+            "Apakah abstraksi berarti membuang detail sebanyak mungkin?"
         ),
-        "reference_answer": (
-            "Pointer (C/C++) adalah variabel yang menyimpan alamat memori secara eksplisit — "
-            "programmer kontrol langsung dengan * dan &. Referensi (Java, Python) adalah alias "
-            "ke object — bahasa yang mengelola detail memori. Python menyembunyikan pointer: "
-            "semua variable adalah referensi ke object, tapi programmer tidak perlu dereference manual. "
-            "Keduanya konsep yang sama di level hardware, berbeda di level abstraksi."
-        ),
-        "relevant_keywords": ["pointer", "referensi", "memori", "alamat", "dereference", "abstraksi"],
-        "cognitive": "4TGR",
-        "session_id": "eval-029",
+        "relevant_keywords": ["abstraksi", "relevan", "detail", "model", "goal", "dekomposisi"],
+        "cognitive": "4TAI",
+        "session_id": "eval-013",
         "query_type": "confusion",
-        "context_note": "Mahasiswa bingung karena terminologi berbeda di tiap bahasa",
+        "context_note": "Mahasiswa kira abstraksi = buang semua detail sebanyak mungkin",
     },
 
-    # ── 30. Scenario — Desain Sistem Antrian Print ────────────────────────
+    # 014 | gap — helicopter view tidak dipahami
     {
         "query": (
-            "Tugas UTS saya harus desain sistem antrian print di perpustakaan. "
-            "Beberapa printer, banyak mahasiswa. Dokumen yang lebih pendek bisa diproses duluan. "
-            "Struktur data apa yang cocok, dan bagaimana CT membantu saya mikirin solusinya?"
+            "Di slide abstraksi ada istilah 'helicopter view'. "
+            "Saya tidak ngerti maksudnya — apa hubungannya helikopter dengan CT? "
+            "Dan bagaimana cara saya menerapkan helicopter view waktu mengerjakan soal?"
         ),
-        "reference_answer": (
-            "Gunakan priority queue (min-heap berdasarkan jumlah halaman) agar dokumen pendek "
-            "diprioritaskan. Proses CT: Decomposisi — pisahkan: antrian per printer, dispatcher, "
-            "monitor status. Abstraksi — sembunyikan detail hardware printer dari logika antrian. "
-            "Pattern recognition — ini mirip job scheduling di OS. Algoritma — priority queue "
-            "dengan heap memberikan enqueue O(log n) dan dequeue O(log n)."
-        ),
-        "relevant_keywords": ["priority queue", "heap", "antrian", "printer", "dekomposisi", "job scheduling"],
-        "cognitive": "5PAR",
-        "session_id": "eval-030",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa mengerjakan desain sistem nyata dengan multiple constraint",
+        "relevant_keywords": ["helicopter view", "abstraksi", "gambaran besar", "detail", "formulasi"],
+        "cognitive": "2TGI",
+        "session_id": "eval-014",
+        "query_type": "gap",
+        "context_note": "Mahasiswa tidak paham metafora helicopter view dalam konteks abstraksi CT",
     },
 
-    # ── 31. Conceptual — Rekursi Ekor (Tail Recursion) ────────────────────
+    # 015 | cross_topic — abstraksi + pattern recognition dicampur
     {
         "query": (
-            "Dosen nyebut 'tail recursion' tadi dan bilang itu lebih efisien. "
-            "Saya gak ngerti bedanya sama rekursi biasa. "
-            "Apa itu tail recursion dan kenapa lebih bagus dari yang biasa?"
+            "Waktu analisis data nilai ujian, saya buang semua outlier dulu baru cari pola. "
+            "Apakah membuang outlier itu abstraksi atau pattern recognition? "
+            "Atau keduanya sekaligus? Saya bingung mana yang mana."
         ),
-        "reference_answer": (
-            "Tail recursion adalah rekursi di mana pemanggilan rekursif adalah operasi terakhir "
-            "di fungsi — tidak ada komputasi setelah recursive call. Compiler/interpreter bisa "
-            "mengoptimasi ini menjadi iterasi (tail call optimization/TCO) sehingga tidak "
-            "menambah stack frame baru. Hasilnya: O(1) memori stack vs O(n) pada rekursi biasa, "
-            "menghindari stack overflow untuk n besar."
-        ),
-        "relevant_keywords": ["tail recursion", "TCO", "stack frame", "optimasi", "rekursi", "iterasi"],
-        "cognitive": "5TGI",
-        "session_id": "eval-031",
-        "query_type": "conceptual",
-        "context_note": "Mahasiswa belum familiar dengan konsep tail call optimization",
-    },
-
-    # ── 32. Application — Quick Sort Pivot ────────────────────────────────
-    {
-        "query": (
-            "Saya diminta implementasi quicksort dan bingung soal pilihan pivot. "
-            "Kalau arraynya [3, 6, 8, 10, 1, 2, 1] dan saya pilih pivot = elemen pertama (3), "
-            "partition pertamanya jadi seperti apa? Kenapa pilihan pivot penting?"
-        ),
-        "reference_answer": (
-            "Dengan pivot=3 pada [3,6,8,10,1,2,1]: pindahkan elemen < pivot ke kiri, > pivot ke kanan. "
-            "Hasil partisi: [1,2,1] | 3 | [6,8,10]. Pivot penting karena menentukan keseimbangan: "
-            "pivot buruk (selalu terkecil/terbesar) → O(n²) seperti insertion sort. "
-            "Pivot ideal = median → O(n log n). Solusi: random pivot atau median-of-three."
-        ),
-        "relevant_keywords": ["quicksort", "pivot", "partisi", "median", "O(n log n)", "balance"],
-        "cognitive": "4PAI",
-        "session_id": "eval-032",
-        "query_type": "application",
-        "context_note": "Mahasiswa tracing quicksort dan mempertanyakan pengaruh pemilihan pivot",
-    },
-
-    # ── 33. Comparative — Stack vs Queue ──────────────────────────────────
-    {
-        "query": (
-            "Saya paham stack itu LIFO dan queue itu FIFO. "
-            "Tapi kalau dikasih soal 'pilih stack atau queue untuk kasus X', "
-            "gimana cara mikirin jawaban yang benar? "
-            "Ada framework atau cara berpikir yang bisa saya pakai?"
-        ),
-        "reference_answer": (
-            "Framework: tanya 'apakah urutan pemrosesan kebalikan dari urutan masuk?' → Stack. "
-            "'Apakah urutan pemrosesan sama dengan urutan masuk?' → Queue. "
-            "Stack: undo/redo, evaluasi ekspresi, DFS, function calls. "
-            "Queue: BFS, job scheduling, buffer data stream, antrian pelayanan. "
-            "Kunci: pikirkan urutan pemrosesan yang dibutuhkan, bukan struktur datanya dulu."
-        ),
-        "relevant_keywords": ["stack", "queue", "LIFO", "FIFO", "urutan", "pemrosesan"],
-        "cognitive": "3TAR",
-        "session_id": "eval-033",
-        "query_type": "comparative",
-        "context_note": "Mahasiswa butuh mental model untuk memilih antara stack dan queue",
-    },
-
-    # ── 34. Scenario — Deteksi Siklus di Graph ────────────────────────────
-    {
-        "query": (
-            "Saya ngerjain project simulasi jaringan komputer. "
-            "Ada kasus router A → B → C → A yang bikin infinite loop. "
-            "Ini masalah 'cycle detection' ya? Cara deteksinya gimana?"
-        ),
-        "reference_answer": (
-            "Benar, itu cycle detection pada directed graph. Metode dengan DFS: tandai node sebagai "
-            "'sedang dikunjungi' (abu-abu) dan 'selesai' (hitam). Jika DFS menemukan edge ke node "
-            "abu-abu, siklus terdeteksi. Untuk undirected graph, gunakan Union-Find (Disjoint Set). "
-            "Untuk use case routing: gunakan Bellman-Ford yang bisa deteksi negative cycle."
-        ),
-        "relevant_keywords": ["cycle detection", "DFS", "graph", "directed", "Union-Find", "visited"],
-        "cognitive": "5PAR",
-        "session_id": "eval-034",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa menemukan bug infinite loop yang ternyata adalah cycle di graph",
-    },
-
-    # ── 35. Conceptual — Greedy Algorithm ─────────────────────────────────
-    {
-        "query": (
-            "Saya dengar istilah 'greedy algorithm' tapi gak ngerti maksudnya. "
-            "Greedy itu artinya 'serakah' — apakah algoritmanya beneran serakah? "
-            "Kapan greedy berhasil dan kapan gagal?"
-        ),
-        "reference_answer": (
-            "Greedy algorithm mengambil keputusan terbaik lokal di setiap langkah tanpa "
-            "mempertimbangkan konsekuensi ke depan. 'Serakah' = selalu ambil yang tampak terbaik sekarang. "
-            "Berhasil ketika masalah punya sifat greedy choice property dan optimal substructure. "
-            "Contoh berhasil: Huffman coding, Dijkstra, activity selection. "
-            "Gagal: knapsack 0/1 (butuh dynamic programming karena keputusan lokal bisa salah)."
-        ),
-        "relevant_keywords": ["greedy", "optimal lokal", "greedy choice", "Dijkstra", "Huffman", "dynamic programming"],
-        "cognitive": "4TGI",
-        "session_id": "eval-035",
-        "query_type": "conceptual",
-        "context_note": "Mahasiswa baru pertama kali mendengar istilah greedy algorithm",
-    },
-
-    # ── 36. Confusion — Rekursi vs Dynamic Programming ────────────────────
-    {
-        "query": (
-            "Saya bikin fungsi fibonacci rekursif dan sangat lambat untuk n=40. "
-            "Teman bilang pakai 'memoization'. Itu sama aja sama dynamic programming? "
-            "Saya gak ngerti hubungan ketiganya — rekursi, memoization, DP."
-        ),
-        "reference_answer": (
-            "Rekursi murni fibonacci menghitung subproblem berulang kali — O(2^n). "
-            "Memoization = top-down DP: simpan hasil subproblem di cache, jika sudah dihitung pakai cache. "
-            "Menjadi O(n). DP bottom-up: hitung dari kasus kecil ke besar dengan tabel. "
-            "Ketiganya saling terkait: memoization adalah rekursi + caching = top-down DP. "
-            "Bottom-up DP lebih efisien memori karena tidak ada overhead call stack."
-        ),
-        "relevant_keywords": ["memoization", "dynamic programming", "rekursi", "cache", "subproblem", "fibonacci"],
+        "relevant_keywords": ["abstraksi", "pattern recognition", "outlier", "data", "pola", "dekomposisi"],
         "cognitive": "5TGR",
+        "session_id": "eval-015",
+        "query_type": "cross_topic",
+        "context_note": "Mahasiswa bingung apakah membuang outlier itu abstraksi atau pattern recognition",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 5 — PATTERN RECOGNITION (GT_CT05, GT_DETAIL_PT05, GT_SUBTOPIK_03, GT_SUBTOPIK_04)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 016 | application — deret coklat bebek (ada di GT_SUBTOPIK_03)
+    {
+        "query": (
+            "Soal: bebek ke-n mendapat n coklat. Total coklat 500 buah. "
+            "Bebek nomor berapa yang pertama kali tidak mendapat coklat? "
+            "Saya sudah coba hitung manual tapi lama sekali."
+        ),
+        "relevant_keywords": ["pola bilangan", "deret segitiga", "pattern recognition", "rumus", "modulo"],
+        "cognitive": "3PGR",
+        "session_id": "eval-016",
+        "query_type": "application",
+        "context_note": "Soal coklat bebek ada di GT_SUBTOPIK_03 — apakah RAG bisa retrieve",
+    },
+
+    # 017 | application — digit terakhir 2^2003 (ada di GT_SUBTOPIK_04)
+    {
+        "query": (
+            "Soal ujian: tentukan digit terakhir dari 2 pangkat 2003. "
+            "Saya tidak mungkin hitung 2^2003 secara langsung. "
+            "Dosen bilang pakai pattern recognition. "
+            "Bagaimana caranya?"
+        ),
+        "relevant_keywords": ["modulo", "siklus", "digit terakhir", "pola", "perpangkatan", "deret"],
+        "cognitive": "4TGR",
+        "session_id": "eval-017",
+        "query_type": "application",
+        "context_note": "Soal digit terakhir 2^n ada di GT_SUBTOPIK_04",
+    },
+
+    # 018 | confusion — mahasiswa kira pattern recognition hanya untuk angka
+    {
+        "query": (
+            "Saya pikir pattern recognition di CT hanya untuk data angka atau deret matematika. "
+            "Tapi dosen bilang bisa juga untuk teks atau gambar. "
+            "Apakah pattern recognition di CT sama dengan machine learning pattern recognition? "
+            "Atau beda?"
+        ),
+        "relevant_keywords": ["pattern recognition", "pola", "data", "abstraksi", "machine learning"],
+        "cognitive": "5PAR",
+        "session_id": "eval-018",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa bingung apakah pattern recognition CT sama dengan ML",
+    },
+
+    # 019 | gap — tidak tahu cara memvalidasi pola yang ditemukan
+    {
+        "query": (
+            "Saya lihat data absensi dan nemu pola: nilai turun setiap minggu ke-5. "
+            "Tapi bagaimana saya tahu ini bukan kebetulan? "
+            "Apa cara CT untuk memvalidasi bahwa pola yang saya temukan itu benar?"
+        ),
+        "relevant_keywords": ["pattern recognition", "validasi", "pola", "data", "abstraksi", "dekomposisi"],
+        "cognitive": "4PGI",
+        "session_id": "eval-019",
+        "query_type": "gap",
+        "context_note": "Mahasiswa tidak tahu cara validasi pola dalam CT",
+    },
+
+    # 020 | application — deret aritmatika/geometri (GT_SUBTOPIK_03)
+    {
+        "query": (
+            "Diberikan barisan: 3, 6, 12, 24, 48. "
+            "Dosen minta saya identifikasi jenis deret, tuliskan rumus suku ke-n, "
+            "dan hitung suku ke-10 tanpa menghitung satu per satu."
+        ),
+        "relevant_keywords": ["deret geometri", "rasio", "pola bilangan", "rumus", "deret aritmatika", "modulo"],
+        "cognitive": "3TGR",
+        "session_id": "eval-020",
+        "query_type": "application",
+        "context_note": "Identifikasi deret geometri dari barisan angka — ada di GT_SUBTOPIK_03",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 6 — ALGORITME & NOTASI (GT_CT06, GT_CT07, GT_DETAIL_PT07, GT_SUBTOPIK_05)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 021 | confusion — mahasiswa kira flowchart lebih formal dari pseudocode
+    {
+        "query": (
+            "Di tugas saya bikin flowchart karena saya kira itu lebih formal dan benar dari pseudocode. "
+            "Tapi dosen lebih prefer pseudocode. "
+            "Apa bedanya pseudocode dengan flowchart, dan mana yang lebih tepat untuk menggambarkan algoritme?"
+        ),
+        "relevant_keywords": ["pseudocode", "flowchart", "algoritme", "notasi", "for loop", "percabangan"],
+        "cognitive": "2PAI",
+        "session_id": "eval-021",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa salah kira flowchart lebih formal dari pseudocode",
+    },
+
+    # 022 | application — pseudocode FPB Euclidean (ada di GT_SUBTOPIK_05)
+    {
+        "query": (
+            "Saya diminta menulis pseudocode algoritme Euclidean untuk mencari FPB dua bilangan. "
+            "Saya tahu konsep FPB tapi tidak tahu cara tulis pseudocode-nya dengan while loop. "
+            "Bisa tolong tunjukkan?"
+        ),
+        "relevant_keywords": ["pseudocode", "FPB", "while", "Euclidean", "modulo", "rekursi"],
+        "cognitive": "3PAR",
+        "session_id": "eval-022",
+        "query_type": "application",
+        "context_note": "Pseudocode FPB Euclidean ada di GT_SUBTOPIK_05",
+    },
+
+    # 023 | gap — mahasiswa tidak tahu ciri algoritme yang baik selain "bisa jalan"
+    {
+        "query": (
+            "Saya sudah buat algoritme untuk cari nilai terbesar dari array dan bisa jalan. "
+            "Tapi dosen bilang algoritme saya kurang baik meski hasilnya benar. "
+            "Apa saja ciri algoritme yang dianggap 'baik' selain menghasilkan output yang benar?"
+        ),
+        "relevant_keywords": ["algoritme", "ciri", "finiteness", "efisiensi", "ambigu", "feasibility"],
+        "cognitive": "1TGR",
+        "session_id": "eval-023",
+        "query_type": "gap",
+        "context_note": "Mahasiswa tidak tahu ciri algoritme baik selain correctness",
+    },
+
+    # 024 | out-of-scope — tanya kompleksitas algoritme Euclidean (tidak eksplisit di GT)
+    {
+        "query": (
+            "Saya buat algoritme FPB Euclidean dan ingin tahu kompleksitasnya Big-O. "
+            "Apakah Euclidean itu O(log n) atau O(n)? "
+            "Dan kenapa bukan O(1) walaupun sering selesai cepat untuk angka kecil?"
+        ),
+        "relevant_keywords": ["FPB", "Euclidean", "Big-O", "kompleksitas", "O(log n)", "algoritme"],
+        "cognitive": "5TAI",
+        "session_id": "eval-024",
+        "query_type": "out_of_scope",
+        "context_note": "Kompleksitas Big-O dari Euclidean tidak eksplisit ada di GT",
+    },
+
+    # 025 | confusion — mahasiswa kira pseudocode harus ada tipe data seperti C++
+    {
+        "query": (
+            "Di pseudocode saya selalu tulis 'int x = 5' karena terbiasa dari C++. "
+            "Tapi teman saya hanya tulis 'x = 5'. Kata dosen keduanya benar. "
+            "Lalu apa konvensi pseudocode CT yang benar untuk deklarasi variabel?"
+        ),
+        "relevant_keywords": ["pseudocode", "variabel", "deklarasi", "tipe data", "konvensi", "assignment"],
+        "cognitive": "2TGI",
+        "session_id": "eval-025",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa bingung konvensi deklarasi variabel di pseudocode CT vs bahasa pemrograman",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 7 — VARIABEL, TIPE DATA, OPERATOR (GT_CT09, GT_DETAIL_PT09, GT_SUBTOPIK_06)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 026 | application — evaluasi ekspresi dengan prioritas operator
+    {
+        "query": (
+            "Soal: hitung nilai ekspresi berikut: (8 + 4) / (2 * 3) - 1. "
+            "Dan juga: 15 % 4 * 2 + 7 % 3. "
+            "Saya sudah hitung tapi tidak yakin — apakah modulo punya prioritas yang sama dengan perkalian?"
+        ),
+        "relevant_keywords": ["prioritas operator", "modulo", "ekspresi", "aritmatika", "kurung", "pembagian"],
+        "cognitive": "2PAR",
+        "session_id": "eval-026",
+        "query_type": "application",
+        "context_note": "Soal evaluasi ekspresi ada di GT_SUBTOPIK_06",
+    },
+
+    # 027 | confusion — De Morgan salah diterapkan
+    {
+        "query": (
+            "Saya sederhanakan ekspresi: NOT (A OR B) menjadi NOT A AND NOT B. "
+            "Tapi teman saya bilang itu salah — harusnya NOT A OR NOT B. "
+            "Padahal saya rasa Hukum De Morgan yang kedua memang seperti itu. "
+            "Mana yang benar dan kenapa?"
+        ),
+        "relevant_keywords": ["De Morgan", "NOT", "AND", "OR", "logika", "tabel kebenaran"],
+        "cognitive": "4TGI",
+        "session_id": "eval-027",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa salah menerapkan Hukum De Morgan kedua",
+    },
+
+    # 028 | gap — mahasiswa tidak tahu perbedaan integer division dengan float division
+    {
+        "query": (
+            "Di pseudocode CT, kalau saya tulis 7 / 2, hasilnya 3 atau 3.5? "
+            "Di Python hasilnya 3.5 tapi di C hasilnya 3 karena integer division. "
+            "Pseudocode CT pakai yang mana? Dan gimana cara nulis integer division di pseudocode?"
+        ),
+        "relevant_keywords": ["pembagian", "integer", "float", "pseudocode", "tipe data", "modulo"],
+        "cognitive": "3TAI",
+        "session_id": "eval-028",
+        "query_type": "gap",
+        "context_note": "Mahasiswa bingung konvensi pembagian integer vs float di pseudocode CT",
+    },
+
+    # 029 | application — evaluasi tabel kebenaran AND, OR, NOT lengkap
+    {
+        "query": (
+            "Tugas: buat tabel kebenaran untuk ekspresi (A AND NOT B) OR (NOT A AND B). "
+            "Saya buat untuk semua kombinasi A dan B tapi hasilnya berbeda dengan teman. "
+            "Saya dapat F,T,T,F tapi teman dapat T,T,T,F. Mana yang benar?"
+        ),
+        "relevant_keywords": ["tabel kebenaran", "AND", "OR", "NOT", "logika", "evaluasi ekspresi"],
+        "cognitive": "3PGI",
+        "session_id": "eval-029",
+        "query_type": "application",
+        "context_note": "Mahasiswa latihan tabel kebenaran XOR — ada di GT_SUBTOPIK_06",
+    },
+
+    # 030 | out-of-scope — tanya tentang tipe data struct/record (tidak ada di GT)
+    {
+        "query": (
+            "Di materi variabel dan tipe data, kita belajar integer, float, boolean, string, dan list. "
+            "Tapi bagaimana kalau saya mau simpan data mahasiswa yang punya nama, NIM, dan nilai sekaligus? "
+            "Apakah ada tipe data gabungan seperti struct di CT?"
+        ),
+        "relevant_keywords": ["tipe data", "variabel", "list", "string", "struct", "record"],
+        "cognitive": "4PAI",
+        "session_id": "eval-030",
+        "query_type": "out_of_scope",
+        "context_note": "Tipe data struct/record tidak ada di GT CT — hanya ada primitif dan list",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 8 — PERCABANGAN (GT_CT10, GT_DETAIL_PT10, GT_SUBTOPIK_07)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 031 | application — trace percabangan kuadran koordinat
+    {
+        "query": (
+            "Trace pseudocode ini untuk input x=-3, y=5:\n"
+            "  if (x > 0) then\n    if (y > 0) then print('Q1') else print('Q4')\n"
+            "  else\n    if (y > 0) then print('Q2') else print('Q3')\n"
+            "Saya dapat Q2 tapi teman dapat Q3. Siapa yang benar?"
+        ),
+        "relevant_keywords": ["trace", "percabangan", "nested if", "kondisi", "output", "kuadran"],
+        "cognitive": "3PGR",
+        "session_id": "eval-031",
+        "query_type": "application",
+        "context_note": "Trace nested if percabangan kuadran ada di GT_SUBTOPIK_07",
+    },
+
+    # 032 | confusion — mahasiswa tidak tahu kapan else-if vs nested if
+    {
+        "query": (
+            "Saya harus cek: apakah suhu > 35 DAN kelembaban > 80. "
+            "Saya buat nested if — if suhu>35 then if kelembaban>80. "
+            "Tapi teman pakai AND: if suhu>35 AND kelembaban>80. "
+            "Kata dosen keduanya boleh tapi ada perbedaannya. Apa perbedaannya?"
+        ),
+        "relevant_keywords": ["nested if", "AND", "percabangan", "kondisi", "else-if", "logika"],
+        "cognitive": "4PAR",
+        "session_id": "eval-032",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa tidak tahu kapan nested if lebih tepat dari AND gabungan",
+    },
+
+    # 033 | gap — mahasiswa tidak tahu apa yang terjadi kalau dua kondisi sama-sama true di else-if
+    {
+        "query": (
+            "Di else-if untuk konversi nilai: A(>=85), B(>=70), C(>=55), D(lainnya). "
+            "Nilai saya 90. Kondisi pertama (>=85) true, tapi kondisi kedua (>=70) juga true. "
+            "Mana yang dieksekusi? Dan kenapa tidak keduanya sekaligus?"
+        ),
+        "relevant_keywords": ["else-if", "kondisi", "true", "percabangan", "sekuensial", "eksekusi"],
+        "cognitive": "2TAR",
+        "session_id": "eval-033",
+        "query_type": "gap",
+        "context_note": "Mahasiswa bingung kenapa hanya satu cabang yang dieksekusi di else-if",
+    },
+
+    # 034 | application — trace else-if konversi nilai
+    {
+        "query": (
+            "Trace pseudocode konversi nilai untuk input nilai=68:\n"
+            "  if (nilai>=85) then print('A')\n"
+            "  else if (nilai>=70) then print('B')\n"
+            "  else if (nilai>=55) then print('C')\n"
+            "  else print('D')\n"
+            "Saya dapat C tapi teman dapat D. Mana yang benar dan kenapa?"
+        ),
+        "relevant_keywords": ["trace", "else-if", "nilai", "percabangan", "kondisi", "output"],
+        "cognitive": "2PGI",
+        "session_id": "eval-034",
+        "query_type": "application",
+        "context_note": "Trace else-if konversi nilai — ada di GT_SUBTOPIK_07",
+    },
+
+    # 035 | cross_topic — percabangan + loop (mahasiswa mau gabungkan keduanya)
+    {
+        "query": (
+            "Saya mau buat program yang minta input terus sampai user masukkan angka valid (1-100). "
+            "Ini perlu loop (while) dan percabangan (if untuk cek valid) sekaligus. "
+            "Mana yang jadi 'pembungkus' — apakah if di dalam while, atau while di dalam if?"
+        ),
+        "relevant_keywords": ["while", "percabangan", "validasi", "loop", "kondisi", "sentinel"],
+        "cognitive": "3TAR",
+        "session_id": "eval-035",
+        "query_type": "cross_topic",
+        "context_note": "Mahasiswa menggabungkan while dan if untuk validasi input",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 9 — PERULANGAN (GT_CT11, GT_DETAIL_PT11, GT_SUBTOPIK_08)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 036 | confusion — mahasiswa tidak tahu kapan for vs while dalam kasus nyata
+    {
+        "query": (
+            "Saya diminta baca semua baris file CSV sampai habis. "
+            "Saya tidak tahu ada berapa baris di file itu. "
+            "Apakah saya pakai for atau while? "
+            "Dosen bilang ada kasus pakai for tapi ada yang pakai while untuk hal yang sama."
+        ),
+        "relevant_keywords": ["for", "while", "iterasi", "kondisi", "file", "sentinel"],
+        "cognitive": "2PAI",
         "session_id": "eval-036",
         "query_type": "confusion",
-        "context_note": "Mahasiswa bingung dengan tiga konsep yang saling overlapping",
+        "context_note": "Mahasiswa bingung for vs while untuk membaca file dengan jumlah baris tidak diketahui",
     },
 
-    # ── 37. Scenario — Pola pada Data Log ─────────────────────────────────
+    # 037 | application — pseudocode cetak bilangan genap dengan dua versi
     {
         "query": (
-            "Saya analisis log server dan lihat error 'connection timeout' selalu muncul "
-            "tiap hari antara jam 14.00–15.00. Teman bilang saya lagi pakai CT. "
-            "Langkah CT apa yang sedang saya jalankan, dan apa langkah berikutnya?"
+            "Saya diminta tulis pseudocode untuk cetak 10 bilangan genap pertama (2, 4, ..., 20) "
+            "dalam DUA versi berbeda: satu dengan step dan satu tanpa step (pakai akumulasi). "
+            "Versi dengan step saya sudah bisa, tapi yang akumulasi saya tidak mengerti maksudnya."
         ),
-        "reference_answer": (
-            "Kamu sedang menjalankan pattern recognition — menemukan pola waktu berulang. "
-            "Langkah CT berikutnya: Abstraksi — tentukan faktor relevan (load server, cron job, backup). "
-            "Decomposisi — pisahkan: analisis traffic jam 14-15, cek scheduled task, monitor resource. "
-            "Algoritma — desain langkah diagnosis sistematis. Pattern ini mengarah ke hipotesis "
-            "'ada proses terjadwal yang memakan resource berlebihan'."
-        ),
-        "relevant_keywords": ["pattern recognition", "abstraksi", "dekomposisi", "log", "analisis", "hipotesis"],
-        "cognitive": "4TGR",
+        "relevant_keywords": ["for", "step", "genap", "akumulasi", "pseudocode", "perulangan", "while"],
+        "cognitive": "2TGR",
         "session_id": "eval-037",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa mengidentifikasi bahwa kerjanya terkait CT dan butuh framework lanjutan",
-    },
-
-    # ── 38. Application — Big-O Space Complexity ──────────────────────────
-    {
-        "query": (
-            "Saya selalu mikirin kompleksitas waktu, tapi dosen tadi minta analisis "
-            "space complexity juga. Untuk fungsi rekursif faktorial(n), "
-            "berapa space complexity-nya dan kenapa?"
-        ),
-        "reference_answer": (
-            "Faktorial rekursif: space complexity O(n) karena setiap pemanggilan rekursif "
-            "menambah satu frame ke call stack — ada n+1 frame aktif bersamaan saat mencapai base case. "
-            "Faktorial iteratif: O(1) space karena hanya satu variabel accumulator. "
-            "Space complexity mengukur memori ekstra yang dibutuhkan algoritma, "
-            "termasuk stack frames untuk rekursi."
-        ),
-        "relevant_keywords": ["space complexity", "call stack", "rekursi", "O(n)", "O(1)", "memori"],
-        "cognitive": "5PAI",
-        "session_id": "eval-038",
         "query_type": "application",
-        "context_note": "Mahasiswa baru sadar ada dimensi kompleksitas selain waktu",
+        "context_note": "Pseudocode dua versi cetak bilangan genap ada di GT_SUBTOPIK_08",
     },
 
-    # ── 39. Comparative — Array vs Hash Table ─────────────────────────────
+    # 038 | gap — mahasiswa tidak tahu apa itu sentinel value
     {
         "query": (
-            "Kalau saya mau cek apakah suatu nama sudah ada dalam daftar 10 ribu mahasiswa, "
-            "lebih efisien pakai array (terus linear search) atau hash table? "
-            "Bedanya di mana secara angka?"
+            "Di slide perulangan ada istilah 'sentinel value'. "
+            "Katanya ini alternatif dari while biasa untuk baca input. "
+            "Saya tidak paham apa itu sentinel dan kapan saya pakai itu "
+            "daripada while biasa dengan kondisi boolean?"
         ),
-        "reference_answer": (
-            "Array dengan linear search: O(n) per query — 10.000 operasi per pengecekan. "
-            "Array terurut dengan binary search: O(log n) — ~13 operasi, tapi perlu sort dulu O(n log n). "
-            "Hash table: O(1) rata-rata per query — hanya satu operasi hash + lookup. "
-            "Untuk 1.000 query: array linear = 10 juta operasi, hash table = 1.000 operasi. "
-            "Hash table unggul jelas untuk data statis besar dengan banyak lookup."
+        "relevant_keywords": ["sentinel", "while", "input", "perulangan", "kondisi", "for"],
+        "cognitive": "3PAI",
+        "session_id": "eval-038",
+        "query_type": "gap",
+        "context_note": "Mahasiswa tidak paham konsep sentinel value dalam perulangan",
+    },
+
+    # 039 | application — trace while loop hitung digit (ada di GT_SUBTOPIK_08)
+    {
+        "query": (
+            "Trace pseudocode berikut untuk input n=4523:\n"
+            "  jumlah = 0\n  while (n > 0) do\n    jumlah = jumlah + (n mod 10)\n    n = n div 10\n"
+            "  print(jumlah)\n"
+            "Saya dapat 14 tapi teman dapat 41. Mana yang benar?"
         ),
-        "relevant_keywords": ["array", "hash table", "linear search", "O(n)", "O(1)", "lookup", "efisiensi"],
-        "cognitive": "4PAR",
+        "relevant_keywords": ["trace", "while", "modulo", "div", "perulangan", "digit"],
+        "cognitive": "3TGR",
         "session_id": "eval-039",
-        "query_type": "comparative",
-        "context_note": "Mahasiswa ingin perbandingan konkret dengan angka nyata",
+        "query_type": "application",
+        "context_note": "Trace while loop hitung jumlah digit — ada di GT_SUBTOPIK_08",
     },
 
-    # ── 40. Conceptual — Dekomposisi Fungsional ───────────────────────────
+    # 040 | out-of-scope — do-while loop (tidak ada di GT CT)
     {
         "query": (
-            "Waktu ngoding, saya sering buat fungsi kecil-kecil untuk setiap tugas spesifik. "
-            "Ternyata itu ada namanya ya? Dosen bilang 'functional decomposition'. "
-            "Apa manfaat konkretnya selain biar kode kelihatan rapi?"
+            "Di C++ dan Java ada do-while loop yang eksekusi body setidaknya satu kali. "
+            "Di pseudocode CT kita hanya belajar for dan while. "
+            "Apakah do-while ada di pseudocode CT? "
+            "Dan bagaimana simulasi do-while dengan while biasa?"
         ),
-        "reference_answer": (
-            "Functional decomposition memecah program menjadi fungsi dengan tanggung jawab tunggal. "
-            "Manfaat konkret: testability — tiap fungsi bisa diuji isolasi; reusability — fungsi "
-            "dipanggil dari banyak tempat tanpa duplikasi; maintainability — bug terlokalisasi; "
-            "readability — nama fungsi mendokumentasikan intent; parallel development — tim bisa "
-            "kerjakan fungsi berbeda secara bersamaan."
-        ),
-        "relevant_keywords": ["dekomposisi", "fungsi", "single responsibility", "testability", "reusability", "modular"],
-        "cognitive": "3PAR",
+        "relevant_keywords": ["do-while", "while", "perulangan", "body", "kondisi", "for"],
+        "cognitive": "4TGI",
         "session_id": "eval-040",
-        "query_type": "conceptual",
-        "context_note": "Mahasiswa sudah praktik tapi belum tahu konsep formal dan manfaatnya",
+        "query_type": "out_of_scope",
+        "context_note": "Do-while tidak ada di GT CT — hanya for dan while yang diajarkan",
     },
 
-    # ── 41. Application — Heap Sort ───────────────────────────────────────
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 10 — NESTED LOOP (GT_SUBTOPIK_09)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 041 | application — cetak segitiga bintang terbalik
     {
         "query": (
-            "Dosen kasih soal: 'urutkan [4, 10, 3, 5, 1] pakai heap sort'. "
-            "Saya tau heap itu struktur tree tapi gak paham hubungannya sama sorting. "
-            "Apa itu max-heap dan bagaimana heap sort menggunakannya?"
+            "Saya bisa buat segitiga bintang biasa (1 bintang di baris pertama, semakin banyak ke bawah). "
+            "Tapi dosen minta buat yang TERBALIK: 5 bintang di baris pertama, semakin sedikit ke bawah. "
+            "Saya tidak tahu harus ubah kondisi loop dalam-nya bagaimana."
         ),
-        "reference_answer": (
-            "Max-heap adalah binary tree di mana setiap node lebih besar dari anak-anaknya — "
-            "root selalu elemen terbesar. Heap sort: 1) Build max-heap dari array O(n), "
-            "2) Berulang: swap root (maks) ke posisi akhir, heapify ulang O(log n). "
-            "Untuk [4,10,3,5,1]: heap [10,5,3,4,1] → swap 10 ke akhir → heapify → ulangi. "
-            "Total O(n log n), in-place, tapi tidak stable."
-        ),
-        "relevant_keywords": ["heap sort", "max-heap", "heapify", "in-place", "O(n log n)", "binary tree"],
-        "cognitive": "4TAI",
+        "relevant_keywords": ["nested loop", "segitiga", "for", "pola", "bintang", "baris"],
+        "cognitive": "2PAR",
         "session_id": "eval-041",
         "query_type": "application",
-        "context_note": "Mahasiswa tahu heap sebagai struktur tapi belum tahu koneksinya ke sorting",
+        "context_note": "Pola segitiga terbalik — variasi dari soal di GT_SUBTOPIK_09",
     },
 
-    # ── 42. Scenario — Validasi Input User ────────────────────────────────
+    # 042 | confusion — mahasiswa salah hitung total iterasi nested loop
     {
         "query": (
-            "Saya bikin form registrasi dan harus validasi: email harus ada '@', "
-            "password minimal 8 karakter, dan username hanya boleh huruf dan angka. "
-            "Dosen bilang ini contoh 'algoritma dengan kondisi'. "
-            "Bagaimana CT membantu saya desain validasi ini secara sistematis?"
+            "Saya punya nested loop: luar 5 iterasi, dalam 3 iterasi. "
+            "Saya kira total iterasinya 5+3=8. Tapi kata teman 5×3=15. "
+            "Mana yang benar dan kenapa? Saya bingung karena selalu tambah di logika saya."
         ),
-        "reference_answer": (
-            "CT untuk validasi form: Decomposisi — pisahkan validasi email, password, username "
-            "menjadi fungsi terpisah. Pattern recognition — semua validasi punya pola: cek kondisi → "
-            "kembalikan pesan error. Abstraksi — buat fungsi validate(value, rules) yang umum. "
-            "Algoritma: untuk email cek indexOf('@') > 0 AND ada domain; password len >= 8; "
-            "username regex [a-zA-Z0-9]+. Setiap kondisi independen dan testable."
-        ),
-        "relevant_keywords": ["validasi", "kondisi", "dekomposisi", "abstraksi", "regex", "algoritma"],
-        "cognitive": "2PAR",
+        "relevant_keywords": ["nested loop", "iterasi", "total", "perkalian", "kompleksitas", "O(n^2)"],
+        "cognitive": "3PAR",
         "session_id": "eval-042",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa mengerjakan fitur nyata dan ingin pendekatan CT yang sistematis",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa salah mengira total iterasi nested loop adalah penjumlahan bukan perkalian",
     },
 
-    # ── 43. Confusion — Kompleksitas Amortized ────────────────────────────
+    # 043 | application — matriks identitas dengan nested loop
     {
         "query": (
-            "Saya baca bahwa append ke Python list itu O(1) amortized. "
-            "Tapi kan kadang list harus resize yang butuh O(n)? "
-            "Jadi O(1) atau O(n)? Amortized itu maksudnya apa?"
+            "Tugas: cetak matriks identitas 3x3 dengan pseudocode nested loop. "
+            "Saya tahu diagonal utamanya berisi 1 dan sisanya 0, "
+            "tapi saya tidak tahu cara menulis kondisi untuk diagonal di pseudocode."
         ),
-        "reference_answer": (
-            "Amortized analysis mengukur rata-rata biaya per operasi dalam sequence panjang. "
-            "Python list resize terjadi jarang (saat kapasitas penuh) dengan strategi double size. "
-            "Biaya total n append: O(n) karena total copy 1+2+4+...+n ≈ 2n = O(n). "
-            "Amortized per operasi: O(n)/n = O(1). Jadi meski sesekali O(n), rata-ratanya O(1). "
-            "Amortized berbeda dari average-case: amortized adalah jaminan worst-case atas sequence."
-        ),
-        "relevant_keywords": ["amortized", "append", "resize", "O(1)", "Python list", "sequence"],
-        "cognitive": "5TGI",
+        "relevant_keywords": ["nested loop", "matriks", "kondisi", "diagonal", "for", "print"],
+        "cognitive": "4PAI",
         "session_id": "eval-043",
-        "query_type": "confusion",
-        "context_note": "Mahasiswa bingung dengan kontradiksi O(1) vs O(n) pada append",
-    },
-
-    # ── 44. Conceptual — Tipe Data Abstrak (ADT) ──────────────────────────
-    {
-        "query": (
-            "Dosen bilang stack, queue, dan list itu 'Abstract Data Type' bukan struktur data. "
-            "Saya kira mereka sama aja. Apa bedanya ADT dengan struktur data konkret?"
-        ),
-        "reference_answer": (
-            "ADT mendefinisikan PERILAKU (operasi yang tersedia dan kontraknya) tanpa menentukan "
-            "implementasi. Stack ADT: push, pop, peek, isEmpty — tidak ditentukan apakah pakai array atau linked list. "
-            "Struktur data konkret adalah implementasi spesifik. "
-            "Contoh: Stack bisa diimplementasikan dengan array atau linked list — keduanya memenuhi Stack ADT. "
-            "ADT adalah abstraksi: pengguna peduli 'apa yang bisa dilakukan', bukan 'bagaimana caranya'."
-        ),
-        "relevant_keywords": ["ADT", "abstraksi", "implementasi", "kontrak", "stack", "interface"],
-        "cognitive": "3TGI",
-        "session_id": "eval-044",
-        "query_type": "conceptual",
-        "context_note": "Mahasiswa tidak membedakan konsep ADT dengan implementasi konkret",
-    },
-
-    # ── 45. Comparative — Iteratif vs Rekursif Fibonacci ──────────────────
-    {
-        "query": (
-            "Saya diminta implementasi fibonacci dua cara: iteratif dan rekursif. "
-            "Hasil keduanya sama, tapi dosen bilang kompleksitasnya beda jauh. "
-            "Seberapa beda tepatnya, dan yang mana harus saya pakai di production?"
-        ),
-        "reference_answer": (
-            "Fibonacci rekursif murni: O(2^n) waktu, O(n) space — sangat lambat, "
-            "fibonacci(40) butuh ~1 miliar operasi. "
-            "Fibonacci iteratif: O(n) waktu, O(1) space — hanya dua variabel. "
-            "Fibonacci dengan memoization: O(n) waktu, O(n) space. "
-            "Untuk production: iteratif selalu lebih baik. Rekursif hanya untuk pembelajaran "
-            "atau ketika kejelasan kode lebih penting dari performa."
-        ),
-        "relevant_keywords": ["fibonacci", "rekursif", "iteratif", "O(2^n)", "O(n)", "memoization", "production"],
-        "cognitive": "4TAR",
-        "session_id": "eval-045",
-        "query_type": "comparative",
-        "context_note": "Mahasiswa mengerjakan tugas dua implementasi dan butuh analisis komparatif",
-    },
-
-    # ── 46. Scenario — Algoritma Rekomendasi Sederhana ────────────────────
-    {
-        "query": (
-            "Tugas akhir saya harus bikin sistem rekomendasi film sederhana. "
-            "Data yang saya punya: rating film dari tiap user. "
-            "Cara paling simpel tapi masuk akal secara algoritma itu gimana? "
-            "Saya belum pernah belajar ML."
-        ),
-        "reference_answer": (
-            "Tanpa ML, gunakan Collaborative Filtering sederhana: cari user dengan preferensi mirip "
-            "(cosine similarity atau Pearson correlation pada vektor rating), lalu rekomendasikan "
-            "film yang disukai user mirip tapi belum ditonton. "
-            "Langkah CT: Decomposisi — pisahkan: hitung similarity, filter film belum ditonton, ranking. "
-            "Abstraksi — representasikan tiap user sebagai vektor rating. "
-            "Kompleksitas: O(n²) untuk hitung semua pasangan user."
-        ),
-        "relevant_keywords": ["rekomendasi", "collaborative filtering", "cosine similarity", "vektor", "dekomposisi"],
-        "cognitive": "5PAR",
-        "session_id": "eval-046",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa mengerjakan proyek akhir tanpa background ML",
-    },
-
-    # ── 47. Application — Notasi Big-O pada Kode Nyata ────────────────────
-    {
-        "query": (
-            "Dosen kasih potongan kode:\n"
-            "for i in range(n):\n"
-            "    for j in range(n):\n"
-            "        if arr[i] + arr[j] == target:\n"
-            "            result.append((i, j))\n"
-            "Kompleksitasnya apa? Dan bagian mana yang paling menentukan?"
-        ),
-        "reference_answer": (
-            "Kode tersebut O(n²) karena dua nested loop masing-masing n iterasi: n × n = n² operasi. "
-            "Bagian penentu: nested loop — setiap kombinasi pasangan (i,j) diperiksa. "
-            "Operasi dalam loop (perbandingan dan append) adalah O(1) sehingga tidak mengubah "
-            "kompleksitas keseluruhan. Optimasi ke O(n): gunakan hash set, simpan complement, "
-            "cek dalam satu pass."
-        ),
-        "relevant_keywords": ["nested loop", "O(n²)", "Big-O", "kompleksitas", "analisis kode", "optimasi"],
-        "cognitive": "3PAI",
-        "session_id": "eval-047",
         "query_type": "application",
-        "context_note": "Mahasiswa diminta analisis kompleksitas kode konkret yang diberikan dosen",
+        "context_note": "Matriks identitas dengan nested loop — ada di GT_SUBTOPIK_09",
     },
 
-    # ── 48. Conceptual — Paradigma Pemrograman dan CT ─────────────────────
+    # 044 | gap — tidak tahu kenapa nested loop identik dengan O(n²)
     {
         "query": (
-            "Saya dengar ada OOP, functional programming, procedural. "
-            "Ini beda paradigma ya? Terus hubungannya sama CT gimana — "
-            "apakah CT hanya berlaku untuk salah satu paradigma?"
+            "Dosen bilang nested loop selalu O(n²). "
+            "Tapi saya punya nested loop: luar dari 1 to n, dalam dari 1 to 5 (konstan). "
+            "Apakah itu masih O(n²)? Karena loop dalamnya tidak bergantung n."
         ),
-        "reference_answer": (
-            "CT adalah cara berpikir dalam menyelesaikan masalah, bukan paradigma bahasa. "
-            "CT berlaku di semua paradigma: OOP menggunakan abstraksi via class/object; "
-            "Functional menekankan decomposisi via pure functions dan komposisi; "
-            "Procedural menggunakan algoritma step-by-step. "
-            "Semua paradigma mengimplementasikan pilar CT (dekomposisi, abstraksi, pattern, algoritma) "
-            "dengan cara berbeda. CT adalah mindset, paradigma adalah toolset."
-        ),
-        "relevant_keywords": ["paradigma", "OOP", "functional", "CT", "abstraksi", "dekomposisi", "mindset"],
-        "cognitive": "4TGR",
-        "session_id": "eval-048",
-        "query_type": "conceptual",
-        "context_note": "Mahasiswa menghubungkan konsep CT dengan paradigma pemrograman yang dipelajari",
+        "relevant_keywords": ["nested loop", "O(n^2)", "kompleksitas", "konstan", "Big-O", "iterasi"],
+        "cognitive": "5TGR",
+        "session_id": "eval-044",
+        "query_type": "gap",
+        "context_note": "Mahasiswa salah kira semua nested loop adalah O(n²)",
     },
 
-    # ── 49. Confusion — Stable vs Unstable Sort ───────────────────────────
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 11 — FUNGSI & MODULARITAS (GT_CT12, GT_DETAIL_PT12, GT_SUBTOPIK_10)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 045 | confusion — mahasiswa kira fungsi dan prosedur sama karena di Python sama
     {
         "query": (
-            "Saya sortir data mahasiswa berdasarkan nilai, tapi urutan mahasiswa "
-            "dengan nilai sama jadi acak setelah sorting. "
-            "Teman bilang saya butuh 'stable sort'. Apa itu? "
-            "Algoritma sort mana yang stable?"
+            "Di Python, def bisa return nilai atau tidak — keduanya sama-sama 'fungsi'. "
+            "Tapi di pseudocode CT, dosen bedakan 'fungsi' dan 'prosedur'. "
+            "Apakah perbedaan ini penting di CT, atau hanya formalitas?"
         ),
-        "reference_answer": (
-            "Stable sort mempertahankan urutan relatif elemen dengan nilai sama. "
-            "Jika dua mahasiswa punya nilai 85, urutan mereka sebelum sorting tetap sama setelahnya. "
-            "Stable: Merge sort, Insertion sort, Bubble sort, Tim sort (Python default). "
-            "Unstable: Quick sort, Heap sort, Selection sort. "
-            "Python sorted() dan list.sort() menggunakan Tim sort — stable secara default. "
-            "Penting saat sort multi-level: sort by nama dulu, lalu sort by nilai."
-        ),
-        "relevant_keywords": ["stable sort", "merge sort", "urutan relatif", "Tim sort", "unstable", "Python"],
-        "cognitive": "3TAI",
-        "session_id": "eval-049",
+        "relevant_keywords": ["fungsi", "prosedur", "return", "Python", "pseudocode", "DRY"],
+        "cognitive": "3TAR",
+        "session_id": "eval-045",
         "query_type": "confusion",
-        "context_note": "Mahasiswa menemukan bug karena memakai unstable sort pada data multi-kriteria",
+        "context_note": "Mahasiswa Python tidak paham pembedaan fungsi vs prosedur di pseudocode CT",
     },
 
-    # ── 50. Scenario — Desain Algoritma dari Nol ──────────────────────────
+    # 046 | application — fungsi luas bangun datar
     {
         "query": (
-            "Saya harus bikin program yang baca teks panjang dan cari 3 kata "
-            "yang paling sering muncul. Saya belum punya ide sama sekali. "
-            "Bagaimana CT membantu saya mulai dari nol sampai punya algoritma yang jelas?"
+            "Tugas: tulis tiga fungsi untuk luas persegi panjang, segitiga, dan lingkaran. "
+            "Lalu buat program utama yang memanggil ketiganya. "
+            "Saya bingung cara menulis parameter dengan tipe data di pseudocode CT."
         ),
-        "reference_answer": (
-            "Pendekatan CT step by step: "
-            "1. Dekomposisi: baca teks → tokenisasi kata → hitung frekuensi → ambil top-3. "
-            "2. Abstraksi: representasikan kata sebagai string, frekuensi sebagai integer — "
-            "abaikan case dan tanda baca. "
-            "3. Pattern recognition: masalah ini mirip histogram/frequency count. "
-            "4. Algoritma: gunakan hash map {kata: count}, iterasi semua kata, "
-            "tambah/inisiasi counter. Ambil top-3 dengan partial sort O(n log 3) atau heapq.nlargest(). "
-            "Total kompleksitas: O(n) untuk counting + O(n log 3) untuk top-k."
-        ),
-        "relevant_keywords": ["frekuensi", "hash map", "tokenisasi", "dekomposisi", "top-k", "algoritma"],
-        "cognitive": "2TAR",
-        "session_id": "eval-050",
-        "query_type": "scenario",
-        "context_note": "Mahasiswa menghadapi masalah terbuka dari nol dan butuh scaffolding CT penuh",
+        "relevant_keywords": ["fungsi", "parameter", "return", "luas", "tipe data", "prosedur"],
+        "cognitive": "2PAI",
+        "session_id": "eval-046",
+        "query_type": "application",
+        "context_note": "Fungsi luas bangun datar ada di GT_SUBTOPIK_10 dan GT_DETAIL_PT12",
     },
+
+    # 047 | gap — mahasiswa tidak paham scope variabel lokal vs global
+    {
+        "query": (
+            "Saya punya variabel x = 10 di program utama. "
+            "Di dalam fungsi saya ubah x = 99. "
+            "Setelah fungsi selesai, nilai x di program utama jadi 99 atau tetap 10? "
+            "Saya bingung karena di Python bisa berbeda hasilnya."
+        ),
+        "relevant_keywords": ["variabel", "scope", "fungsi", "lokal", "global", "return"],
+        "cognitive": "3TAI",
+        "session_id": "eval-047",
+        "query_type": "gap",
+        "context_note": "Mahasiswa bingung scope variabel lokal vs global dalam fungsi pseudocode",
+    },
+
+    # 048 | cross_topic — fungsi + rekursi (mahasiswa bingung rekursi adalah fungsi)
+    {
+        "query": (
+            "Rekursi itu fungsi yang memanggil dirinya sendiri. "
+            "Tapi kalau rekursi adalah fungsi, kenapa diajarkan terpisah? "
+            "Apa yang membuat rekursi 'spesial' dibanding fungsi biasa?"
+        ),
+        "relevant_keywords": ["rekursi", "fungsi", "self-call", "base case", "stack", "prosedur"],
+        "cognitive": "4TGI",
+        "session_id": "eval-048",
+        "query_type": "cross_topic",
+        "context_note": "Mahasiswa tidak paham apa yang membuat rekursi berbeda dari fungsi biasa",
+    },
+
+    # 049 | out-of-scope — higher-order function (tidak ada di GT)
+    {
+        "query": (
+            "Di Python ada konsep fungsi yang menerima fungsi lain sebagai parameter — "
+            "disebut higher-order function. Apakah konsep ini diajarkan di CT? "
+            "Atau CT hanya bahas fungsi yang menerima tipe data primitif?"
+        ),
+        "relevant_keywords": ["fungsi", "parameter", "higher-order", "prosedur", "abstraksi", "modularitas"],
+        "cognitive": "5PAI",
+        "session_id": "eval-049",
+        "query_type": "out_of_scope",
+        "context_note": "Higher-order function tidak ada di GT CT",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 12 — REKURSI (GT_SUBTOPIK_11)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 050 | confusion — mahasiswa tidak tahu kenapa rekursi berhenti
+    {
+        "query": (
+            "Saya tulis fungsi rekursif tapi program saya crash dengan error 'maximum recursion depth exceeded'. "
+            "Saya sudah tambahkan base case tapi masih crash. "
+            "Apa yang salah? Apakah base case saya yang bermasalah atau ada hal lain?"
+        ),
+        "relevant_keywords": ["rekursi", "base case", "stack overflow", "depth", "infinite", "fungsi"],
+        "cognitive": "3PAI",
+        "session_id": "eval-050",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa punya rekursi yang crash — base case tidak memenuhi syarat",
+    },
+
+    # 051 | application — trace faktorial(4) dengan call stack
+    {
+        "query": (
+            "Saya diminta trace faktorial(4) secara lengkap dan tunjukkan call stack "
+            "di fase 'turun' (push) dan fase 'naik' (pop). "
+            "Saya bingung apa bedanya fase turun dan fase naik."
+        ),
+        "relevant_keywords": ["faktorial", "rekursi", "call stack", "trace", "base case", "push"],
+        "cognitive": "3TGR",
+        "session_id": "eval-051",
+        "query_type": "application",
+        "context_note": "Trace faktorial rekursif dengan call stack ada di GT_SUBTOPIK_11",
+    },
+
+    # 052 | confusion — mahasiswa tidak tahu mengapa Fibonacci rekursif lambat
+    {
+        "query": (
+            "Saya buat Fibonacci rekursif dan berjalan normal untuk Fib(10). "
+            "Tapi waktu saya coba Fib(40) program sangat lambat — hampir 1 menit. "
+            "Padahal logikanya sederhana. Kenapa bisa selambat itu?"
+        ),
+        "relevant_keywords": ["Fibonacci", "rekursi", "O(2^n)", "kompleksitas", "call stack", "memoization"],
+        "cognitive": "5TAR",
+        "session_id": "eval-052",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa tidak tahu mengapa Fibonacci rekursif eksponensial lambatnya",
+    },
+
+    # 053 | application — trace Fib(6) dari rekursi
+    {
+        "query": (
+            "Hitung Fib(6) menggunakan definisi rekursif: Fib(1)=1, Fib(2)=1, Fib(n)=Fib(n-1)+Fib(n-2). "
+            "Saya dapat 11 tapi teman dapat 8. "
+            "Tolong trace dari awal untuk membuktikan mana yang benar."
+        ),
+        "relevant_keywords": ["Fibonacci", "rekursi", "trace", "base case", "perhitungan", "deret"],
+        "cognitive": "3TGI",
+        "session_id": "eval-053",
+        "query_type": "application",
+        "context_note": "Trace Fibonacci rekursif — ada di GT_SUBTOPIK_11",
+    },
+
+    # 054 | cross_topic — rekursi + kompleksitas (mahasiswa hubungkan keduanya)
+    {
+        "query": (
+            "Dosen bilang faktorial rekursif O(n) tapi Fibonacci rekursif O(2^n). "
+            "Keduanya rekursi, kenapa kompleksitasnya bisa beda jauh? "
+            "Apa yang menentukan kompleksitas dari sebuah fungsi rekursif?"
+        ),
+        "relevant_keywords": ["rekursi", "kompleksitas", "O(n)", "O(2^n)", "Fibonacci", "faktorial"],
+        "cognitive": "5TGI",
+        "session_id": "eval-054",
+        "query_type": "cross_topic",
+        "context_note": "Mahasiswa menghubungkan rekursi dengan analisis kompleksitas",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 13 — STRUKTUR DATA (GT_CT13, GT_DETAIL_PT13)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 055 | confusion — mahasiswa kira array dan list Python identik
+    {
+        "query": (
+            "Di Python saya pakai list untuk segalanya dan tidak pernah ada masalah. "
+            "Tapi di slide CT dibedakan antara array dan list. "
+            "Apakah Python list itu array? Kalau iya, kenapa disebut beda?"
+        ),
+        "relevant_keywords": ["array", "list", "tipe data", "memori", "Python", "indeks"],
+        "cognitive": "4TGR",
+        "session_id": "eval-055",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa tidak paham perbedaan array klasik dan Python list",
+    },
+
+    # 056 | gap — mahasiswa tidak tahu kapan array lebih baik dari list
+    {
+        "query": (
+            "Kalau Python list sudah bisa melakukan semua yang array bisa — "
+            "tambah elemen, akses indeks, loop — kenapa orang masih pakai array? "
+            "Kapan tepatnya array lebih baik dari list?"
+        ),
+        "relevant_keywords": ["array", "list", "efisiensi", "memori", "operasi", "tipe data"],
+        "cognitive": "5PAR",
+        "session_id": "eval-056",
+        "query_type": "gap",
+        "context_note": "Mahasiswa tidak paham keunggulan array dibanding dynamic list",
+    },
+
+    # 057 | out-of-scope — linked list (tidak ada di GT CT)
+    {
+        "query": (
+            "Saya baca tentang linked list di internet dan katanya lebih efisien dari array "
+            "untuk insert dan delete. Apakah linked list diajarkan di mata kuliah CT ini? "
+            "Kalau tidak, apa yang membedakan dengan array?"
+        ),
+        "relevant_keywords": ["linked list", "array", "insert", "delete", "struktur data", "pointer"],
+        "cognitive": "4TGI",
+        "session_id": "eval-057",
+        "query_type": "out_of_scope",
+        "context_note": "Linked list tidak ada di GT CT — hanya array/list yang diajarkan",
+    },
+
+    # 058 | application — operasi list: cari rata-rata dan distribusi
+    {
+        "query": (
+            "Saya punya list nilai [75, 82, 60, 91, 55, 88, 70]. "
+            "Saya diminta hitung rata-rata, lalu tampilkan berapa mahasiswa di atas dan di bawah rata-rata. "
+            "Apakah ini bisa diselesaikan dengan satu loop atau perlu dua loop?"
+        ),
+        "relevant_keywords": ["list", "rata-rata", "loop", "for", "akumulasi", "perbandingan"],
+        "cognitive": "3PAI",
+        "session_id": "eval-058",
+        "query_type": "application",
+        "context_note": "Operasi statistik pada list — ada di GT_DETAIL_PT09 dan GT_CT13",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 14 — STACK & QUEUE (GT_SUBTOPIK_12)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 059 | application — simulasi stack PUSH/POP/PEEK
+    {
+        "query": (
+            "Simulasikan stack dengan operasi berurutan:\n"
+            "PUSH(7), PUSH(2), PUSH(5), POP, PUSH(9), PEEK, POP, POP.\n"
+            "Saya tidak yakin apa yang dikembalikan PEEK — apakah elemen terhapus atau tidak?"
+        ),
+        "relevant_keywords": ["stack", "PUSH", "POP", "PEEK", "LIFO", "top", "simulasi"],
+        "cognitive": "2TGI",
+        "session_id": "eval-059",
+        "query_type": "application",
+        "context_note": "Simulasi operasi stack — ada di GT_SUBTOPIK_12",
+    },
+
+    # 060 | application — simulasi queue ENQUEUE/DEQUEUE
+    {
+        "query": (
+            "Simulasikan queue dengan operasi:\n"
+            "ENQUEUE(P), ENQUEUE(Q), ENQUEUE(R), DEQUEUE, ENQUEUE(S), DEQUEUE, DEQUEUE.\n"
+            "Tunjukkan isi queue setelah setiap operasi dan nilai yang dikembalikan DEQUEUE."
+        ),
+        "relevant_keywords": ["queue", "ENQUEUE", "DEQUEUE", "FIFO", "front", "rear", "simulasi"],
+        "cognitive": "2PAR",
+        "session_id": "eval-060",
+        "query_type": "application",
+        "context_note": "Simulasi operasi queue — ada di GT_SUBTOPIK_12",
+    },
+
+    # 061 | confusion — mahasiswa tidak tahu pilih stack atau queue
+    {
+        "query": (
+            "Saya mau buat fitur undo di aplikasi teks editor saya. "
+            "Setiap aksi disimpan dan bisa di-undo ke aksi sebelumnya. "
+            "Apakah saya pakai stack atau queue? Dan mengapa?"
+        ),
+        "relevant_keywords": ["stack", "queue", "LIFO", "FIFO", "undo", "aplikasi"],
+        "cognitive": "3TAI",
+        "session_id": "eval-061",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa memilih stack vs queue untuk fitur undo",
+    },
+
+    # 062 | application — cek keseimbangan kurung dengan stack
+    {
+        "query": (
+            "Soal: periksa apakah ekspresi '((a+b)*(c-d))' seimbang kurungnya. "
+            "Dosen minta pakai stack. Saya paham LIFO tapi tidak tahu cara terapkan ke masalah kurung ini."
+        ),
+        "relevant_keywords": ["stack", "kurung", "PUSH", "POP", "seimbang", "LIFO", "ekspresi"],
+        "cognitive": "5TGI",
+        "session_id": "eval-062",
+        "query_type": "application",
+        "context_note": "Aplikasi stack untuk cek keseimbangan kurung — ada di GT_SUBTOPIK_12",
+    },
+
+    # 063 | gap — mahasiswa tidak tahu implementasi stack dengan array
+    {
+        "query": (
+            "Di slide stack ada pseudocode implementasi dengan array dan variabel 'top'. "
+            "Saya tidak mengerti mengapa perlu variabel top — kenapa tidak langsung pakai panjang array? "
+            "Apa fungsi variabel top dalam implementasi stack?"
+        ),
+        "relevant_keywords": ["stack", "implementasi", "array", "top", "PUSH", "POP"],
+        "cognitive": "4TGR",
+        "session_id": "eval-063",
+        "query_type": "gap",
+        "context_note": "Mahasiswa tidak paham peran variabel top dalam implementasi stack berbasis array",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 15 — GRAPH & TREE (GT_SUBTOPIK_13)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 064 | confusion — mahasiswa tidak bisa bedakan tree dan graph biasa
+    {
+        "query": (
+            "Dosen bilang tree itu 'graph khusus'. "
+            "Tapi kalau tree adalah graph, kenapa diajarkan terpisah? "
+            "Apa yang membuat graph dianggap tree dan bukan hanya graph biasa?"
+        ),
+        "relevant_keywords": ["tree", "graph", "cycle", "hierarkis", "node", "edge"],
+        "cognitive": "4TGI",
+        "session_id": "eval-064",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa bingung hubungan hierarki antara tree dan graph",
+    },
+
+    # 065 | application — trace Dijkstra pada graph berbobot
+    {
+        "query": (
+            "Graph: A-B(4), A-C(2), B-D(3), C-D(5), D-E(1). "
+            "Cari jarak terpendek dari A ke E menggunakan Dijkstra. "
+            "Saya sudah coba tapi selalu dapat jalur yang berbeda dari teman."
+        ),
+        "relevant_keywords": ["Dijkstra", "graph", "jarak terpendek", "bobot", "BFS", "traversal"],
+        "cognitive": "3TGI",
+        "session_id": "eval-065",
+        "query_type": "application",
+        "context_note": "Trace Dijkstra ada di GT_SUBTOPIK_13",
+    },
+
+    # 066 | comparative — BFS vs DFS urutan kunjungan
+    {
+        "query": (
+            "Graph: A→B, A→C, B→D, B→E, C→F. "
+            "Saya trace BFS dari A dan dapat: A, B, C, D, E, F. "
+            "Teman trace DFS dari A dan dapat: A, B, D, E, C, F. "
+            "Apakah keduanya benar? Dan kenapa urutannya bisa berbeda?"
+        ),
+        "relevant_keywords": ["BFS", "DFS", "traversal", "queue", "stack", "urutan", "graph"],
+        "cognitive": "4TGI",
+        "session_id": "eval-066",
+        "query_type": "comparative",
+        "context_note": "Perbandingan BFS vs DFS ada di GT_SUBTOPIK_13",
+    },
+
+    # 067 | gap — mahasiswa tidak tahu bedanya directed dan undirected graph di kasus nyata
+    {
+        "query": (
+            "Di slide graph ada directed dan undirected. "
+            "Dosen minta pilih jenis graph yang tepat untuk 'jaringan pertemanan di media sosial'. "
+            "Saya tidak yakin — pertemanan kan simetris tapi ada yang following tanpa difollow balik. "
+            "Mana yang benar?"
+        ),
+        "relevant_keywords": ["directed graph", "undirected graph", "edge", "simetris", "media sosial", "relasi"],
+        "cognitive": "3PAR",
+        "session_id": "eval-067",
+        "query_type": "gap",
+        "context_note": "Memilih directed vs undirected graph untuk kasus nyata — ada di GT_SUBTOPIK_13",
+    },
+
+    # 068 | out-of-scope — binary search tree operasi insert/delete (tidak ada di GT)
+    {
+        "query": (
+            "Saya baca tentang Binary Search Tree (BST) di internet. "
+            "Apakah BST diajarkan di CT? Kalau ya, bagaimana cara insert dan search di BST?"
+        ),
+        "relevant_keywords": ["binary search tree", "tree", "insert", "search", "node", "hierarkis"],
+        "cognitive": "5PGR",
+        "session_id": "eval-068",
+        "query_type": "out_of_scope",
+        "context_note": "BST operasi spesifik tidak ada di GT CT — hanya konsep tree dasar",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 16 — KOMPLEKSITAS & BIG-O (GT_SUBTOPIK_14)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 069 | application — identifikasi Big-O dari tiga kode
+    {
+        "query": (
+            "Tentukan kompleksitas waktu dari:\n"
+            "a) x = arr[5]\n"
+            "b) for i=1 to n: print(arr[i])\n"
+            "c) for i=1 to n: for j=1 to n: print(i+j)\n"
+            "Saya dapat a=O(1), b=O(n), c=O(n²). Apakah benar?"
+        ),
+        "relevant_keywords": ["Big-O", "O(1)", "O(n)", "O(n^2)", "loop", "nested loop", "kompleksitas"],
+        "cognitive": "3PAI",
+        "session_id": "eval-069",
+        "query_type": "application",
+        "context_note": "Identifikasi Big-O dari kode ada di GT_SUBTOPIK_14",
+    },
+
+    # 070 | confusion — mahasiswa salah simplifikasi O(n² + n)
+    {
+        "query": (
+            "Program saya punya satu nested loop O(n²) dan satu loop biasa O(n) yang berjalan setelahnya. "
+            "Saya tulis kompleksitasnya O(n²+n). Tapi dosen coret itu dan tulis O(n²). "
+            "Kenapa n-nya dibuang?"
+        ),
+        "relevant_keywords": ["Big-O", "penyederhanaan", "O(n^2)", "O(n)", "suku dominan", "aturan"],
+        "cognitive": "4PAR",
+        "session_id": "eval-070",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa bingung aturan penyederhanaan Big-O — buang suku rendah",
+    },
+
+    # 071 | application — analisis Big-O loop dengan pengali dua
+    {
+        "query": (
+            "Tentukan Big-O pseudocode ini:\n"
+            "  for i=1 to n do\n    j=1\n    while (j < n) do\n      print(i,j)\n      j = j*2\n"
+            "Saya kira jawabannya O(n²) karena ada nested loop. Tapi dosen bilang bukan."
+        ),
+        "relevant_keywords": ["Big-O", "O(n log n)", "while", "logaritmik", "pengali", "analisis"],
+        "cognitive": "5TGI",
+        "session_id": "eval-071",
+        "query_type": "application",
+        "context_note": "Big-O loop dengan j*=2 ada di GT_SUBTOPIK_14",
+    },
+
+    # 072 | comparative — bubble sort vs merge sort untuk data besar
+    {
+        "query": (
+            "Saya punya 100.000 data yang perlu diurutkan. "
+            "Bubble sort terasa lambat. Dosen menyarankan merge sort. "
+            "Kalau keduanya bisa menghasilkan array terurut, kenapa merge sort lebih baik untuk data besar?"
+        ),
+        "relevant_keywords": ["bubble sort", "merge sort", "O(n^2)", "O(n log n)", "kompleksitas", "sorting"],
+        "cognitive": "5PAR",
+        "session_id": "eval-072",
+        "query_type": "comparative",
+        "context_note": "Perbandingan sorting berdasarkan kompleksitas ada di GT_SUBTOPIK_14",
+    },
+
+    # 073 | gap — space complexity tidak dipahami
+    {
+        "query": (
+            "Saya hanya tahu time complexity. Tapi dosen juga tanya space complexity dari algoritme saya. "
+            "Apa itu space complexity dan bagaimana cara menganalisisnya? "
+            "Apakah O(1) space berarti tidak pakai memori sama sekali?"
+        ),
+        "relevant_keywords": ["space complexity", "memori", "O(1)", "O(n)", "algoritme", "rekursi"],
+        "cognitive": "4TGR",
+        "session_id": "eval-073",
+        "query_type": "gap",
+        "context_note": "Space complexity dibahas di GT_SUBTOPIK_14 dalam konteks time vs space",
+    },
+
+    # 074 | out-of-scope — amortized complexity (tidak ada di GT)
+    {
+        "query": (
+            "Saya baca bahwa append ke Python list itu O(1) amortized, bukan O(1) biasa. "
+            "Apa itu amortized complexity dan kenapa append tidak selalu O(1)?"
+        ),
+        "relevant_keywords": ["amortized", "append", "list", "O(1)", "kompleksitas", "array"],
+        "cognitive": "6TGR",
+        "session_id": "eval-074",
+        "query_type": "out_of_scope",
+        "context_note": "Amortized complexity tidak ada di GT CT",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 17 — SEARCHING & SORTING
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 075 | application — trace binary search
+    {
+        "query": (
+            "Array terurut: [3, 7, 12, 18, 25, 31, 44, 56, 67, 89]. Cari angka 25. "
+            "Saya trace binary search dan butuh 4 langkah. Teman hanya butuh 2 langkah. "
+            "Tolong trace dari awal untuk verifikasi berapa langkah yang benar."
+        ),
+        "relevant_keywords": ["binary search", "trace", "low", "high", "mid", "langkah", "array terurut"],
+        "cognitive": "3TGR",
+        "session_id": "eval-075",
+        "query_type": "application",
+        "context_note": "Trace binary search step by step",
+    },
+
+    # 076 | confusion — mahasiswa salah kira binary search bisa untuk data tidak terurut
+    {
+        "query": (
+            "Saya coba binary search untuk array [5, 3, 8, 1, 9] dan hasilnya salah — "
+            "elemen yang ada tidak ketemu. Padahal algoritmanya sudah benar. "
+            "Kenapa binary search saya gagal?"
+        ),
+        "relevant_keywords": ["binary search", "terurut", "prasyarat", "array", "linear search", "O(log n)"],
+        "cognitive": "2PAI",
+        "session_id": "eval-076",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa tidak tahu prasyarat data harus terurut untuk binary search",
+    },
+
+    # 077 | application — trace bubble sort lengkap semua pass
+    {
+        "query": (
+            "Trace bubble sort untuk array [5, 2, 8, 1, 9] — tunjukkan semua pertukaran di setiap pass "
+            "sampai array terurut. Saya bingung kapan pass berhenti dan berapa total pass yang dibutuhkan."
+        ),
+        "relevant_keywords": ["bubble sort", "pass", "tukar", "trace", "array", "iterasi"],
+        "cognitive": "2TAI",
+        "session_id": "eval-077",
+        "query_type": "application",
+        "context_note": "Trace bubble sort semua pass",
+    },
+
+    # 078 | application — trace selection sort
+    {
+        "query": (
+            "Trace selection sort untuk array [4, 7, 2, 9, 1, 5]. "
+            "Saya tidak yakin cara kerja selection sort — apakah dia cari minimum atau maximum dulu? "
+            "Dan apakah hasilnya ascending atau descending?"
+        ),
+        "relevant_keywords": ["selection sort", "minimum", "tukar", "trace", "ascending", "iterasi"],
+        "cognitive": "3PGI",
+        "session_id": "eval-078",
+        "query_type": "application",
+        "context_note": "Trace selection sort ascending",
+    },
+
+    # 079 | comparative — kapan linear search lebih baik dari binary search
+    {
+        "query": (
+            "Teman saya selalu pakai binary search karena katanya lebih cepat. "
+            "Tapi dosen bilang ada kasus di mana linear search lebih tepat. "
+            "Kapan linear search lebih baik atau lebih tepat digunakan daripada binary search?"
+        ),
+        "relevant_keywords": ["binary search", "linear search", "terurut", "O(n)", "O(log n)", "prasyarat"],
+        "cognitive": "4PAI",
+        "session_id": "eval-079",
+        "query_type": "comparative",
+        "context_note": "Perbandingan kapan linear vs binary search lebih tepat",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 18 — CROSS-TOPIK INTEGRATIF
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 080 | cross_topic — dekomposisi + Big-O (desain sistem dengan analisis kompleksitas)
+    {
+        "query": (
+            "Saya mau buat sistem pencarian kontak dari 10.000 data. "
+            "Dosen minta saya dekomposisi dulu, baru pilih algoritme berdasarkan Big-O. "
+            "Dari perspektif CT, bagaimana cara menggabungkan dekomposisi dan analisis Big-O "
+            "untuk memilih solusi yang tepat?"
+        ),
+        "relevant_keywords": ["dekomposisi", "Big-O", "algoritme", "pencarian", "binary search", "abstraksi"],
+        "cognitive": "6PAR",
+        "session_id": "eval-080",
+        "query_type": "cross_topic",
+        "context_note": "Integrasi dekomposisi + Big-O untuk desain solusi",
+    },
+
+    # 081 | cross_topic — stack + rekursi (hubungan antara call stack dan stack data structure)
+    {
+        "query": (
+            "Waktu belajar rekursi, dosen bilang setiap pemanggilan rekursif disimpan di 'call stack'. "
+            "Waktu belajar struktur data, kita belajar 'stack' sebagai ADT. "
+            "Apakah call stack dalam rekursi sama dengan stack yang kita pelajari di struktur data?"
+        ),
+        "relevant_keywords": ["rekursi", "call stack", "stack", "LIFO", "memori", "fungsi"],
+        "cognitive": "5TGR",
+        "session_id": "eval-081",
+        "query_type": "cross_topic",
+        "context_note": "Hubungan call stack rekursi dengan stack sebagai struktur data",
+    },
+
+    # 082 | cross_topic — pattern recognition + Big-O (mengenali kompleksitas dari pola kode)
+    {
+        "query": (
+            "Dosen bilang kita bisa gunakan pattern recognition untuk langsung tahu Big-O dari kode "
+            "tanpa menghitung detail. Misalnya 'lihat nested loop langsung tahu O(n²)'. "
+            "Apa saja pola-pola kode yang bisa langsung saya kenali Big-O-nya?"
+        ),
+        "relevant_keywords": ["pattern recognition", "Big-O", "nested loop", "O(n^2)", "pola", "O(log n)"],
+        "cognitive": "5PAI",
+        "session_id": "eval-082",
+        "query_type": "cross_topic",
+        "context_note": "Menggunakan pattern recognition untuk identifikasi cepat Big-O",
+    },
+
+    # 083 | cross_topic — abstraksi + fungsi (fungsi sebagai implementasi abstraksi)
+    {
+        "query": (
+            "Kalau abstraksi adalah 'sembunyikan detail yang tidak perlu', "
+            "apakah setiap fungsi yang saya buat otomatis mengimplementasikan abstraksi? "
+            "Atau ada bedanya antara fungsi yang mengimplementasikan abstraksi dan yang tidak?"
+        ),
+        "relevant_keywords": ["abstraksi", "fungsi", "detail", "implementasi", "modularitas", "DRY"],
+        "cognitive": "4TAI",
+        "session_id": "eval-083",
+        "query_type": "cross_topic",
+        "context_note": "Hubungan antara abstraksi sebagai pilar CT dan fungsi sebagai implementasinya",
+    },
+
+    # 084 | cross_topic — rekursi + pohon (tree traversal rekursif)
+    {
+        "query": (
+            "Dosen bilang DFS di graph biasanya diimplementasikan rekursif. "
+            "Saya paham rekursi dan paham DFS secara konsep, "
+            "tapi tidak paham kenapa DFS alami untuk diimplementasikan rekursif "
+            "sementara BFS tidak?"
+        ),
+        "relevant_keywords": ["DFS", "rekursi", "BFS", "stack", "tree", "traversal"],
+        "cognitive": "5TGI",
+        "session_id": "eval-084",
+        "query_type": "cross_topic",
+        "context_note": "Hubungan antara rekursi dan DFS traversal",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 19 — SOAL KOMBINASI NYATA (situasi mahasiswa)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 085 | application — palindrome dengan dua pointer
+    {
+        "query": (
+            "Saya diminta cek apakah kata 'katak' adalah palindrom tanpa pakai fungsi string bawaan. "
+            "Saya coba dengan loop biasa tapi hasilnya salah untuk beberapa input. "
+            "Bagaimana algoritme yang benar untuk cek palindrom?"
+        ),
+        "relevant_keywords": ["string", "palindrom", "loop", "indeks", "perbandingan", "while"],
+        "cognitive": "4TAI",
+        "session_id": "eval-085",
+        "query_type": "application",
+        "context_note": "Cek palindrom dengan loop — menggabungkan string/list dan perulangan",
+    },
+
+    # 086 | application — cek bilangan prima optimal
+    {
+        "query": (
+            "Saya buat program cek bilangan prima dengan loop dari 2 sampai n. "
+            "Untuk n=1.000.000 sangat lambat. Dosen bilang ada cara lebih cepat. "
+            "Bagaimana cara mengoptimasi pengecekan bilangan prima?"
+        ),
+        "relevant_keywords": ["bilangan prima", "loop", "akar kuadrat", "O(sqrt(n))", "optimasi", "algoritme"],
+        "cognitive": "5TGR",
+        "session_id": "eval-086",
+        "query_type": "application",
+        "context_note": "Optimasi cek prima dengan akar kuadrat",
+    },
+
+    # 087 | application — hitung jumlah digit tanpa string
+    {
+        "query": (
+            "Tugas: hitung berapa digit bilangan 98765 tanpa mengubahnya ke string. "
+            "Hanya boleh pakai operasi aritmatika. "
+            "Saya tahu pembagian berulang bisa dipakai tapi tidak tahu cara pseudocode-nya."
+        ),
+        "relevant_keywords": ["digit", "while", "div", "modulo", "aritmatika", "pseudocode"],
+        "cognitive": "3PAR",
+        "session_id": "eval-087",
+        "query_type": "application",
+        "context_note": "Hitung jumlah digit dengan pembagian berulang — kombinasi while dan div",
+    },
+
+    # 088 | scenario — desain sistem antrian prioritas
+    {
+        "query": (
+            "Saya diminta desain sistem antrian loket bank: nasabah biasa antri normal, "
+            "lansia dan ibu hamil diprioritaskan. "
+            "Struktur data apa yang paling cocok untuk kasus ini?"
+        ),
+        "relevant_keywords": ["queue", "priority queue", "FIFO", "stack", "struktur data", "LIFO"],
+        "cognitive": "5PAI",
+        "session_id": "eval-088",
+        "query_type": "scenario",
+        "context_note": "Desain sistem antrian prioritas menggunakan struktur data yang tepat",
+    },
+
+    # 089 | scenario — rekursi untuk kombinasi
+    {
+        "query": (
+            "Soal ujian: tulis fungsi rekursif untuk C(5,2) menggunakan sifat Pascal: "
+            "C(n,k) = C(n-1,k-1) + C(n-1,k), dengan C(n,0)=C(n,n)=1. "
+            "Saya tidak tahu cara trace-nya dan tidak yakin berapa hasilnya."
+        ),
+        "relevant_keywords": ["kombinasi", "rekursi", "Pascal", "base case", "C(n,k)", "trace"],
+        "cognitive": "5PGR",
+        "session_id": "eval-089",
+        "query_type": "scenario",
+        "context_note": "Kombinasi rekursif dengan segitiga Pascal",
+    },
+
+    # 090 | scenario — memilih sorting untuk data hampir terurut
+    {
+        "query": (
+            "Saya punya data nilai ujian 30.000 mahasiswa yang hampir terurut — "
+            "hanya beberapa data yang posisinya tidak tepat. "
+            "Dari bubble sort, selection sort, dan merge sort, mana yang paling efisien?"
+        ),
+        "relevant_keywords": ["bubble sort", "selection sort", "merge sort", "nearly sorted", "O(n)", "efisiensi"],
+        "cognitive": "5TAI",
+        "session_id": "eval-090",
+        "query_type": "scenario",
+        "context_note": "Pilih sorting terbaik untuk data hampir terurut",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 20 — PERTANYAAN TRICKY / EDGE CASE
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 091 | confusion — mahasiswa kira return bisa dipanggil lebih dari sekali
+    {
+        "query": (
+            "Fungsi saya punya dua return: pertama di dalam if, kedua di akhir. "
+            "Untuk input tertentu, kondisi if true. Apakah program akan mengeksekusi return pertama "
+            "lalu lanjut ke return kedua? Atau stop di return pertama?"
+        ),
+        "relevant_keywords": ["return", "fungsi", "kondisi", "if", "eksekusi", "alur"],
+        "cognitive": "2PAI",
+        "session_id": "eval-091",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa salah kira dua return dieksekusi berurutan",
+    },
+
+    # 092 | confusion — base case faktorial n=0 vs n=1
+    {
+        "query": (
+            "Fungsi faktorial saya hanya punya base case n==0. "
+            "Teman bilang harus tambahkan n==1 juga. "
+            "Tapi hasil faktorial(4) saya tetap 24 tanpa n==1. "
+            "Apakah n==1 wajib sebagai base case kedua atau tidak?"
+        ),
+        "relevant_keywords": ["faktorial", "base case", "rekursi", "n=0", "n=1", "fungsi"],
+        "cognitive": "4TGI",
+        "session_id": "eval-092",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa bingung apakah n==1 wajib menjadi base case faktorial",
+    },
+
+    # 093 | gap — mahasiswa tidak paham infinite loop vs loop yang selesai lama
+    {
+        "query": (
+            "Program saya sudah jalan 5 menit untuk input besar dan belum selesai. "
+            "Apakah itu infinite loop atau hanya lambat? "
+            "Bagaimana cara membedakan antara algoritme yang sangat lambat dengan yang benar-benar infinite loop?"
+        ),
+        "relevant_keywords": ["infinite loop", "finiteness", "kompleksitas", "while", "kondisi", "algoritme"],
+        "cognitive": "3TAI",
+        "session_id": "eval-093",
+        "query_type": "gap",
+        "context_note": "Mahasiswa tidak bisa bedakan infinite loop dengan algoritme lambat",
+    },
+
+    # 094 | application — Fibonacci(6) trace rekursif
+    {
+        "query": (
+            "Trace rekursif untuk fungsi:\n"
+            "  function f(n): if n<=2 return 1 else return f(n-1)+f(n-2)\n"
+            "Hitung f(6). Saya dapat 11, teman dapat 8. "
+            "Tolong trace lengkap dan tunjukkan mana yang benar."
+        ),
+        "relevant_keywords": ["Fibonacci", "rekursi", "trace", "f(6)", "base case", "deret"],
+        "cognitive": "3TGR",
+        "session_id": "eval-094",
+        "query_type": "application",
+        "context_note": "Trace Fibonacci rekursif f(6) — ada di GT_SUBTOPIK_11",
+    },
+
+    # 095 | application — pseudocode cari nilai maksimum dari 5 input
+    {
+        "query": (
+            "Tulis pseudocode untuk membaca 5 bilangan dari input dan tampilkan nilai terbesarnya. "
+            "Saya bingung apakah harus simpan semua dulu ke array atau bisa langsung bandingkan satu per satu "
+            "tanpa menyimpan ke array."
+        ),
+        "relevant_keywords": ["pseudocode", "maksimum", "for", "read", "perbandingan", "array"],
+        "cognitive": "2TGI",
+        "session_id": "eval-095",
+        "query_type": "application",
+        "context_note": "Pseudocode cari nilai maksimum ada di GT_SUBTOPIK_05",
+    },
+
+    # 096 | gap — mahasiswa tidak tahu apa itu pass by value dalam pseudocode
+    {
+        "query": (
+            "Di fungsi saya, saya ubah nilai parameter dan berharap nilai aslinya ikut berubah. "
+            "Tapi setelah fungsi selesai, nilai aslinya tidak berubah. "
+            "Kenapa perubahan di dalam fungsi tidak mempengaruhi variabel di luar?"
+        ),
+        "relevant_keywords": ["parameter", "fungsi", "pass by value", "variabel", "scope", "return"],
+        "cognitive": "3TAI",
+        "session_id": "eval-096",
+        "query_type": "gap",
+        "context_note": "Mahasiswa tidak paham pass by value dalam fungsi pseudocode",
+    },
+
+    # 097 | out-of-scope — exception handling (tidak ada di GT)
+    {
+        "query": (
+            "Di program saya, kalau user masukkan huruf padahal yang diharapkan angka, program crash. "
+            "Dosen bilang perlu 'error handling'. Apakah error handling atau exception handling "
+            "diajarkan di CT? Bagaimana cara menanganinya di pseudocode?"
+        ),
+        "relevant_keywords": ["error handling", "input", "validasi", "percabangan", "pseudocode", "while"],
+        "cognitive": "4PAR",
+        "session_id": "eval-097",
+        "query_type": "out_of_scope",
+        "context_note": "Exception handling tidak ada di GT CT — hanya validasi dengan percabangan/loop",
+    },
+
+    # 098 | cross_topic — modulo + pattern recognition (siklus digit)
+    {
+        "query": (
+            "Soal: hari ini Senin. Hari apa 1000 hari dari sekarang? "
+            "Dosen bilang ini tentang pattern recognition dan modulo. "
+            "Saya paham modulo tapi tidak tahu bagaimana menghubungkannya dengan hari dalam seminggu."
+        ),
+        "relevant_keywords": ["modulo", "siklus", "pattern recognition", "hari", "periodik", "pola"],
+        "cognitive": "2PGR",
+        "session_id": "eval-098",
+        "query_type": "cross_topic",
+        "context_note": "Aplikasi modulo untuk siklus hari — ada di GT_SUBTOPIK_04",
+    },
+
+    # 099 | application — pseudocode login dengan maksimal 3 percobaan
+    {
+        "query": (
+            "Saya diminta buat pseudocode sistem login dengan maksimal 3 percobaan. "
+            "Lebih dari 3 kali salah, akun terkunci. "
+            "Saya tidak tahu bagaimana menghitung percobaan dan kapan berhenti."
+        ),
+        "relevant_keywords": ["while", "percobaan", "boolean", "validasi", "percabangan", "for"],
+        "cognitive": "3TAR",
+        "session_id": "eval-099",
+        "query_type": "application",
+        "context_note": "Sistem login dengan batas percobaan — kombinasi while dan if",
+    },
+
+    # 100 | scenario — memilih representasi graph yang tepat
+    {
+        "query": (
+            "Saya mau representasikan peta kota dengan ratusan persimpangan dan ribuan jalan. "
+            "Setiap jalan punya jarak. Rata-rata setiap persimpangan hanya terhubung ke 4 jalan lain. "
+            "Mana yang lebih efisien: adjacency matrix atau adjacency list? Dan kenapa?"
+        ),
+        "relevant_keywords": ["adjacency matrix", "adjacency list", "graph", "sparse", "dense", "memori"],
+        "cognitive": "5PAR",
+        "session_id": "eval-100",
+        "query_type": "scenario",
+        "context_note": "Pilih representasi graph untuk sparse graph peta kota — ada di GT_SUBTOPIK_13",
+    },
+
+    # ══════════════════════════════════════════════════════════════════════
+    # BLOK 21 — 10 TAMBAHAN (total 110)
+    # ══════════════════════════════════════════════════════════════════════
+
+    # 101 | application — modulo siklus digit terakhir 3^n
+    {
+        "query": (
+            "Soal: tentukan digit terakhir dari 3^100. "
+            "Saya coba hitung 3^1=3, 3^2=9, 3^3=27, 3^4=81, 3^5=243... "
+            "Saya lihat ada pola tapi tidak tahu cara formalkan dan aplikasikan ke 3^100."
+        ),
+        "relevant_keywords": ["modulo", "digit terakhir", "pola", "siklus", "perpangkatan", "deret"],
+        "cognitive": "4PGR",
+        "session_id": "eval-101",
+        "query_type": "application",
+        "context_note": "Digit terakhir 3^n menggunakan siklus modulo — ada di GT_SUBTOPIK_04",
+    },
+
+    # 102 | confusion — mahasiswa salah mengira coverage 1.0 = sistem sempurna
+    {
+        "query": (
+            "Dosen bilang algoritme binary search O(log n) sangat efisien. "
+            "Tapi untuk array berisi 8 elemen, binary search butuh log₂(8)=3 langkah, "
+            "sementara linear search rata-rata butuh 4 langkah. "
+            "Bedanya tidak jauh. Apakah binary search benar-benar sepadan untuk ukuran data kecil?"
+        ),
+        "relevant_keywords": ["binary search", "linear search", "O(log n)", "O(n)", "n kecil", "efisiensi"],
+        "cognitive": "5TAR",
+        "session_id": "eval-102",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa mempertanyakan keuntungan binary search untuk data kecil",
+    },
+
+    # 103 | gap — mahasiswa tidak paham bedanya rekursi langsung vs tidak langsung
+    {
+        "query": (
+            "Rekursi itu fungsi yang memanggil dirinya sendiri. "
+            "Tapi dosen menyebut ada 'rekursi tidak langsung' — fungsi A memanggil B, B memanggil A. "
+            "Apakah CT mengajarkan rekursi tidak langsung? "
+            "Dan apakah base case-nya sama dengan rekursi langsung?"
+        ),
+        "relevant_keywords": ["rekursi", "rekursi tidak langsung", "base case", "fungsi", "pemanggilan"],
+        "cognitive": "5TGR",
+        "session_id": "eval-103",
+        "query_type": "gap",
+        "context_note": "Rekursi tidak langsung tidak eksplisit di GT — hanya rekursi langsung yang diajarkan",
+    },
+
+    # 104 | application — deret selisih bertingkat (ada di GT_SUBTOPIK_03)
+    {
+        "query": (
+            "Diberikan barisan: 1, 3, 7, 13, 21, 31. "
+            "Saya hitung selisihnya: 2, 4, 6, 8, 10 — itu selisih bertingkat pertama. "
+            "Lalu selisih dari selisih: 2, 2, 2, 2 — konstan. "
+            "Apa artinya dan bagaimana saya temukan rumus suku ke-n dari barisan aslinya?"
+        ),
+        "relevant_keywords": ["pola bilangan", "selisih bertingkat", "deret", "rumus", "pattern recognition", "kuadrat"],
+        "cognitive": "4TGR",
+        "session_id": "eval-104",
+        "query_type": "application",
+        "context_note": "Pola selisih bertingkat ada di GT_SUBTOPIK_03",
+    },
+
+    # 105 | confusion — mahasiswa kira while true = bug
+    {
+        "query": (
+            "Saya lihat di kode server web ada while(true) yang jalan terus tanpa henti. "
+            "Kata saya itu infinite loop dan harus diperbaiki. "
+            "Tapi kata teman itu sengaja. Apakah while(true) selalu berarti bug?"
+        ),
+        "relevant_keywords": ["while", "infinite loop", "finiteness", "algoritme", "kondisi", "server"],
+        "cognitive": "3PAR",
+        "session_id": "eval-105",
+        "query_type": "confusion",
+        "context_note": "Mahasiswa kira while(true) selalu merupakan bug — kaitkan dengan finiteness",
+    },
+
+    # 106 | cross_topic — abstraksi + pseudocode (kerangka abstraksi PGBD di soal)
+    {
+        "query": (
+            "Di soal abstraksi, dosen minta saya identifikasi PROBLEM, GOAL, BATASAN, dan DATA. "
+            "Saya bingung bedanya PROBLEM dengan GOAL — keduanya terasa seperti 'apa yang mau dicapai'. "
+            "Bisa jelaskan perbedaannya dengan contoh?"
+        ),
+        "relevant_keywords": ["abstraksi", "problem", "goal", "batasan", "data", "formulasi"],
+        "cognitive": "3PGR",
+        "session_id": "eval-106",
+        "query_type": "cross_topic",
+        "context_note": "Kerangka PGBD ada di GT_SUBTOPIK_02",
+    },
+
+    # 107 | application — pseudocode cari semua faktor bilangan
+    {
+        "query": (
+            "Tugas: buat pseudocode untuk menampilkan semua faktor bilangan n. "
+            "Contoh: faktor dari 12 adalah 1, 2, 3, 4, 6, 12. "
+            "Saya tidak tahu harus loop sampai n atau ada cara lebih efisien."
+        ),
+        "relevant_keywords": ["for", "modulo", "faktor", "loop", "bilangan", "pseudocode"],
+        "cognitive": "3PAI",
+        "session_id": "eval-107",
+        "query_type": "application",
+        "context_note": "Cari semua faktor bilangan dengan loop dan modulo",
+    },
+
+    # 108 | scenario — desain database sederhana untuk nilai mahasiswa
+    {
+        "query": (
+            "Saya diminta desain penyimpanan data nilai 500 mahasiswa untuk 10 mata kuliah. "
+            "Dosen minta saya pakai abstraksi dulu sebelum tentukan struktur data. "
+            "Dari perspektif CT, bagaimana proses abstraksi dan apa struktur data yang tepat?"
+        ),
+        "relevant_keywords": ["abstraksi", "struktur data", "array", "list", "dekomposisi", "formulasi"],
+        "cognitive": "5PAR",
+        "session_id": "eval-108",
+        "query_type": "scenario",
+        "context_note": "Desain penyimpanan data dengan abstraksi CT lalu pilih struktur data",
+    },
+
+    # 109 | out-of-scope — hash table / dictionary (tidak ada di GT CT)
+    {
+        "query": (
+            "Saya butuh cari nama mahasiswa dari NIM-nya dengan cepat O(1). "
+            "Di Python saya pakai dictionary. Apakah dictionary diajarkan di CT? "
+            "Kalau tidak, struktur data apa dari CT yang bisa mencapai pencarian O(1)?"
+        ),
+        "relevant_keywords": ["dictionary", "hash table", "O(1)", "pencarian", "array", "list"],
+        "cognitive": "6PAI",
+        "session_id": "eval-109",
+        "query_type": "out_of_scope",
+        "context_note": "Hash table/dictionary tidak ada di GT CT — mahasiswa akan dapatkan jawaban parsial",
+    },
+
+    # 110 | cross_topic — semua pilar CT dalam satu soal desain sistem
+    {
+        "query": (
+            "Saya diminta rancang algoritme sederhana untuk mengurutkan dan mencari nama mahasiswa "
+            "dari file yang berisi 1000 data. "
+            "Dosen minta saya tunjukkan: (1) abstraksi masalah, (2) dekomposisi langkah, "
+            "(3) pola yang dikenali, (4) algoritme yang dipilih beserta alasannya."
+        ),
+        "relevant_keywords": ["abstraksi", "dekomposisi", "pattern recognition", "algoritme", "sorting", "searching"],
+        "cognitive": "6TGR",
+        "session_id": "eval-110",
+        "query_type": "cross_topic",
+        "context_note": "Soal integratif semua 4 pilar CT sekaligus — menguji kemampuan RAG retrieve multi-dokumen",
+    },
+
 ]
+
+
+# ── Sanity check ───────────────────────────────────────────────────────────
+if __name__ == "__main__":
+    assert len(TEST_CASES) == 110, f"Expected 110, got {len(TEST_CASES)}"
+    ids = [tc["session_id"] for tc in TEST_CASES]
+    assert len(set(ids)) == 110, "Duplicate session_id!"
+    # Pastikan tidak ada reference_answer
+    for tc in TEST_CASES:
+        assert "reference_answer" not in tc, f"reference_answer ditemukan di {tc['session_id']}"
+    types = {}
+    for tc in TEST_CASES:
+        t = tc["query_type"]
+        types[t] = types.get(t, 0) + 1
+    print(f"✅ {len(TEST_CASES)} test cases")
+    print(f"   Types: {types}")
+    cogs = set(tc["cognitive"] for tc in TEST_CASES)
+    print(f"   Cognitives: {sorted(cogs)}")
