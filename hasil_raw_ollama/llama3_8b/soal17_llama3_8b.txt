@@ -1,0 +1,20 @@
+A classic problem!
+
+Let's analyze the situation:
+
+Pak Dengklek has 500 chocolates.
+
+Bebek (Duck) number k gets n chocolates, where k is the duck's number and n is the number of chocolates it gets.
+
+We want to find out which Bebek does not get any chocolates for the first time.
+
+Notice that if a Bebek gets n chocolates, then all Bebek with numbers less than or equal to k-1 (k-1 being the previous Bebek) have also got their share of chocolates. This is because they would have been served before the current Bebek (k).
+
+Now, since there are only 500 chocolates in total, we can conclude that:
+
+1. If n > 500, no duck will get any chocolate.
+2. If n ≤ 500, then all ducks up to and including k-1 will have gotten their share of chocolates.
+
+So, if Bebek k gets its n chocolates, then the first Bebek that does not get any chocolate is Bebek number k + 1 (the next one).
+
+Therefore, the answer is: The first Bebek that does not get any chocolate is Bebek number k + 1.

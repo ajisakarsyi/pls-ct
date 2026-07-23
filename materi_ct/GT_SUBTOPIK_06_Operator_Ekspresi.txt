@@ -1,0 +1,189 @@
+================================================================
+GROUND TRUTH SUBTOPIK — KOM2102 COMPUTATIONAL THINKING
+Subtopik: Operator dan Ekspresi (Aritmatika, Relasional, Logika)
+================================================================
+
+KONSEP INTI:
+Operator = simbol yang melakukan operasi pada nilai/variabel.
+Ekspresi = kombinasi nilai, variabel, dan operator yang menghasilkan nilai.
+
+URUTAN PRIORITAS OPERATOR (tinggi → rendah):
+1. Tanda kurung ()
+2. Perpangkatan ** atau ^
+3. Perkalian *, Pembagian /, Modulo %
+4. Penjumlahan +, Pengurangan -
+5. Operator Relasional: >, <, >=, <=, ==, !=
+6. NOT
+7. AND
+8. OR
+
+TABEL KEBENARAN LOGIKA:
+  AND: T∧T=T, T∧F=F, F∧T=F, F∧F=F
+  OR : T∨T=T, T∨F=T, F∨T=T, F∨F=F
+  NOT: ¬T=F, ¬F=T
+
+HUKUM DE MORGAN:
+  NOT(A AND B) = NOT A OR NOT B
+  NOT(A OR B)  = NOT A AND NOT B
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Evaluasi Aritmatika]
+Hitung nilai dari ekspresi berikut:
+a) 5 + 3 * 2 - 1
+b) (5 + 3) * (2 - 1)
+c) 17 % 5 + 2 ** 3
+d) 100 / 4 / 5
+e) (8 + 4) / (2 * 3) - 1
+f) 15 % 4 * 2 + 7 % 3
+
+JAWABAN:
+a) 5 + (3*2) - 1 = 5 + 6 - 1 = 10
+b) 8 * 1 = 8
+c) (17%5) + (2**3) = 2 + 8 = 10
+d) (100/4)/5 = 25/5 = 5
+e) 12/6 - 1 = 2 - 1 = 1
+f) (15%4)*2 + (7%3) = 3*2 + 1 = 6 + 1 = 7
+
+[SOAL 2 — Evaluasi Relasional]
+Diketahui: x=7, y=3, z=7. Evaluasi (True/False):
+a) x == z
+b) x != y
+c) x > y + z
+d) x - y >= z - 4
+e) x * y < z * 4
+f) (x + y) == (z + y)
+
+JAWABAN:
+a) 7 == 7 → True
+b) 7 != 3 → True
+c) 7 > 3+7=10 → 7>10 → False
+d) 7-3=4 >= 7-4=3 → 4>=3 → True
+e) 7*3=21 < 7*4=28 → True
+f) 7+3=10 == 7+3=10 → True
+
+[SOAL 3 — Evaluasi Logika]
+Diketahui: a=True, b=False, c=True. Evaluasi:
+a) a AND b
+b) a OR b
+c) NOT b
+d) a AND NOT b
+e) (a OR b) AND (NOT b OR c)
+f) NOT (a AND b) OR (b AND c)
+
+JAWABAN:
+a) True AND False = False
+b) True OR False = True
+c) NOT False = True
+d) True AND True = True
+e) (True OR False) AND (True OR True) = True AND True = True
+f) NOT(True AND False) OR (False AND True)
+   = NOT(False) OR False
+   = True OR False = True
+
+[SOAL 4 — Ekspresi Campuran]
+Diketahui: p=10, q=4, r=3. Evaluasi:
+a) p % q > r
+b) p / q == q - 2
+c) NOT (p > q AND q > r)
+d) p * r - q ** 2 >= p + q
+e) (p % r == 1) OR (q % r == 1)
+
+JAWABAN:
+a) 10%4=2 > 3 → False
+b) 10/4=2 (integer) == 4-2=2 → True
+c) NOT(10>4 AND 4>3) = NOT(True AND True) = NOT True = False
+d) 10*3-4**2 = 30-16=14 >= 10+4=14 → 14>=14 → True
+e) (10%3==1) OR (4%3==1) = (1==1) OR (1==1) = True OR True = True
+
+[SOAL 5 — Assignment dan Penelusuran Nilai]
+Trace nilai variabel a, b, c setelah setiap baris:
+  a = 10
+  b = 4
+  c = a mod b
+  a = a / b        // pembagian integer
+  b = b + c
+  c = a * b - c
+  a = b mod c
+
+JAWABAN:
+a=10, b=4, c=?
+c = 10 mod 4 = 2           → a=10, b=4, c=2
+a = 10 / 4 = 2 (integer)   → a=2, b=4, c=2
+b = 4 + 2 = 6              → a=2, b=6, c=2
+c = 2 * 6 - 2 = 12-2 = 10  → a=2, b=6, c=10
+a = 6 mod 10 = 6           → a=6, b=6, c=10
+
+Nilai akhir: a=6, b=6, c=10
+
+[SOAL 6 — Hukum De Morgan]
+Sederhanakan ekspresi berikut menggunakan Hukum De Morgan:
+a) NOT(x > 5 AND y < 3)
+b) NOT(a == b OR c != d)
+c) NOT(p >= 10 AND q <= 20 AND r == 0)
+
+JAWABAN:
+a) NOT(x>5) OR NOT(y<3) = (x<=5) OR (y>=3)
+
+b) NOT(a==b) AND NOT(c!=d) = (a!=b) AND (c==d)
+
+c) NOT(p>=10) OR NOT(q<=20) OR NOT(r==0)
+   = (p<10) OR (q>20) OR (r!=0)
+
+[SOAL 7 — Kondisi Percabangan Benar]
+Tentukan apakah blok THEN atau ELSE yang dieksekusi untuk setiap kondisi:
+(diketahui: nilai=72, status="aktif", umur=17)
+
+a) if (nilai >= 70 AND nilai < 80) then print("B") else print("Lainnya")
+b) if (status == "aktif" OR umur >= 18) then print("Boleh") else print("Tidak")
+c) if (NOT (umur >= 18)) then print("Minor") else print("Dewasa")
+d) if (nilai > 60 AND status != "aktif") then print("A") else print("B")
+
+JAWABAN:
+a) (72>=70) AND (72<80) = True AND True = True → print("B")
+b) ("aktif"=="aktif") OR (17>=18) = True OR False = True → print("Boleh")
+c) NOT(17>=18) = NOT(False) = True → print("Minor")
+d) (72>60) AND ("aktif"!="aktif") = True AND False = False → print("B")
+
+[SOAL 8 — Ekspresi sebagai Kondisi Kompleks]
+Tulis ekspresi logika untuk setiap kondisi berikut:
+a) x adalah bilangan positif GENAP
+b) y adalah bilangan yang habis dibagi 3 tapi tidak habis dibagi 9
+c) Segitiga valid: sisi a, b, c membentuk segitiga jika jumlah dua sisi > sisi ketiga
+d) Tahun y adalah tahun kabisat
+
+JAWABAN:
+a) (x > 0) AND (x mod 2 == 0)
+
+b) (y mod 3 == 0) AND (y mod 9 != 0)
+   atau: (y mod 3 == 0) AND NOT (y mod 9 == 0)
+
+c) (a + b > c) AND (a + c > b) AND (b + c > a)
+
+d) (y mod 400 == 0) OR ((y mod 4 == 0) AND (y mod 100 != 0))
+
+[SOAL 9 — Short-Circuit Evaluation]
+Jelaskan konsep short-circuit evaluation dan terapkan:
+Jika a=0 dan b=5, apakah ekspresi berikut aman dijalankan?
+  (a != 0) AND (b / a > 2)
+
+JAWABAN:
+Short-circuit evaluation = evaluasi ekspresi logika berhenti segera
+setelah hasilnya sudah pasti:
+- Untuk AND: jika bagian kiri = False → hasil pasti False → bagian kanan TIDAK dievaluasi
+- Untuk OR: jika bagian kiri = True → hasil pasti True → bagian kanan TIDAK dievaluasi
+
+Untuk ekspresi (a != 0) AND (b / a > 2) dengan a=0:
+- (a != 0) = (0 != 0) = False
+- Karena False AND (apapun) = False → bagian kanan (b/a>2) TIDAK dievaluasi
+- Tidak terjadi pembagian dengan nol → AMAN
+
+Jika urutan dibalik: (b/a > 2) AND (a != 0):
+- Langsung evaluasi b/a = 5/0 → ERROR (division by zero!)
+→ Urutan ekspresi logika PENTING untuk keamanan program.
+
+================================================================
+END OF GROUND TRUTH SUBTOPIK — OPERATOR DAN EKSPRESI
+================================================================

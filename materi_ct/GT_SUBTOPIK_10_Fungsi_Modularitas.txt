@@ -1,0 +1,190 @@
+================================================================
+GROUND TRUTH SUBTOPIK -- KOM2102 COMPUTATIONAL THINKING
+Subtopik: Fungsi -- Definisi, Parameter, dan Modularitas
+================================================================
+
+KONSEP INTI:
+Fungsi = blok kode bernama yang dapat dipanggil kembali (reusable).
+Fungsi mengimplementasikan Dekomposisi dan Abstraksi.
+Prinsip DRY: Don't Repeat Yourself.
+
+ANATOMI FUNGSI:
+  function namaFungsi(param1: tipe1, param2: tipe2) : tipeReturn
+    <tubuh fungsi>
+    return nilai
+
+PERBEDAAN FUNGSI vs PROSEDUR:
+  Fungsi   : mengembalikan nilai (ada return type dan return statement)
+  Prosedur : tidak mengembalikan nilai (hanya melakukan aksi/side effect)
+
+ATURAN PARAMETER:
+  1. Urutan sesuai definisi
+  2. Jumlah sesuai definisi
+  3. Tipe data sesuai definisi
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 -- Fungsi Dasar: Luas Bangun]
+Tulis fungsi untuk luas persegi panjang, segitiga, dan lingkaran!
+
+JAWABAN:
+  function luasPersegiPanjang(p: float, l: float) : float
+    return p * l
+
+  function luasSegitiga(alas: float, tinggi: float) : float
+    return (alas * tinggi) / 2
+
+  function luasLingkaran(r: float) : float
+    return 3.14 * r * r
+
+Test: luasPersegiPanjang(8,5)=40, luasSegitiga(6,4)=12, luasLingkaran(7)=153.86
+
+[SOAL 2 -- Fungsi dengan Kondisi: Huruf Mutu]
+JAWABAN:
+  function hurufMutu(nilai: int) : string
+    if (nilai >= 80) then return "A"
+    else if (nilai >= 70) then return "B"
+    else if (nilai >= 55) then return "C"
+    else if (nilai >= 40) then return "D"
+    else return "E"
+
+[SOAL 3 -- Fungsi Memanggil Fungsi: Total Luas N Persegi Panjang]
+JAWABAN:
+  function luas(p: float, l: float) : float
+    return p * l
+
+  procedure totalLuas()
+    read(N)
+    total = 0
+    for i = 1 to N do
+      read(p, l)
+      total = total + luas(p, l)
+    print(total)
+
+[SOAL 4 -- Fungsi Habis Dibagi (Aman Division by Zero)]
+JAWABAN:
+  function habis_dibagi(a: int, b: int) : int
+    if (a==0 and b==0) then return 0
+    if (a==0 or b==0) then return 1
+    if (a%b==0 or b%a==0) then return 1
+    else return 0
+
+  procedure prosesN()
+    read(N)
+    count = 0
+    for i = 1 to N do
+      read(a, b)
+      if habis_dibagi(a, b)==1 then count = count + 1
+    print(count)
+
+[SOAL 5 -- Error Parameter]
+Diketahui: function hitung(a: int, b: float, c: string) : string
+Identifikasi error:
+a) hitung(5, 3.14, "ok")     -> VALID
+b) hitung("5", 3.14, "ok")  -> ERROR: tipe param 1 salah (string bukan int)
+c) hitung(5, 3.14)           -> ERROR: kurang 1 parameter
+d) hitung(3.14, 5, "ok")    -> ERROR: urutan tipe terbalik
+e) hitung(5, 3.14, "ok", 1) -> ERROR: kelebihan 1 parameter
+
+[SOAL 6 -- Fungsi Lingkaran (Memanggil Fungsi)]
+Hitung total keliling lingkaran yang luasnya > 100 dari N lingkaran!
+
+JAWABAN:
+  function hitungLuas(r: float) : float
+    return 3.14 * r * r
+
+  function hitungKeliling(r: float) : float
+    return 2 * 3.14 * r
+
+  procedure prosesLingkaran()
+    read(N)
+    totalKeliling = 0
+    for i = 1 to N do
+      read(r)
+      if hitungLuas(r) > 100 then
+        totalKeliling = totalKeliling + hitungKeliling(r)
+    print(totalKeliling)
+
+Contoh: r=6 -> luas=3.14*36=113.04>100, keliling=2*3.14*6=37.68
+        r=4 -> luas=3.14*16=50.24<=100, tidak dihitung.
+
+[SOAL 7 -- Prosedur vs Fungsi]
+Konversikan prosedur ini menjadi fungsi yang mengembalikan nilai!
+
+Prosedur:
+  procedure suaraBebek(nama: string, berat: int)
+    if berat > 5 then print(nama, "kwek kwek")
+    else print(nama, "kwek")
+
+JAWABAN (sebagai fungsi):
+  function getSuaraBebek(berat: int) : string
+    if berat > 5 then return "kwek kwek"
+    else return "kwek"
+
+  // Penggunaan:
+  nama = "Donald"
+  suara = getSuaraBebek(3)
+  print(nama, "bilang", suara)
+  // Output: Donald bilang kwek
+
+[SOAL 8 -- Fungsi: Cek Bilangan Prima]
+JAWABAN:
+  function adaPrima(n: int) : boolean
+    if (n <= 1) then return False
+    if (n == 2) then return True
+    if (n mod 2 == 0) then return False
+    i = 3
+    while (i*i <= n) do
+      if (n mod i == 0) then return False
+      i = i + 2
+    return True
+
+  procedure cetakPrima()
+    read(N)
+    for i = 1 to N do
+      read(x)
+      if adaPrima(x) then print(x, "prima")
+      else print(x, "bukan prima")
+
+[SOAL 9 -- Modularitas: Sistem Nilai Mahasiswa]
+Rancang 3 fungsi untuk sistem penilaian:
+a) hitungNA(uts, uas, kuis, proyek) -> float
+b) hurufMutu(na) -> string
+c) statusLulus(mutu) -> string
+
+JAWABAN:
+  function hitungNA(uts:float, uas:float, kuis:float, proyek:float) : float
+    return uts*0.35 + uas*0.35 + kuis*0.20 + proyek*0.10
+
+  function hurufMutu(na: float) : string
+    if na >= 75 then return "A"
+    else if na >= 70 then return "AB"
+    else if na >= 60 then return "B"
+    else if na >= 55 then return "BC"
+    else if na >= 45 then return "C"
+    else if na >= 35 then return "D"
+    else return "E"
+
+  function statusLulus(mutu: string) : string
+    if mutu == "E" then return "Wajib mengulang"
+    else if mutu == "D" then return "Dianjurkan mengulang"
+    else return "Lulus"
+
+  procedure prosesMahasiswa()
+    read(uts, uas, kuis, proyek)
+    na = hitungNA(uts, uas, kuis, proyek)
+    mutu = hurufMutu(na)
+    status = statusLulus(mutu)
+    print("NA:", na, "Mutu:", mutu, "Status:", status)
+
+Contoh: uts=70, uas=65, kuis=80, proyek=90
+  na = 70*0.35 + 65*0.35 + 80*0.20 + 90*0.10
+     = 24.5 + 22.75 + 16 + 9 = 72.25
+  mutu = AB (70 <= 72.25 < 75)
+  status = Lulus
+
+================================================================
+END OF GROUND TRUTH SUBTOPIK -- FUNGSI DAN MODULARITAS
+================================================================

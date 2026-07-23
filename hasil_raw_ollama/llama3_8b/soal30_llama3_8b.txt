@@ -1,0 +1,18 @@
+Here are the answers:
+
+a) Pertemanan Facebook (Friendship): **Undirected Graph**
+Reason: In a social network like Facebook, friendship is a two-way relationship - if A is friends with B, then B is also friends with A. This is an undirected graph because it doesn't matter which node is connected to the other; both directions are equivalent.
+
+b) Follow Twitter (Follow): **Directed Graph**
+Reason: In Twitter, following is a one-way relationship - if A follows B, it only means that A wants to see B's tweets, not vice versa. This is a directed graph because there's a direction from A to B, indicating the flow of information or attention.
+
+c) Jalan satu arah (One-way road): **Directed Graph**
+Reason: In real-life roads, traffic flows in one direction only - you can't drive backwards on a highway! Similarly, this represents a directed graph where edges have direction and indicate the flow of movement or travel.
+
+d) Transmisi listrik (Electric transmission): **Directed Graph**
+Reason: Electric power transmission lines transmit energy from a source to a load, not vice versa. This is a directed graph because it represents the flow of energy in one direction, indicating the origin and destination of the electricity.
+
+e) Sitasi paper ilmiah (Citations in academic papers): **Directed Graph**
+Reason: When citing a paper, you're referencing the work of another author, which means there's a direction from the cited paper to your own. This represents a directed graph because it indicates the flow of influence or acknowledgement from one paper to another.
+
+In general, if the relationship between nodes is symmetrical and bidirectional (two-way), it's an undirected graph. If the relationship is asymmetrical and one-way, it's a directed graph.

@@ -1,0 +1,26 @@
+Here is the complete pseudocode to determine the grade based on the score:
+```
+GRADE = ""
+
+SCORE = 0 // input score from user or database
+
+IF SCORE >= 80 THEN
+  GRADE = "A"
+ELSE IF SCORE >= 70 THEN
+  GRADE = "B"
+ELSE IF SCORE >= 55 THEN
+  GRADE = "C"
+ELSE IF SCORE >= 40 THEN
+  GRADE = "D"
+ELSE
+  GRADE = "E"
+
+PRINT("Your grade is: ", GRADE)
+```
+Note:
+
+* `SCORE` represents the input score from user or database.
+* The pseudocode uses a simple `IF-THEN-ELSE` structure to check if the score meets the criteria for each grade.
+* The final grade is stored in the `GRADE` variable and printed out.
+
+This pseudocode assumes that the score is an integer value, and you may need to modify it depending on your specific requirements.

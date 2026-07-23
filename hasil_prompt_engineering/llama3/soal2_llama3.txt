@@ -1,0 +1,44 @@
+=== JAWABAN TUTOR ===
+Saya akan menjelaskan bagaimana cara kerja Abstraction, Abstraction, Decomposition, dan Pattern Recognition dalam konteks pembuatan jadwal belajar.
+
+**Abstraction**
+
+Abstraction dalam konteks pembuatan jadwal belajar berarti memfokuskan pada aspek-aspek yang paling penting dan mengabaikan detail-detail yang tidak terlalu penting. Dalam membuat jadwal belajar, kita perlu memilih mata kuliah yang paling penting dan memprioritaskan waktu untuk itu. Misalnya, jika kita memiliki 6 mata kuliah yang harus diambil, kita dapat memilih 2-3 mata kuliah yang paling penting dan memprioritaskan waktu untuk itu.
+
+\\[\text{Abstraction} = \frac{\text{Aspek penting}}{\text{Detail-detail tidak penting}} \\]
+
+**Abstraction**
+
+Abstraction dalam konteks pembuatan jadwal belajar juga berarti mengidentifikasi pola atau kebiasaan yang relevan dengan pembuatan jadwal belajar. Dalam membuat jadwal belajar, kita perlu mengidentifikasi mata kuliah yang dapat diambil bersamaan dan mengidentifikasi slot waktu kosong yang dapat digunakan untuk mata kuliah lain.
+
+\\[\text{Abstraction} = \frac{\text{Pola atau kebiasaan}}{\text{Detail-detail tidak penting}} \\]
+
+**Decomposition**
+
+Decomposition dalam konteks pembuatan jadwal belajar berarti memecah proses pembuatan jadwal menjadi sub-tugas yang lebih kecil dan lebih mudah diatasi. Dalam membuat jadwal belajar, kita perlu memecah proses pembuatan jadwal menjadi beberapa sub-tugas, seperti:
+
+1. Daftar mata kuliah yang akan diambil
+2. Estimasi waktu per mata kuliah
+3. Identifikasi slot waktu kosong
+4. Penyusunan jadwal akhir
+
+Dengan memecah proses pembuatan jadwal menjadi sub-tugas yang lebih kecil, kita dapat membuat jadwal belajar yang lebih efektif dan efisien.
+
+\\[\text{Decomposition} = \frac{\text{Sub-tugas kecil}}{\text{Proses pembuatan jadwal}} \\]
+
+**Pattern Recognition**
+
+Pattern Recognition dalam konteks pembuatan jadwal belajar berarti mengenali pola atau kebiasaan yang relevan dengan pembuatan jadwal belajar. Dalam membuat jadwal belajar, kita perlu mengenali pola atau kebiasaan yang relevan, seperti:
+
+1. Mengidentifikasi mata kuliah yang paling penting dan memprioritaskan waktu untuk itu
+2. Mengidentifikasi mata kuliah yang dapat diambil bersamaan
+3. Mengidentifikasi slot waktu kosong yang dapat digunakan untuk mata kuliah lain
+
+Dengan mengenali pola atau kebiasaan yang relevan, kita dapat membuat jadwal belajar yang lebih efektif dan efisien.
+
+\\[\text{Pattern Recognition} = \frac{\text{Pola atau kebiasaan}}{\text{Detail-detail tidak penting}} \\]
+
+Untuk memastikan kamu memahami konsep Abstraction, Abstraction, Decomposition, dan Pattern Recognition dalam konteks pembuatan jadwal belajar, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja masing-masing konsep, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Saya memiliki 8 mata kuliah yang harus diambil dalam semester ini, tetapi saya hanya memiliki waktu 20 jam per minggu untuk belajar. Bagaimana saya dapat menggunakan konsep Abstraction untuk memilih mata kuliah yang paling penting dan memprioritaskan waktu untuk itu?

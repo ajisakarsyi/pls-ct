@@ -1,0 +1,27 @@
+=== JAWABAN TUTOR ===
+Baiklah, mari kita mulai!
+
+Pertama-tama, mari kita bahas apa itu algoritme. Algoritme adalah serangkaian langkah-langkah sistematis untuk mencapai hasil tertentu. Dalam contoh sebelumnya, kita telah membahas bahwa "Resep masakan" adalah contoh algoritme yang baik karena menggunakan serangkaian langkah-langkah sistematis untuk membuat masakan yang lezat.
+
+Sekarang, mari kita tuliskan pseudocode untuk mencari nilai terbesar dari tiga bilangan a, b, c menggunakan dua metode berbeda.
+
+Metode 1: Menggunakan Variabel dan Assignment
+
+\\[\text{Variabel: } \text{max} = a \\]
+\\[\text{Assignment: } \text{if } b > \text{max} \text{ then } \text{max} = b \\]
+\\[\text{Assignment: } \text{if } c > \text{max} \text{ then } \text{max} = c \\]
+\\[\text{Keterangan: } \text{max} \text{ adalah nilai terbesar dari } a, b, c \\]
+
+Metode 2: Menggunakan Instruksi dan Keterangan
+
+\\[\text{Instruksi: } \text{if } a > b \text{ then } \text{max} = a \text{ else } \text{max} = b \\]
+\\[\text{Keterangan: } \text{max} \text{ adalah nilai terbesar dari } a, b \\]
+\\[\text{Instruksi: } \text{if } \text{max} > c \text{ then } \text{max} = c \\]
+\\[\text{Keterangan: } \text{max} \text{ adalah nilai terbesar dari } a, b, c \\]
+
+Dalam kedua metode di atas, kita menggunakan variabel dan assignment untuk menyimpan nilai terbesar, atau menggunakan instruksi dan keterangan untuk membandingkan nilai dan menentukan nilai terbesar.
+
+Untuk memastikan kamu memahami konsep algoritme ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja algoritme dalam mencari nilai terbesar dari tiga bilangan a, b, c, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Dalam suatu kompetisi olahraga, nilai terbesar dari tiga bilangan yang mewakili waktu tempuh atlet dalam lomba 100m, 200m, dan 400m adalah 10,2 detik, 20,5 detik, dan 40,8 detik. Bagaimana cara menentukan nilai terbesar dari tiga bilangan tersebut?

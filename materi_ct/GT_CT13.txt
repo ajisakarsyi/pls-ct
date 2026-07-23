@@ -1,0 +1,121 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 13: Pengenalan Struktur Data
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Konsep Dasar Struktur Data]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Dalam melakukan pengolahan komputasional, kita sering berurusan dengan data yang mungkin berjumlah besar dan bersifat kompleks. Untuk dapat mengolah data tersebut dengan benar dan efisien, data perlu disimpan dalam bentuk yang terorganisir. Bentuk atau tata cara penyimpanan data agar dapat diolah dengan benar dan efisien disebut sebagai struktur data.
+
+Analogi sederhana untuk memahami struktur data adalah saat seseorang bepergian dan membawa banyak barang dalam tas atau koper. Agar barang-barang tersebut mudah dicari dan diambil kembali, penyimpanan tidak boleh dilakukan secara sembarangan melainkan harus diatur dengan rapi dan terstruktur. Demikian pula dengan data dalam komputer — penataan data yang tepat menentukan kemudahan dan efisiensi pengolahan.
+
+Berbagai aplikasi komputer memerlukan struktur data yang sesuai dengan kebutuhannya. Sebagai contoh, aplikasi perkantoran seperti Microsoft Word atau Google Docs memerlukan struktur data yang mendukung fungsionalitas undo dan redo. Sementara aplikasi peta seperti Google Maps memerlukan struktur data yang mendukung perhitungan jalur terpendek atau tercepat antara dua titik. Pemilihan struktur data yang tepat menjadi kunci efisiensi dan kebenaran suatu sistem komputasi.
+
+
+----------------------------------------------------------------
+[MATERI 2: Stack (Tumpukan)]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Stack adalah salah satu bentuk struktur data yang paling sering digunakan. Dalam artian sederhana, stack berarti tumpukan. Struktur data stack digunakan apabila data yang terakhir dimasukkan harus berada di posisi paling atas dan merupakan data pertama yang dapat diambil. Prinsip ini dikenal sebagai Last In First Out (LIFO).
+
+Stack memiliki dua operasi utama:
+1. Push: menambahkan sebuah data baru ke dalam stack dan menempatkannya pada posisi teratas.
+2. Pop: mengeluarkan data yang berada pada posisi teratas, selama stack masih berisi data (tidak kosong). Data yang dikeluarkan melalui operasi pop sekaligus dihapus dari stack sehingga jumlah data yang tersimpan berkurang.
+
+Simulasi rangkaian instruksi: push 5 → push 7 → push 2 → pop → push 6 → push 9 → push 6 → pop → pop → pop menghasilkan urutan output pop sebagai berikut: 2 (pop pertama), 6 (pop kedua), 9 (pop ketiga), 6 (pop keempat). Setelah seluruh operasi selesai, stack hanya menyisakan nilai 5 dan 7 di dalamnya.
+
+Penerapan stack dalam dunia nyata sangat luas. Contoh yang paling umum adalah fitur undo dan redo pada aplikasi perkantoran. Setiap kali pengguna melakukan perubahan, aplikasi akan menyimpan perubahan tersebut dengan operasi push ke dalam stack. Setiap kali pengguna melakukan undo, aplikasi akan melakukan pop pada stack untuk mengambil perubahan terakhir, lalu membalikkan perubahan tersebut agar dokumen kembali ke kondisi sebelumnya. Contoh lain adalah fitur back dan forward pada browser web yang juga menggunakan prinsip stack untuk menyimpan riwayat halaman yang dikunjungi.
+
+
+----------------------------------------------------------------
+[MATERI 3: Queue (Antrian)]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Sebagai lawan dari stack, terdapat struktur data queue. Queue dalam istilah sehari-hari berarti antrian. Dalam sebuah antrian, urutan pemrosesan harus sesuai dengan urutan kedatangan objek, sehingga data yang pertama masuk adalah juga data pertama yang dapat diakses. Prinsip ini dikenal sebagai First In First Out (FIFO).
+
+Queue memiliki dua operasi utama:
+1. Enqueue: menambahkan sebuah data baru ke dalam antrian dan menempatkannya pada posisi paling akhir.
+2. Dequeue: mengeluarkan data yang berada pada posisi pertama (paling depan), selama queue masih berisi data (tidak kosong). Data yang dikeluarkan sekaligus dihapus dari queue sehingga jumlah data yang tersimpan berkurang.
+
+Simulasi rangkaian instruksi: enqueue 5 → enqueue 7 → enqueue 2 → dequeue → enqueue 6 → enqueue 9 → enqueue 6 → dequeue → dequeue menghasilkan urutan output dequeue sebagai berikut: 5 (dequeue pertama), 7 (dequeue kedua), 2 (dequeue ketiga).
+
+Penerapan queue dalam dunia nyata juga sangat luas. Contoh yang paling umum adalah printer queue (antrian printer). Setiap kali sebuah dokumen dikirim untuk dicetak, printer akan melakukan enqueue terhadap dokumen tersebut. Apabila proses pencetakan saat ini masih berjalan, dokumen yang baru masuk harus menunggu dalam antrian. Jika printer sudah idle (tidak sedang mencetak), printer akan melakukan dequeue untuk mendapatkan dokumen berikutnya yang perlu dicetak.
+
+Perbedaan mendasar antara stack dan queue terletak pada urutan pengeluaran datanya: stack menggunakan prinsip LIFO (data terakhir masuk, pertama keluar), sedangkan queue menggunakan prinsip FIFO (data pertama masuk, pertama keluar).
+
+
+----------------------------------------------------------------
+[MATERI 4: Graph]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Graph adalah struktur data yang terdiri dari dua komponen utama:
+1. Node atau vertex (simpul): merepresentasikan sebuah objek dalam dunia nyata.
+2. Edge (garis penghubung): merepresentasikan hubungan atau relasi antar node.
+
+Graph sering digunakan untuk merepresentasikan data yang mengandung adanya relasi atau hubungan antar beberapa objek. Contoh penerapan graph yang paling umum adalah representasi jalur jalan raya, jalur kereta, jalur listrik, dan jaringan telepon. Dalam konteks ini, node merepresentasikan sebuah lokasi (kota, stasiun, rumah, dan sebagainya), sedangkan edge merepresentasikan adanya jalur yang menghubungkan antar lokasi tersebut. Contoh lain mencakup representasi hubungan perkenalan atau pertemanan antar orang serta hubungan antar konsep dalam ilmu pengetahuan.
+
+Terdapat dua jenis graph berdasarkan sifat arah hubungannya:
+1. Graph Berarah (Directed Graph): digunakan dalam kasus di mana hubungan antar node tidak bersifat simetris, misalnya jalur satu arah atau hubungan sebab-akibat. Edge pada graph berarah memiliki arah yang menunjukkan dari node mana menuju node mana.
+2. Graph Tidak Berarah (Undirected Graph): digunakan dalam kasus di mana hubungan antar node selalu bersifat simetris, misalnya jalur dua arah atau hubungan saling mengenal. Edge pada graph tidak berarah tidak memiliki arah, sehingga hubungan berlaku di kedua arah secara setara.
+
+Pada kasus tertentu, setiap edge dalam graph dapat diberikan sebuah nilai atau bobot (weighted graph). Bobot ini digunakan untuk merepresentasikan biaya (cost) yang diasosiasikan dengan setiap edge, misalnya jarak antar kota atau biaya perjalanan dari satu kota ke kota lain. Dengan adanya bobot, dimungkinkan untuk melakukan penalaran komputasional seperti menghitung jalur dengan total bobot terkecil (jalur terpendek) antara dua node. Dalam kehidupan sehari-hari, prinsip ini digunakan oleh aplikasi GPS dan aplikasi peta untuk mencari rute terpendek atau tercepat. Salah satu algoritme yang terkenal untuk menghitung jalur terpendek pada graph berbobot adalah Algoritme Dijkstra.
+
+
+----------------------------------------------------------------
+[MATERI 5: Tree]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Tree adalah bentuk khusus dari graph yang tidak mengandung cycle. Cycle pada sebuah graph adalah sebuah jalur yang berawal dari sebuah node tertentu dan kembali lagi ke node yang sama. Ketiadaan cycle pada tree berarti struktur tree bersifat hirarkis dan tidak memungkinkan terjadinya lintasan melingkar.
+
+Dalam konteks tree, dikenal istilah node parent (orang tua) dan node child (anak), yang mencerminkan hubungan hierarki antar node. Setiap node (kecuali akar atau root) memiliki tepat satu parent, sedangkan setiap node dapat memiliki nol atau lebih child.
+
+Tree biasa digunakan untuk merepresentasikan sesuatu yang bersifat hierarkis. Contoh penerapan tree dalam kehidupan sehari-hari antara lain:
+- Struktur file dan direktori (folder) di dalam komputer, di mana folder dapat berisi subfolder dan file di dalamnya.
+- Struktur organisasi suatu perusahaan atau lembaga, yang menggambarkan hierarki jabatan dari atas ke bawah.
+- Struktur taksonomi dalam ilmu pengetahuan, seperti klasifikasi makhluk hidup dalam biologi (kingdom, filum, kelas, ordo, famili, genus, spesies).
+- Representasi kemungkinan langkah dalam permainan catur berbasis kecerdasan buatan, di mana setiap node merepresentasikan satu kondisi papan catur dan setiap edge merepresentasikan satu kemungkinan langkah.
+
+
+----------------------------------------------------------------
+[MATERI 6: Latihan Pemilihan dan Penerapan Struktur Data]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Pemahaman terhadap struktur data diperkuat melalui empat latihan pemilihan dan penerapan struktur data yang tepat:
+
+1. Latihan Pemilihan Struktur Data (Latihan 1):
+Tiga kasus diberikan untuk ditentukan struktur data yang paling tepat:
+- Server komputer yang melayani banyak client sesuai urutan terhubungnya: struktur data yang paling tepat adalah Queue (FIFO), karena client yang terhubung lebih awal harus mendapatkan respons lebih dahulu sesuai urutan kedatangannya.
+- Sistem kecerdasan buatan dalam permainan catur yang merepresentasikan berbagai kemungkinan langkah ke depan: struktur data yang paling tepat adalah Tree, karena setiap kemungkinan langkah bercabang secara hierarkis dari kondisi papan saat ini.
+- Compiler bahasa pemrograman yang memvalidasi kebenaran pasangan kurung buka dan tutup: struktur data yang paling tepat adalah Stack (LIFO), karena kurung yang dibuka paling akhir harus ditutup paling awal, yang sesuai dengan prinsip LIFO.
+
+2. Latihan Simulasi Stack (Latihan 2):
+Diberikan rangkaian operasi: push 5 → push 7 → pop → push 6 → push 3 → pop. Hasil operasi pop pertama adalah 7 (karena 7 adalah elemen terakhir yang di-push sebelum operasi pop pertama), dan hasil operasi pop kedua adalah 3 (karena 3 adalah elemen terakhir yang di-push sebelum operasi pop kedua).
+
+3. Latihan Pemilihan Jenis Graph (Latihan 3):
+Empat kasus diberikan untuk ditentukan jenis graph (directed atau undirected) yang paling sesuai:
+- Hubungan antar halaman web berdasarkan hyperlink: Graph Berarah (directed), karena hyperlink bersifat satu arah (halaman A dapat memiliki hyperlink ke halaman B, namun belum tentu sebaliknya).
+- Data siapa pernah menulis karya ilmiah dengan siapa: Graph Tidak Berarah (undirected), karena hubungan co-authorship bersifat simetris (jika A menulis bersama B, maka B juga menulis bersama A).
+- Data akun follow di media sosial: Graph Berarah (directed), karena hubungan follow tidak harus bersifat simetris (akun A bisa mengikuti akun B tanpa B mengikuti A).
+- Interaksi antar protein dalam biologi molekuler: Graph Tidak Berarah (undirected), karena interaksi antar protein bersifat simetris (jika protein A berinteraksi dengan protein B, maka B juga berinteraksi dengan A).
+
+4. Latihan Jalur Terpendek (Latihan 4):
+Diberikan sebuah graph berbobot dan mahasiswa diminta menentukan jalur terpendek dari node A ke node F. Penyelesaian dilakukan dengan mengidentifikasi seluruh kemungkinan jalur dari A ke F, menghitung total bobot masing-masing jalur, kemudian memilih jalur dengan total bobot terkecil sebagai jalur terpendek. Prinsip ini merupakan aplikasi langsung dari konsep graph berbobot dan algoritme pencarian jalur terpendek seperti Dijkstra.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

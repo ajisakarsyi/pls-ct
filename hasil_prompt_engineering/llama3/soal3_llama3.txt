@@ -1,0 +1,13 @@
+=== JAWABAN TUTOR ===
+Saya akan menjelaskan perbedaan utama antara 'berpikir komputasional' dan 'belajar pemrograman' serta mengapa mahasiswa non-Ilmu Komputer perlu belajar CT.
+
+Berpikir komputasional adalah kemampuan untuk memformulasikan masalah dan solusinya secara sistematis, sedangkan belajar pemrograman adalah keterampilan teknis untuk menuliskan instruksi dalam bahasa pemrograman tertentu. Dalam konteks Indonesia, misalnya, mahasiswa non-Ilmu Komputer dapat menggunakan kemampuan berpikir komputasional untuk menganalisis data statistik tentang pendapatan masyarakat di Indonesia dan menemukan solusi untuk meningkatkan kesejahteraan mereka. Sementara itu, belajar pemrograman dapat membantu mereka menulis kode untuk mengolah data tersebut.
+
+Mahasiswa non-Ilmu Komputer perlu belajar CT karena setiap bidang kini menghadapi data dan masalah kompleks yang dapat diselesaikan dengan bantuan teknologi. Dalam konteks Indonesia, misalnya, mahasiswa non-Ilmu Komputer dapat menggunakan CT untuk menganalisis data tentang cuaca dan mengembangkan sistem prediksi cuaca yang akurat. Dengan demikian, mereka dapat membantu masyarakat Indonesia dalam menghadapi bencana alam seperti banjir dan kekeringan.
+
+Dalam konteks pembelajaran, CT dapat membantu mahasiswa non-Ilmu Komputer untuk memahami konsep-konsep yang kompleks dan mengembangkan kemampuan analitis dan sistematis. Dengan demikian, mereka dapat menjadi lebih efektif dalam menganalisis masalah dan menemukan solusi yang tepat.
+
+Untuk memastikan kamu memahami konsep berpikir komputasional dan CT, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja berpikir komputasional dalam menganalisis data statistik tentang pendapatan masyarakat di Indonesia, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Saya bekerja sebagai analis data di sebuah lembaga swadaya masyarakat yang membantu meningkatkan pendapatan masyarakat di Indonesia. Saya memiliki dataset yang besar tentang pendapatan masyarakat di berbagai daerah di Indonesia. Bagaimana saya dapat menggunakan kemampuan berpikir komputasional untuk menganalisis data tersebut dan menemukan solusi untuk meningkatkan pendapatan masyarakat di daerah yang stagnan?

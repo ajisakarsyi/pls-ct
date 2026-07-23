@@ -1,0 +1,262 @@
+================================================================
+GROUND TRUTH DETAIL — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 4: Problem Solving — Abstraksi
+================================================================
+
+----------------------------------------------------------------
+[MATERI: Abstraksi — Konsep, Tahapan Problem Solving, dan Penerapan]
+----------------------------------------------------------------
+
+PENJELASAN DETAIL:
+
+A. KETERAMPILAN BERPIKIR DAN TAKSONOMI BLOOM
+
+Berpikir komputasional melatih kemampuan High Order Thinking Skill (HOTS) yang berada
+pada tingkatan tertinggi Taksonomi Bloom:
+
+Taksonomi Bloom (dari rendah ke tinggi):
+LOTS (Low Order Thinking Skill):
+  Level 1 - Remember (Mengingat): menghafal fakta, definisi
+  Level 2 - Understand (Memahami): menjelaskan konsep
+  Level 3 - Apply (Menerapkan): menggunakan pengetahuan dalam situasi baru
+
+HOTS (High Order Thinking Skill):
+  Level 4 - Analyze (Menganalisis): mengurai informasi menjadi bagian-bagian
+  Level 5 - Evaluate (Mengevaluasi): membuat keputusan berdasarkan kriteria
+  Level 6 - Create (Mencipta): menghasilkan sesuatu yang baru dan original
+
+Berpikir komputasional beroperasi terutama di level 4–6 (HOTS).
+
+B. PROBLEM SOLVING — SYMPTOM vs. PROBLEM
+
+Perbedaan krusial yang sering diabaikan:
+
+SYMPTOM (Gejala): perbedaan antara fakta yang terjadi dengan hasil yang diharapkan.
+→ Apa yang kita rasakan/amati.
+
+PROBLEM (Masalah/Akar Persoalan): sesuatu yang salah dan menyebabkan gejala.
+→ Pertanyaan kunci: "What went wrong with what?"
+
+Contoh:
+- "Aku pusing" → SYMPTOM
+  Problem sebenarnya bisa: kurang tidur, belum makan, dehidrasi, tekanan darah rendah
+- "Aku terlambat masuk kuliah" → SYMPTOM
+  Problem sebenarnya bisa: alarm tidak bunyi, salah jadwal, kemacetan, dsb.
+- "Banyak supermarket tutup" → SYMPTOM
+  Problem sebenarnya bisa: daya beli menurun, persaingan online, kenaikan sewa, dsb.
+
+Output dari problem solving yang benar adalah SOLUSI yang menangani ROOT CAUSE,
+bukan sekadar meredam gejala.
+
+Tiga Tahapan Problem Solving:
+1. Defining the Problem: memastikan yang diselesaikan adalah masalah sesungguhnya,
+   bukan gejalanya. Ini adalah langkah paling krusial.
+2. Problem Solving Processes: analisis kompleksitas, evaluasi, penetapan batasan,
+   seleksi alternatif solusi.
+3. Solution: harus efisien, efektif, optimal, dan valid.
+
+C. ABSTRAKSI (ABSTRACTION)
+
+Definisi:
+"Focusing on the important details and leaving out irrelevant distractions."
+(Fokus pada detail penting dan mengabaikan hal yang tidak relevan.)
+
+PENTING: Abstraksi BUKAN membuang bagian yang tidak penting, melainkan HANYA memberi
+prioritas paling rendah untuk diperhatikan pada bagian tersebut.
+
+Prinsip "helicopter view": melihat persoalan dari atas secara menyeluruh sebelum
+mendalami detail. Lawan dari ini adalah "losing sight of the forest for the trees"
+(terlalu fokus pada detail hingga kehilangan gambaran besar).
+
+Empat komponen abstraksi dalam problem solving:
+1. PROBLEM   : apa akar permasalahannya?
+2. GOAL      : apa tujuan yang ingin dicapai?
+3. BATASAN   : constraint apa yang membatasi ruang solusi?
+4. DATA      : informasi apa yang tersedia dan relevan?
+
+Contoh Abstraksi — Google Maps:
+- Citra Satelit: menampilkan SEMUA detail geografis (tidak terabstraksi)
+- Tampilan Default: hanya menampilkan jalan, nama lokasi penting, rute
+  → ini adalah hasil ABSTRAKSI: informasi tidak relevan untuk navigasi diabaikan
+
+Penerapan Abstraksi di Berbagai Bidang:
+1. Karya Ilmiah : abstrak skripsi/jurnal merangkum inti karya secara padat
+2. Statistika   : mengidentifikasi variabel kunci dari ribuan data mentah
+3. Sosial       : merancang solusi kemiskinan pesisir dengan fokus pada faktor kunci
+4. Seni         : mendeteksi plagiarisme lagu dengan mengidentifikasi elemen esensial musik
+5. Medis        : diagnosis penyakit dari ratusan gejala → fokus pada gejala kunci
+6. Bisnis       : laporan keuangan merangkum ribuan transaksi menjadi KPI utama
+
+D. LATIHAN ABSTRAKSI DARI SLIDE
+
+1. Berang-Berang dan Lift:
+   Problem   : tidak semua berang bisa terangkut (total 82 kg > kapasitas 60 kg)
+   Goal      : memuat berang-berang SEBANYAK MUNGKIN dalam satu kali perjalanan
+   Batasan   : 2 lift, masing-masing max 30 kg, 1 kali angkut
+   Data      : A:2, B:3, C:5, D:8, E:9, F:9, G:12, H:12, I:22 kg
+
+2. Penyusup Museum:
+   Problem   : terdeteksi adanya orang yang masuk tidak lewat pintu masuk
+   Goal      : temukan pada menit keberapa penyusup terdeteksi
+   Batasan   : pencatatan terjadi setelah setiap perpindahan; beberapa orang bisa
+               berpindah bersamaan
+   Data      : tabel rekaman jumlah orang per ruangan + denah museum
+
+3. Robot Candy:
+   Problem   : robot harus menemukan jalur dari S ke F yang mengumpulkan permen max
+   Goal      : maksimalkan jumlah permen yang dikumpulkan
+   Batasan   : robot hanya bisa bergerak ke kanan atau ke atas
+   Data      : peta petak dengan jumlah permen (0–3) di setiap petak
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Symptom vs. Problem]
+Identifikasi mana yang merupakan symptom dan mana yang merupakan problem (root cause)
+dari situasi berikut, lalu jelaskan alasannya:
+a) "Aplikasi mobile saya sering crash saat dibuka."
+b) "Nilai rata-rata UTS mahasiswa kelas A sangat rendah."
+c) "Server website mengalami downtime setiap hari Senin pagi."
+
+JAWABAN:
+a) "Aplikasi sering crash" → SYMPTOM
+   Root cause (problem) mungkin: memory leak dalam kode, konflik versi library,
+   bug pada fitur tertentu, atau ketidakcocokan dengan versi OS.
+
+b) "Nilai rata-rata rendah" → SYMPTOM
+   Root cause mungkin: materi terlalu sulit, metode pengajaran kurang efektif,
+   soal tidak sesuai dengan yang diajarkan, atau mahasiswa kurang belajar.
+
+c) "Server downtime tiap Senin pagi" → SYMPTOM
+   Root cause mungkin: ada scheduled job/task yang berjalan tiap Senin pagi
+   dan menghabiskan resource, atau traffic lonjakan saat jam kerja dimulai.
+
+[SOAL 2 — Komponen Abstraksi]
+Lakukan abstraksi terhadap persoalan berikut dengan mengidentifikasi problem, goal,
+batasan, dan data:
+"Sebuah toko online ingin menentukan harga diskon optimal untuk menghabiskan stok
+produk yang akan kadaluarsa dalam 7 hari, dengan tetap mempertahankan profit positif."
+
+JAWABAN:
+Problem  : Stok produk akan kadaluarsa dan tidak habis terjual → kerugian total
+Goal     : Tentukan persentase diskon yang memaksimalkan unit terjual sekaligus
+           menjaga profit total tetap positif (tidak merugi)
+Batasan  :
+  - Waktu: produk harus habis dalam 7 hari
+  - Minimal harga jual: harus di atas harga pokok (HPP) agar tidak merugi
+  - Stok: jumlah unit yang tersedia
+  - Persentase diskon: antara 0% hingga maksimal (harga jual = HPP)
+Data     :
+  - Harga jual normal
+  - Harga pokok produksi (HPP)
+  - Jumlah stok yang ada
+  - Rata-rata penjualan harian sebelum diskon
+  - Estimasi elastisitas harga (seberapa diskon meningkatkan penjualan)
+
+[SOAL 3 — Berang-Berang dan Lift]
+Lakukan abstraksi penuh dan tentukan solusi optimal untuk masalah berikut:
+2 lift, kapasitas masing-masing 25 kg.
+Berang: P:3kg, Q:5kg, R:7kg, S:10kg, T:12kg, U:15kg, V:18kg
+
+JAWABAN:
+Abstraksi:
+Problem : Tidak semua berang muat (total 3+5+7+10+12+15+18 = 70 kg > 50 kg kapasitas)
+Goal    : Angkut sebanyak mungkin berang (prioritas jumlah, bukan berat)
+Batasan : 2 lift, masing-masing max 25 kg, 1 kali perjalanan
+Data    : P:3, Q:5, R:7, S:10, T:12, U:15, V:18
+
+Strategi (prioritaskan berang ringan agar lebih banyak muat):
+Lift 1: P(3)+Q(5)+R(7)+S(10) = 25 kg ✓ → 4 berang
+Lift 2: T(12)+Q... Q sudah → T(12)+P... P sudah → T(12)+R... R sudah.
+Lift 2: U(15)+Q(5)? Q sudah → U(15)+P(3)? P sudah
+Lift 2: T(12)+U(15) = 27 ✗ → T(12)+Q? Q sudah
+Lift 2: T(12)+R(7)? R sudah → S sudah → T(12)+P(3)? P sudah.
+Lift 2: U(15)+P? P sudah → U(15) saja? + yang tersisa: T,U,V
+Sisa: T(12), U(15), V(18)
+Lift 2: T(12)+P... semua <25 yang belum terpakai: T(12) saja = 12, atau T(12) + sisa budget 13.
+Tidak ada yang tersisa. Total sisa = T(12)+U(15)+V(18).
+Lift 2 optimal dari sisa: T(12)+Q? tidak tersisa Q.
+
+REVISI:
+Lift 1: P(3)+Q(5)+R(7)+S(10) = 25 ✓ (4 berang)
+Sisa untuk Lift 2: T(12), U(15), V(18)
+Lift 2: T(12)+U(15) = 27 ✗ → T(12) saja (tidak optimal)
+        U(15)+P? sudah terpakai.
+Lift 2 terbaik dari {T,U,V}: T(12) + sisa ≤13: tidak ada yg cukup → T(12) saja
+        atau: U(15) + R(7)? R sudah → U(15) saja
+Lift 2: T(12) = 12 kg → 1 berang. Atau U(15) = 15 kg → 1 berang.
+Total terangkut: 5 berang (Lift 1: P,Q,R,S + Lift 2: T atau U). V tidak terangkut + U atau T.
+
+[SOAL 4 — Abstraksi dalam Kehidupan Sehari-hari]
+Jelaskan bagaimana abstraksi diterapkan dalam proses membuat laporan keuangan bulanan
+sebuah perusahaan dari ribuan transaksi harian!
+
+JAWABAN:
+Tanpa abstraksi: laporan berisi setiap transaksi (ribuan baris data) → tidak praktis.
+Dengan abstraksi:
+- Fokus pada informasi penting: total pendapatan, total pengeluaran, kategori utama,
+  profit/loss, arus kas.
+- Diabaikan (prioritas rendah): detail setiap transaksi individu, nama kasir,
+  nomor invoice spesifik (tersimpan di database, bukan di laporan ringkasan).
+- Hasil: laporan 1–2 halaman yang berisi KPI (Key Performance Indicators) utama
+  yang dibutuhkan manajemen untuk pengambilan keputusan.
+
+[SOAL 5 — Robot Candy]
+Robot Candy bergerak dari S (kiri bawah) ke F (kanan atas) di grid 3×3 berikut.
+Robot hanya bisa bergerak ke kanan (R) atau ke atas (U). Angka = jumlah permen di petak.
+Grid (baris bawah ke atas, kolom kiri ke kanan):
+Baris 3 (atas): 1  3  2
+Baris 2       : 2  1  3
+Baris 1 (bawah,S): 0  2  1 (F di pojok kanan atas)
+
+Berapa maksimum permen yang bisa dikumpulkan Robot Candy?
+
+JAWABAN:
+Semua jalur dari S (baris1,kol1) ke F (baris3,kol3) — panjang 4 langkah (2R, 2U):
+
+Jalur 1: S→R→R→U→U (kol: 1→2→3, baris: 1→1→2→3)
+Petak: (1,1)=0, (1,2)=2, (1,3)=1, (2,3)=3, (3,3)=2 → Total: 0+2+1+3+2 = 8
+
+Jalur 2: S→R→U→R→U (kol: 1→2→2→3, baris: 1→1→2→2→3)
+Petak: (1,1)=0, (1,2)=2, (2,2)=1, (2,3)=3, (3,3)=2 → Total: 0+2+1+3+2 = 8
+
+Jalur 3: S→R→U→U→R (kol: 1→2→2→2→3, baris: 1→1→2→3→3)
+Petak: (1,1)=0, (1,2)=2, (2,2)=1, (3,2)=3, (3,3)=2 → Total: 0+2+1+3+2 = 8
+
+Jalur 4: S→U→R→R→U (kol: 1→1→2→3, baris: 1→2→2→2→3)
+Petak: (1,1)=0, (2,1)=2, (2,2)=1, (2,3)=3, (3,3)=2 → Total: 0+2+1+3+2 = 8
+
+Jalur 5: S→U→R→U→R (kol: 1→1→2→2→3, baris: 1→2→2→3→3)
+Petak: (1,1)=0, (2,1)=2, (2,2)=1, (3,2)=3, (3,3)=2 → Total: 0+2+1+3+2 = 8
+
+Jalur 6: S→U→U→R→R (kol: 1→1→1→2→3, baris: 1→2→3→3→3)
+Petak: (1,1)=0, (2,1)=2, (3,1)=1, (3,2)=3, (3,3)=2 → Total: 0+2+1+3+2 = 8
+
+Jawaban: Maksimum permen = 8 (semua jalur menghasilkan nilai sama pada grid ini).
+
+[SOAL 6 — Penyusup Museum]
+Sebuah museum memiliki 3 ruangan (R1, R2, R3) dan 1 pintu masuk ke R1.
+Tabel rekaman sistem keamanan:
+
+Waktu | R1 | R2 | R3 | Keterangan
+10:00 |  2 |  0 |  0 | 2 pengunjung masuk lewat pintu
+10:05 |  1 |  1 |  0 | 1 pengunjung pindah R1→R2
+10:10 |  0 |  2 |  0 | 1 pengunjung pindah R1→R2
+10:15 |  0 |  1 |  2 | Sistem mendeteksi anomali!
+
+Pada menit ke berapa penyusup terdeteksi? Jelaskan!
+
+JAWABAN:
+Abstraksi: tracking total orang di museum = jumlah yang masuk lewat pintu.
+- 10:00: total = 2 orang (R1:2, R2:0, R3:0). Masuk akal.
+- 10:05: total = 2 orang (R1:1, R2:1, R3:0). Masuk akal (1 pindah R1→R2).
+- 10:10: total = 2 orang (R1:0, R2:2, R3:0). Masuk akal (1 lagi pindah R1→R2).
+- 10:15: total = 0+1+2 = 3 orang! Padahal yang masuk lewat pintu hanya 2.
+  → Ada 1 orang ekstra yang masuk BUKAN lewat pintu masuk = PENYUSUP.
+
+Penyusup terdeteksi pada menit 10:15 (menit ke-15).
+
+================================================================
+END OF GROUND TRUTH DETAIL — PERTEMUAN 4
+================================================================

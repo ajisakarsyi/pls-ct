@@ -1,0 +1,42 @@
+=== JAWABAN TUTOR ===
+Baiklah, mari kita simulasikan operasi pada queue kosong dan tentukan setiap output dequeue.
+
+Queue kosong memiliki struktur seperti \\[\text{queue} = \emptyset \\].
+
+Kita akan melakukan operasi enqueue untuk menambahkan elemen ke dalam queue. Operasi enqueue menambahkan elemen ke akhir dari queue.
+
+\\[\text{enqueue}(A) \rightarrow \text{queue} = [A\] \]
+\\[\text{enqueue}(B) \rightarrow \text{queue} = [A, B\] \]
+\\[\text{enqueue}(C) \rightarrow \text{queue} = [A, B, C\] \]
+
+Sekarang, kita akan melakukan operasi dequeue untuk mengeluarkan elemen dari queue. Operasi dequeue mengeluarkan elemen dari awal dari queue.
+
+\\[\text{dequeue} \rightarrow \text{output} = A, \text{queue} = [B, C\] \]
+
+Kita akan melakukan operasi enqueue lagi untuk menambahkan elemen ke dalam queue.
+
+\\[\text{enqueue}(D) \rightarrow \text{queue} = [B, C, D\] \]
+\\[\text{enqueue}(E) \rightarrow \text{queue} = [B, C, D, E\] \]
+
+Sekarang, kita akan melakukan operasi dequeue lagi untuk mengeluarkan elemen dari queue.
+
+\\[\text{dequeue} \rightarrow \text{output} = B, \text{queue} = [C, D, E\] \]
+
+Kita akan melakukan operasi dequeue lagi untuk mengeluarkan elemen dari queue.
+
+\\[\text{dequeue} \rightarrow \text{output} = C, \text{queue} = [D, E\] \]
+
+Kita akan melakukan operasi enqueue lagi untuk menambahkan elemen ke dalam queue.
+
+\\[\text{enqueue}(F) \rightarrow \text{queue} = [D, E, F\] \]
+
+Sekarang, kita akan melakukan operasi dequeue lagi untuk mengeluarkan elemen dari queue.
+
+\\[\text{dequeue} \rightarrow \text{output} = D, \text{queue} = [E, F\] \]
+
+Jadi, urutan output dequeue dari operasi tersebut adalah: A, B, C, D, E.
+
+Untuk memastikan kamu memahami konsep queue ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja operasi enqueue dan dequeue pada queue, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Saya memiliki sebuah sistem pengiriman pesanan online yang menggunakan queue untuk mengatur urutan pengiriman pesanan. Saya ingin menambahkan elemen "Pengiriman" ke dalam queue setelah pesanan "A" dan "B" telah dikirimkan. Bagaimana struktur queue akan berubah setelah operasi enqueue(Pengiriman) dilakukan?

@@ -1,0 +1,272 @@
+================================================================
+GROUND TRUTH DETAIL — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 12: Fungsi
+================================================================
+
+PENJELASAN DETAIL:
+
+A. MOTIVASI: MASALAH KODE BERULANG
+
+Kode yang sama diulang untuk data berbeda (misal: cek suara 3 kucing berbeda)
+menghasilkan masalah:
+1. Redundan      : kode sama ditulis berkali-kali
+2. Sulit dibaca  : kode panjang dan tidak efisien
+3. Sulit dikelola: perubahan harus dilakukan di banyak tempat
+
+Solusi: FUNGSI — tulis sekali, gunakan berkali-kali.
+
+B. ANATOMI FUNGSI
+
+Format:
+  function namaFungsi(param1: tipe1, param2: tipe2, ...) : tipeReturn
+    <tubuh fungsi>
+    return nilai
+
+Komponen:
+1. Nama Fungsi  : identitas yang digunakan saat pemanggilan
+2. Parameter    : input fungsi (namaVariabel:tipeData), pisahkan dengan koma
+3. Return Type  : tipe data output yang dikembalikan
+4. Tubuh Fungsi : blok instruksi/logika yang dijalankan
+5. return       : perintah mengembalikan nilai ke pemanggil
+
+Prinsip: Parameter = INPUT, return = OUTPUT
+
+Contoh:
+  function kuadrat(x: int) : int
+    t = x * x
+    return t
+
+  Pemanggilan: hasil = kuadrat(5)  // hasil = 25
+
+C. PROSEDUR vs. FUNGSI
+
+Prosedur:
+- Blok kode yang melakukan sesuatu tanpa mengembalikan nilai
+- Contoh: print(), prosedur meowing() yang langsung print
+- Tidak ada return type / return type void
+
+Fungsi:
+- Blok kode yang menghasilkan/mengembalikan sebuah nilai
+- Hasilnya bisa disimpan di variabel atau digunakan dalam ekspresi lain
+- Lebih fleksibel karena outputnya dapat dikombinasikan
+
+Contoh konversi prosedur → fungsi:
+  // Prosedur (langsung print):
+  procedure meowing(nama: string, berat: int)
+    if berat > 5 then print(nama, "meong meong")
+    else print(nama, "miaw miaw")
+
+  // Fungsi (mengembalikan nilai):
+  function getMeowSound(berat: int) : string
+    if berat > 5 then return("meong meong")
+    else return("miaw miaw")
+
+D. ATURAN PARAMETER
+
+Tiga aspek yang harus benar:
+1. URUTAN parameter harus sesuai definisi
+2. JUMLAH parameter harus sesuai definisi
+3. TIPE DATA setiap parameter harus sesuai
+
+Contoh dengan: function meowing(nama: string, berat: int)
+  meowing("Speedy", 8)    → VALID
+  meowing(8, "Speedy")    → ERROR: urutan tipe terbalik
+  meowing("Lady", 0, 0)   → ERROR: jumlah parameter salah
+  meowing("Spot", "10")   → ERROR: tipe data salah ('10' = string, bukan int)
+
+E. FUNGSI SEBAGAI DEKOMPOSISI DAN ABSTRAKSI
+
+Dekomposisi: memecah algoritme besar menjadi fungsi-fungsi kecil yang terfokus.
+Abstraksi: menyembunyikan kerumitan implementasi di dalam fungsi;
+           algoritme utama cukup "mempercayai" fungsi akan menghasilkan output benar.
+
+F. TIGA LATIHAN DARI SLIDE
+
+1. Habis Dibagi:
+   function habis_dibagi(a: int, b: int) : int
+     if (a==0 and b==0) then return 0
+     if (a==0 or b==0) then return 1
+     if (a%b==0 or b%a==0) then return 1
+     else return 0
+
+2. Total Luas:
+   function luas(P: int, L: int) : int
+     return P * L
+
+3. Fungsi memanggil Fungsi (Lingkaran):
+   luasLingkaran = hitungLuas(radius)
+   if (luasLingkaran > 100) then
+     keliling = hitungKeliling(radius)
+
+G. MANFAAT UTAMA FUNGSI
+
+1. DRY (Don't Repeat Yourself): tidak ada kode redundan
+2. Mudah dibaca: kode utama lebih bersih dan ringkas
+3. Mudah dikelola: ubah di satu tempat, berlaku di mana-mana
+
+Gunakan fungsi kapan pun ditemukan POLA atau PENGULANGAN logika.
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Fungsi Sederhana]
+Tuliskan fungsi untuk menghitung luas persegi panjang!
+
+JAWABAN:
+  function luasPersegiPanjang(panjang: int, lebar: int) : int
+    return panjang * lebar
+
+  // Pemanggilan:
+  L = luasPersegiPanjang(8, 5)  // L = 40
+
+[SOAL 2 — Fungsi dengan Kondisi]
+Tuliskan fungsi yang menerima nilai ujian dan mengembalikan huruf mutu (A/B/C/D/E)!
+
+JAWABAN:
+  function hurufMutu(nilai: int) : string
+    if (nilai >= 80) then return "A"
+    else if (nilai >= 70) then return "B"
+    else if (nilai >= 55) then return "C"
+    else if (nilai >= 40) then return "D"
+    else return "E"
+
+  // Pemanggilan:
+  mutu = hurufMutu(75)  // mutu = "B"
+  print("Huruf mutu:", mutu)
+
+[SOAL 3 — Fungsi dan Algoritme Utama]
+Buat fungsi dan algoritme utama untuk menghitung total luas N persegi panjang!
+
+JAWABAN:
+  function luas(P: int, L: int) : int
+    return P * L
+
+  procedure totalLuas()
+    read(N)
+    sum = 0
+    for i = 1 to N do
+      read(A, B)
+      area = luas(A, B)
+      sum = sum + area
+    print("Total luas:", sum)
+
+[SOAL 4 — Fungsi Memanggil Fungsi]
+Buat dua fungsi: hitungLuas(r) dan hitungKeliling(r) untuk lingkaran,
+lalu buat algoritme utama menghitung total keliling lingkaran dengan luas > 100!
+(gunakan PI = 3.14)
+
+JAWABAN:
+  function hitungLuas(r: float) : float
+    return 3.14 * r * r
+
+  function hitungKeliling(r: float) : float
+    return 2 * 3.14 * r
+
+  procedure hitungTotalKeliling()
+    read(N)
+    totalKeliling = 0
+    for i = 1 to N do
+      read(radius)
+      luasLingkaran = hitungLuas(radius)
+      if (luasLingkaran > 100) then
+        keliling = hitungKeliling(radius)
+        totalKeliling = totalKeliling + keliling
+    print("Total keliling:", totalKeliling)
+
+[SOAL 5 — Fungsi Habis Dibagi]
+Buat fungsi habis_dibagi(a,b) yang aman dari pembagian nol, lalu buat algoritme
+utama membaca N pasangan dan menghitung berapa yang memenuhi syarat!
+
+JAWABAN:
+  function habis_dibagi(a: int, b: int) : int
+    if (a == 0 and b == 0) then return 0
+    if (a == 0 or b == 0) then return 1
+    if (a % b == 0 or b % a == 0) then return 1
+    else return 0
+
+  procedure latihan()
+    read(N)
+    sum = 0
+    for i = 1 to N do
+      read(a, b)
+      if (habis_dibagi(a, b) == 1) then
+        sum = sum + 1
+    print(sum)
+
+[SOAL 6 — Identifikasi Prosedur vs. Fungsi]
+Klasifikasikan setiap blok berikut sebagai prosedur atau fungsi, dan jelaskan alasannya!
+a) function cetakNama(nama: string) → print("Halo, " + nama)
+b) function hitungFPB(a: int, b: int) : int → return FPB dari a dan b
+c) procedure inisialisasi() → set semua variabel ke 0
+d) function cekPrima(n: int) : boolean → return True jika n prima
+
+JAWABAN:
+a) PROSEDUR: tidak mengembalikan nilai (hanya melakukan aksi print).
+   Meski tertulis "function", karena tidak ada return → lebih tepat disebut prosedur.
+
+b) FUNGSI: mengembalikan nilai integer (FPB dari a dan b).
+
+c) PROSEDUR: tidak mengembalikan nilai, hanya melakukan aksi inisialisasi variabel.
+
+d) FUNGSI: mengembalikan nilai boolean (True/False).
+
+[SOAL 7 — Error Parameter]
+Diberikan: function hitung(a: int, b: float, c: string) : string
+Identifikasi error pada setiap pemanggilan berikut:
+a) hitung(5, 3.14, "halo")
+b) hitung("5", 3.14, "halo")
+c) hitung(5, 3.14)
+d) hitung(3.14, 5, "halo")
+e) hitung(5, 3, "halo", "ekstra")
+
+JAWABAN:
+a) VALID: urutan, jumlah, dan tipe data sesuai (int, float, string)
+b) ERROR: parameter pertama seharusnya int, diberikan string "5"
+c) ERROR: jumlah parameter kurang, hanya 2 dari 3 yang dibutuhkan
+d) ERROR: urutan tipe terbalik (float diberikan ke posisi int, int ke posisi float)
+e) ERROR: jumlah parameter berlebih, 4 argumen diberikan untuk 3 parameter
+
+[SOAL 8 — Desain Fungsi Lengkap]
+Buat program yang membaca N bilangan bulat, lalu untuk setiap bilangan:
+- Jika bilangan prima: cetak "[bilangan] adalah PRIMA"
+- Jika bukan prima: cetak "[bilangan] BUKAN prima"
+Gunakan fungsi cekPrima(n) sebagai fungsi bantu!
+
+JAWABAN:
+  function cekPrima(n: int) : boolean
+    if (n <= 1) then return False
+    if (n == 2) then return True
+    if (n mod 2 == 0) then return False
+    for i = 3 to sqrt(n) step 2 do
+      if (n mod i == 0) then return False
+    return True
+
+  procedure prosesData()
+    read(N)
+    for i = 1 to N do
+      read(x)
+      if (cekPrima(x)) then
+        print(x, "adalah PRIMA")
+      else
+        print(x, "BUKAN prima")
+
+[SOAL 9 — Rekursi Sederhana (Pengayaan)]
+Fungsi rekursif adalah fungsi yang memanggil dirinya sendiri.
+Tuliskan fungsi rekursif untuk menghitung n! (faktorial)!
+
+JAWABAN:
+  function faktorial(n: int) : int
+    if (n == 0 or n == 1) then return 1
+    else return n * faktorial(n - 1)
+
+  // Trace untuk n=4:
+  faktorial(4) = 4 × faktorial(3)
+               = 4 × 3 × faktorial(2)
+               = 4 × 3 × 2 × faktorial(1)
+               = 4 × 3 × 2 × 1
+               = 24
+
+================================================================
+END OF GROUND TRUTH DETAIL — PERTEMUAN 12
+================================================================

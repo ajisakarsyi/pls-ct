@@ -1,0 +1,136 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 9: Elemen Pseudocode — Variabel, Operator, Tipe Data, dan List
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Review Pseudocode dan Elemen-Elemen Dasarnya]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Pseudocode adalah cara informal untuk menuliskan algoritme atau rancangan program komputer. Tujuan pseudocode adalah untuk mendapatkan ide secara cepat sekaligus memudahkan pembacaan algoritme tanpa harus mengikuti aturan grammar (sintaks) bahasa pemrograman yang ketat. Tidak ada aturan penulisan pseudocode yang baku secara universal, namun untuk mengurangi ambiguitas, digunakan konvensi-konvensi tertentu.
+
+Dalam pseudocode, terdapat lima elemen utama yang membentuk struktur penulisan algoritme, yaitu:
+1. Variabel: elemen penyimpanan nilai.
+2. Assignment: pemberian nilai pada variabel.
+3. Keterangan: catatan atau komentar dalam algoritme.
+4. Instruksi: perintah atau operasi yang dilakukan.
+5. Struktur Kendali: mekanisme pengaturan alur eksekusi algoritme.
+
+Pertemuan ini berfokus pada pembahasan mendalam terhadap variabel, instruksi, assignment, tipe data, dan operator sebagai elemen-elemen inti dalam penyusunan pseudocode.
+
+
+----------------------------------------------------------------
+[MATERI 2: Variabel]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Variabel adalah elemen dari algoritme yang berfungsi untuk menyimpan nilai tertentu pada suatu saat, dan nilai tersebut dapat diubah menjadi nilai lain sesuai kebutuhan pada saat yang berbeda. Variabel dapat dianalogikan sebagai sebuah wadah atau kotak yang diberi nama, di mana nilai yang tersimpan di dalamnya dapat diambil, disimpan, atau dimodifikasi sewaktu-waktu selama algoritme berjalan.
+
+Tiga operasi dasar yang dapat dilakukan pada variabel adalah:
+1. Store (menyimpan): memasukkan nilai ke dalam variabel.
+2. Retrieve (mengambil): mengambil atau membaca nilai yang tersimpan dalam variabel.
+3. Modify (mengubah): mengubah nilai yang tersimpan dalam variabel dengan nilai baru.
+
+Dalam penamaan variabel, terdapat konvensi yang perlu diikuti untuk menjaga konsistensi dan keterbacaan algoritme. Variabel umumnya bersifat case-sensitive, artinya membedakan huruf besar dan huruf kecil (misalnya, "Data", "data", dan "DATA" diperlakukan sebagai tiga variabel yang berbeda). Variabel merupakan suatu identifier yang harus memiliki nama unik, terdiri dari karakter alphanumeric, dan harus diawali dengan huruf (bukan angka atau karakter khusus). Contoh nama variabel yang valid antara lain: data, data123, d4t4, data_3. Contoh nama variabel yang tidak valid antara lain: 3data (diawali angka) dan "data 3" (mengandung spasi).
+
+Penamaan variabel yang deskriptif dan bermakna sangat dianjurkan agar algoritme lebih mudah dibaca dan dipahami, dibandingkan menggunakan nama yang terlalu singkat dan tidak informatif.
+
+
+----------------------------------------------------------------
+[MATERI 3: Instruksi dan Assignment]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Instruksi atau perintah adalah satuan operasional dari suatu algoritme. Instruksi dinyatakan dalam kalimat yang mudah dipahami dan konsisten. Dua contoh instruksi dasar yang sering digunakan dalam pseudocode adalah:
+- read(a, b): instruksi untuk membaca atau memberikan nilai ke dalam variabel a dan b (instruksi input).
+- print(sum): instruksi untuk menuliskan atau menampilkan nilai variabel sum (instruksi output).
+
+Assignment atau penugasan adalah operasi pemberian nilai pada sebuah variabel. Nilai yang diberikan dapat berasal dari sebuah ekspresi, yaitu operasi yang menghasilkan suatu nilai. Ekspresi dapat berupa ekspresi aritmatika maupun ekspresi logika. Contoh assignment:
+- sum = 0 (memberikan nilai nol ke variabel sum)
+- x = n (memberikan nilai variabel n ke variabel x)
+- sum = sum + x (menghitung nilai sum ditambah x, kemudian menyimpan hasilnya kembali ke variabel sum)
+
+Contoh algoritme lengkap yang menggabungkan instruksi dan assignment adalah algoritme penjumlahan dua bilangan. Input: dua bilangan a dan b. Output: jumlah bilangan a dan b yang disimpan dalam variabel sum. Pseudocode: read(a, b); sum = a + b; print(sum).
+
+
+----------------------------------------------------------------
+[MATERI 4: Tipe Data]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Tipe data adalah klasifikasi nilai yang dapat disimpan dalam sebuah variabel. Setiap variabel dalam suatu algoritme atau program memiliki tipe data yang menentukan jenis nilai yang dapat ditampung serta operasi apa yang dapat dilakukan terhadapnya. Terdapat beberapa tipe data dasar yang umum digunakan dalam algoritme dan pemrograman, antara lain:
+
+1. Integer (Bilangan Bulat): menyimpan nilai bilangan bulat, baik positif maupun negatif, tanpa komponen desimal. Contoh: -5, 0, 42, 100.
+
+2. Float atau Double (Bilangan Desimal/Real): menyimpan nilai bilangan yang memiliki komponen desimal atau pecahan. Contoh: 3.14, -0.5, 2.718.
+
+3. String (Teks): menyimpan urutan karakter yang membentuk teks. Contoh: "Halo", "IPB University", "KOM2102".
+
+4. Boolean (Logika): menyimpan nilai kebenaran yang hanya terdiri dari dua kemungkinan, yaitu True (benar) atau False (salah). Tipe data ini umumnya digunakan dalam operasi logika dan struktur kendali.
+
+5. Character (Karakter): menyimpan satu karakter tunggal. Contoh: 'A', 'b', '3'.
+
+Pemilihan tipe data yang tepat untuk setiap variabel merupakan bagian penting dalam perancangan algoritme yang efisien dan benar.
+
+
+----------------------------------------------------------------
+[MATERI 5: Operator]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Operator adalah simbol atau kata kunci yang digunakan untuk melakukan operasi terhadap nilai atau variabel dalam suatu ekspresi. Terdapat lima kategori operator yang dibahas dalam pertemuan ini:
+
+1. Assignment Operator (Operator Penugasan):
+Digunakan untuk memberikan nilai pada variabel. Simbol yang digunakan adalah tanda sama dengan (=). Contoh: x = 5 berarti nilai 5 disimpan ke dalam variabel x.
+
+2. Arithmetic Operator (Operator Aritmatika):
+Digunakan untuk melakukan operasi matematika dasar. Operator aritmatika yang umum digunakan meliputi: penjumlahan (+), pengurangan (-), perkalian (*), pembagian (/), dan modulo atau sisa bagi (%). Dalam menghitung ekspresi aritmatika yang melibatkan beberapa operator sekaligus, berlaku aturan urutan perhitungan (Order of Calculation/Precedence) yang menentukan operator mana yang dikerjakan terlebih dahulu. Umumnya, perkalian dan pembagian dikerjakan sebelum penjumlahan dan pengurangan, dan tanda kurung dapat digunakan untuk mengubah urutan prioritas tersebut.
+
+3. Relational Operator (Operator Relasional/Perbandingan):
+Digunakan untuk membandingkan dua nilai dan menghasilkan nilai boolean (True atau False). Operator relasional yang umum digunakan meliputi: sama dengan (==), tidak sama dengan (!=), lebih besar dari (>), lebih kecil dari (<), lebih besar atau sama dengan (>=), dan lebih kecil atau sama dengan (<=).
+
+4. Logical Operator (Operator Logika):
+Digunakan untuk menggabungkan dua atau lebih ekspresi boolean dan menghasilkan nilai boolean. Operator logika yang umum digunakan meliputi: AND (dan) yang menghasilkan True hanya jika kedua operand bernilai True; OR (atau) yang menghasilkan True jika setidaknya satu operand bernilai True; dan NOT (bukan) yang membalik nilai boolean dari operand.
+
+5. Is Operator:
+Operator khusus yang digunakan untuk memeriksa identitas atau tipe dari suatu nilai atau objek.
+
+
+----------------------------------------------------------------
+[MATERI 6: List (Sequence of Values / Array)]
+----------------------------------------------------------------
+
+Ground Truth:
+
+List atau Array adalah struktur data yang memungkinkan penyimpanan sekumpulan nilai secara berurutan di bawah satu nama variabel. Jika variabel biasa hanya dapat menyimpan satu nilai pada satu waktu, maka list memungkinkan penyimpanan banyak nilai sekaligus dalam satu wadah yang terorganisir secara sekuensial. Setiap elemen dalam list dapat diakses menggunakan indeks posisinya.
+
+Konsep list sangat berguna ketika berhadapan dengan data dalam jumlah besar yang sejenis, seperti daftar nilai ujian mahasiswa, daftar harga produk, atau daftar nama pelanggan. Dengan menggunakan list, manipulasi terhadap kumpulan data tersebut dapat dilakukan secara lebih efisien dibandingkan menggunakan variabel terpisah untuk setiap elemen data.
+
+
+----------------------------------------------------------------
+[MATERI 7: Studi Kasus Penerapan Variabel dan Operator]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Pemahaman terhadap variabel, tipe data, dan operator diperkuat melalui tiga studi kasus berikut:
+
+1. Studi Kasus Toko Kue "Manis Sejahtera":
+Robot Robi membantu toko kue dengan mencatat jumlah kue yang terjual dan menghitung total uang yang diperoleh dari setiap transaksi penjualan. Dalam kasus ini, variabel digunakan untuk menyimpan informasi seperti jumlah kue yang terjual (bilangan bulat/integer), harga per kue (bilangan desimal/float), dan total pendapatan (float). Operator aritmatika digunakan untuk menghitung total uang yang didapat dari perkalian jumlah kue dengan harga per kue, serta untuk mengakumulasikan total penjualan sepanjang hari.
+
+2. Studi Kasus Toko Online Baju (Arif):
+Mahasiswa bernama Arif menjalankan bisnis toko online dan perlu mencatat informasi seperti jumlah barang terjual, harga barang, dan keuntungan yang didapat. Setiap informasi disimpan dalam variabel yang sesuai dengan tipe datanya. Operator aritmatika digunakan untuk menghitung keuntungan berdasarkan selisih antara harga jual dan harga beli, serta untuk menghitung total pendapatan dari keseluruhan barang yang terjual.
+
+3. Studi Kasus Penelusuran Nilai Variabel:
+Diberikan nilai awal x = 8, y = 12, dan z = 20. Kemudian dilakukan serangkaian operasi assignment secara berurutan: x = x + y menghasilkan x = 20; y = z - x menghasilkan y = 0; z = z * 2 menghasilkan z = 40; x = z - y menghasilkan x = 40; y = (x + z) / 2 menghasilkan y = 40; z = z / x + y menghasilkan z = 41. Studi kasus ini melatih kemampuan menelusuri perubahan nilai variabel secara bertahap mengikuti urutan eksekusi instruksi assignment, yang merupakan keterampilan dasar penting dalam memahami alur kerja suatu algoritme.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

@@ -1,0 +1,296 @@
+================================================================
+GROUND TRUTH DETAIL — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 9: Elemen Pseudocode — Variabel, Tipe Data, Operator, List
+================================================================
+
+PENJELASAN DETAIL:
+
+A. LIMA ELEMEN PSEUDOCODE
+1. Variabel          : elemen penyimpanan nilai
+2. Assignment        : pemberian nilai pada variabel
+3. Keterangan        : komentar/catatan dalam algoritme
+4. Instruksi         : perintah atau operasi yang dilakukan
+5. Struktur Kendali  : mekanisme pengaturan alur eksekusi
+
+B. VARIABEL
+
+Definisi: Elemen algoritme untuk menyimpan nilai tertentu yang dapat diubah sewaktu-waktu.
+Analogi: kotak berlabel yang bisa diisi, diambil isinya, atau diganti isinya.
+
+Tiga operasi pada variabel:
+- Store   (menyimpan)  : memasukkan nilai ke dalam variabel
+- Retrieve (mengambil) : membaca nilai yang tersimpan
+- Modify  (mengubah)   : mengganti nilai dengan nilai baru
+
+Konvensi penamaan variabel:
+- Case-sensitive: "Data" ≠ "data" ≠ "DATA"
+- Harus diawali huruf (bukan angka atau karakter khusus)
+- Hanya boleh mengandung karakter alphanumeric dan underscore
+- Unik dalam satu scope algoritme
+
+Valid   : data, data123, d4t4, data_3, _data, namaLengkap
+Tidak valid: 3data (diawali angka), "data 3" (ada spasi), data-3 (ada tanda minus)
+
+C. INSTRUKSI
+
+Definisi: Satuan operasional dari suatu algoritme.
+Ditulis dalam kalimat yang mudah dipahami dan konsisten.
+
+Instruksi dasar:
+- read(a, b)  : membaca/memberikan nilai ke variabel a dan b (INPUT)
+- print(sum)  : menampilkan nilai variabel sum (OUTPUT)
+- swap(a, b)  : menukar nilai variabel a dan b
+
+D. ASSIGNMENT (PENUGASAN)
+
+Definisi: Pemberian nilai pada sebuah variabel menggunakan ekspresi.
+Format: variabel = ekspresi
+
+Ekspresi dapat berupa:
+- Ekspresi aritmatika: sum = a + b
+- Ekspresi logika    : hasil = (x > 5)
+- Nilai konstanta    : sum = 0
+- Nilai variabel lain: x = n
+
+Contoh assignment berantai:
+  sum = 0         // inisialisasi
+  x = n           // salin nilai n ke x
+  sum = sum + x   // akumulasi (sum lama + x → sum baru)
+
+E. TIPE DATA DASAR
+
+Tipe Data  | Deskripsi                        | Contoh Nilai
+-----------|----------------------------------|------------------
+Integer    | Bilangan bulat                   | -5, 0, 42, 100
+Float/Double| Bilangan desimal               | 3.14, -0.5, 2.718
+String     | Teks (urutan karakter)           | "Halo", "IPB"
+Boolean    | Nilai kebenaran (True/False)     | True, False
+Character  | Satu karakter tunggal            | 'A', 'b', '3'
+
+F. OPERATOR
+
+1. Assignment Operator: =
+   Contoh: x = 5
+
+2. Arithmetic Operators (Operator Aritmatika):
+   +  : Penjumlahan    | a + b
+   -  : Pengurangan    | a - b
+   *  : Perkalian      | a * b
+   /  : Pembagian      | a / b
+   %  : Modulo (sisa bagi) | a % b
+   ** atau ^ : Perpangkatan | a ** 2
+
+   Order of Calculation (Urutan Prioritas):
+   1. Tanda kurung ()
+   2. Perpangkatan **
+   3. Perkalian *, Pembagian /, Modulo %
+   4. Penjumlahan +, Pengurangan -
+   (Operasi setara: dikerjakan kiri ke kanan)
+
+3. Relational Operators (Operator Perbandingan):
+   ==  : Sama dengan          | a == b
+   !=  : Tidak sama dengan    | a != b
+   >   : Lebih besar dari     | a > b
+   <   : Lebih kecil dari     | a < b
+   >=  : Lebih besar atau sama| a >= b
+   <=  : Lebih kecil atau sama| a <= b
+   (Menghasilkan nilai Boolean: True atau False)
+
+4. Logical Operators (Operator Logika):
+   AND : True jika KEDUA operand True
+   OR  : True jika SALAH SATU operand True
+   NOT : Membalik nilai Boolean
+
+   Tabel kebenaran AND:
+   T AND T = T | T AND F = F | F AND T = F | F AND F = F
+
+   Tabel kebenaran OR:
+   T OR T = T | T OR F = T | F OR T = T | F OR F = F
+
+   NOT: NOT T = F | NOT F = T
+
+5. Is Operator: memeriksa tipe atau identitas suatu nilai/objek.
+
+G. LIST (ARRAY / SEQUENCE OF VALUES)
+
+Definisi: Struktur data yang menyimpan sekumpulan nilai secara berurutan di bawah
+satu nama variabel.
+
+Perbedaan dengan variabel biasa:
+- Variabel biasa: menyimpan SATU nilai
+- List: menyimpan BANYAK nilai dengan satu nama
+
+Cara akses: menggunakan indeks posisi (biasanya mulai dari 0 atau 1)
+Contoh: nilai[0], nilai[1], nilai[2], ...
+
+Kegunaan: manipulasi data massal yang sejenis (daftar nilai, harga, nama)
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Nama Variabel Valid]
+Tentukan mana nama variabel yang VALID dan mana yang TIDAK VALID:
+a) nilaiAkhir     b) 2x     c) total_nilai    d) nilai mahasiswa
+e) _temp          f) x2     g) harga-satuan   h) IPK2024
+
+JAWABAN:
+Valid     : a) nilaiAkhir, c) total_nilai, e) _temp, f) x2, h) IPK2024
+Tidak valid:
+- b) 2x : diawali angka
+- d) "nilai mahasiswa" : mengandung spasi
+- g) harga-satuan : mengandung tanda minus (-)
+
+[SOAL 2 — Tipe Data]
+Tentukan tipe data yang paling tepat untuk menyimpan informasi berikut:
+a) Usia seseorang dalam tahun
+b) Nilai IPK (misalnya 3.75)
+c) Nama lengkap mahasiswa
+d) Status kelulusan (lulus/tidak)
+e) Inisial nama (satu huruf pertama)
+f) Jumlah produk dalam keranjang belanja
+g) Suhu badan dalam derajat Celcius
+
+JAWABAN:
+a) Integer   (usia: 20, 21, dst. — bilangan bulat)
+b) Float     (IPK: 3.75 — bilangan desimal)
+c) String    ("Budi Santoso" — teks)
+d) Boolean   (True = lulus, False = tidak lulus)
+e) Character ('B' — satu karakter)
+f) Integer   (1, 2, 3 produk — bilangan bulat)
+g) Float     (36.5, 37.2 — bilangan desimal)
+
+[SOAL 3 — Evaluasi Ekspresi Aritmatika]
+Hitung nilai ekspresi berikut (terapkan urutan prioritas operasi):
+a) 5 + 3 * 2
+b) (5 + 3) * 2
+c) 10 / 2 + 3 * 4
+d) 17 % 5 + 2 ** 3
+e) (8 + 4) / (2 * 3) - 1
+
+JAWABAN:
+a) 5 + 3*2 = 5 + 6 = 11
+b) (5+3)*2 = 8*2 = 16
+c) 10/2 + 3*4 = 5 + 12 = 17
+d) 17%5 + 2**3 = 2 + 8 = 10
+e) (8+4)/(2*3) - 1 = 12/6 - 1 = 2 - 1 = 1
+
+[SOAL 4 — Evaluasi Ekspresi Logika]
+Tentukan nilai True/False dari ekspresi berikut (diketahui x=5, y=10, z=5):
+a) x == z
+b) x != y
+c) x > y AND y > z
+d) x >= z OR x > y
+e) NOT (x == y)
+f) (x + z == 10) AND (y > x)
+
+JAWABAN:
+a) x == z → 5 == 5 → True
+b) x != y → 5 != 10 → True
+c) (x > y) AND (y > z) → (5>10) AND (10>5) → False AND True → False
+d) (x >= z) OR (x > y) → (5>=5) OR (5>10) → True OR False → True
+e) NOT (x == y) → NOT (5==10) → NOT False → True
+f) (x+z==10) AND (y>x) → (10==10) AND (10>5) → True AND True → True
+
+[SOAL 5 — Penelusuran Nilai Variabel]
+Diketahui: x=8, y=12, z=20. Tentukan nilai akhir x, y, z setelah semua operasi!
+x = x + y
+y = z - x
+z = z * 2
+x = z - y
+y = (x + z) / 2
+z = z / x + y
+
+JAWABAN (telusuri langkah per langkah):
+Awal: x=8, y=12, z=20
+
+x = x + y = 8 + 12 = 20   → x=20, y=12, z=20
+y = z - x = 20 - 20 = 0   → x=20, y=0, z=20
+z = z * 2 = 20 * 2 = 40   → x=20, y=0, z=40
+x = z - y = 40 - 0 = 40   → x=40, y=0, z=40
+y = (x+z)/2 = (40+40)/2 = 40 → x=40, y=40, z=40
+z = z/x + y = 40/40 + 40 = 1 + 40 = 41 → x=40, y=40, z=41
+
+Nilai akhir: x=40, y=40, z=41
+
+[SOAL 6 — Penelusuran Baru]
+Diketahui: a=3, b=7, c=2. Tentukan nilai akhir setelah operasi berikut:
+a = a * c
+b = b - a
+c = a + b
+a = c * 2
+b = a - c + b
+
+JAWABAN:
+Awal: a=3, b=7, c=2
+
+a = a * c = 3 * 2 = 6    → a=6, b=7, c=2
+b = b - a = 7 - 6 = 1    → a=6, b=1, c=2
+c = a + b = 6 + 1 = 7    → a=6, b=1, c=7
+a = c * 2 = 7 * 2 = 14   → a=14, b=1, c=7
+b = a - c + b = 14-7+1 = 8 → a=14, b=8, c=7
+
+Nilai akhir: a=14, b=8, c=7
+
+[SOAL 7 — Studi Kasus Toko Kue]
+Robot Robi mencatat penjualan kue di "Toko Manis Sejahtera".
+Harga kue coklat: Rp 15.000, kue keju: Rp 20.000.
+Hari ini terjual 8 kue coklat dan 5 kue keju.
+Tuliskan pseudocode dan hitung total pendapatan!
+
+JAWABAN:
+Pseudocode:
+  harga_coklat = 15000
+  harga_keju   = 20000
+  jual_coklat  = 8
+  jual_keju    = 5
+  
+  total_coklat = harga_coklat * jual_coklat
+  total_keju   = harga_keju * jual_keju
+  total_pendapatan = total_coklat + total_keju
+  
+  print("Total Pendapatan: ", total_pendapatan)
+
+Perhitungan:
+  total_coklat = 15000 * 8 = 120.000
+  total_keju   = 20000 * 5 = 100.000
+  total_pendapatan = 120.000 + 100.000 = 220.000
+
+Jawaban: Total pendapatan = Rp 220.000
+
+[SOAL 8 — List/Array]
+Diberikan list nilai ujian mahasiswa:
+nilai = [75, 88, 62, 91, 70, 85, 78, 55, 93, 80]
+
+Tuliskan pseudocode untuk:
+a) Menghitung rata-rata nilai
+b) Mencari nilai tertinggi
+c) Menghitung jumlah mahasiswa yang lulus (nilai >= 70)
+
+JAWABAN:
+a) Rata-rata:
+  n = 10
+  sum = 0
+  for i = 0 to n-1 do
+    sum = sum + nilai[i]
+  rata = sum / n
+  print(rata)
+  → Hasil: (75+88+62+91+70+85+78+55+93+80)/10 = 777/10 = 77.7
+
+b) Nilai tertinggi:
+  maks = nilai[0]
+  for i = 1 to n-1 do
+    if nilai[i] > maks then maks = nilai[i]
+  print(maks)
+  → Hasil: 93
+
+c) Jumlah yang lulus:
+  lulus = 0
+  for i = 0 to n-1 do
+    if nilai[i] >= 70 then lulus = lulus + 1
+  print(lulus)
+  → Hasil: 8 mahasiswa lulus (75,88,91,70,85,78,93,80); tidak lulus: 62 dan 55
+
+================================================================
+END OF GROUND TRUTH DETAIL — PERTEMUAN 9
+================================================================

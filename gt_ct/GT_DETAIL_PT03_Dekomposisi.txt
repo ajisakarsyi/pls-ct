@@ -1,0 +1,248 @@
+================================================================
+GROUND TRUTH DETAIL — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 3: Problem Solving — Dekomposisi
+================================================================
+
+----------------------------------------------------------------
+[MATERI: Dekomposisi — Konsep, Prinsip, dan Penerapan]
+----------------------------------------------------------------
+
+PENJELASAN DETAIL:
+
+A. DEFINISI DAN KONSEP DASAR
+
+Dekomposisi (Decomposition) didefinisikan sebagai:
+"The process of breaking down a problem into smaller manageable parts."
+(Proses memecah suatu masalah menjadi bagian-bagian yang lebih kecil dan lebih mudah dikelola.)
+
+Kata kunci: BREAKING BIG PROBLEMS INTO SMALLER AND EASIER TO MANAGE PROBLEMS
+
+Latar belakang: "It's hard to solve a big problem." — Anonymous.
+Masalah besar/kompleks lebih sulit diselesaikan secara langsung. Jauh lebih mudah membagi
+masalah menjadi permasalahan yang lebih kecil, lalu menyelesaikannya satu per satu.
+
+Dekomposisi membantu:
+- Menyelesaikan masalah-masalah kompleks
+- Mengelola proyek-proyek besar secara terstruktur
+- Membagi tanggung jawab secara modular
+
+Pola hierarkis dekomposisi:
+Masalah A → Sub-masalah A1 + Sub-masalah A2
+            ↓                   ↓
+         Solusi A1           Solusi A2
+                  ↘         ↙
+                  Solusi A (total)
+
+B. CONTOH PENERAPAN DEKOMPOSISI
+
+1. Menghitung Luas Bangun Datar Tidak Beraturan
+   Masalah: menghitung luas bangun datar kompleks.
+   Dekomposisi: pecah menjadi bentuk-bentuk sederhana (persegi + segitiga, dll.),
+   hitung luas masing-masing, jumlahkan.
+
+2. Membuat Sarapan
+   Dekomposisi: menyiapkan bahan → memasak nasi → menggoreng telur → menyeduh teh →
+   menghidangkan. Setiap sub-tugas diselesaikan secara mandiri.
+
+3. Menghabiskan Semangka
+   Semangka besar dipotong menjadi bagian-bagian kecil → dibagikan → dimakan satu per satu.
+   Saat seluruh potongan habis, masalah terselesaikan. Ini menggambarkan pola:
+   Masalah → Sub-masalah (potongan) → Solusi parsial → Solusi total.
+
+4. Merakit Mobil (Assembly Line)
+   Proses pembuatan mobil didekomposisi menjadi fungsi-fungsi spesifik yang dikerjakan
+   oleh pekerja atau robot berbeda. Lebih efektif dibanding satu robot melakukan semua hal.
+
+5. Kamera 360 Derajat (Insta360)
+   Menangkap gambar 360° didekomposisi: Lensa 1 menangkap >180°, Lensa 2 menangkap >180°,
+   keduanya digabungkan (stitching) pada area tumpang tindih → hasil gambar 360° seamless.
+
+6. Mencari Bilangan Terbesar dari Kumpulan Data
+   Dekomposisi: bagi kumpulan bilangan menjadi kelompok → cari terbesar per kelompok →
+   bandingkan hasil antar kelompok → tentukan yang terbesar.
+
+7. Problem Berang-Berang dan Lift
+   Hanya ada 2 lift, kapasitas masing-masing 30 kg. 9 berang-berang dengan berat berbeda:
+   A:2, B:3, C:5, D:8, E:9, F:9, G:12, H:12, I:22 (total: 82 kg).
+   Total kapasitas 2 lift = 60 kg → pasti ada yang tidak terangkut.
+   Dekomposisi: optimalkan pengisian Lift 1 → optimalkan pengisian Lift 2 → gabungkan.
+
+C. PENERAPAN DEKOMPOSISI DALAM PROBLEM SOLVING FORMAL
+
+Langkah dekomposisi terstruktur:
+1. Identifikasi GOAL (tujuan utama)
+2. Pecah menjadi sub-masalah yang lebih kecil
+3. Selesaikan setiap sub-masalah secara mandiri
+4. Gabungkan solusi sub-masalah menjadi solusi utuh
+
+Contoh — Masalah Pasangan Bilangan Habis Dibagi:
+Goal: menghitung berapa pasangan (ai, bi) di mana ai habis dibagi bi ATAU bi habis dibagi ai.
+Dekomposisi:
+- Sub-masalah 1: baca pasangan bilangan satu per satu
+- Sub-masalah 2: periksa apakah ai % bi == 0
+- Sub-masalah 3: periksa apakah bi % ai == 0
+- Sub-masalah 4: jika salah satu atau keduanya ya, hitung sebagai pasangan valid
+- Sub-masalah 5: akumulasi dan cetak jumlah pasangan valid
+
+Contoh — Kompresi Gambar Biner:
+Gambar 4×4 piksel (hitam=0, putih=1) didekomposisi secara rekursif:
+- Jika seluruh digit = 0 → hasil "0"
+- Jika seluruh digit = 1 → hasil "1"
+- Jika tidak homogen → bagi menjadi 4 sub-grid, terapkan rekursif pada setiap sub-grid,
+  gabungkan dengan format "(hasil1 hasil2 hasil3 hasil4)"
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Identifikasi Dekomposisi]
+Sebutkan minimal 5 sub-masalah yang muncul jika kita mendekomposisi masalah
+"Menyelenggarakan Ujian Tengah Semester (UTS) untuk 200 mahasiswa"!
+
+JAWABAN:
+1. Menyusun soal ujian
+2. Menentukan ruang ujian dan kapasitas tempat duduk
+3. Membuat daftar hadir dan nomor kursi mahasiswa
+4. Mendistribusikan lembar soal dan lembar jawaban
+5. Mengawasi jalannya ujian
+6. Mengumpulkan lembar jawaban setelah ujian selesai
+7. Mengoreksi jawaban dan memasukkan nilai
+8. Mengumumkan hasil ujian
+
+[SOAL 2 — Dekomposisi Algoritme]
+Dekomposisikan masalah "Menentukan apakah suatu tahun adalah tahun kabisat" menjadi
+sub-masalah yang lebih kecil!
+
+JAWABAN:
+Sub-masalah hasil dekomposisi:
+1. Baca input: tahun (Y)
+2. Periksa apakah Y habis dibagi 4
+3. Jika ya, periksa apakah Y habis dibagi 100
+4. Jika habis dibagi 100, periksa apakah Y habis dibagi 400
+5. Tentukan status kabisat berdasarkan hasil pemeriksaan:
+   - Habis dibagi 400 → kabisat
+   - Habis dibagi 100 tapi tidak 400 → bukan kabisat
+   - Habis dibagi 4 tapi tidak 100 → kabisat
+   - Tidak habis dibagi 4 → bukan kabisat
+6. Cetak hasil
+
+[SOAL 3 — Berang-Berang dan Lift]
+Hanya ada 2 lift di gedung BeaverHQ. Setiap lift hanya bisa membawa maksimum 30 kg.
+Berang-berang: A:2kg, B:3kg, C:5kg, D:8kg, E:9kg, F:9kg, G:12kg, H:12kg, I:22kg.
+Tuliskan komposisi optimal yang memaksimalkan jumlah berang-berang yang terangkut!
+
+JAWABAN:
+Total berat semua berang = 2+3+5+8+9+9+12+12+22 = 82 kg
+Kapasitas 2 lift = 60 kg → minimal 22 kg tidak terangkut.
+
+Strategi optimal (maksimalkan JUMLAH berang, bukan berat):
+Lift 1: A(2) + B(3) + C(5) + D(8) + E(9) = 27 kg ✓ (≤30 kg, 5 berang)
+Lift 2: F(9) + G(12) + H(12) = 33 kg ✗ → terlalu berat
+Lift 2: F(9) + G(12) + B... (B sudah di Lift 1)
+
+Coba ulang:
+Lift 1: A(2) + B(3) + C(5) + E(9) + F(9) = 28 kg ✓ (5 berang)
+Lift 2: D(8) + G(12) + H(12) = 32 kg ✗
+
+Lift 1: A(2) + B(3) + C(5) + D(8) + F(9) = 27 kg ✓ (5 berang)
+Lift 2: E(9) + G(12) + H(12) = 33 kg ✗
+
+Lift 1: A(2) + B(3) + C(5) + D(8) + E(9) = 27 kg ✓ (5 berang)
+Lift 2: F(9) + H(12) + B... sudah terpakai → F(9) + G(12) = 21 kg (2 berang)
+→ Total terangkut: 7 berang (I:22kg tidak terangkut)
+
+Alternatif optimal:
+Lift 1: A(2)+B(3)+C(5)+D(8)+E(9) = 27 kg → 5 berang
+Lift 2: F(9)+G(12)+H(12) = 33 kg ✗
+Lift 2: F(9)+G(12) = 21 kg → 2 berang, masih ada sisa 9 kg
+        Tambah A? sudah di lift 1. Tidak ada yang pas.
+Lift 2: F(9)+H(12) = 21 kg + D(8)? D sudah di lift 1.
+Lift 2: G(12)+H(12) = 24 kg + B(3) = 27 kg ✓ → 3 berang!
+
+SOLUSI OPTIMAL:
+Lift 1: A(2)+C(5)+D(8)+E(9)+F(9) = 33 kg ✗
+Lift 1: A(2)+B(3)+C(5)+E(9)+F(9) = 28 kg ✓ → 5 berang
+Lift 2: G(12)+H(12)+B... B sudah di lift 1 → G(12)+H(12)+D(8) = 32 kg ✗
+Lift 2: G(12)+H(12)+C... C sudah → G(12)+H(12) = 24 kg + A? A sudah. Sisa: D(8) → 24+8=32 ✗
+Kesimpulan terbaik yang bisa dicapai:
+Lift 1: A(2)+B(3)+C(5)+D(8)+E(9) = 27 kg (5 berang)
+Lift 2: G(12)+H(12)+F(9) = 33 kg ✗ → G(12)+F(9) = 21 kg + C? C sudah.
+Lift 2: H(12)+F(9) = 21 + D? D sudah. + B? B sudah.
+Lift 2: G(12)+H(12) = 24 + B(3)? B sudah → tidak bisa.
+Lift 2: G(12)+F(9)+B(3)? B sudah.
+FINAL: Lift 2: G(12)+H(12) = 24 kg → 2 berang. Total = 7 berang.
+Atau: Lift 2: F(9)+G(12)+H(12) = 33 ✗ → pilih 2 dari F/G/H: G+H = 24 ✓
+Berang tidak terangkut: I(22) dan F(9) atau salah satunya.
+
+[SOAL 4 — Dekomposisi Masalah Sehari-hari]
+Dekomposisikan masalah "Mengatur keuangan pribadi selama satu bulan dengan penghasilan
+tetap" menjadi sub-masalah yang sistematis!
+
+JAWABAN:
+1. Catat total penghasilan bulan ini
+2. Identifikasi pengeluaran wajib tetap (kos, tagihan, cicilan)
+3. Identifikasi pengeluaran variabel (makan, transportasi, kebutuhan harian)
+4. Tentukan target tabungan bulanan
+5. Hitung: penghasilan - pengeluaran wajib - tabungan = budget bebas
+6. Alokasikan budget bebas untuk kebutuhan variabel
+7. Pantau pengeluaran aktual vs. rencana setiap minggu
+8. Lakukan evaluasi dan penyesuaian di akhir bulan
+
+[SOAL 5 — Kompresi Gambar Biner]
+Diberikan grid 4×4 berikut (1=putih, 0=hitam). Terapkan metode kompresi biner rekursif!
+Grid:
+1 1 0 0
+1 1 0 0
+0 0 1 1
+0 0 1 1
+
+JAWABAN:
+Grid tidak homogen → bagi menjadi 4 sub-grid 2×2:
+- Sub-grid kiri atas (Q1):  1 1 / 1 1 → semua 1 → "1"
+- Sub-grid kanan atas (Q2): 0 0 / 0 0 → semua 0 → "0"
+- Sub-grid kiri bawah (Q3): 0 0 / 0 0 → semua 0 → "0"
+- Sub-grid kanan bawah (Q4):1 1 / 1 1 → semua 1 → "1"
+Hasil: (1001)
+
+[SOAL 6 — Penjadwalan Komputer Lab]
+Sepuluh siswa menggunakan komputer di lab dengan jadwal berikut (jam 1–5).
+Tanda X menunjukkan siswa membutuhkan komputer pada jam tersebut:
+
+Jam  : 1  2  3  4  5
+Siswa1: X  X  .  .  .
+Siswa2: X  .  X  .  .
+Siswa3: .  X  X  X  .
+Siswa4: .  .  .  X  X
+Siswa5: X  .  .  .  X
+
+Berapa jumlah minimum komputer yang dibutuhkan?
+
+JAWABAN:
+Hitung jumlah siswa yang membutuhkan komputer di setiap jam bersamaan:
+- Jam 1: Siswa 1, 2, 5 → 3 siswa
+- Jam 2: Siswa 1, 3 → 2 siswa
+- Jam 3: Siswa 2, 3 → 2 siswa
+- Jam 4: Siswa 3, 4 → 2 siswa
+- Jam 5: Siswa 4, 5 → 2 siswa
+
+Jumlah maksimum penggunaan simultan = 3 (pada Jam 1)
+Jawaban: Minimum 3 komputer dibutuhkan.
+
+[SOAL 7 — Penalaran Dekomposisi]
+Mengapa pendekatan dekomposisi lebih efektif dibandingkan mencoba menyelesaikan masalah
+besar sekaligus? Berikan 3 alasan disertai contoh!
+
+JAWABAN:
+1. Mengurangi kompleksitas kognitif: Otak manusia memiliki keterbatasan dalam memproses
+   terlalu banyak informasi sekaligus. Contoh: membangun rumah tidak mungkin dilakukan
+   sekaligus, melainkan didekomposisi: fondasi → struktur → atap → finishing.
+2. Memungkinkan paralelisasi: Sub-masalah dapat dikerjakan secara bersamaan oleh tim
+   berbeda. Contoh: proyek software besar dibagi menjadi modul-modul yang dikerjakan
+   tim paralel.
+3. Memudahkan debugging dan perbaikan: Jika ada kesalahan, lebih mudah mengidentifikasi
+   di sub-masalah mana kesalahan terjadi. Contoh: jika hasil akhir salah, cek sub-solusi
+   satu per satu untuk menemukan yang bermasalah.
+
+================================================================
+END OF GROUND TRUTH DETAIL — PERTEMUAN 3
+================================================================

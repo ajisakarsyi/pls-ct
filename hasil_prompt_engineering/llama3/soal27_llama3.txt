@@ -1,0 +1,17 @@
+=== JAWABAN TUTOR ===
+Mahasiswa, mari kita bahas tentang struktur data yang paling tepat untuk beberapa kasus.
+
+Untuk kasus a) antrian pelanggan bank, struktur data yang paling tepat adalah **queue**. Queue adalah struktur data yang memungkinkan elemen ditambahkan ke dalamnya (enqueue) dan dihapus dari ujung depannya (dequeue). Dalam kasus antrian pelanggan bank, queue dapat digunakan untuk mengatur urutan pelanggan yang menunggu layanan.
+
+Untuk kasus b) fitur Ctrl+Z, struktur data yang paling tepat adalah **stack**. Stack adalah struktur data yang memungkinkan elemen ditambahkan ke atasnya (push) dan dihapus dari atasnya (pop). Dalam kasus fitur Ctrl+Z, stack dapat digunakan untuk mengatur urutan perintah yang dapat dibatalkan.
+
+Untuk kasus c) peta kota untuk rute terpendek, struktur data yang paling tepat adalah **graph**. Graph adalah struktur data yang digunakan untuk merepresentasikan hubungan antara objek. Dalam kasus peta kota, graph dapat digunakan untuk mengatur jaringan jalan dan menemukan rute terpendek antara dua titik.
+
+Untuk kasus d) struktur folder/file, struktur data yang paling tepat adalah **tree**. Tree adalah struktur data yang digunakan untuk merepresentasikan hubungan antara elemen. Dalam kasus struktur folder/file, tree dapat digunakan untuk mengatur struktur folder dan file.
+
+Untuk kasus e) validasi kurung di compiler, struktur data yang paling tepat adalah **stack**. Stack dapat digunakan untuk mengatur urutan kurung yang telah dibuka dan perlu ditutup.
+
+Untuk memastikan kamu memahami konsep struktur data ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja stack dan queue, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Saya sedang mengembangkan aplikasi pengelolaan antrian di bank online. Bagaimana cara saya dapat menggunakan struktur data queue untuk mengatur urutan pelanggan yang menunggu layanan, serta memastikan bahwa pelanggan yang telah menunggu paling lama mendapatkan layanan terlebih dahulu?

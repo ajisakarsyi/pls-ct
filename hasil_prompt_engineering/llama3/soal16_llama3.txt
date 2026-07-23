@@ -1,0 +1,47 @@
+=== JAWABAN TUTOR ===
+Baiklah, mari kita jalankan Algoritme Euclidean secara manual untuk input yang diberikan.
+
+Pertama, mari kita lihat contoh a) FPB(56, 14). Langkah-langkahnya adalah sebagai berikut:
+
+\[ 56 = 4 \times 14 + 0 \]
+
+Dari sini, kita dapat melihat bahwa sisa pembagian (modulus) adalah 0. Ini berarti bahwa 14 adalah faktor dari 56. Jadi, FPB(56, 14) adalah 14.
+
+Sekarang, mari kita lihat contoh b) FPB(77, 33). Langkah-langkahnya adalah sebagai berikut:
+
+\[ 77 = 2 \times 33 + 11 \]
+
+\[ 33 = 2 \times 11 + 11 \]
+
+Dari sini, kita dapat melihat bahwa sisa pembagian (modulus) adalah 11. Ini berarti bahwa 11 adalah faktor dari 33. Jadi, FPB(77, 33) adalah 11.
+
+Terakhir, mari kita lihat contoh c) FPB(144, 89). Langkah-langkahnya adalah sebagai berikut:
+
+\[ 144 = 1 \times 89 + 55 \]
+
+\[ 89 = 1 \times 55 + 34 \]
+
+\[ 55 = 1 \times 34 + 21 \]
+
+\[ 34 = 1 \times 21 + 13 \]
+
+\[ 21 = 1 \times 13 + 8 \]
+
+\[ 13 = 1 \times 8 + 5 \]
+
+\[ 8 = 1 \times 5 + 3 \]
+
+\[ 5 = 1 \times 3 + 2 \]
+
+\[ 3 = 1 \times 2 + 1 \]
+
+\[ 2 = 2 \times 1 + 0 \]
+
+Dari sini, kita dapat melihat bahwa sisa pembagian (modulus) adalah 0. Ini berarti bahwa 1 adalah faktor dari 2. Jadi, FPB(144, 89) adalah 1.
+
+Dengan demikian, kita telah menjalankan Algoritme Euclidean secara manual untuk input yang diberikan.
+
+Untuk memastikan kamu memahami konsep Algoritme Euclidean ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja Algoritme Euclidean, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Sebuah pabrik tekstil ingin membeli mesin jahit yang dapat menghasilkan benang dengan lebar yang dapat dibagi secara maksimal oleh FPB dari 240 dan 180. Berapa lebar benang yang dapat diproduksi oleh mesin jahit tersebut?

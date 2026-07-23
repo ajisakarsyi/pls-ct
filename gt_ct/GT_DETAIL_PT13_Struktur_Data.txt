@@ -1,0 +1,309 @@
+================================================================
+GROUND TRUTH DETAIL — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 13: Pengenalan Struktur Data
+================================================================
+
+PENJELASAN DETAIL:
+
+A. KONSEP DASAR STRUKTUR DATA
+
+Definisi: Bentuk atau tata cara menyimpan data agar dapat diolah dengan benar dan efisien.
+
+Analogi: tas koper saat bepergian — penyimpanan terorganisir mempermudah pencarian.
+
+Kebutuhan: aplikasi dengan data besar/kompleks memerlukan struktur data yang sesuai.
+Contoh: fitur undo-redo (Word/Excel) membutuhkan STACK;
+        jalur terpendek (Google Maps) membutuhkan GRAPH berbobot + algoritme Dijkstra.
+
+B. STACK (TUMPUKAN)
+
+Definisi: Struktur data dengan prinsip Last In First Out (LIFO).
+→ Data terakhir masuk = data pertama keluar.
+
+Dua operasi utama:
+- PUSH : menambahkan data baru di POSISI TERATAS
+- POP  : mengeluarkan data dari POSISI TERATAS (stack tidak boleh kosong)
+
+Visualisasi:
+  Stack awal: [5, 7, 2]  (2 di atas)
+  push(6) → [5, 7, 2, 6]
+  pop()   → keluarkan 6, stack = [5, 7, 2]
+  pop()   → keluarkan 2, stack = [5, 7]
+
+Simulasi dari slide:
+push 5 → push 7 → push 2 → pop → push 6 → push 9 → push 6 → pop → pop → pop
+Stack : [5]→[5,7]→[5,7,2]→[5,7](out:2)→[5,7,6]→[5,7,6,9]→[5,7,6,9,6]
+        →[5,7,6,9](out:6)→[5,7,6](out:9)→[5,7](out:6)
+Output pop: 2, 6, 9, 6
+
+Penerapan nyata:
+- Undo/redo pada Word, Excel, Google Docs
+- Tombol back/forward pada browser
+- Validasi kurung dalam compiler
+- Eksekusi fungsi rekursif (call stack)
+
+C. QUEUE (ANTRIAN)
+
+Definisi: Struktur data dengan prinsip First In First Out (FIFO).
+→ Data pertama masuk = data pertama keluar.
+
+Dua operasi utama:
+- ENQUEUE: menambahkan data baru di POSISI PALING AKHIR (belakang antrian)
+- DEQUEUE: mengeluarkan data dari POSISI PALING DEPAN (queue tidak boleh kosong)
+
+Visualisasi:
+  Queue awal: [5, 7, 2]  (5 di depan, 2 di belakang)
+  enqueue(6) → [5, 7, 2, 6]
+  dequeue()  → keluarkan 5, queue = [7, 2, 6]
+
+Simulasi dari slide:
+enqueue 5→enqueue 7→enqueue 2→dequeue→enqueue 6→enqueue 9→enqueue 6→dequeue→dequeue
+Queue: [5]→[5,7]→[5,7,2]→[7,2](out:5)→[7,2,6]→[7,2,6,9]→[7,2,6,9,6]
+       →[2,6,9,6](out:7)→[6,9,6](out:2)
+Output dequeue: 5, 7, 2
+
+Penerapan nyata:
+- Printer queue (antrian cetak)
+- Antrian pelayanan (bank, rumah sakit)
+- Buffer jaringan (packet data)
+- Job scheduling di sistem operasi
+
+Perbandingan STACK vs QUEUE:
+Aspek      | STACK (LIFO)      | QUEUE (FIFO)
+-----------|-------------------|------------------
+Prinsip    | Last In First Out | First In First Out
+Tambah data| push (ke atas)    | enqueue (ke belakang)
+Ambil data | pop (dari atas)   | dequeue (dari depan)
+Analogi    | Tumpukan piring   | Antrian loket
+Penggunaan | Undo, browser back| Printer, antrian layanan
+
+D. GRAPH
+
+Definisi: Struktur data terdiri dari Node/Vertex (simpul) dan Edge (garis penghubung).
+- Node/Vertex: merepresentasikan objek dunia nyata
+- Edge: merepresentasikan relasi/hubungan antar node
+
+Dua jenis graph:
+1. Directed (Berarah): hubungan antar node TIDAK simetris (ada arah)
+   - Contoh: hyperlink web (A→B tidak berarti B→A), follow media sosial
+2. Undirected (Tidak Berarah): hubungan SIMETRIS (kedua arah)
+   - Contoh: persahabatan, co-authorship, interaksi protein
+
+Graph Berbobot (Weighted Graph):
+- Setiap edge memiliki nilai/bobot (weight)
+- Merepresentasikan biaya, jarak, atau waktu
+- Contoh: jarak antar kota, biaya perjalanan
+- Digunakan untuk mencari jalur terpendek (Shortest Path)
+- Algoritme Dijkstra: salah satu algoritme paling terkenal untuk jalur terpendek
+
+Penerapan graph:
+- Peta jalan (Google Maps, GPS)
+- Jaringan sosial (Facebook, Instagram)
+- Jaringan listrik dan telekomunikasi
+- Internet (hubungan antar server/website)
+- Ilmu pengetahuan (hubungan antar konsep)
+
+E. TREE
+
+Definisi: Bentuk KHUSUS dari graph yang TIDAK mengandung cycle.
+- Cycle: jalur yang berawal dari sebuah node dan kembali ke node yang sama.
+
+Terminologi tree:
+- Root: node paling atas (akar)
+- Parent: node yang memiliki child
+- Child: node di bawah parent
+- Leaf: node yang tidak memiliki child
+- Level/Depth: jarak dari root
+
+Sifat utama: bersifat HIERARKIS — setiap node (kecuali root) punya tepat 1 parent.
+
+Penerapan tree:
+- Struktur file dan folder di komputer
+- Struktur organisasi perusahaan
+- Taksonomi ilmu biologi (Kingdom→Filum→Kelas→...→Spesies)
+- Pohon keputusan (decision tree) dalam kecerdasan buatan
+- Pohon permainan (game tree) untuk AI catur, GO, dsb.
+
+F. PEMILIHAN STRUKTUR DATA YANG TEPAT
+
+Panduan pemilihan:
+- Butuh urutan LIFO (terakhir masuk, pertama keluar) → STACK
+- Butuh urutan FIFO (pertama masuk, pertama keluar) → QUEUE
+- Data bersifat hierarkis tanpa cycle → TREE
+- Data memiliki relasi/hubungan kompleks → GRAPH
+- Hubungan simetris (dua arah) → Undirected Graph
+- Hubungan asimetris (satu arah) → Directed Graph
+- Butuh perhitungan jalur/biaya → Weighted Graph
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Simulasi Stack]
+Simulasikan operasi berikut pada stack yang awalnya kosong dan tentukan output:
+push(3) → push(8) → push(1) → pop → push(5) → pop → pop → push(2) → pop
+
+JAWABAN:
+push(3): stack=[3]
+push(8): stack=[3,8]
+push(1): stack=[3,8,1]
+pop    : keluarkan 1, stack=[3,8] → OUTPUT: 1
+push(5): stack=[3,8,5]
+pop    : keluarkan 5, stack=[3,8] → OUTPUT: 5
+pop    : keluarkan 8, stack=[3] → OUTPUT: 8
+push(2): stack=[3,2]
+pop    : keluarkan 2, stack=[3] → OUTPUT: 2
+
+Urutan output pop: 1, 5, 8, 2
+Stack akhir: [3]
+
+[SOAL 2 — Simulasi Queue]
+Simulasikan operasi berikut pada queue yang awalnya kosong dan tentukan output:
+enqueue(A) → enqueue(B) → enqueue(C) → dequeue → enqueue(D) → dequeue → dequeue → enqueue(E)
+
+JAWABAN:
+enqueue(A): queue=[A]
+enqueue(B): queue=[A,B]
+enqueue(C): queue=[A,B,C]
+dequeue   : keluarkan A, queue=[B,C] → OUTPUT: A
+enqueue(D): queue=[B,C,D]
+dequeue   : keluarkan B, queue=[C,D] → OUTPUT: B
+dequeue   : keluarkan C, queue=[D] → OUTPUT: C
+enqueue(E): queue=[D,E]
+
+Urutan output dequeue: A, B, C
+Queue akhir: [D, E]
+
+[SOAL 3 — Pemilihan Struktur Data]
+Tentukan struktur data yang paling tepat untuk setiap kasus berikut dan berikan alasan!
+
+a) Sistem antrian pelanggan di bank (siapa datang dulu, dilayani dulu)
+b) Fitur "Ctrl+Z" (undo) pada aplikasi desain grafis
+c) Representasi peta kota untuk mencari rute terpendek
+d) Struktur folder dan file di sistem operasi
+e) Validasi pasangan kurung pada compiler: { ( [ ] ) }
+f) Sistem rekomendasi teman di media sosial ("mutual friends")
+
+JAWABAN:
+a) QUEUE (FIFO): pelanggan yang datang lebih awal dilayani lebih dahulu.
+
+b) STACK (LIFO): setiap perubahan di-push; Ctrl+Z men-pop perubahan terakhir.
+
+c) WEIGHTED DIRECTED/UNDIRECTED GRAPH: kota = node, jalan = edge, jarak = bobot.
+   Directed jika ada jalan satu arah, Undirected jika semua jalan dua arah.
+   Gunakan algoritme Dijkstra untuk jalur terpendek.
+
+d) TREE: struktur folder/file bersifat hierarkis tanpa cycle (folder induk→subfolder→file).
+
+e) STACK (LIFO): saat menemukan kurung buka → push. Saat menemukan kurung tutup →
+   pop dari stack dan periksa apakah pasangannya cocok.
+
+f) UNDIRECTED GRAPH: hubungan pertemanan bersifat simetris (A berteman B = B berteman A).
+   "Mutual friends" = node yang terhubung dengan kedua node (common neighbor).
+
+[SOAL 4 — Validasi Kurung dengan Stack]
+Jelaskan bagaimana Stack digunakan untuk memvalidasi string kurung: "{([])<>()}"!
+Apakah string ini valid?
+
+JAWABAN:
+Algoritme: untuk setiap karakter:
+- Jika kurung BUKA ({,[,(,<) → PUSH ke stack
+- Jika kurung TUTUP (},],),>) → POP dari stack dan cek apakah cocok
+
+Trace untuk "{([])<>()}":
+{ → push {, stack=[{]
+( → push (, stack=[{,(]
+[ → push [, stack=[{,(,[]
+] → pop [, cocok dengan ], stack=[{,(] ✓
+) → pop (, cocok dengan ), stack=[{] ✓
+< → push <, stack=[{,<]
+> → pop <, cocok dengan >, stack=[{] ✓
+( → push (, stack=[{,(]
+) → pop (, cocok dengan ), stack=[{] ✓
+} → pop {, cocok dengan }, stack=[] ✓
+
+Stack akhir kosong dan semua pasangan cocok → String VALID ✓
+
+[SOAL 5 — Directed vs. Undirected Graph]
+Tentukan apakah situasi berikut lebih tepat menggunakan directed atau undirected graph:
+a) Jaringan persahabatan di Facebook
+b) Sistem follow di Twitter/Instagram
+c) Jaringan jalan satu arah di kota
+d) Jaringan transmisi listrik antar gardu
+e) Hubungan "cite" antar paper ilmiah (A mengutip B)
+
+JAWABAN:
+a) UNDIRECTED: persahabatan di Facebook simetris (A berteman B = B berteman A).
+b) DIRECTED: follow tidak simetris (A follow B tidak berarti B follow A).
+c) DIRECTED: jalan satu arah punya arah spesifik (A→B tidak berarti B→A bisa dilalui).
+d) UNDIRECTED: transmisi listrik bisa mengalir dua arah di jaringan.
+e) DIRECTED: sitasi satu arah (A mengutip B tidak berarti B mengutip A).
+
+[SOAL 6 — Latihan Stack: Simulasi Antrian Printer]
+Sebuah printer menerima dokumen secara berurutan: D1, D2, D3. Printer menggunakan
+QUEUE. Ketika D2 sedang dicetak, masuk D4 dan D5. Setelah D2 selesai, masuk D6.
+Tuliskan urutan dokumen yang akan dicetak!
+
+JAWABAN:
+1. D1 masuk → enqueue(D1): queue=[D1]
+2. D2 masuk → enqueue(D2): queue=[D1,D2]
+3. D3 masuk → enqueue(D3): queue=[D1,D2,D3]
+4. Printer cetak D1 → dequeue: queue=[D2,D3]
+5. Printer cetak D2 (sedang berjalan), masuk D4 → enqueue(D4): queue=[D2,D3,D4]
+6. Masuk D5 → enqueue(D5): queue=[D2,D3,D4,D5]
+7. D2 selesai → dequeue: queue=[D3,D4,D5]
+8. Masuk D6 → enqueue(D6): queue=[D3,D4,D5,D6]
+
+Urutan cetak: D1, D2, D3, D4, D5, D6
+
+[SOAL 7 — Jalur Terpendek (Graph Berbobot)]
+Diberikan graph berbobot dengan node A, B, C, D, E dan bobot sebagai berikut:
+A-B: 4, A-C: 2, B-C: 1, B-D: 5, C-D: 8, C-E: 10, D-E: 2, B-E: 7
+
+Tentukan jalur terpendek dari A ke E beserta total bobotnya!
+
+JAWABAN:
+Semua jalur dari A ke E:
+1. A→B→E           : 4+7 = 11
+2. A→B→D→E         : 4+5+2 = 11
+3. A→C→E           : 2+10 = 12
+4. A→C→D→E         : 2+8+2 = 12
+5. A→B→C→E         : 4+1+10 = 15
+6. A→B→C→D→E       : 4+1+8+2 = 15
+7. A→C→B→D→E       : 2+1+5+2 = 10 ✓ (terpendek!)
+8. A→C→B→E         : 2+1+7 = 10 ✓ (sama!)
+
+Jalur terpendek: A→C→B→D→E atau A→C→B→E, keduanya dengan bobot = 10.
+
+[SOAL 8 — Aplikasi Tree]
+Gambarkan/deskripsikan struktur tree untuk hierarki folder komputer berikut:
+Dokumen/
+  ├── Kuliah/
+  │   ├── Semester1/
+  │   │   ├── KOM2102.pdf
+  │   │   └── MTK101.pdf
+  │   └── Semester2/
+  │       └── FIS201.pdf
+  └── Personal/
+      └── Foto.jpg
+
+Identifikasi: root, leaf node, parent dari "Semester1", children dari "Kuliah"!
+
+JAWABAN:
+Struktur Tree:
+         Dokumen (ROOT)
+        /              \
+     Kuliah           Personal
+    /      \              |
+Semester1  Semester2    Foto.jpg (LEAF)
+   /    \       |
+KOM2102  MTK101  FIS201 (semua LEAF)
+
+Root: Dokumen
+Leaf nodes: KOM2102.pdf, MTK101.pdf, FIS201.pdf, Foto.jpg
+Parent dari "Semester1": Kuliah
+Children dari "Kuliah": Semester1, Semester2
+
+================================================================
+END OF GROUND TRUTH DETAIL — PERTEMUAN 13
+================================================================

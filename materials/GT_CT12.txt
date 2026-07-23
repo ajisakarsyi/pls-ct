@@ -1,0 +1,186 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 12: Fungsi
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Motivasi dan Konsep Dasar Fungsi]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Dalam penyusunan algoritme, seringkali terdapat situasi di mana blok instruksi yang sama perlu diulang untuk menangani data yang berbeda. Sebagai contoh, sebuah algoritme yang menentukan suara kucing berdasarkan beratnya harus mengulangi blok percabangan yang identik untuk setiap kucing yang berbeda. Pendekatan seperti ini menghasilkan kode yang buruk karena bersifat redundan (kode yang sama ditulis berulang kali), sulit dibaca karena kode menjadi panjang dan tidak efisien, serta sulit dikelola karena jika ada perubahan logika, perubahan tersebut harus dilakukan di banyak tempat. Bayangkan jika terdapat 100 kucing, maka perubahan satu logika saja mengharuskan pengeditan ratusan baris kode.
+
+Solusi dari permasalahan ini adalah penggunaan fungsi. Dengan fungsi, kode dapat digunakan kembali tanpa ditulis ulang (reusable), blok kode diberi nama sehingga mudah dipanggil kapan pun dibutuhkan, dan perubahan logika cukup dilakukan di satu tempat saja yaitu di dalam definisi fungsi.
+
+Analogi sederhana untuk memahami fungsi adalah resep masakan. Misalnya, resep membuat jus mangga memiliki nama fungsi (buatJusMangga), parameter berupa bahan-bahan (air, mangga, gula), dan return berupa hasil jus yang siap diminum. Resep tersebut dapat digunakan kapan pun tanpa harus menulis ulang setiap langkahnya setiap kali ingin membuat jus.
+
+
+----------------------------------------------------------------
+[MATERI 2: Anatomi dan Definisi Fungsi]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Sebuah fungsi memiliki lima komponen utama yang membentuk strukturnya, sebagaimana terlihat pada contoh fungsi kuadrat berikut:
+
+    function kuadrat(x: int) : int
+        t = x * x
+        return t
+
+Penjelasan setiap komponen:
+1. Nama Fungsi (function kuadrat): nama yang digunakan untuk memanggil fungsi tersebut dari bagian lain algoritme.
+2. Parameter (x: int): input yang diterima fungsi, dituliskan dalam format namaVariabel:tipe_data. Apabila terdapat lebih dari satu parameter, digunakan tanda koma sebagai pemisah.
+3. Tipe Hasil atau Return Type (: int): tipe data dari output yang akan dihasilkan dan dikembalikan oleh fungsi.
+4. Tubuh Fungsi: blok logika atau instruksi yang dijalankan ketika fungsi dipanggil.
+5. Perintah return: perintah untuk mengembalikan nilai hasil ke pemanggil fungsi.
+
+Prinsip utama yang perlu diingat adalah: Parameter merupakan input fungsi, sedangkan return merupakan output fungsi.
+
+Contoh definisi dan pemanggilan fungsi untuk kasus suara kucing:
+
+Definisi fungsi:
+    function meowing(nama: string, berat: int)
+        if berat > 5 then
+            print(nama, 'bilang meong meong')
+        else
+            print(nama, 'bilang miaw miaw')
+
+Pemanggilan fungsi:
+    meowing('Bean', 5)
+    meowing('Mimi', 3)
+    meowing('Airy', 7)
+
+Dengan pendekatan ini, jika ingin mengubah logika suara kucing, perubahan cukup dilakukan satu kali di dalam definisi fungsi, dan seluruh pemanggilan fungsi akan otomatis mengikuti perubahan tersebut.
+
+
+----------------------------------------------------------------
+[MATERI 3: Fungsi vs. Prosedur]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Dalam konteks algoritme dan pemrograman, terdapat perbedaan mendasar antara dua jenis blok kode yang dapat diberi nama dan dipanggil kembali, yaitu prosedur dan fungsi.
+
+Prosedur (Procedure) adalah blok kode yang melakukan serangkaian instruksi tertentu namun tidak mengembalikan nilai kepada pemanggil. Prosedur biasanya digunakan untuk menjalankan aksi seperti mencetak ke layar atau menjalankan suatu proses. Contoh: instruksi print() adalah prosedur karena ia menjalankan aksi tanpa menghasilkan nilai yang dapat disimpan. Fungsi meowing yang dideklarasikan tanpa return type dan langsung melakukan print di dalamnya juga tergolong prosedur.
+
+Fungsi (Function) adalah blok kode yang memproses input dan mengembalikan sebuah nilai kepada pemanggil menggunakan perintah return. Nilai yang dikembalikan tersebut dapat disimpan dalam variabel atau digunakan langsung dalam ekspresi logika lain. Contoh: fungsi kuadrat(5) mengembalikan nilai 25, yang dapat disimpan dalam variabel untuk digunakan lebih lanjut.
+
+Fungsi bersifat lebih fleksibel dibandingkan prosedur karena hasilnya dapat dikombinasikan dengan operasi lain. Contoh konversi prosedur meowing menjadi fungsi yang mengembalikan nilai:
+
+    function getMeowSound(berat: int) : string
+        if berat > 5 then
+            return('meong meong')
+        else
+            return('miaw miaw')
+
+Cara penggunaan:
+    nama = "Bean"
+    suara = getMeowSound(5)
+    print(nama, "bilang", suara)
+    Output: Bean bilang miaw miaw
+
+
+----------------------------------------------------------------
+[MATERI 4: Penggunaan Parameter yang Benar]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Parameter merupakan jantung dari sebuah fungsi karena menentukan input yang diterima. Pemanggilan fungsi harus dilakukan dengan memperhatikan tiga aspek parameter secara ketat: urutan parameter, jumlah parameter, dan tipe data parameter. Kesalahan pada salah satu aspek tersebut akan menyebabkan error.
+
+Contoh dengan definisi: function meowing(nama: string, berat: int):
+- meowing('Speedy', 8) → VALID, urutan dan tipe data sesuai.
+- meowing(8, 'Speedy') → ERROR, urutan tipe data terbalik (integer diberikan ke parameter string dan sebaliknya).
+- meowing('Lady', 0, 0) → ERROR, jumlah parameter salah (tiga argumen diberikan, sementara fungsi hanya menerima dua parameter).
+- meowing('Spot', '10') → ERROR, tipe data salah ('10' adalah string, sementara parameter berat bertipe integer).
+
+
+----------------------------------------------------------------
+[MATERI 5: Fungsi sebagai Implementasi Dekomposisi dan Abstraksi]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Fungsi merupakan implementasi konkret dari dua pilar utama berpikir komputasional, yaitu dekomposisi dan abstraksi. Dekomposisi diterapkan dengan cara memecah algoritme besar menjadi fungsi-fungsi yang lebih kecil dan fokus pada tugas spesifik. Abstraksi diterapkan dengan cara menyembunyikan kerumitan implementasi di dalam fungsi sehingga algoritme utama tidak perlu mengetahui detail cara kerja fungsi tersebut, cukup "mempercayai" bahwa fungsi akan menghasilkan output yang benar.
+
+Hal ini diilustrasikan melalui tiga latihan berikut:
+
+1. Latihan Pasangan Habis Dibagi:
+Problem: Hitung total pasangan (a, b) dari N pasangan bilangan di mana a habis dibagi b atau b habis dibagi a. Penyelesaian menggunakan dekomposisi menjadi satu algoritme utama dan satu fungsi pengecekan bernama habis_dibagi(a, b).
+
+Fungsi pengecekan (menangani kasus khusus bagi nol):
+    function habis_dibagi(a: int, b: int) : int
+        if (a==0 and b==0) then return 0
+        if (a==0 or b==0) then return 1
+        if (a%b==0 or b%a==0) then
+            return 1
+        else
+            return 0
+
+Algoritme utama:
+    procedure latihan()
+        read(N)
+        sum = 0
+        for i = 1 to N do
+            read(a, b)
+            if (habis_dibagi(a, b)==1) then
+                sum = sum + 1
+        print(sum)
+
+Abstraksi diterapkan karena algoritme utama tidak perlu mengetahui detail penanganan kasus bagi nol; kerumitan tersebut disembunyikan di dalam fungsi habis_dibagi.
+
+2. Latihan Total Luas Lahan:
+Problem: Hitung total luas dari N persegi panjang.
+
+Fungsi bantu:
+    function luas(P: int, L: int) : int
+        return P * L
+
+Algoritme utama:
+    procedure totalLuas()
+        read(N)
+        sum = 0
+        for i = 1 to N do
+            read(A, B)
+            area = luas(A, B)
+            sum = sum + area
+        print(sum)
+
+3. Latihan Fungsi Memanggil Fungsi:
+Problem: Diberikan N buah lingkaran dengan radius r masing-masing. Hitung total keliling dari semua lingkaran yang luasnya di atas 100. Penyelesaian memerlukan dua fungsi bantu: hitungLuas(r) dan hitungKeliling(r).
+
+Algoritme utama:
+    procedure hitungTotalKeliling()
+        read(N)
+        totalKeliling = 0
+        for i = 1 to N do
+            read(radius)
+            luasLingkaran = hitungLuas(radius)
+            if (luasLingkaran > 100) then
+                keliling = hitungKeliling(radius)
+                totalKeliling = totalKeliling + keliling
+        print(totalKeliling)
+
+Latihan ini menunjukkan bahwa fungsi-fungsi kecil yang terfokus dapat bekerja sama untuk menyelesaikan masalah yang lebih besar dan kompleks.
+
+
+----------------------------------------------------------------
+[MATERI 6: Ringkasan — Manfaat dan Prinsip Penggunaan Fungsi]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Fungsi adalah blok kode yang diberi nama dan dapat digunakan kembali (reusable). Fungsi merupakan pilar implementasi dari dua konsep inti berpikir komputasional: dekomposisi (memecah masalah besar menjadi bagian-bagian kecil yang terfokus) dan abstraksi (menyembunyikan kerumitan di balik antarmuka yang sederhana). Parameter adalah input untuk fungsi, sedangkan return adalah output dari fungsi.
+
+Tiga manfaat utama penggunaan fungsi dalam penyusunan algoritme adalah:
+1. DRY (Don't Repeat Yourself): menghilangkan redundansi dengan tidak mengulang kode yang sama di banyak tempat.
+2. Mudah dibaca: kode utama menjadi lebih bersih dan mudah dipahami karena detail implementasi tersembunyi di dalam fungsi.
+3. Mudah dikelola: perubahan logika cukup dilakukan di satu tempat yaitu di dalam definisi fungsi, dan perubahan tersebut otomatis berlaku di seluruh tempat fungsi dipanggil.
+
+Fungsi sebaiknya digunakan kapan pun ditemukan pola atau pengulangan logika dalam penyusunan algoritme.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

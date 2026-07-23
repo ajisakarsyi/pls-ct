@@ -1,0 +1,35 @@
+Berikut adalah implementasi fungsi-fungsi tersebut dalam bahasa pemrograman Python:
+```python
+import math
+
+def hitungLuas(r):
+    return math.pi * (r ** 2)
+
+def hitungKeliling(r):
+    return 2 * math.pi * r
+
+def total_keliling_lingkaran():
+    total = 0
+    i = 1
+    while True:
+        luas = hitungLuas(i)
+        if luas > 100:
+            keliling = hitungKeliling(i)
+            print(f"Lingkaran dengan jari-jari {i} memiliki luas {luas:.2f} dan keliling {keliling:.2f}")
+            total += keliling
+        i += 1
+    return total
+
+print("Total keliling lingkaran: ", total_keliling_lingkaran())
+```
+Algoritme utama adalah sebagai berikut:
+
+1. Deklarasi variabel `total` untuk menampung hasil total keliling lingkaran.
+2. Deklarasi variabel `i` sebagai counter jari-jari lingkaran.
+3. Perulangan menggunakan `while True` untuk memantau setiap nilai jari-jari.
+4. Dalam setiap iterasi, hitung luas dan keliling lingkaran dengan fungsi `hitungLuas()` dan `hitungKeliling()`, masing-masing.
+5. Cek apakah luas lingkaran lebih besar dari 100. Jika true, maka tambahkan keliling lingkaran ke dalam variabel `total`.
+6. Tambahkan 1 ke nilai jari-jari `i` dan ulangi perulangan.
+7. Setelah perulangan selesai, return nilai `total`.
+
+Note: Anda dapat mengubah nilai PI dengan cara lain, seperti menggunakan konstanta yang ditetapkan secara manual atau menggunakan library matematika lainnya.

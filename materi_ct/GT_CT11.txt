@@ -1,0 +1,185 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 11: Algoritme — Struktur Kontrol Perulangan
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Konsep Dasar Perulangan]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Perulangan (loop) adalah struktur kendali yang mengulangi serangkaian instruksi hingga suatu kondisi tertentu terpenuhi. Perulangan merupakan salah satu dari dua jenis struktur kontrol utama dalam algoritme, di samping percabangan. Penggunaan perulangan sangat diperlukan ketika suatu instruksi atau sekelompok instruksi perlu dieksekusi lebih dari satu kali, baik dalam jumlah yang sudah diketahui sejak awal maupun dalam jumlah yang bergantung pada kondisi tertentu saat algoritme berjalan. Contoh permasalahan yang memerlukan perulangan adalah menentukan bilangan terbesar dari sejumlah n bilangan, di mana nilai n diberikan oleh pengguna.
+
+Terdapat tiga jenis perulangan utama yang dikenal dalam algoritme, yaitu:
+1. Iterasi Tetap: perulangan dengan jumlah pengulangan yang sudah ditentukan sejak awal (perulangan "for").
+2. Iterasi Berdasarkan Kondisi: perulangan yang berjalan selama kondisi tertentu terpenuhi, dengan jumlah pengulangan yang tidak selalu diketahui sebelumnya (perulangan "while", "do-while", "do-until").
+3. Iterasi Berbasis Koleksi: perulangan yang mengiterasi setiap elemen dalam suatu kumpulan data (perulangan "for-in").
+
+
+----------------------------------------------------------------
+[MATERI 2: Iterasi Tetap (Perulangan "for")]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Iterasi tetap adalah jenis perulangan di mana jumlah pengulangan sudah ditentukan secara eksplisit sebelum perulangan dimulai. Format penulisan perulangan for dalam pseudocode adalah sebagai berikut:
+
+    for <var> = <awal> to <akhir> step <langkah> do
+        <body>
+
+Penjelasan: variabel penghitung <var> mengambil nilai secara berurutan mulai dari nilai <awal> hingga <akhir>, dengan penambahan sebesar <langkah> pada setiap iterasi. Instruksi dalam <body> dijalankan untuk setiap nilai yang diambil oleh variabel penghitung. Apabila bagian step tidak disertakan, nilai <langkah> diasumsikan sebesar 1.
+
+Kompleksitas waktu perulangan for untuk mencetak 1 hingga n adalah linear, yaitu O(n), karena jumlah operasi bertumbuh sebanding dengan nilai n.
+
+Berikut adalah beberapa contoh penerapan perulangan iterasi tetap:
+
+Contoh 1 — Mencetak bilangan 1 sampai 5 (langkah 1):
+    for i = 1 to 5 do
+        print(i)
+    Output: 1, 2, 3, 4, 5
+
+Contoh 2 — Mencetak bilangan dengan langkah 3:
+    for i = 1 to 10 step 3 do
+        print(i)
+    Output: 1, 4, 7, 10
+
+Contoh 3 — Mencetak bilangan secara menurun (langkah negatif):
+    for i = 5 to 0 step -1 do
+        print(i)
+    Output: 5, 4, 3, 2, 1, 0
+
+Contoh 4 — Mencetak bilangan dari 100 hingga 200 dengan langkah 11:
+    for i = 100 to 200 step 11 do
+        print(i)
+    Output: 100, 111, 122, 133, 144, 155, 166, 177, 188, 199
+
+Penerapan perulangan for dalam latihan mencakup: mencetak 10 bilangan genap pertama, menghitung dan mencetak jumlah 10 bilangan genap pertama, serta menghitung dan mencetak jumlah n bilangan genap pertama di mana nilai n diberikan oleh pengguna. Dua pendekatan pseudocode untuk mencetak 10 bilangan genap pertama adalah:
+- Pendekatan 1: for i = 0 to 18 step 2 do; print(i)
+- Pendekatan 2: x = 0; for i = 1 to 10 do; print(x); x = x + 2
+
+
+----------------------------------------------------------------
+[MATERI 3: Iterasi Berdasarkan Kondisi (Perulangan "while")]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Iterasi berdasarkan kondisi digunakan ketika jumlah pengulangan yang diperlukan tidak selalu diketahui sebelumnya, melainkan bergantung pada kondisi yang dievaluasi selama algoritme berjalan. Format penulisan perulangan while dalam pseudocode adalah:
+
+    while <kondisi> do
+        <body>
+
+Penjelasan: ekspresi logika <kondisi> dievaluasi di awal setiap iterasi. Jika <kondisi> bernilai True, instruksi dalam <body> dikerjakan, kemudian kembali lagi ke pemeriksaan <kondisi>. Jika <kondisi> bernilai False, perulangan selesai dan algoritme melanjutkan ke instruksi berikutnya. Apabila <kondisi> tidak pernah bernilai False, perulangan tidak akan pernah berakhir (infinite loop), yang merupakan kesalahan logika yang harus dihindari.
+
+Berikut adalah beberapa contoh penerapan perulangan while:
+
+Contoh 1 — Mencetak bilangan 1 sampai 5:
+    i = 1
+    while i <= 5 do
+        print(i)
+        i = i + 1
+    Output: 1, 2, 3, 4, 5. Nilai i di akhir kode adalah 6.
+
+Contoh 2 — Mencetak bilangan dengan penambahan 3:
+    i = 1
+    while i <= 10 do
+        print(i)
+        i = i + 3
+    Output: 1, 4, 7, 10. Nilai i di akhir kode adalah 13.
+
+Contoh 3 — Mencetak bilangan secara menurun:
+    i = 5
+    while i >= 0 do
+        print(i)
+        i = i - 1
+    Output: 5, 4, 3, 2, 1, 0. Nilai i di akhir kode adalah -1.
+
+Contoh 4 — Pembagian berulang dengan kondisi modulo:
+    x = 405
+    while x mod 3 == 0 do
+        x = x / 3
+        print(x)
+    Output: 135, 45, 15, 5. Nilai x di akhir kode adalah 5 (karena 5 tidak habis dibagi 3).
+
+
+----------------------------------------------------------------
+[MATERI 4: Perulangan Interaktif dan Sentinel]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Perulangan interaktif adalah bentuk perulangan while yang melibatkan input dari pengguna di dalam body perulangan dan berjalan selama pengguna memilih untuk melanjutkan. Contohnya adalah algoritme yang menghitung rata-rata dari sejumlah bilangan yang dimasukkan oleh pengguna selama pengguna menjawab "yes":
+
+    sum = 0
+    count = 0
+    more = "yes"
+    while more == "yes" do
+        read(x)
+        sum = sum + x
+        count = count + 1
+    print(sum / count)
+
+Sentinel adalah nilai khusus yang berfungsi sebagai penanda untuk mengakhiri perulangan. Daripada meminta pengguna secara eksplisit untuk melanjutkan atau berhenti, pengguna cukup memasukkan nilai sentinel (nilai yang tidak mungkin menjadi data valid) untuk menghentikan perulangan. Contoh penggunaan sentinel dengan nilai -99 sebagai penanda akhir input:
+
+    sum = 0
+    count = -1
+    x = 0
+    while x <> -99 do
+        sum = sum + x
+        count = count + 1
+        read(x)
+    print(sum / count)
+
+Dalam contoh ini, selama nilai yang dimasukkan bukan -99, nilai tersebut akan terus diakumulasikan. Ketika pengguna memasukkan -99, perulangan berhenti dan rata-rata dicetak.
+
+
+----------------------------------------------------------------
+[MATERI 5: Perulangan dengan Pengecekan di Akhir (do-while dan do-until)]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Berbeda dengan perulangan while yang mengevaluasi kondisi di awal setiap iterasi, terdapat dua jenis perulangan yang melakukan pengecekan kondisi di akhir setiap iterasi, yaitu do-while dan do-until.
+
+Pada perulangan do-while, instruksi dalam body dieksekusi terlebih dahulu, kemudian kondisi dievaluasi. Jika kondisi bernilai True, perulangan kembali ke body. Jika False, perulangan berhenti. Implikasinya adalah body selalu dieksekusi minimal satu kali, terlepas dari nilai kondisi awal.
+
+Pada perulangan do-until, instruksi dalam body juga dieksekusi terlebih dahulu sebelum kondisi dievaluasi. Perbedaannya dengan do-while terletak pada logika kondisi: perulangan do-until berhenti ketika kondisi bernilai True (bukan False), sehingga perulangan terus berlanjut selama kondisi masih False.
+
+Perbedaan penting antara while dan do-while/do-until adalah bahwa pada while, body bisa tidak pernah dieksekusi jika kondisi langsung bernilai False dari awal, sedangkan pada do-while dan do-until, body selalu dieksekusi paling sedikit satu kali.
+
+
+----------------------------------------------------------------
+[MATERI 6: Perulangan Bersarang (Nested Loop)]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Perulangan bersarang (nested loop) adalah konstruksi di mana sebuah perulangan berada di dalam perulangan lain. Perulangan yang berada di dalam disebut perulangan dalam (inner loop), sedangkan yang berada di luar disebut perulangan luar (outer loop). Untuk setiap satu kali iterasi perulangan luar, perulangan dalam akan menyelesaikan seluruh iterasinya dari awal hingga akhir.
+
+Contoh perulangan bersarang untuk mencetak kotak bintang 4 baris × 5 kolom:
+    for i = 1 to 4 do
+        for j = 1 to 5 do
+            print("*", end="")
+        print()
+    Output: empat baris yang masing-masing berisi lima karakter bintang (*****).
+
+Jumlah total operasi pencetakan bintang untuk kotak dengan m baris dan n kolom adalah m × n kali, sehingga kompleksitas waktunya adalah O(m × n).
+
+Dalam merancang perulangan bersarang, langkah-langkah yang dianjurkan adalah: (1) tentukan pembagian tugas antara perulangan luar dan perulangan dalam — misalnya perulangan luar mengurus pergantian baris dan perulangan dalam mengurus komponen dalam satu baris; (2) rancang bagian luar terlebih dahulu; (3) rancang bagian dalam; kemudian (4) gabungkan keduanya.
+
+Latihan penerapan perulangan bersarang mencakup pembuatan berbagai bentuk segitiga siku-siku menggunakan karakter bintang. Untuk input tinggi segitiga sebesar 4, output yang diharapkan adalah pola bintang yang bertambah dari 1 bintang di baris pertama hingga 4 bintang di baris terakhir. Variasi bentuk segitiga lainnya dapat dicapai dengan mengubah logika perulangan dalam untuk mengatur posisi dan jumlah bintang pada setiap baris.
+
+
+----------------------------------------------------------------
+[MATERI 7: Ringkasan]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Struktur kontrol perulangan memungkinkan algoritme untuk mengatur arah jalannya eksekusi secara berulang dan dinamis. Struktur kontrol seringkali melibatkan evaluasi ekspresi logika sebagai kondisi pengendali jalannya perulangan. Terdapat tiga jenis perulangan utama: for untuk jumlah iterasi yang sudah diketahui, while untuk iterasi yang bergantung pada kondisi dengan pengecekan di awal, serta do-while dan do-until untuk iterasi dengan pengecekan di akhir yang menjamin body selalu dieksekusi minimal sekali. Perulangan bersarang memungkinkan penyelesaian masalah yang melibatkan dimensi berganda. Prinsip utama dalam merancang perulangan adalah memastikan algoritme yang dihasilkan benar, efisien, dan mudah dipahami.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

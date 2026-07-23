@@ -1,0 +1,11 @@
+=== JAWABAN TUTOR ===
+Baiklah, mari kita bahas tentang pseudocode yang telah kita buat sebelumnya untuk menentukan huruf mutu berdasarkan nilai yang diperoleh. Pseudocode tersebut menggunakan logika if-else untuk membandingkan nilai dengan kriteria mutu yang telah ditentukan.
+
+Dalam pseudocode tersebut, kita memiliki beberapa kondisi yang akan dievaluasi secara berurutan. Pertama, kita memeriksa apakah nilai sama dengan atau lebih besar dari 80. Jika ya, maka huruf mutu adalah A. Jika tidak, kita lanjutkan ke kondisi berikutnya, yaitu apakah nilai antara 70 dan 79. Jika ya, maka huruf mutu adalah B. Kita melanjutkan proses ini hingga kita menemukan kondisi yang sesuai dengan nilai yang diperoleh.
+
+Dengan demikian, pseudocode tersebut dapat menentukan huruf mutu dengan tepat berdasarkan nilai yang diperoleh. Ini menunjukkan bahwa kita dapat menggunakan logika if-else untuk membuat keputusan berdasarkan kondisi yang telah ditentukan.
+
+Untuk memastikan kamu memahami konsep ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja pseudocode di atas dalam menentukan huruf mutu.
+
+=== FOLLOW-UP QUESTION ===
+Saya ingin membuat program untuk mencetak 20 bilangan ganjil pertama dan kemudian menghitung jumlah digit dari setiap bilangan tersebut. Bagaimana cara saya dapat menulis pseudocode untuk mencapai tujuan ini?

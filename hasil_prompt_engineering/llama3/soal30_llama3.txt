@@ -1,0 +1,25 @@
+=== JAWABAN TUTOR ===
+Mahasiswa, mari kita bahas tentang directed dan undirected graph.
+
+Pertama-tama, mari kita definisikan apa itu directed dan undirected graph.
+
+Directed graph adalah graf yang memiliki arah, artinya setiap simpul memiliki kemungkinan mengarah ke simpul lain. Sementara itu, undirected graph adalah graf yang tidak memiliki arah, artinya setiap simpul tidak memiliki kemungkinan mengarah ke simpul lain.
+
+Sekarang, mari kita lihat contoh-contoh yang kamu berikan:
+
+a) Pertemanan Facebook: Pada Facebook, kita dapat mengirimkan permintaan pertemanan kepada orang lain, dan jika orang lain menerima permintaan tersebut, maka kita menjadi teman. Dalam hal ini, hubungan antara kita dan orang lain memiliki arah, yaitu kita mengirimkan permintaan pertemanan kepada orang lain. Jadi, ini adalah contoh directed graph.
+
+b) Follow Twitter: Pada Twitter, kita dapat mengikuti akun orang lain, dan jika orang lain mengikuti kita, maka kita menjadi pengikutnya. Dalam hal ini, hubungan antara kita dan orang lain memiliki arah, yaitu kita mengikuti akun orang lain. Jadi, ini juga adalah contoh directed graph.
+
+c) Jalan satu arah: Pada jalan satu arah, kita dapat melihat bahwa jalan memiliki arah, yaitu kita dapat berjalan dari titik A ke titik B, tetapi tidak dapat berjalan dari titik B ke titik A. Dalam hal ini, hubungan antara titik A dan titik B memiliki arah, yaitu kita dapat berjalan dari titik A ke titik B. Jadi, ini adalah contoh directed graph.
+
+d) Transmisi listrik: Pada transmisi listrik, listrik dapat mengalir dari gardu induk ke gardu penyalur, tetapi tidak dapat mengalir dari gardu penyalur ke gardu induk. Dalam hal ini, hubungan antara gardu induk dan gardu penyalur memiliki arah, yaitu listrik dapat mengalir dari gardu induk ke gardu penyalur. Jadi, ini juga adalah contoh directed graph.
+
+e) Sitasi paper ilmiah: Pada sitasi paper ilmiah, kita dapat melihat bahwa paper A mengutip paper B, tetapi tidak dapat melihat bahwa paper B mengutip paper A. Dalam hal ini, hubungan antara paper A dan paper B memiliki arah, yaitu paper A mengutip paper B. Jadi, ini juga adalah contoh directed graph.
+
+Dari contoh-contoh di atas, kita dapat melihat bahwa semua contoh tersebut memiliki arah, yaitu hubungan antara dua simpul memiliki arah tertentu. Jadi, semua contoh tersebut adalah contoh directed graph.
+
+Untuk memastikan kamu memahami konsep directed dan undirected graph ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja directed graph, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Apakah jaringan relasi antara pengguna dan produk yang mereka sukai di platform e-commerce dapat digambarkan menggunakan directed graph jika pengguna dapat memberikan rating positif atau negatif terhadap produk?

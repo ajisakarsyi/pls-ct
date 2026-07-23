@@ -1,0 +1,260 @@
+================================================================
+GROUND TRUTH DETAIL — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 10: Struktur Kontrol — Percabangan
+================================================================
+
+PENJELASAN DETAIL:
+
+A. STRUKTUR KONTROL
+
+Default eksekusi algoritme: sekuensial (urut dari atas ke bawah).
+Struktur kontrol mengubah urutan pengerjaan untuk mencapai tujuan algoritme.
+
+Dua jenis struktur kontrol:
+1. Percabangan (Conditionals): memilih instruksi berdasarkan kondisi
+2. Perulangan (Loop): mengulang instruksi sampai kondisi terpenuhi
+
+B. PERCABANGAN — KONDISI
+
+Kondisi = ekspresi yang bernilai True atau False.
+Sumber kondisi:
+- Operasi relasional: x >= 3, a == b, y != 0
+- Operasi logika: (1 < x) AND (x <= 5), NOT (a == b)
+
+C. BENTUK-BENTUK PERCABANGAN
+
+1. IF-THEN (satu arah):
+   if (kondisi) then
+     instruksi
+   → Instruksi hanya dijalankan jika kondisi True.
+   → Jika False, langsung ke baris berikutnya.
+
+   Contoh:
+   if (cloudy) then
+     Bring umbrella
+
+2. IF-THEN-ELSE (dua arah):
+   if (kondisi) then
+     instruksi-1
+   else
+     instruksi-2
+   → Instruksi-1 jika True, instruksi-2 jika False. Salah satu PASTI dijalankan.
+
+   Contoh:
+   if (temp > 20) then
+     Wear Shirt
+   else
+     Wear Sweater
+
+3. PERCABANGAN BERSARANG BIASA (nested):
+   if (kondisi-1) then
+     if (kondisi-2) then
+       instruksi-1
+     else
+       instruksi-2
+   else
+     instruksi-3
+
+4. PERCABANGAN BERSARANG SEKUENSIAL (else-if):
+   if (kondisi-1) then
+     instruksi-1
+   else if (kondisi-2) then
+     instruksi-2
+   else if (kondisi-3) then
+     instruksi-3
+   else
+     instruksi-default
+
+D. CONTOH DARI SLIDE
+
+Maks 2 Bilangan:
+  read(a, b)
+  if (a > b) then print(a)
+  else print(b)
+
+Selisih 2 Bilangan (non-negatif):
+  read(a, b)
+  if (a > b) then selisih = a - b
+  else selisih = b - a
+  print(selisih)
+
+Maks 3 Bilangan (else-if):
+  read(a, b, c)
+  if (a >= b and a >= c) then print(a)
+  else if (b >= c and b >= a) then print(b)
+  else print(c)
+
+Paritas (ganjil/genap):
+  read(a)
+  sisa = a mod 2
+  if (sisa == 0) then print("genap")
+  else print("ganjil")
+
+Huruf Mutu:
+  Batas: A>=80, B>=70, C>=55, D>=40, E<40
+  read(nilai)
+  if (nilai >= 80) then print("A")
+  else if (nilai >= 70) then print("B")
+  else if (nilai >= 55) then print("C")
+  else if (nilai >= 40) then print("D")
+  else print("E")
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Maks 2 Bilangan]
+Tuliskan pseudocode untuk menentukan bilangan terbesar dari dua bilangan a dan b!
+
+JAWABAN:
+  read(a, b)
+  if (a > b) then
+    print(a)
+  else
+    print(b)
+
+[SOAL 2 — Selisih 2 Bilangan]
+Tuliskan pseudocode untuk menghitung selisih dua bilangan (selalu non-negatif)!
+
+JAWABAN:
+  read(a, b)
+  if (a > b) then
+    selisih = a - b
+  else
+    selisih = b - a
+  print(selisih)
+
+[SOAL 3 — Paritas]
+Tuliskan pseudocode untuk menentukan apakah bilangan bulat a adalah ganjil atau genap!
+
+JAWABAN:
+  read(a)
+  sisa = a mod 2
+  if (sisa == 0) then
+    print("genap")
+  else
+    print("ganjil")
+
+[SOAL 4 — Huruf Mutu Lengkap]
+Tuliskan pseudocode lengkap untuk menentukan huruf mutu berdasarkan nilai akhir!
+Ketentuan: A>=80, B>=70, C>=55, D>=40, E<40
+
+JAWABAN:
+  read(nilai)
+  if (nilai >= 80) then
+    print("A")
+  else if (nilai >= 70) then
+    print("B")
+  else if (nilai >= 55) then
+    print("C")
+  else if (nilai >= 40) then
+    print("D")
+  else
+    print("E")
+
+[SOAL 5 — Maks 3 Bilangan]
+Tuliskan pseudocode untuk menentukan bilangan terbesar dari a, b, c!
+
+JAWABAN:
+Metode 1 (else-if):
+  read(a, b, c)
+  if (a >= b and a >= c) then print(a)
+  else if (b >= c and b >= a) then print(b)
+  else print(c)
+
+Metode 2 (variabel bantu):
+  read(a, b, c)
+  maks = a
+  if (b > maks) then maks = b
+  if (c > maks) then maks = c
+  print(maks)
+
+[SOAL 6 — Monotonisitas]
+Tentukan apakah tiga bilangan a, b, c bersifat monoton naik, monoton turun, atau
+tidak monoton!
+
+JAWABAN:
+  read(a, b, c)
+  if (a < b and b < c) then
+    print("monoton naik")
+  else if (a > b and b > c) then
+    print("monoton turun")
+  else
+    print("tidak monoton")
+
+[SOAL 7 — Sisi Segitiga]
+Tentukan apakah tiga bilangan a, b, c dapat membentuk sisi-sisi segitiga!
+Syarat: jumlah dua sisi selalu lebih besar dari sisi ketiga.
+
+JAWABAN:
+  read(a, b, c)
+  if (a + b > c and a + c > b and b + c > a) then
+    print("bisa")
+  else
+    print("tidak bisa")
+
+[SOAL 8 — Jenis Segitiga]
+Berdasarkan panjang tiga sisinya, tentukan apakah segitiga itu sama sisi,
+sama kaki, atau sembarang!
+
+JAWABAN:
+  read(a, b, c)
+  if (a == b and b == c) then
+    print("sama sisi")
+  else if (a == b or b == c or a == c) then
+    print("sama kaki")
+  else
+    print("sembarang")
+
+[SOAL 9 — Pajak Penghasilan]
+Tuliskan pseudocode untuk menghitung pajak penghasilan dengan tarif progresif:
+- Lapisan I  : 0–60jt = 5%
+- Lapisan II : >60jt–250jt = 15%
+- Lapisan III: >250jt–500jt = 25%
+- Lapisan IV : >500jt–5M = 30%
+- Lapisan V  : >5M = 35%
+PTKP = 54jt + 4,5jt × tanggungan (max 4 tanggungan)
+
+JAWABAN:
+  read(penghasilan, tanggungan)
+  if (tanggungan > 4) then tanggungan = 4
+  PTKP = 54000000 + (4500000 * tanggungan)
+  PKP = penghasilan - PTKP  // Penghasilan Kena Pajak
+  if (PKP <= 0) then
+    pajak = 0
+  else if (PKP <= 60000000) then
+    pajak = PKP * 0.05
+  else if (PKP <= 250000000) then
+    pajak = 60000000*0.05 + (PKP - 60000000)*0.15
+  else if (PKP <= 500000000) then
+    pajak = 60000000*0.05 + 190000000*0.15 + (PKP-250000000)*0.25
+  else if (PKP <= 5000000000) then
+    pajak = 60000000*0.05 + 190000000*0.15 + 250000000*0.25 + (PKP-500000000)*0.30
+  else
+    pajak = 60000000*0.05 + 190000000*0.15 + 250000000*0.25 + 4500000000*0.30 + (PKP-5000000000)*0.35
+  print("Pajak terutang: ", pajak)
+
+[SOAL 10 — Penelusuran Kode Percabangan]
+Trace (telusuri) output dari kode berikut untuk input a=10, b=15, c=10:
+  read(a, b, c)
+  if (a == c) then
+    if (b > a) then
+      print("B terbesar")
+    else
+      print("A=C terbesar")
+  else if (a > b and a > c) then
+    print("A terbesar")
+  else if (b > c) then
+    print("B terbesar")
+  else
+    print("C terbesar")
+
+JAWABAN:
+Input: a=10, b=15, c=10
+Kondisi 1: a == c → 10 == 10 → True → masuk blok if pertama
+  Kondisi 2: b > a → 15 > 10 → True → print("B terbesar")
+Output: "B terbesar"
+
+================================================================
+END OF GROUND TRUTH DETAIL — PERTEMUAN 10
+================================================================

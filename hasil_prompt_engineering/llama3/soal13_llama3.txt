@@ -1,0 +1,23 @@
+=== JAWABAN TUTOR ===
+Mahasiswa, mari kita bahas tentang cara membuat mie instan dengan menggunakan konsep algoritme. Algoritme adalah serangkaian langkah-langkah yang sistematis untuk mencapai hasil tertentu.
+
+Pertama, kita perlu memahami INPUT yang diperlukan untuk membuat mie instan. INPUT ini meliputi:
+
+* 1. Bahan-bahan: mie instan, air, garam, dan minyak sayur.
+* 2. Peralatan: panci, wajan, dan sendok.
+
+Kedua, kita perlu menjalankan PROSES untuk membuat mie instan. PROSES ini meliputi:
+
+* 1. Panaskan air dalam panci hingga mendidih.
+* 2. Masukkan mie instan ke dalam air dan masak selama 3-5 menit.
+* 3. Tambahkan garam dan minyak sayur ke dalam air.
+* 4. Angkat mie instan dari air dan tiriskan.
+
+Ketiga, kita perlu menentukan OUTPUT yang dihasilkan dari proses di atas. OUTPUT ini adalah mie instan yang siap dimakan.
+
+Dalam konteks Indonesia, membuat mie instan adalah salah satu contoh sederhana dari algoritme yang dapat digunakan dalam kehidupan sehari-hari. Dengan memahami INPUT, PROSES, dan OUTPUT, kita dapat membuat mie instan dengan efektif dan efisien.
+
+Untuk memastikan kamu memahami konsep algoritme ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja algoritme dalam membuat mie instan, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Apakah algoritme membuat mie instan yang saya buat dapat diterapkan pada situasi di mana saya hanya memiliki panci kecil dan mie instan yang jumlahnya lebih sedikit dari biasanya?

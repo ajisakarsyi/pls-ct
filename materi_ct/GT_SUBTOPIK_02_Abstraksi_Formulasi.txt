@@ -1,0 +1,189 @@
+================================================================
+GROUND TRUTH SUBTOPIK — KOM2102 COMPUTATIONAL THINKING
+Subtopik: Abstraksi — Formulasi Problem (Problem/Goal/Batasan/Data)
+================================================================
+
+KONSEP INTI:
+Abstraksi = fokus pada hal PENTING, beri prioritas rendah pada detail tidak relevan.
+Bukan membuang informasi, melainkan menentukan MANA yang kritis untuk solusi.
+
+KERANGKA ABSTRAKSI (4 KOMPONEN):
+┌─────────────┬──────────────────────────────────────────────┐
+│ PROBLEM     │ Apa akar masalahnya? (root cause, bukan gejala)│
+│ GOAL        │ Apa yang ingin dicapai? (output yang diinginkan)│
+│ BATASAN     │ Apa yang membatasi ruang solusi? (constraint)  │
+│ DATA        │ Informasi apa yang tersedia dan relevan?        │
+└─────────────┴──────────────────────────────────────────────┘
+
+HELICOPTER VIEW: lihat persoalan secara menyeluruh sebelum mendalami detail.
+Hindari: "losing sight of the forest for the trees"
+(terlalu fokus detail → kehilangan gambaran besar)
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Abstraksi: Berang-Berang dan Lift]
+Lakukan abstraksi penuh terhadap masalah berikut:
+"2 lift di BeaverHQ, kapasitas masing-masing 30 kg. 9 berang dengan berat berbeda
+(A:2, B:3, C:5, D:8, E:9, F:9, G:12, H:12, I:22 kg) ingin naik sekaligus.
+Tuliskan komposisi yang bisa naik sebanyak mungkin."
+
+JAWABAN:
+PROBLEM  : Total berat berang (82 kg) melebihi kapasitas 2 lift (60 kg).
+           Tidak semua bisa terangkut → perlu optimasi pemilihan.
+GOAL     : Memuat JUMLAH BERANG sebanyak mungkin dalam 1 kali perjalanan
+           (bukan memaksimalkan berat, tapi jumlah individu).
+BATASAN  :
+  - Hanya 2 lift tersedia
+  - Setiap lift max 30 kg
+  - 1 kali perjalanan (tidak bisa bolak-balik)
+  - Setiap berang hanya bisa di satu lift
+DATA     :
+  - 9 berang: A(2), B(3), C(5), D(8), E(9), F(9), G(12), H(12), I(22)
+  - Total berat = 82 kg
+  - Kapasitas total 2 lift = 60 kg → minimal 22 kg tidak terangkut
+
+[SOAL 2 — Abstraksi: Penyusup Museum]
+"Di museum Darmaga ada sistem keamanan. Penyusup = orang yang masuk BUKAN lewat
+pintu masuk. Sistem merekam jumlah orang di setiap ruangan setiap kali ada
+perpindahan. Tabel rekaman tersedia. Pada menit ke berapa penyusup terdeteksi?"
+
+JAWABAN:
+PROBLEM  : Ada orang di dalam museum yang tidak masuk lewat pintu resmi.
+GOAL     : Tentukan pada menit ke berapa jumlah orang di ruangan tidak konsisten
+           dengan jumlah yang masuk lewat pintu (anomali total count).
+BATASAN  :
+  - Penyusup = orang yang muncul tanpa masuk lewat pintu
+  - Sistem hanya mencatat setelah perpindahan terjadi
+  - Beberapa orang bisa berpindah bersamaan
+  - Denah museum menunjukkan koneksi antar ruangan
+DATA     :
+  - Tabel rekaman: timestamp + jumlah orang per ruangan
+  - Jumlah pengunjung yang masuk resmi lewat pintu
+  - Denah ruangan dan hubungan antar ruangan
+
+METODE SOLUSI:
+Lacak total orang di seluruh museum setiap waktu.
+Jika total tiba-tiba LEBIH dari yang masuk lewat pintu → ada penyusup.
+
+[SOAL 3 — Abstraksi: Robot Candy]
+"Robot Candy bergerak dari S (kiri bawah) ke F (kanan atas) di grid berpetak.
+Setiap petak berisi 0–3 permen. Robot hanya bisa bergerak ke kanan atau ke atas.
+Berapa maksimum permen yang dikumpulkan?"
+
+JAWABAN:
+PROBLEM  : Robot harus memilih jalur optimal dari banyak kemungkinan jalur
+           untuk memaksimalkan permen yang dikumpulkan.
+GOAL     : Temukan jalur S→F yang menghasilkan jumlah permen terbanyak.
+BATASAN  :
+  - Hanya bisa bergerak ke KANAN atau ke ATAS (tidak bisa balik/diagonal)
+  - Harus mulai dari S dan berakhir di F
+  - Semua permen di petak yang dilalui otomatis diambil
+DATA     :
+  - Grid dengan dimensi tertentu
+  - Jumlah permen (0–3) di setiap petak
+  - Posisi S dan F
+
+ABSTRAKSI KUNCI: abaikan warna/nama petak, fokus hanya pada NILAI permen
+dan arah yang diizinkan. Masalah ini adalah classic "grid path maximum sum".
+
+[SOAL 4 — Abstraksi: Optimalkan Anggaran Belanja]
+Lakukan abstraksi terhadap masalah ini:
+"Sebuah startup punya anggaran Rp 50 juta untuk membeli peralatan kantor.
+Tersedia 10 item berbeda dengan harga dan kegunaan yang berbeda-beda.
+CEO ingin memaksimalkan produktivitas tim dengan anggaran yang ada."
+
+JAWABAN:
+PROBLEM  : Anggaran terbatas, tidak semua item bisa dibeli →
+           perlu memilih kombinasi yang memberikan nilai terbaik.
+GOAL     : Pilih subset item yang memaksimalkan total nilai produktivitas
+           dengan total harga ≤ Rp 50 juta.
+BATASAN  :
+  - Total pengeluaran ≤ Rp 50 juta
+  - Setiap item hanya bisa dibeli 1 kali
+  - Semua item harus dibeli utuh (tidak bisa sebagian)
+DATA     :
+  - Daftar 10 item dengan harga dan skor produktivitas masing-masing
+  - Total anggaran = Rp 50 juta
+
+YANG DIABAIKAN (bukan data relevan):
+  - Warna/merek item (tidak mempengaruhi produktivitas)
+  - Nama vendor/supplier
+  - Tanggal pengiriman (asumsi semua tersedia)
+
+[SOAL 5 — Abstraksi: Jadwal Ujian Tanpa Konflik]
+Abstraksi: 10 mata kuliah akan diujiankan. Ada 30 mahasiswa yang masing-masing
+mengambil subset mata kuliah. Dua mata kuliah tidak bisa diujiankan bersamaan
+jika ada mahasiswa yang mengambil keduanya. Minimumkan jumlah slot waktu.
+
+JAWABAN:
+PROBLEM  : Beberapa MK tidak bisa diujiankan bersamaan karena konflik mahasiswa.
+           Perlu mengalokasikan slot waktu yang meminimalkan total slot ujian.
+GOAL     : Temukan pembagian MK ke dalam slot waktu paling sedikit
+           sehingga tidak ada konflik (graph coloring problem).
+BATASAN  :
+  - MK yang memiliki mahasiswa yang sama → tidak bisa di slot yang sama
+  - Setiap MK harus diujiankan tepat 1 kali
+  - Setiap slot bisa berisi banyak MK asal tidak ada konflik
+DATA     :
+  - Daftar 10 MK
+  - Daftar 30 mahasiswa dan MK yang diambil masing-masing
+  - Matriks konflik: MK i dan MK j konflik jika ada mahasiswa yang ambil keduanya
+
+ABSTRAKSI: Modelkan sebagai graph → setiap MK adalah node; edge antara dua MK
+jika ada konflik. Masalah menjadi: cari jumlah warna minimum untuk mewarnai
+node agar tidak ada dua node terhubung punya warna sama (chromatic number).
+
+[SOAL 6 — Abstraksi vs Symptom]
+Identifikasi mana ROOT CAUSE (problem sesungguhnya) dari setiap gejala:
+a) "Website saya lambat setiap hari Senin pagi."
+b) "Nilai ujian mahasiswa turun 20% dibanding semester lalu."
+c) "Printer kantor sering macet."
+
+JAWABAN:
+a) Gejala: website lambat setiap Senin pagi.
+   Root cause (kemungkinan): ada scheduled job/batch process yang berjalan
+   setiap Senin pagi dan mengonsumsi banyak resource server; atau traffic
+   lonjakan saat semua karyawan mulai bekerja → server tidak cukup kapasitas.
+   Abstraksi: fokus pada pola waktu (Senin pagi) → itu petunjuk penyebab.
+
+b) Gejala: nilai turun 20%.
+   Root cause (kemungkinan): materi lebih sulit, metode pengajaran berubah,
+   soal tidak sesuai dengan yang diajarkan, atau kondisi eksternal mahasiswa.
+   Abstraksi: bandingkan materi, soal, dan metode dengan semester sebelumnya
+   → identifikasi variabel mana yang berubah.
+
+c) Gejala: printer sering macet.
+   Root cause (kemungkinan): kertas yang digunakan terlalu tipis/tebal,
+   roller pengumpan aus, atau printer tidak dibersihkan secara berkala.
+   Abstraksi: fokus pada frekuensi dan kondisi saat macet →
+   apakah selalu dengan kertas tertentu? Setelah sekian lembar?
+
+[SOAL 7 — Abstraksi Data]
+Diberikan dataset 10.000 transaksi penjualan toko online selama 1 tahun.
+Seorang manajer ingin memutuskan strategi diskon untuk Q4.
+Lakukan abstraksi: data apa yang RELEVAN dan apa yang TIDAK?
+
+JAWABAN:
+DATA RELEVAN (fokus tinggi):
+  - Total penjualan per bulan (tren temporal)
+  - Produk dengan penjualan tertinggi dan terendah
+  - Margin keuntungan per kategori produk
+  - Penjualan Q4 tahun-tahun sebelumnya (historis)
+  - Persentase pelanggan yang melakukan pembelian ulang
+  - Dampak diskon sebelumnya terhadap volume penjualan
+
+DATA TIDAK RELEVAN untuk keputusan ini (prioritas rendah):
+  - Nama lengkap setiap pelanggan
+  - Nomor invoice spesifik
+  - Waktu tepat (jam:menit:detik) setiap transaksi
+  - Metode pembayaran per transaksi
+  - Alamat pengiriman detail
+
+HASIL ABSTRAKSI: laporan 1 halaman berisi KPI utama (pendapatan, margin,
+produk top-10, tren bulanan) — bukan 10.000 baris data mentah.
+
+================================================================
+END OF GROUND TRUTH SUBTOPIK — ABSTRAKSI FORMULASI
+================================================================

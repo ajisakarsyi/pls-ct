@@ -1,0 +1,26 @@
+Here are two different pseudocodes to find the maximum value from three numbers `a`, `b`, and `c`:
+
+**Method 1: Using Conditional Statements**
+
+```
+max_value = a
+if b > max_value then
+    max_value = b
+end if
+if c > max_value then
+    max_value = c
+end if
+print("The maximum value is:", max_value)
+```
+
+**Method 2: Using Comparison Operators and Assignment**
+
+```
+max_value = (a > b) ? a : b
+max_value = (c > max_value) ? c : max_value
+print("The maximum value is:", max_value)
+```
+
+In the first method, we use conditional statements to compare each number with the current maximum value. If a new maximum value is found, we update the `max_value` variable.
+
+In the second method, we use comparison operators (`>`) and the ternary operator (`?:`) to find the maximum value in a single line of code. The `(a > b) ? a : b` expression returns either `a` or `b`, depending on which one is larger. Then, we compare `c` with this intermediate result using the same approach.

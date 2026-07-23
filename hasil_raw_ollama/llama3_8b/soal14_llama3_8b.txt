@@ -1,0 +1,8 @@
+After analyzing the options, I can conclude that:
+
+* a) Langkah-langkah GPS (GPS steps): This is an algorithm in the sense that it's a set of instructions to achieve a specific goal (reaching a destination). It's a good example of a well-designed algorithm.
+* b) 'Pelajari matematika dengan baik' (Learn mathematics well): While this phrase implies learning a subject, it's not an algorithm. An algorithm is typically a step-by-step procedure to solve a problem or achieve a specific goal. This phrase doesn't provide a specific set of instructions.
+* c) Resep masakan (Recipe): A recipe can be thought of as a set of instructions, but it's more like a protocol or a cookbook rather than an algorithm.
+* d) 'Lakukan hal yang diperlukan untuk sukses.' (Do what is needed to succeed.): This phrase is not an algorithm because it doesn't provide specific steps to achieve a goal. It's more of a motivational statement or advice.
+
+So, option b) 'Pelajari matematika dengan baik' is the one that does NOT qualify as an algorithm.

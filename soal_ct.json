@@ -1,0 +1,219 @@
+{
+  "source_excel": "KOM2102_Eval_Template(1).xlsx",
+  "source_sheet": "Gemma",
+  "question_column": "Soal (ID)",
+  "range": "1-30",
+  "total_questions": 30,
+  "questions": [
+    {
+      "no": 1,
+      "topik": "CT Core",
+      "kesulitan": "Mudah",
+      "pertemuan": "PT01 — Pendahuluan",
+      "soal": "Identifikasi elemen AADP dalam pembuatan jadwal belajar mingguan untuk 6 mata kuliah."
+    },
+    {
+      "no": 2,
+      "topik": "CT Core",
+      "kesulitan": "Mudah",
+      "pertemuan": "PT01 — Pendahuluan",
+      "soal": "Berikan satu contoh nyata dari masing-masing dimensi VUCA dalam konteks teknologi atau kehidupan digital saat ini."
+    },
+    {
+      "no": 3,
+      "topik": "CT Core",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT01 — Pendahuluan",
+      "soal": "Apa perbedaan utama antara 'berpikir komputasional' dan 'belajar pemrograman'? Mengapa mahasiswa non-Ilmu Komputer perlu belajar CT?"
+    },
+    {
+      "no": 4,
+      "topik": "CT Core",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT01 — Pendahuluan",
+      "soal": "Seorang peneliti menganalisis pola penyebaran berita hoaks di media sosial. Jelaskan penerapan keempat elemen AADP dalam penelitiannya."
+    },
+    {
+      "no": 5,
+      "topik": "CT Core",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT04 — Abstraksi",
+      "soal": "Identifikasi apakah 'Aku pusing', 'Aku terlambat kuliah', dan 'Banyak supermarket tutup' adalah symptom atau problem, lalu jelaskan akar persoalannya."
+    },
+    {
+      "no": 6,
+      "topik": "CT Core",
+      "kesulitan": "Sulit",
+      "pertemuan": "PT03 — Dekomposisi",
+      "soal": "2 lift, kapasitas masing-masing 30 kg. Berang-berang: A:2,B:3,C:5,D:8,E:9,F:9,G:12,H:12,I:22 kg. Tuliskan komposisi optimal yang memaksimalkan jumlah berang-berang yang terangkut."
+    },
+    {
+      "no": 7,
+      "topik": "ICT & Etika",
+      "kesulitan": "Mudah",
+      "pertemuan": "PT02 — ICT Literacy & Ethics",
+      "soal": "Sebuah perusahaan e-commerce menggunakan data riwayat pembelian dan lokasi pengguna untuk iklan personal. Termasuk dilema etika apakah kasus ini?"
+    },
+    {
+      "no": 8,
+      "topik": "ICT & Etika",
+      "kesulitan": "Mudah",
+      "pertemuan": "PT02 — ICT Literacy & Ethics",
+      "soal": "Identifikasi ciri-ciri hoaks pada berita: 'VIRAL!! MINUM AIR KELAPA SEMBUHKAN COVID DALAM 3 JAM! (dari: free-news-viral123.blogspot.com)'."
+    },
+    {
+      "no": 9,
+      "topik": "ICT & Etika",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT02 — ICT Literacy & Ethics",
+      "soal": "Bedakan bagaimana mahasiswa menggunakan critical thinking vs creative thinking ketika menemukan artikel ilmiah yang ia ragukan kebenarannya."
+    },
+    {
+      "no": 10,
+      "topik": "ICT & Etika",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT02 — ICT Literacy & Ethics",
+      "soal": "Seorang mahasiswa menggunakan ChatGPT untuk mengerjakan seluruh tugas esainya tanpa menyebutkan penggunaan AI. Analisis kasus ini dari perspektif LwICT."
+    },
+    {
+      "no": 11,
+      "topik": "ICT & Etika",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT02 — ICT Literacy & Ethics",
+      "soal": "Seorang pengguna media sosial memposting foto orang lain tanpa izin beserta informasi pribadinya. Undang-undang mana yang berpotensi dilanggar? Jelaskan alasannya."
+    },
+    {
+      "no": 12,
+      "topik": "ICT & Etika",
+      "kesulitan": "Sulit",
+      "pertemuan": "PT02 — ICT Literacy & Ethics",
+      "soal": "Sebuah mobil otonom mengalami kecelakaan yang mengakibatkan korban jiwa. Diskusikan isu etika yang muncul: tanggung jawab, kepercayaan, pengawasan, dan dilema pemrograman."
+    },
+    {
+      "no": 13,
+      "topik": "Algoritme",
+      "kesulitan": "Mudah",
+      "pertemuan": "PT06 — Block Programming & Algoritme",
+      "soal": "Tuliskan algoritme (narasi langkah-langkah) untuk 'Membuat Mie Instan' dengan format INPUT, PROSES, OUTPUT."
+    },
+    {
+      "no": 14,
+      "topik": "Algoritme",
+      "kesulitan": "Mudah",
+      "pertemuan": "PT06 — Block Programming & Algoritme",
+      "soal": "Manakah yang BUKAN algoritme yang baik? a) Langkah-langkah GPS b) 'Pelajari matematika dengan baik' c) Resep masakan d) 'Lakukan hal yang diperlukan untuk sukses.'"
+    },
+    {
+      "no": 15,
+      "topik": "Algoritme",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT07 — Notasi Algoritme",
+      "soal": "Tuliskan pseudocode untuk mencari nilai terbesar dari tiga bilangan a, b, c menggunakan dua metode berbeda."
+    },
+    {
+      "no": 16,
+      "topik": "Algoritme",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT07 — Notasi Algoritme",
+      "soal": "Jalankan Algoritme Euclidean secara manual dan tunjukkan setiap langkahnya untuk: a) FPB(56,14) b) FPB(77,33) c) FPB(144,89)."
+    },
+    {
+      "no": 17,
+      "topik": "Algoritme",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT05 — Pattern Recognition",
+      "soal": "Pak Dengklek memiliki 500 coklat. Bebek ke-n mendapat n coklat. Bebek nomor berapa yang pertama kali tidak mendapat coklat?"
+    },
+    {
+      "no": 18,
+      "topik": "Algoritme",
+      "kesulitan": "Sulit",
+      "pertemuan": "PT07 — Notasi Algoritme",
+      "soal": "Tentukan kompleksitas waktu Big-O dari: a) mencari nilai max dari n bilangan b) menghitung n! rekursif c) menghitung rata-rata n bilangan. Jelaskan alasannya."
+    },
+    {
+      "no": 19,
+      "topik": "Pemrograman",
+      "kesulitan": "Mudah",
+      "pertemuan": "PT09 — Variabel, Tipe Data, Operator",
+      "soal": "Tentukan tipe data yang tepat untuk: a) usia b) IPK (3.75) c) nama lengkap d) status kelulusan e) inisial nama f) jumlah produk g) suhu badan."
+    },
+    {
+      "no": 20,
+      "topik": "Pemrograman",
+      "kesulitan": "Mudah",
+      "pertemuan": "PT09 — Variabel, Tipe Data, Operator",
+      "soal": "Tentukan nama variabel mana yang VALID dan TIDAK VALID: nilaiAkhir, 2x, total_nilai, 'nilai mahasiswa', _temp, x2, harga-satuan, IPK2024."
+    },
+    {
+      "no": 21,
+      "topik": "Pemrograman",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT09 — Variabel, Tipe Data, Operator",
+      "soal": "Diketahui x=8, y=12, z=20. Tentukan nilai akhir x, y, z setelah semua operasi assignment berantai dieksekusi secara berurutan."
+    },
+    {
+      "no": 22,
+      "topik": "Pemrograman",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT10 — Percabangan",
+      "soal": "Tuliskan pseudocode lengkap untuk menentukan huruf mutu: A>=80, B>=70, C>=55, D>=40, E<40."
+    },
+    {
+      "no": 23,
+      "topik": "Pemrograman",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT11 — Perulangan",
+      "soal": "Tuliskan pseudocode untuk: a) mencetak 10 bilangan genap pertama (for loop) b) menghitung jumlah digit dari bilangan bulat positif n (while loop)."
+    },
+    {
+      "no": 24,
+      "topik": "Pemrograman",
+      "kesulitan": "Sulit",
+      "pertemuan": "PT12 — Fungsi",
+      "soal": "Buat dua fungsi hitungLuas(r) dan hitungKeliling(r) untuk lingkaran (PI=3.14), lalu algoritme utama menghitung total keliling lingkaran dengan luas > 100."
+    },
+    {
+      "no": 25,
+      "topik": "Struktur Data",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT13 — Struktur Data",
+      "soal": "Simulasikan operasi pada stack kosong dan tentukan setiap output pop: push(3)→push(8)→push(1)→pop→push(5)→pop→pop→push(2)→pop."
+    },
+    {
+      "no": 26,
+      "topik": "Struktur Data",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT13 — Struktur Data",
+      "soal": "Simulasikan operasi pada queue kosong dan tentukan setiap output dequeue: enqueue(A)→enqueue(B)→enqueue(C)→dequeue→enqueue(D)→dequeue→dequeue→enqueue(E)."
+    },
+    {
+      "no": 27,
+      "topik": "Struktur Data",
+      "kesulitan": "Sedang",
+      "pertemuan": "PT13 — Struktur Data",
+      "soal": "Tentukan struktur data paling tepat untuk: a) antrian pelanggan bank b) fitur Ctrl+Z c) peta kota untuk rute terpendek d) struktur folder/file e) validasi kurung di compiler."
+    },
+    {
+      "no": 28,
+      "topik": "Struktur Data",
+      "kesulitan": "Sulit",
+      "pertemuan": "PT13 — Struktur Data",
+      "soal": "Jelaskan bagaimana Stack memvalidasi string kurung '{([])<>()}'. Trace setiap langkah dan tentukan apakah string ini valid."
+    },
+    {
+      "no": 29,
+      "topik": "Struktur Data",
+      "kesulitan": "Sulit",
+      "pertemuan": "PT13 — Struktur Data",
+      "soal": "Diberikan graph berbobot: A-B:4, A-C:2, B-C:1, B-D:5, C-D:8, C-E:10, D-E:2, B-E:7. Tentukan jalur terpendek dari A ke E beserta total bobotnya."
+    },
+    {
+      "no": 30,
+      "topik": "Struktur Data",
+      "kesulitan": "Sulit",
+      "pertemuan": "PT13 — Struktur Data",
+      "soal": "Tentukan directed vs undirected graph untuk: a) pertemanan Facebook b) follow Twitter c) jalan satu arah d) transmisi listrik e) sitasi paper ilmiah. Jelaskan alasannya."
+    }
+  ]
+}

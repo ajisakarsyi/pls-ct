@@ -1,0 +1,15 @@
+Here are the results:
+
+**VALID**
+
+1. nilaiAkhir (variable name follows camelCase convention)
+2. total_nilai (variable name follows camelCase convention)
+3. x2 (variable name is a valid identifier in many programming languages)
+4. _temp (variable name starts with an underscore, which is allowed in some programming languages like Python or Java)
+
+**TIDAK VALID**
+
+1. 2x (invalid variable name as it contains a mathematical operator)
+2. 'nilai mahasiswa' (invalid variable name because it's a string literal and not a valid identifier)
+3. harga-satuan (invalid variable name because it contains a hyphen, which is not allowed in most programming languages)
+4. IPK2024 (while `IPK` might be a valid variable name, the year part at the end makes it an invalid variable name)

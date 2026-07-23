@@ -8,3 +8,7 @@ faiss-cpu
 langchain
 langchain-community
 langchain-ollama
+openai
+rouge-score
+bert-score
+torch

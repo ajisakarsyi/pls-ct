@@ -1,0 +1,19 @@
+=== JAWABAN TUTOR ===
+Tentu, saya akan menjelaskan kompleksitas waktu Big-O dari tiga kasus yang Anda sebutkan.
+
+a) Mencari nilai max dari n bilangan
+
+Untuk mencari nilai max dari n bilangan, kita harus membandingkan satu per satu. Jika kita harus membandingkan n bilangan, maka kita harus melakukan n-1 kali perbandingan. Dengan demikian, kompleksitas waktu Big-O dari mencari nilai max dari n bilangan adalah O(n), karena kita harus melakukan operasi yang sama sebanyak n kali.
+
+b) Menghitung n! rekursif
+
+Menghitung n! rekursif berarti kita melakukan pemanggilan fungsi secara rekursif sebanyak n kali. Misalnya, jika kita ingin menghitung 5!, maka kita akan melakukan pemanggilan fungsi sebagai berikut: 5! = 5 × 4 × 3 × 2 × 1. Dalam setiap pemanggilan fungsi, kita melakukan operasi yang sama sebanyak n kali. Dengan demikian, kompleksitas waktu Big-O dari menghitung n! rekursif adalah O(n), karena kita harus melakukan operasi yang sama sebanyak n kali.
+
+c) Menghitung rata-rata n bilangan
+
+Menghitung rata-rata n bilangan berarti kita harus melakukan operasi penjumlahan dan pembagian. Jika kita memiliki n bilangan, maka kita harus melakukan operasi penjumlahan sebanyak n kali dan operasi pembagian sebanyak 1 kali. Dengan demikian, kompleksitas waktu Big-O dari menghitung rata-rata n bilangan adalah O(n), karena kita harus melakukan operasi penjumlahan sebanyak n kali.
+
+Untuk memastikan kamu memahami konsep kompleksitas waktu Big-O ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja kompleksitas waktu Big-O dari tiga kasus yang Anda sebutkan, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Saya memiliki sebuah daftar 10 angka acak dan ingin menemukan nilai maksimumnya. Saya ingin mengetahui kompleksitas waktu Big-O dari algoritma yang saya gunakan untuk mencari nilai maksimum tersebut. Algoritma apa yang saya gunakan dan mengapa?

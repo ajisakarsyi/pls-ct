@@ -1,0 +1,13 @@
+=== JAWABAN TUTOR ===
+Dalam kasus perusahaan e-commerce yang menggunakan data riwayat pembelian dan lokasi pengguna untuk iklan personal, kita dapat melihat adanya dilema etika privasi. Data pribadi pengguna diakses dan digunakan untuk kepentingan komersial tanpa transparansi penuh kepada pengguna. Ini menimbulkan konflik antara hak privasi individu dan kepentingan bisnis perusahaan.
+
+\\[\text{Dilema Etika} = \frac{\text{Hak Privasi}}{\text{Kepentingan Bisnis}} \\]
+
+Dalam konteks Indonesia, contoh konkret yang relevan adalah ketika sebuah perusahaan e-commerce menggunakan data riwayat pembelian dan lokasi pengguna untuk iklan personal tanpa izin dari pengguna. Ini dapat menimbulkan kekhawatiran akan keamanan data pribadi pengguna dan potensi pelanggaran privasi.
+
+\\[\text{Kekhawatiran} = \frac{\text{Kekurangan Transparansi}}{\text{Kepentingan Bisnis}} \\]
+
+Untuk memastikan kamu memahami konsep privasi dan dilema etika dalam kasus ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja dekomposisi, analisis, dan penyelesaian dalam menganalisis masalah ini, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Apakah perusahaan e-commerce yang menggunakan data riwayat pembelian dan lokasi pengguna untuk iklan personal harus memberikan pilihan pengguna untuk menonaktifkan fitur ini?

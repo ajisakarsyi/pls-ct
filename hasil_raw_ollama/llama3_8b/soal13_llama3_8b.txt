@@ -1,0 +1,23 @@
+Here is the algorithm for making instant noodles (mie instan):
+
+**Input**
+
+* 1 package of instant noodles
+* Water or hot water
+* Optional: seasonings, such as soy sauce, chili flakes, or sesame oil
+
+**Proses**
+
+1. Open the package of instant noodles and remove any seasoning packets.
+2. Measure out the recommended amount of water according to the package instructions. For most brands, this is 2-3 cups (400-600 ml) for a single serving.
+3. Bring the measured water to a boil in a pot or kettle.
+4. Once boiling, pour the boiling water over the instant noodles in a separate bowl or container.
+5. Let the noodles sit for 2-3 minutes, allowing them to rehydrate and cook.
+6. If desired, add any additional seasonings (e.g., soy sauce, chili flakes, sesame oil) according to personal taste.
+7. Stir well to distribute the seasonings evenly.
+
+**Output**
+
+* A steaming hot bowl of cooked instant noodles, ready to be enjoyed!
+
+Note: This algorithm assumes a basic preparation method for making instant noodles. Some brands may have specific instructions or variations on this process, so please refer to the package instructions if you're unsure.

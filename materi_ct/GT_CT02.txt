@@ -1,0 +1,91 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 2: ICT Literacy and Ethics
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Konsep Literasi dan Literacy with ICT (LwICT)]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Literasi pada awalnya merujuk pada kemampuan kebahasaan, namun pengertiannya berkembang mencakup dimensi yang lebih luas, yaitu berpikir kritis, kemampuan berhitung, memecahkan masalah, cara untuk mencapai tujuan, mengembangkan ilmu pengetahuan, serta mengembangkan potensi diri seseorang.
+
+Dalam konteks teknologi, dikenal konsep Literacy with ICT (LwICT), yaitu pengembangan literasi dengan memanfaatkan teknologi informasi dan komunikasi (Information and Communication Technology/ICT). LwICT didefinisikan sebagai kemampuan berpikir secara kritis dan kreatif mengenai informasi serta komunikasi, sebagai warga komunitas global, dengan menggunakan ICT secara aman, bertanggung jawab, dan beretika. Konsep ini menekankan bahwa literasi digital bukan sekadar kemampuan teknis mengoperasikan perangkat, melainkan mencakup dimensi berpikir kritis dan kreatif yang dilandasi oleh tanggung jawab etis dalam berinteraksi di dunia digital.
+
+Dua komponen berpikir utama yang menjadi landasan LwICT adalah:
+
+1. Critical Thinking (Berpikir Kritis): merupakan salah satu dimensi kunci dalam proses berpikir manusia yang mendorong kemampuan menganalisis, mengevaluasi, dan mempertanyakan informasi secara sistematis sebelum mengambil kesimpulan atau keputusan.
+
+2. Creative Thinking (Berpikir Kreatif): didefinisikan sebagai kemampuan untuk melihat berbagai kemungkinan penyelesaian terhadap suatu masalah, yang menghasilkan gagasan-gagasan baru dan berguna. Terdapat berbagai faktor yang dapat mempengaruhi kemampuan berpikir kreatif seseorang.
+
+Critical thinking dan creative thinking merupakan satu kesatuan yang saling melengkapi dan tidak dapat dipisahkan dalam praktik literasi ICT yang efektif.
+
+
+----------------------------------------------------------------
+[MATERI 2: Health and Safety dalam Penggunaan ICT]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Penggunaan teknologi informasi dan komunikasi tidak lepas dari risiko terhadap kesehatan dan keselamatan penggunanya. Salah satu bahaya yang perlu diwaspadai adalah cyber bullying (perundungan di dunia maya), pencurian identitas, dan body shaming, yang semuanya dapat menyebabkan stres dan mengganggu kesehatan mental pengguna. Berdasarkan data UNICEF tahun 2020, sebanyak 45% anak di Indonesia berusia 14 hingga 24 tahun pernah menjadi korban perundungan di dunia digital atau maya (cyber bullying). Angka ini mencerminkan besarnya risiko yang dihadapi generasi muda dalam penggunaan teknologi, sehingga kesadaran akan keselamatan digital menjadi hal yang sangat penting untuk ditanamkan.
+
+
+----------------------------------------------------------------
+[MATERI 3: Etika dan Tanggung Jawab dalam Penggunaan Teknologi Informasi]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Etika, menurut Kamus Besar Bahasa Indonesia (KBBI), adalah ilmu tentang apa yang baik dan apa yang buruk, serta tentang hak dan kewajiban moral. Dalam konteks penggunaan teknologi informasi, etika menjadi landasan penting bagi setiap pengguna untuk berperilaku sebagai digital citizen yang baik di abad ke-21.
+
+Terdapat empat dilema etika utama dalam penggunaan teknologi informasi yang dirumuskan berdasarkan perspektif Aristotelian (Michael D. Myers & Leigh Miller, 1996), yaitu:
+
+1. Akurasi Informasi: Penyebaran informasi yang tidak benar dan tidak akurat dapat membahayakan pengguna karena dapat menyebabkan pengambilan keputusan yang salah. Kesalahan dalam penyebaran informasi juga dapat mengakibatkan konsekuensi hukum. Keakuratan dan kebenaran informasi dalam teknologi informasi akan menjadi masalah apabila tidak didasari oleh prinsip-prinsip kejujuran, kebenaran, dan integritas.
+
+2. Privasi: Teknologi mampu menyimpan dan mengakses banyak data pribadi, yang berpotensi mengancam privasi individu. Terdapat konflik antara hak privasi seseorang dan kepentingan komunitas. Contohnya adalah penggunaan data pribadi untuk menargetkan iklan di media sosial.
+
+3. Akses ke Informasi: Dilema ini mencakup pembatasan akses informasi pada sebuah sistem, perlunya pengetahuan dan keterampilan dalam mengakses informasi, serta pentingnya kejelasan penanggung jawab dan pemilik informasi. Perlu adanya peraturan perlindungan data dan informasi yang memadai.
+
+4. Hak Kekayaan Intelektual (HKI): Terdapat dilema dalam menyeimbangkan perlindungan hak pemilik kekayaan intelektual dengan pemberian akses yang memadai kepada publik. Contoh pelanggaran etika dalam HKI adalah pembajakan perangkat lunak. Hak cipta berfungsi mendorong kreativitas dan inovasi dengan memberikan insentif bagi para inovator, namun jika perlindungan terlalu ketat, dapat menghambat akses publik terhadap pengetahuan dan inovasi.
+
+
+----------------------------------------------------------------
+[MATERI 4: Isu Etika Kontemporer dalam Teknologi]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Terdapat lima isu etika utama yang relevan dalam perkembangan teknologi saat ini:
+
+1. Penyalahgunaan Informasi Pribadi: Data dan informasi pribadi pengguna rentan disalahgunakan oleh berbagai pihak, baik oleh perusahaan maupun individu yang tidak bertanggung jawab.
+
+2. Informasi yang Salah dan Deep Fakes: Teknologi deep fake memungkinkan pembuatan konten visual dan audio yang tampak nyata namun sepenuhnya palsu, sehingga potensi pelanggaran privasi dan penyalahgunaan identitas menjadi sangat tinggi. Teknologi ini dapat dimanfaatkan untuk menyebarkan informasi yang menyesatkan.
+
+3. Kurangnya Pengawasan dan Tanggung Jawab: Perkembangan teknologi yang cepat seringkali tidak diimbangi dengan mekanisme pengawasan dan akuntabilitas yang memadai dari para pengembang maupun pengguna teknologi.
+
+4. Pemanfaatan AI: Kecerdasan buatan menimbulkan berbagai isu etika terkait dengan cara penggunaannya, termasuk potensi bias algoritmik, privasi data, dan dampak sosial dari otomatisasi.
+
+5. Teknologi Otonom: Teknologi otonom seperti mobil tanpa pengemudi, senjata robotik, dan drone telah banyak digunakan dalam berbagai bidang. Contohnya mencakup mesin robotik sebagai pengganti tentara manusia, mobil tanpa pengemudi untuk pengiriman paket, serta drone yang dimanfaatkan sebagai senjata maupun untuk keperluan pertanian. Isu etika yang sering muncul adalah ketika manusia terlalu mempercayai teknologi tanpa memahami sepenuhnya cara kerja teknologi tersebut.
+
+Dalam konteks hukum di Indonesia, terdapat sejumlah regulasi yang membatasi dan mengatur perilaku di dunia maya, yaitu: Undang-Undang Nomor 27 Tahun 2022 tentang Perlindungan Data Pribadi; Undang-Undang Nomor 11 Tahun 2008 tentang Informasi dan Transaksi Elektronik (ITE); serta Undang-Undang Nomor 19 Tahun 2016 tentang Perubahan atas Undang-Undang Nomor 11 Tahun 2008 tentang ITE.
+
+
+----------------------------------------------------------------
+[MATERI 5: Fenomena Sosial Digital — Budaya Anonim, Internet Fraud, dan Hoax]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Rendahnya literasi ICT dan kesadaran etika digital melahirkan berbagai fenomena negatif di dunia maya yang perlu dipahami oleh setiap pengguna teknologi.
+
+Pertama, budaya anonim dan fenomena "Fess" (confession) di media sosial mendorong sebagian pengguna untuk menyampaikan pernyataan tanpa identitas yang jelas, sehingga mengurangi rasa tanggung jawab atas konten yang disebarkan. Hal ini sering kali memunculkan komentar-komentar tidak ramah di kolom diskusi daring, serta pernyataan-pernyataan sensitif yang dapat merugikan pihak lain. Perilaku demikian merupakan contoh nyata dari kurangnya etika dalam berinteraksi di ruang digital.
+
+Kedua, Internet Fraud didefinisikan sebagai penggunaan layanan internet atau perangkat lunak dengan akses internet untuk menipu atau mengambil keuntungan dengan cara merugikan pihak lain. Fenomena ini merupakan salah satu bentuk kejahatan siber yang paling umum terjadi.
+
+Ketiga, Hoax adalah usaha untuk menipu atau mengakali masyarakat agar mempercayai sesuatu yang tidak benar. Hoax dapat dikenali dari beberapa ciri khas, yaitu: judul yang bersifat provokatif dan sensasional; kredibilitas alamat situs yang meragukan; tidak menyertakan fakta yang dapat diverifikasi; serta penggunaan media berupa foto atau video yang palsu atau dimanipulasi. Sebagai respons terhadap fenomena ini, terdapat gerakan Anti Hoax yang dapat diakses melalui platform turnbackhoax.id, yang berfungsi sebagai referensi verifikasi informasi bagi masyarakat.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

@@ -1,0 +1,30 @@
+I'd be happy to help you with that! The Euclidean algorithm is a popular method for finding the Greatest Common Divisor (GCD) or the Highest Common Factor (HCF) of two numbers. Here are the steps for each of your examples:
+
+**a) FPB(56,14)**
+
+1. Find the larger number: 56 > 14
+2. Divide the larger number by the smaller one: 56 ÷ 14 = 4 with a remainder of 0
+3. Since the remainder is 0, the GCD is the divisor: 14
+
+So, FPB(56,14) = 14
+
+**b) FPB(77,33)**
+
+1. Find the larger number: 77 > 33
+2. Divide the larger number by the smaller one: 77 ÷ 33 = 2 with a remainder of 11
+3. Divide the larger number by the remainder: 33 ÷ 11 = 3 with a remainder of 0
+4. Since the remainder is 0, the GCD is the divisor: 11
+
+So, FPB(77,33) = 11
+
+**c) FPB(144,89)**
+
+1. Find the larger number: 144 > 89
+2. Divide the larger number by the smaller one: 144 ÷ 89 = 1 with a remainder of 55
+3. Divide the larger number by the remainder: 89 ÷ 55 = 1 with a remainder of 34
+4. Divide the larger number by the remainder: 55 ÷ 34 = 1 with a remainder of 21
+5. Divide the larger number by the remainder: 34 ÷ 21 = 1 with a remainder of 13
+6. Divide the larger number by the remainder: 21 ÷ 13 = 1 with a remainder of 8
+7. Since the remainder is 0, the GCD is the divisor: 13
+
+So, FPB(144,89) = 13

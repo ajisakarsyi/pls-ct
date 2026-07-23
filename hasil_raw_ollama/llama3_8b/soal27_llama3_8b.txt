@@ -1,0 +1,23 @@
+Here are my recommendations for the most suitable data structures for each problem:
+
+a) Antrian pelanggan bank (Queue of bank customers):
+	* Suitable data structure: Queue or First-In-First-Out (FIFO) list.
+	* Reason: Customers arrive and depart in a specific order, and you need to process them in that order. A queue data structure ensures this ordering is maintained.
+
+b) Fitur Ctrl+Z (Undo feature):
+	* Suitable data structure: Stack or Last-In-First-Out (LIFO) list.
+	* Reason: When the user presses Ctrl+Z, they want to undo their last action. A stack data structure allows you to pop the most recent item off the top of the stack, effectively "reversing" the sequence of actions.
+
+c) Peta kota untuk rute terpendek (City map for shortest route):
+	* Suitable data structure: Graph or adjacency matrix.
+	* Reason: You need to find the shortest path between two points on a graph. A graph data structure allows you to represent nodes and edges, making it easy to calculate distances and find the optimal route.
+
+d) Struktur folder/file (File system hierarchy):
+	* Suitable data structure: Tree or hierarchical list.
+	* Reason: File systems have a hierarchical structure, with folders containing files and other folders. A tree data structure allows you to represent this hierarchical relationship between files and folders.
+
+e) Validasi kurung di compiler (Parentheses validation in a compiler):
+	* Suitable data structure: Stack or LIFO list.
+	* Reason: When parsing code, you need to validate the parentheses' matching rules. A stack data structure helps you keep track of opening and closing parentheses, ensuring that they are properly matched.
+
+These recommendations are based on the problem's requirements and the properties of each data structure.

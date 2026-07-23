@@ -1,0 +1,15 @@
+Baiklah, mari kita bahas tentang kompleksitas waktu Big-O O(n) dalam konteks mencari nilai maksimum dari nilai ujian siswa di sekolah.
+
+Dalam mencari nilai maksimum dari nilai ujian siswa, kita dapat menggunakan algoritme yang sederhana, yaitu dengan membandingkan nilai ujian siswa satu per satu. Kita mulai dengan membandingkan nilai ujian siswa pertama dengan nilai ujian siswa kedua, kemudian nilai ujian siswa kedua dengan nilai ujian siswa ketiga, dan seterusnya. Dalam setiap iterasi, kita membandingkan dua nilai ujian siswa dan memilih nilai yang lebih besar.
+
+Misalkan kita memiliki nilai ujian siswa sebagai berikut: 80, 90, 70, 85, 95. Kita mulai dengan membandingkan nilai ujian siswa pertama (80) dengan nilai ujian siswa kedua (90). Karena 90 lebih besar dari 80, maka nilai ujian siswa kedua (90) menjadi nilai maksimum saat ini.
+
+Kita kemudian membandingkan nilai ujian siswa kedua (90) dengan nilai ujian siswa ketiga (70). Karena 90 lebih besar dari 70, maka nilai ujian siswa kedua (90) tetap menjadi nilai maksimum saat ini.
+
+Kita terus melakukan pembandingan seperti ini hingga kita mencapai nilai ujian siswa terakhir. Dalam contoh ini, nilai ujian siswa terakhir adalah 95. Kita membandingkan nilai ujian siswa kedua terakhir (95) dengan nilai ujian siswa terakhir (95). Karena 95 sama dengan 95, maka nilai ujian siswa terakhir (95) menjadi nilai maksimum saat ini.
+
+Dalam contoh ini, kita melakukan 4 iterasi untuk mencari nilai maksimum dari nilai ujian siswa. Kita dapat melihat bahwa kompleksitas waktu algoritme ini adalah O(n), karena kita memiliki perulangan yang berulang-ulang dan pembandingan yang dilakukan dalam setiap iterasi.
+
+Dalam konteks mencari nilai maksimum dari nilai ujian siswa di sekolah, algoritme ini dapat digunakan untuk menemukan nilai maksimum dari nilai ujian siswa dalam waktu yang efektif. Kita tidak perlu melakukan perbandingan yang rumit atau kompleks, karena kita hanya perlu membandingkan dua nilai ujian siswa.
+
+Untuk memastikan kamu memahami konsep kompleksitas waktu Big-O ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja algoritme yang memiliki kompleksitas waktu Big-O O(n) dalam konteks mencari nilai maksimum dari nilai ujian siswa di sekolah.

@@ -1,0 +1,13 @@
+=== JAWABAN TUTOR ===
+Baiklah, mari kita analisis kasus seorang mahasiswa yang menggunakan ChatGPT untuk mengerjakan seluruh tugas esainya tanpa menyebutkan penggunaan AI dari perspektif LwICT (Learning with Information and Communication Technology).
+
+Dari perspektif LwICT, kita dapat melihat bahwa mahasiswa tersebut menggunakan teknologi untuk membantu mengerjakan tugasnya. Namun, perlu diingat bahwa penggunaan teknologi tidak selalu berarti bahwa mahasiswa tersebut telah memahami konsep yang diajarkan. Oleh karena itu, kita perlu mempertimbangkan apakah mahasiswa tersebut telah melakukan analisis yang sistematis dan kritis terhadap informasi yang diberikan oleh ChatGPT.
+
+Dalam konteks Indonesia, penggunaan teknologi seperti ChatGPT dapat membantu mahasiswa dalam mengerjakan tugas-tugas akademis, tetapi perlu diingat bahwa kemampuan kognitif mahasiswa masih perlu dikembangkan. Oleh karena itu, kita perlu memastikan bahwa mahasiswa tersebut telah memahami konsep yang diajarkan dan dapat menerapkan kemampuan kognitifnya dalam mengerjakan tugas-tugas akademis.
+
+Dalam hal ini, kita dapat melihat bahwa mahasiswa tersebut telah menggunakan kemampuan analitis dan sistematis untuk mengerjakan tugasnya. Namun, perlu diingat bahwa kemampuan kognitif mahasiswa masih perlu dikembangkan untuk dapat menerapkan konsep yang diajarkan dalam konteks yang lebih kompleks.
+
+Untuk memastikan kamu memahami konsep LwICT ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja analisis sistematis dan kritis dalam menganalisis penggunaan teknologi dalam mengerjakan tugas akademis, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Seorang dosen menggunakan ChatGPT untuk membantu mahasiswanya mengerjakan tugas esai, tetapi tidak menyebutkan penggunaan AI. Bagaimana cara dosen tersebut dapat memastikan bahwa mahasiswanya telah memahami konsep yang diajarkan dan tidak hanya mengandalkan teknologi?

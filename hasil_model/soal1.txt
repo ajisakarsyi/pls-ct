@@ -1,7 +1,2 @@
-Pertama, Abstraksi. Dalam tahapan ini, kita harus memfokuskan perhatian pada informasi penting dan mengabaikan detail yang tidak relevan. Contohnya, jika kita ingin menyelesaikan masalah tentang pola lampu merah dan biru, kita harus mengidentifikasi pola kode biner pada gambar dan mengabaikan bagian lainnya.
-
-Kedua, Algoritme. Dalam tahapan ini, kita harus menyusun langkah-langkah solusi yang terstruktur. Contohnya, jika kita ingin menyelesaikan masalah tentang verifikasi integritas pesan melalui aturan bit paritas, kita harus mengembangkan algoritme yang tepat untuk memverifikasi pesan.
-
-Ketiga, Dekomposisi. Dalam tahapan ini, kita harus memecah masalah besar atau kompleks menjadi bagian-bagian yang lebih kecil dan sederhana. Contohnya, jika kita ingin menyelesaikan masalah tentang representasi dan kompresi gambar, kita harus membagi grid menjadi empat bagian searah jarum jam dan diapit tanda kurung untuk menghemat ruang simpan.
-
-Keempat, Pengenalan Pola. Dalam tahapan ini, kita harus mengidentifikasi pola yang tersembunyi dalam data atau informasi. Contohnya, jika kita ingin menyelesaikan masalah tentang definisi dan formulasi masalah, kita harus menggunakan Root Cause Analysis (RCA) untuk mengidentifikasi penyebab utama di balik suatu fenomena.
+Decomposition: Memecah proses pembuatan jadwal menjadi sub-tugas, seperti daftar mata kuliah, estimasi waktu per mata kuliah, identifikasi slot waktu kosong, dan penyusunan jadwal akhir.
+Abstraction: Menganalisis setiap elemen visual, mempertimbangkan hubungan antarbagian, dan menyusunnya menjadi pemahaman menyeluruh tentang bagaimana membuat jadwal belajar yang efektif.

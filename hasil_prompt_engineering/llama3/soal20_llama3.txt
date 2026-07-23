@@ -1,0 +1,17 @@
+=== JAWABAN TUTOR ===
+Mahasiswa, mari kita bahas tentang tipe data yang tepat untuk menyimpan informasi.
+
+Pertama, mari kita lihat tipe data String. Tipe data ini digunakan untuk menyimpan informasi yang terdiri dari kombinasi huruf dan spasi, seperti nama lengkap mahasiswa. Contohnya, "Muhammad Ali". Tipe data String dapat menyimpan informasi yang panjang dan kompleks, sehingga sangat cocok untuk menyimpan nama lengkap mahasiswa.
+
+Kedua, mari kita lihat tipe data Boolean. Tipe data ini digunakan untuk menyimpan informasi yang hanya memiliki dua kemungkinan, yaitu lulus atau tidak lulus. Contohnya, status kelulusan mahasiswa. Tipe data Boolean sangat cocok untuk menyimpan informasi yang hanya memiliki dua kemungkinan.
+
+Ketiga, mari kita lihat tipe data Char. Tipe data ini digunakan untuk menyimpan informasi yang hanya terdiri dari satu huruf, seperti inisial nama mahasiswa. Contohnya, 'M' atau 'A'. Tipe data Char sangat cocok untuk menyimpan informasi yang singkat dan sederhana.
+
+Keempat, mari kita lihat tipe data Integer. Tipe data ini digunakan untuk menyimpan informasi yang diwakili oleh bilangan bulat, seperti jumlah produk dalam keranjang belanja. Contohnya, 5 atau 10. Tipe data Integer sangat cocok untuk menyimpan informasi yang diwakili oleh bilangan bulat.
+
+Kelima, mari kita lihat tipe data Float. Tipe data ini digunakan untuk menyimpan informasi yang diwakili oleh bilangan desimal, seperti suhu badan dalam derajat Celcius. Contohnya, 37,5 atau 38,2. Tipe data Float sangat cocok untuk menyimpan informasi yang diwakili oleh bilangan desimal.
+
+Dengan demikian, kita dapat mengetahui tipe data yang tepat untuk menyimpan informasi yang berbeda-beda. Untuk memastikan kamu memahami konsep tipe data ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja tipe data tersebut dalam menyimpan informasi.
+
+=== FOLLOW-UP QUESTION ===
+Saya ingin membuat sebuah program untuk menyimpan informasi tentang mahasiswa, tetapi saya tidak yakin harus menggunakan tipe data apa untuk menyimpan nama lengkap mahasiswa. Apakah saya harus menggunakan tipe data String atau ada tipe data lain yang lebih cocok?

@@ -1,0 +1,24 @@
+A nice little puzzle!
+
+Let's analyze the situation step by step:
+
+1. `x = 8`
+2. `y = 12`
+3. `z = 20`
+
+The operations are all assignments, and they are executed in a linear sequence.
+
+Now, let's see what happens when each operation is executed:
+
+1. `x = 8`: x becomes 8.
+2. `y = 12`: y becomes 12 (no effect on x).
+3. `z = 20`: z becomes 20 (no effect on x or y).
+
+So, the final values are:
+`x = 8`
+`y = 12`
+`z = 20`
+
+In other words, none of the assignments affect the values of `x` and `y`, so they remain unchanged. Only `z` is updated to become 20.
+
+The final answer: `x = 8`, `y = 12`, `z = 20`.

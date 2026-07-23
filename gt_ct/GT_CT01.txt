@@ -1,0 +1,93 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 1: Kontrak Perkuliahan dan Pendahuluan
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Identitas dan Deskripsi Mata Kuliah]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Mata kuliah Computational Thinking (KOM2102) merupakan mata kuliah dengan beban studi 2 SKS (2-0) yang ditawarkan pada Semester 1 atau 2 di Program Studi Ilmu Komputer, IPB University. Mata kuliah ini berfokus pada proses formulasi masalah dan pengembangan solusi secara sistematis. Secara spesifik, terdapat empat fokus utama dalam mata kuliah ini: (1) proses identifikasi masalah dan formulasi solusi dengan menekankan pada abstraksi, yaitu kemampuan menyaring informasi penting ke dalam solusi generik; (2) pencarian kesamaan pola dalam suatu masalah (pattern recognition); (3) pembangunan langkah-langkah solusi yang terstruktur dalam bentuk algoritme; serta (4) pemecahan masalah melalui proses memecah masalah besar menjadi submasalah yang lebih kecil dan mudah ditangani (dekomposisi).
+
+Berdasarkan ketentuan beban SKS, setiap mahasiswa diperkirakan menghabiskan total 340 menit atau sekitar 5 jam 40 menit per minggu untuk mempelajari mata kuliah ini, yang terdiri atas 100 menit tatap muka (50 menit × 2), 120 menit tugas terstruktur (60 menit × 2), dan 120 menit belajar mandiri (60 menit × 2).
+
+Capaian pembelajaran mata kuliah ini mencakup lima kompetensi utama: (1) mampu menjelaskan konsep dasar berpikir komputasional yang mencakup literasi digital, etika teknologi, dekomposisi, abstraksi, pengenalan pola, dan algoritme; (2) mampu menerapkan prinsip berpikir komputasional dalam menganalisis dan merancang solusi atas permasalahan nyata menggunakan notasi algoritme yang sesuai; (3) mampu mengimplementasikan struktur kendali dasar seperti percabangan dan perulangan, fungsi, serta struktur data sederhana (list/array dan data teks) dalam bentuk algoritmik; (4) mampu menjelaskan dan membandingkan algoritme pencarian dan pengurutan berdasarkan karakteristik dan kompleksitasnya; serta (5) mampu merancang solusi logis dan kreatif melalui pemrograman visual berbasis block programming dengan memperhatikan aspek etika dan keberlanjutan pembelajaran.
+
+
+----------------------------------------------------------------
+[MATERI 2: Pengertian Computational Thinking (Berpikir Komputasional)]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Computational Thinking (Berpikir Komputasional) didefinisikan sebagai proses berpikir yang terlibat dalam memformulasikan masalah beserta solusinya sedemikian rupa sehingga solusi tersebut dapat direpresentasikan dalam bentuk yang dapat dilaksanakan secara efektif oleh agen pemroses informasi (J. Cuny, L. Snyder, dan J. M. Wing, 2020). Definisi lain menyatakan bahwa computational thinking merupakan teknik pemecahan masalah yang meniru proses yang dilakukan oleh pemrogram komputer ketika menulis program dan algoritme.
+
+Terdapat empat elemen inti dalam berpikir komputasional, yaitu:
+
+1. Dekomposisi (Decomposition): proses memecah masalah yang lebih besar dan kompleks menjadi bagian-bagian yang lebih kecil dan sederhana agar lebih mudah diselesaikan.
+
+2. Abstraksi (Abstraction): kemampuan untuk fokus hanya pada informasi penting dan mengabaikan detail yang kurang relevan dalam konteks penyelesaian masalah.
+
+3. Algoritme (Algorithms): proses membangun langkah-langkah solusi yang terstruktur dan sistematis terhadap suatu masalah.
+
+4. Pengenalan Pola (Pattern Recognition): kemampuan mencari dan menemukan pola atau kesamaan baik antar masalah yang berbeda maupun di dalam masalah yang sama.
+
+Keempat elemen ini sering disingkat sebagai AADP (Abstraction, Algorithm, Decomposition, Pattern Recognition) dan menjadi fondasi utama dalam pendekatan problem solving berbasis berpikir komputasional.
+
+
+----------------------------------------------------------------
+[MATERI 3: Alasan Mempelajari Berpikir Komputasional dan Era VUCA]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Mata kuliah berpikir komputasional dirancang dengan latar belakang kondisi dunia yang saat ini berada dalam era VUCA, yaitu suatu kondisi yang ditandai oleh empat karakteristik utama: Volatility (tingkat perubahan yang sangat cepat), Uncertainty (ketidakjelasan mengenai kondisi saat ini), Complexity (adanya banyak faktor pengambilan keputusan yang saling terkait), dan Ambiguity (kurangnya kejelasan mengenai makna dari suatu peristiwa).
+
+Dalam konteks era VUCA tersebut, berpikir komputasional diakui secara luas sebagai kompetensi penting, tidak hanya bagi mereka yang tertarik pada ilmu komputer dan matematika, tetapi juga bagi setiap mahasiswa di abad ke-21. Learning outcome utama dari mata kuliah ini adalah peningkatan digital and technological fluency, yaitu kapasitas seseorang dalam memahami teknologi digital serta kemampuan menggunakannya untuk memecahkan persoalan di berbagai bidang.
+
+Penting untuk dipahami bahwa fokus utama mata kuliah ini adalah problem solving, bukan mencetak mahasiswa untuk menjadi seperti mahasiswa ilmu komputer. Mata kuliah ini didesain agar mahasiswa memiliki landasan berpikir bahwa terdapat teknologi komputer yang dapat dimanfaatkan untuk menyelesaikan pekerjaan di domain masing-masing. Dengan demikian, orientasi pembelajaran bersifat lintas disiplin dan praktis, yaitu membekali mahasiswa dengan kemampuan memanfaatkan teknologi secara cerdas dalam bidang studinya masing-masing.
+
+
+----------------------------------------------------------------
+[MATERI 4: Era Baru Komputasi dan Kecerdasan Buatan (AI)]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Mata kuliah ini juga memperkenalkan mahasiswa pada era baru dunia komputasi yang ditandai oleh perkembangan pesat kecerdasan buatan (Artificial Intelligence/AI). Salah satu tonggak penting dalam era ini adalah kemunculan ChatGPT yang diakui sebagai game changer dalam dunia teknologi dan komputasi. Saat ini, AI telah hadir di mana-mana (AI Everywhere) dan digunakan dalam berbagai aplikasi dan layanan.
+
+Mahasiswa diperkenalkan pada berbagai kategori alat (tools) berbasis AI yang dapat dimanfaatkan, di antaranya:
+
+1. Image Generator: alat yang mampu menghasilkan gambar berdasarkan deskripsi teks (prompt), contohnya Bing Image Creator by Microsoft dan Imagine.art. Kemampuan menghasilkan gambar berkualitas tinggi sangat bergantung pada keterampilan penulisan prompt (Prompt Engineering) yang baik dan detail.
+
+2. Music Generator: alat berbasis AI yang dapat menghasilkan komposisi musik berdasarkan deskripsi naratif, salah satunya adalah platform Udio. Seperti halnya image generator, kualitas output bergantung pada ketepatan dan kekayaan deskripsi prompt yang diberikan.
+
+3. Deepfake dan Video AI: perkembangan teknologi AI juga mencakup kemampuan menghasilkan video hyperrealistis berbasis kecerdasan buatan.
+
+4. Living Computers (Tren Terkini): tren komputasi terbaru mencakup komputer yang dibuat dari neuron manusia (organoid computing) serta robot yang dilatih menggunakan AI, seperti robot DeepMind milik Google yang dilatih untuk bermain tenis meja.
+
+Dalam konteks ini, mahasiswa diajak untuk memahami paradigma baru bahwa AI tidak akan menggantikan manusia secara langsung, namun manusia yang mampu menggunakan AI akan menggantikan mereka yang tidak bisa memanfaatkan AI. Pemahaman tentang alat-alat AI ini menjadi bagian dari literasi digital yang perlu dikuasai mahasiswa.
+
+
+----------------------------------------------------------------
+[MATERI 5: Kontrak Perkuliahan — Sistem Pembelajaran, Penilaian, dan Topik Kuliah]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Perkuliahan KOM2102 dilaksanakan dalam 14 pertemuan dengan format pembelajaran yang bersifat Synchronous dan Asynchronous. Pada pertemuan Synchronous (tatap muka di kelas), kegiatan terdiri atas pemaparan materi sekitar 60 menit dan hands-on atau tugas mandiri selama 50 menit. Pada pertemuan Asynchronous, mahasiswa mengakses lesson di LMS, mengikuti online course mandiri, mengerjakan latihan di platform class.ipb.ac.id, dan menyelesaikan proyek mandiri.
+
+Salah satu komponen tugas rutin yang diperkenalkan adalah Asah Otak, yaitu tugas terjadwal yang bersifat individu dan dirancang sebagai latihan mandiri bagi seluruh mahasiswa. Mahasiswa diwajibkan mengerjakan Asah Otak minimal dua kali sebelum UTS dan dua kali sebelum UAS.
+
+Sistem penilaian mata kuliah ini menggunakan komposisi bobot sebagai berikut: UTS sebesar 35%, UAS sebesar 35%, Kuis sebesar 20%, serta Proyek dan Aktivitas Partisipatif sebesar 10%. Konversi nilai akhir ke huruf mutu mengacu pada aturan IPB University dengan ketentuan: A untuk nilai akhir (NA) ≥ 75; AB untuk 70 ≤ NA < 75; B untuk 60 ≤ NA < 70; BC untuk 55 ≤ NA < 60; C untuk 45 ≤ NA < 55; D untuk 35 ≤ NA < 45; dan E untuk NA < 35. Huruf mutu E mewajibkan mahasiswa untuk mengulang mata kuliah, sedangkan huruf mutu D dianjurkan untuk mengulang.
+
+Secara keseluruhan, topik kuliah dibagi menjadi dua bagian besar. Bagian pertama (sebelum UTS) mencakup: (1) Berpikir Komputasional dan VUCA — meliputi konsep dan pengertian CT, tujuan, manfaat, pengenalan AADP, dan pengenalan AI; (2) ICT Literacy and Ethics — membahas definisi literasi dan etika di bidang TIK serta profesionalisme dalam dunia teknologi; (3) Dekomposisi — pengertian, teori, dan penerapan dekomposisi dalam problem solving; (4) Abstraksi — definisi dan penerapan abstraction dalam problem solving; (5) Pengenalan Pola — definisi dan penerapan pattern recognition; (6) Pengantar Algoritme 1: Block Programming — pemahaman dan penerapan konsep CT menggunakan paradigma pemrograman visual; serta (7) Pengantar Algoritme 2: Notasi Algoritme — meliputi pendekatan naratif, flowchart, dan pseudocode.
+
+Bagian kedua (sebelum UAS) mencakup: (8) Variabel, Operator, Tipe Data, dan List — konsep data, variabel, operasi, ekspresi, array, dan pengolahan teks; (9) Struktur Kontrol Percabangan; (10) Struktur Kontrol Perulangan; (11) Fungsi — konsep, definisi, dan pemanggilan fungsi; (12) Data dan Struktur Data — konsep FIFO vs LIFO serta penerapannya; (13) Searching dan Sorting — konsep, perbandingan kompleksitas, dan contoh problem solving; serta (14) Proyek Block Programming menggunakan platform Scratch (scratch.mit.edu) sebagai tugas individu akhir.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

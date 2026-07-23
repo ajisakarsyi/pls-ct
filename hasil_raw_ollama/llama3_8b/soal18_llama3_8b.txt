@@ -1,0 +1,15 @@
+Here are the answers:
+
+a) Mencari nilai max dari n bilangan: O(1)
+
+The reason is that finding the maximum value of a set of numbers only requires a single pass through the data, regardless of the size of the input (n). In other words, the time complexity does not depend on the value of n.
+
+b) Menghitung n! rekursif: O(n)
+
+This is because each recursive call to the function will perform a constant amount of work plus one recursive call. The number of recursive calls is proportional to the input size (n), so the time complexity is O(n).
+
+c) Menghitung rata-rata n bilangan: O(n)
+
+To calculate the average of a set of numbers, you need to iterate through each element in the set and perform some constant amount of work. The number of iterations is proportional to the input size (n), so the time complexity is O(n).
+
+Note that these are all upper bounds on the time complexity, and there may be more efficient algorithms for certain cases.

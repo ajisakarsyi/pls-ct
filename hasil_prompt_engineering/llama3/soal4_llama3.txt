@@ -1,0 +1,25 @@
+=== JAWABAN TUTOR ===
+Dalam penelitian tentang penyebaran berita hoaks di media sosial, keempat elemen AADP (Analisis, Algoritma, Abstraksi, dan Dekomposisi) dapat diterapkan sebagai berikut:
+
+Analisis: Peneliti melakukan analisis terhadap data yang terkait dengan penyebaran berita hoaks di media sosial. Mereka menganalisis pola penyebaran berita hoaks, termasuk sumber berita, waktu penyebaran, dan karakteristik pengguna yang menyebarkannya.
+
+\\[\text{Analisis} = \frac{\text{Data}}{\text{Pola}} \\]
+
+Algoritma: Peneliti menggunakan algoritma untuk menganalisis data yang telah dikumpulkan. Mereka dapat menggunakan algoritma seperti algoritma machine learning untuk mengidentifikasi pola penyebaran berita hoaks.
+
+\\[\text{Algoritma} = \frac{\text{Data}}{\text{Pola}} \\]
+
+Abstraksi: Peneliti melakukan abstraksi terhadap data yang telah dianalisis. Mereka mengidentifikasi konsep-konsep yang umum dan relevan dengan penyebaran berita hoaks di media sosial.
+
+\\[\text{Abstraksi} = \frac{\text{Data}}{\text{Konsep}} \\]
+
+Dekomposisi: Peneliti melakukan dekomposisi terhadap konsep-konsep yang telah diidentifikasi. Mereka mengidentifikasi komponen-komponen yang membentuk konsep tersebut dan menganalisis hubungan antara komponen-komponen tersebut.
+
+\\[\text{Dekomposisi} = \frac{\text{Konsep}}{\text{Komponen}} \\]
+
+Dengan menerapkan keempat elemen AADP, peneliti dapat memahami lebih baik tentang penyebaran berita hoaks di media sosial dan mengembangkan strategi untuk menghentikan penyebaran berita hoaks tersebut.
+
+Untuk memastikan kamu memahami konsep AADP ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja AADP dalam menganalisis data statistik tentang pendapatan masyarakat di Indonesia, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Seorang peneliti ingin menganalisis pola penyebaran berita hoaks di media sosial yang terkait dengan fenomena "Fess" (confession). Bagaimana peneliti dapat menggunakan analisis dan algoritma untuk mengidentifikasi sumber berita hoaks yang paling berpengaruh dalam penyebaran berita hoaks tersebut?

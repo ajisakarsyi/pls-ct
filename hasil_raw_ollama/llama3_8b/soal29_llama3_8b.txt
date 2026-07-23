@@ -1,0 +1,24 @@
+A classic problem! Let's find the shortest path from A to E.
+
+We can use the following steps:
+
+1. Find the minimum weight edges coming out of A:
+	* A-B (4)
+	* A-C (2)
+Choose the lighter edge: A-C (2)
+2. Move to vertex C:
+	* Add the weight of the edge A-C (2) to our total weight
+3. From C, find the minimum weight edges going to E:
+	* C-E (10)
+	* D-E (2)
+Choose the lighter edge: D-E (2)
+4. Move to vertex E:
+	* Add the weight of the edge D-E (2) to our total weight
+
+Now, let's recap the path:
+
+A -> C (weight 2)
+C -> D (no need to calculate; we're just moving to the next node)
+D -> E (weight 2)
+
+The total weight of the shortest path from A to E is: 2 + 2 = 4

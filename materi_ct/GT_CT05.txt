@@ -1,0 +1,65 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 5: Pattern Recognition (Pengenalan Pola)
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Konsep Dasar Pattern Recognition]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Pattern Recognition (Pengenalan Pola) merupakan salah satu elemen inti dari berpikir komputasional yang berfokus pada kemampuan mengenali pola atau karakteristik yang mirip dalam suatu persoalan. Mengenali pola atau karakteristik yang serupa akan sangat membantu dalam memecahkan persoalan dan mengkonstruksi jalan untuk mendapatkan solusi. Pertanyaan mendasar yang menjadi titik tolak pengenalan pola adalah: "Di mana saya pernah melihat atau melakukan ini sebelumnya?" — dan pertanyaan ini dapat menjadi langkah signifikan dalam berpikir komputasional untuk memperoleh solusi.
+
+Secara formal, pengenalan pola didefinisikan sebagai kemampuan untuk mengenali kesamaan atau perbedaan umum melalui suatu pola yang ada, dengan tujuan untuk memprediksi atau memperoleh cara cepat dalam memandang suatu persoalan. Pengenalan pola merupakan dasar untuk menyelesaikan persoalan karena dengan mengenali pola umum yang ada, seseorang dapat menyaring informasi penting dari informasi yang tidak dibutuhkan.
+
+Pengenalan pola juga merupakan dasar dari pengetahuan manusia secara umum. Beberapa contoh penerapannya dalam kehidupan meliputi:
+
+1. Identifikasi Wajah Manusia: Dalam mengenali wajah manusia, hanya tiga hal yang perlu diperhatikan sebagai pola tetap, yaitu mata, hidung, dan mulut. Ketiga elemen ini sudah mampu memberikan gambaran wajah manusia karena ketiganya merupakan sesuatu yang tidak berubah, sedangkan atribut yang bisa berubah seperti warna kulit tidak menjadi patokan utama.
+
+2. Perkembangan Bayi: Sejak bayi, manusia menggunakan pola untuk memahami dunia di sekitarnya, mulai dari merespons secara verbal dan menumbuhkan kemampuan berbahasa, hingga mengembangkan respons perilaku dan kemampuan berkomunikasi dengan lingkungan sekitar.
+
+3. Identifikasi Wabah Penyakit: Para ilmuwan menggunakan pengenalan pola untuk mengidentifikasi pola suatu wabah penyakit dengan mencari kemiripan dalam kasus-kasus yang berbeda. Contohnya adalah perbandingan antara pandemi COVID-19 dengan Flu Spanyol (Spanish Flu) tahun 1918.
+
+4. Rekomendasi Konten Digital: Platform seperti YouTube menggunakan pengenalan pola terhadap kebiasaan tontonan pengguna untuk merekomendasikan konten yang relevan dan sesuai dengan preferensi pengguna.
+
+
+----------------------------------------------------------------
+[MATERI 2: Pola di Antara Masalah yang Berbeda]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Salah satu kekuatan utama pengenalan pola dalam berpikir komputasional adalah kemampuannya untuk diaplikasikan lintas masalah yang berbeda. Untuk mencari pola antar-masalah, seseorang mencari hal-hal yang sama atau sangat mirip pada setiap masalah yang dihadapi. Begitu sebuah pola berhasil diidentifikasi, pola tersebut dapat digunakan untuk membangun solusi umum yang berlaku di antara masalah-masalah yang serupa.
+
+Contoh yang digunakan adalah proses memanggang kue. Ketika suatu persoalan memanggang kue didekomposisi, diperoleh sub-masalah seperti: jenis kue yang akan dipanggang, bahan yang dibutuhkan beserta takarannya, jumlah orang yang ingin dibuatkan kue, lama waktu memanggang, waktu penambahan masing-masing bahan, dan peralatan yang diperlukan. Setelah memahami cara memanggang satu jenis kue, seseorang dapat segera melihat bahwa memanggang kue jenis lain tidak jauh berbeda, karena pola umumnya sudah dipahami, yaitu: setiap kue memiliki jumlah bahan tertentu yang tepat, bahan-bahan akan ditambahkan pada waktu tertentu, dan setiap kue dipanggang untuk jangka waktu tertentu.
+
+Prinsip ini menunjukkan bahwa pengenalan pola tidak hanya berguna untuk satu masalah spesifik, melainkan memungkinkan pengembangan solusi umum (general solution) yang dapat diterapkan pada kelas masalah yang serupa.
+
+
+----------------------------------------------------------------
+[MATERI 3: Penerapan Pattern Recognition dalam Problem Solving]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Pengenalan pola diterapkan secara konkret dalam berbagai latihan dan soal problem solving. Berikut adalah empat contoh soal beserta penerapan pengenalan polanya:
+
+1. Latihan Pola dari Gambar:
+Latihan ini meminta mahasiswa untuk mengidentifikasi pola visual dari serangkaian gambar, kemudian menentukan gambar mana yang paling cocok untuk mengisi kotak yang kosong. Pendekatan yang digunakan adalah terlebih dahulu melakukan abstraksi terhadap elemen-elemen visual yang relevan, kemudian mengenali pola transformasi atau urutan yang terjadi antar gambar untuk menentukan jawaban yang tepat.
+
+2. Latihan Coklat Bebek (Deret Segitiga):
+Pak Dengklek memiliki bebek yang diberi nomor mulai dari 1, 2, dan seterusnya. Setiap bebek ke-n mendapatkan coklat sebanyak n buah. Dengan total 500 coklat yang tersedia, pertanyaannya adalah bebek nomor berapa yang pertama kali tidak mendapat coklat. Pola yang ditemukan adalah bahwa jumlah coklat yang terbagikan hingga bebek ke-n membentuk deret segitiga: 1, 3, 6, 10, 15, 21, ..., 465 (bebek ke-30), 496 (bebek ke-31), 528 (bebek ke-32). Karena total coklat adalah 500, maka hingga bebek ke-31 total coklat yang terbagikan adalah 496, sedangkan bebek ke-32 membutuhkan 32 coklat lagi namun hanya tersisa 4 coklat. Dengan demikian, bebek nomor 32 adalah bebek pertama yang tidak mendapat coklat.
+
+3. Latihan Digit Terakhir dari Perpangkatan:
+Persoalan ini menanyakan digit terakhir dari 2^2003. Dengan mengurai nilai perpangkatan 2 secara berurutan (2^0=1, 2^1=2, 2^2=4, 2^3=8, 2^4=16, 2^5=32, dst.), ditemukan pola bahwa digit terakhir dari perpangkatan 2 berulang dalam siklus empat: 1, 2, 4, 8, 6, 2, 4, 8, 6, ... Pola ini dapat direpresentasikan sebagai: jika N mod 4 = 1 maka digit terakhir 2; jika N mod 4 = 2 maka digit terakhir 4; jika N mod 4 = 3 maka digit terakhir 8; jika N mod 4 = 0 maka digit terakhir 6. Karena 2003 mod 4 = 3, maka digit terakhir dari 2^2003 adalah 8. Solusi ini hanya dapat ditemukan secara efisien melalui pengenalan pola pada siklus digit terakhir.
+
+4. Latihan Ayam Bebek:
+Pak Dengklek membeli hewan secara berselang-seling antara toko bebek dan toko ayam dengan aturan: jika kemarin membeli x ekor bebek maka hari ini membeli 2x ekor ayam, dan jika kemarin membeli y ekor ayam maka hari ini membeli 3y ekor bebek. Dengan simulasi: hari pertama membeli 1 bebek (total hewan: 1), hari kedua membeli 2 ayam (total: 3), hari ketiga membeli 6 bebek (total: 9), hari keempat membeli 12 ayam (total: 21), dan seterusnya. Dengan mengenali pola dari simulasi tersebut, dapat ditentukan hewan ke-1000 yang dibeli oleh Pak Dengklek.
+
+Sebagai catatan khusus terkait perbedaan pendekatan dalam pengenalan pola, dicontohkan pada persoalan penjumlahan deret bilangan 1 + 2 + 3 + ... + 10. Pendekatan matematis biasa akan menjumlahkan secara bertahap satu per satu. Namun dengan pendekatan berpikir komputasional melalui pengenalan pola, ditemukan bahwa penjumlahan bilangan di ujung kiri dan kanan selalu menghasilkan nilai yang sama (1+10=11, 2+9=11, 3+8=11, dst.) sebanyak separuh dari jumlah bilangan, sehingga hasilnya adalah (n/2) × (n+1) = 5 × 11 = 55. Ini menunjukkan bahwa pengenalan pola memungkinkan pemecahan masalah secara jauh lebih efektif dan efisien dibandingkan pendekatan kalkulasi biasa.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

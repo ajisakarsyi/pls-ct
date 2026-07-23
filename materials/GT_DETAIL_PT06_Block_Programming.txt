@@ -1,0 +1,218 @@
+================================================================
+GROUND TRUTH DETAIL — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 6: Pengenalan Algoritme & Block Programming
+================================================================
+
+----------------------------------------------------------------
+[MATERI: Algoritme, Pemrograman, dan Block Programming]
+----------------------------------------------------------------
+
+PENJELASAN DETAIL:
+
+A. ALGORITME — DEFINISI DAN SEJARAH
+
+Definisi: Algoritme adalah instruksi atau langkah-langkah yang berstruktur untuk
+menyelesaikan suatu persoalan (problem).
+
+Asal-usul kata:
+- Berasal dari nama Abu Ja'far Muhammad Ibnu Musa Al-Khwarizmi, ilmuwan asal Uzbekistan
+- Orang Barat menyebutnya "Algorism" → berkembang menjadi "Algorithm"
+- Pertama digunakan secara formal tahun 1950 merujuk pada Algoritme Euclidean — algoritme
+  untuk mencari FPB dari dua bilangan bulat, disusun oleh ilmuwan Yunani bernama Euclid.
+
+Algoritme dalam kehidupan sehari-hari:
+- Buku manual mesin cuci       - Resep masakan
+- Panduan perakitan perabotan  - Prosedur medis
+- Instruksi navigasi GPS
+
+B. PEMROGRAMAN (PROGRAMMING)
+
+Definisi: Proses menulis instruksi yang akan dijalankan komputer untuk melakukan tugas tertentu.
+Bahasa pemrograman: Python, Java, C++, JavaScript, dll.
+
+Tantangan belajar pemrograman:
+1. Memahami sintaks bahasa pemrograman
+2. Membangun logika berpikir algoritmik
+3. Kemampuan problem solving
+4. Kesabaran dalam debugging
+
+C. BLOCK PROGRAMMING
+
+Definisi: Metode pemrograman menggunakan blok-blok visual berbentuk puzzle yang disusun
+dengan cara drag and drop.
+
+Karakteristik:
+- Setiap blok mewakili satu instruksi tertentu
+- Tidak perlu mengetik sintaks rumit
+- Cocok untuk pemula: mudah, interaktif, minim kesalahan sintaks
+
+Platform: code.org, Scratch (scratch.mit.edu), App Inventor
+
+D. PERBANDINGAN BLOCK vs. TEXT PROGRAMMING
+
+Aspek          | Block Programming              | Text Programming
+---------------|--------------------------------|---------------------------
+Bentuk         | Blok visual (drag-drop)        | Sintaks teks
+Kemudahan      | Sangat mudah dipelajari        | Lebih sulit, butuh latihan
+Error          | Minim error sintaks            | Rawan error sintaks
+Target pengguna| Anak-anak, pemula              | Profesional
+Fleksibilitas  | Terbatas (untuk berlatih)      | Sangat fleksibel
+
+E. PLATFORM CODE.ORG
+
+- Organisasi nirlaba global; fokus: CS for All melalui block programming
+- Kampanye: Hour of Code; Dukungan: Google, Microsoft, Amazon
+- Kurikulum: CS Fundamentals (SD), CS Discoveries (SMP/SMA), CS Principles (SMA/Univ)
+
+F. ANTARMUKA CODE.ORG — 4 AREA UTAMA
+
+1. Area Instruksi : petunjuk tugas yang harus diselesaikan
+2. Area Blok      : semua blok instruksi yang tersedia
+3. Area Kerja     : tempat menyusun blok dengan drag-drop
+4. Area Run       : menjalankan program dan melihat hasilnya
+
+G. KATEGORI BLOK DALAM CODE.ORG
+
+1. World Block    : mengatur stage/canvas (latar belakang, aturan umum stage)
+2. Sprites Block  : membuat dan mengontrol sprite (tambah sprite, ganti kostum)
+3. Location Block : mengatur posisi sprite di koordinat (x,y) tertentu
+4. Behaviours Block: perilaku otomatis sprite ("bergerak maju", "memantul di tepi")
+
+H. CONTOH PROGRAM DALAM CODE.ORG
+
+1. Sprite memunculkan teks saat diklik
+2. Sprite berubah ukuran saat diklik
+3. Sprite berputar saat diklik
+4. Sprite memunculkan teks DAN bersuara saat diklik
+   → Menunjukkan bahwa beberapa blok dapat dirangkai untuk satu trigger
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Algoritme dalam Kehidupan]
+Tuliskan algoritme (narasi langkah-langkah) untuk "Membuat Mie Instan"!
+
+JAWABAN:
+INPUT  : 1 bungkus mie instan, air, bumbu
+OUTPUT : semangkuk mie instan siap makan
+1. Siapkan panci, isi dengan 400 ml air
+2. Panaskan air hingga mendidih
+3. Masukkan mie ke dalam air mendidih
+4. Masak selama 3 menit sambil diaduk
+5. Siapkan mangkuk, masukkan bumbu
+6. Angkat mie, tuang ke mangkuk dengan kuahnya
+7. Aduk rata, mie siap disajikan
+
+[SOAL 2 — Identifikasi Algoritme Valid]
+Manakah yang BUKAN algoritme yang baik? Jelaskan!
+a) "Ambil gelas. Buka keran. Isi air. Minum."
+b) "Pelajari matematika dengan baik."
+c) "Nyalakan komputer. Klik ikon browser. Ketik URL. Tekan Enter."
+d) "Lakukan hal yang diperlukan untuk sukses."
+
+JAWABAN:
+b) dan d) BUKAN algoritme yang baik:
+- b) Ambigu: apa artinya "dengan baik"? Tidak ada langkah konkret yang dapat diikuti.
+- d) Sangat ambigu: "hal yang diperlukan" tidak terdefinisi. Tidak terukur hasilnya.
+a) dan c) adalah algoritme yang baik: konkret, tidak ambigu, terurut, dan memiliki tujuan jelas.
+
+[SOAL 3 — Blok Komponen]
+Pasangkan kebutuhan berikut dengan jenis blok yang tepat:
+a) Karakter berjalan terus-menerus ke kanan
+b) Mengubah latar belakang menjadi pemandangan luar angkasa
+c) Menempatkan pesawat di koordinat tertentu
+d) Menambahkan karakter alien baru ke dalam scene
+
+JAWABAN:
+a) → Behaviours Block (perilaku otomatis: "bergerak maju terus")
+b) → World Block (mengatur stage: set latar belakang)
+c) → Location Block (mengatur posisi sprite pada koordinat x,y)
+d) → Sprites Block (membuat/menambahkan sprite baru)
+
+[SOAL 4 — Block vs. Text Programming]
+Seorang guru ingin mengajarkan pemrograman kepada siswa kelas 4 SD. Manakah pendekatan
+yang lebih tepat? Berikan 3 alasan!
+
+JAWABAN:
+Block Programming lebih tepat. Alasan:
+1. Kemudahan: siswa usia 10 tahun belum terbiasa aturan sintaks ketat. Block programming
+   menghilangkan hambatan sintaks agar siswa fokus pada logika algoritmik.
+2. Minim frustrasi: text programming rawan error sintaks (satu karakter salah = gagal).
+   Block programming meminimalkan ini sehingga pengalaman belajar lebih positif.
+3. Visual dan interaktif: blok puzzle yang bisa diseret sesuai cara belajar anak-anak
+   yang cenderung visual dan kinestetik.
+
+[SOAL 5 — Desain Program Block Programming]
+Rancang (dalam deskripsi teks) program di code.org dengan 3 sprite yang masing-masing
+melakukan aksi unik saat diklik!
+
+JAWABAN:
+Program: "Mini Zoo Interactive"
+
+Sprite 1 — KUCING:
+Aksi: Menampilkan teks "Meow!" dan berputar 360 derajat
+Blok: Event (klik) → Sprites (teks) + Behaviours (rotasi)
+
+Sprite 2 — IKAN:
+Aksi: Berpindah ke posisi acak di layar dan berubah ukuran lebih besar
+Blok: Event (klik) → Location (posisi acak) + Behaviours (ubah ukuran)
+
+Sprite 3 — BURUNG:
+Aksi: Menampilkan teks "Tweet!" dan berpindah ke bagian atas layar
+Blok: Event (klik) → Sprites (teks) + Location (pindah ke koordinat Y atas)
+
+[SOAL 6 — Algoritme Valid atau Tidak?]
+Perhatikan "algoritme" berikut. Apakah valid? Perbaiki jika tidak!
+"Lihat ketiga angka. Pilih yang terbesar."
+
+JAWABAN:
+TIDAK VALID. Alasan:
+- "Lihat" dan "Pilih" ambigu — tidak mendefinisikan langkah konkret untuk membandingkan.
+- Tidak ada instruksi eksplisit cara membandingkan angka.
+
+Perbaikan:
+INPUT : a, b, c
+OUTPUT: nilai terbesar
+1. Baca a, b, c
+2. Misalkan maks = a
+3. Jika b > maks, maka maks = b
+4. Jika c > maks, maka maks = c
+5. Cetak maks
+
+[SOAL 7 — Sejarah Algoritme]
+Jelaskan kontribusi Al-Khwarizmi dan Euclid dalam perkembangan algoritme!
+
+JAWABAN:
+Al-Khwarizmi (abad ke-9, Uzbekistan):
+- Namanya menjadi asal kata "algorithm" (transliterasi Latin: Algorismus/Algorism).
+- Karyanya juga menjadi asal kata "algebra".
+- Dianggap sebagai salah satu bapak matematika dan ilmu komputer.
+
+Euclid (sekitar 300 SM, Yunani):
+- Menyusun Algoritme Euclidean: prosedur sistematis mencari FPB dari dua bilangan bulat.
+- Salah satu algoritme tertua yang masih digunakan dalam ilmu komputer hingga kini.
+- Kata "algorithm" pertama kali digunakan secara formal pada 1950 merujuk algoritme ini.
+
+[SOAL 8 — Algoritme Euclidean]
+Gunakan Algoritme Euclidean untuk mencari FPB dari:
+a) FPB(48, 18)
+b) FPB(100, 75)
+
+JAWABAN:
+Algoritme Euclidean: FPB(a,b) = FPB(b, a mod b) sampai sisa = 0.
+
+a) FPB(48, 18):
+   48 mod 18 = 12 → FPB(18, 12)
+   18 mod 12 = 6  → FPB(12, 6)
+   12 mod 6  = 0  → FPB = 6
+   Jawaban: FPB(48, 18) = 6
+
+b) FPB(100, 75):
+   100 mod 75 = 25 → FPB(75, 25)
+   75 mod 25  = 0  → FPB = 25
+   Jawaban: FPB(100, 75) = 25
+
+================================================================
+END OF GROUND TRUTH DETAIL — PERTEMUAN 6
+================================================================

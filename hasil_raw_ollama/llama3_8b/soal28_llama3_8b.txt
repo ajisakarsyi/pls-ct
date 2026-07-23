@@ -1,0 +1,23 @@
+A classic problem!
+
+To validate the string `'{([])<()}'`, we'll use a stack-based approach. Here's the step-by-step explanation:
+
+1. Initialize an empty stack.
+2. Iterate through the input string:
+	* `{` : Push it onto the stack (stack: `[ { ]`)
+	* `(` : Push it onto the stack (stack: `[ { ) `)
+	* `[]` : Pop two elements from the stack (`{` and `(`), because they match each other. Stack remains empty.
+	* `<` : Push it onto the stack (stack: `[ < `)
+	* `)` : Pop one element from the stack (`<`) because they match each other. Stack remains empty.
+	* `>` : Pop one element from the stack (`<`) because they don't match. **Error!**
+3. The input string is `'{([])<()}'`, and we've reached the end of it.
+
+**Validation result:** **Invalid**
+
+The reason why it's invalid is that when we encountered the `>` character, there was no matching `<` to pop from the stack. This indicates that the brackets are not properly nested or matched.
+
+Here's a summary:
+
+* We started with an empty stack.
+* We iterated through the input string and pushed/pop elements onto/from the stack accordingly.
+* When we reached the end of the string, there was no matching `<` to pop from the stack, indicating that the string is invalid.

@@ -1,0 +1,193 @@
+================================================================
+GROUND TRUTH SUBTOPIK — KOM2102 COMPUTATIONAL THINKING
+Subtopik: Perulangan Bersarang (Nested Loop)
+================================================================
+
+KONSEP INTI:
+Nested Loop = perulangan di dalam perulangan.
+Setiap 1 iterasi LUAR -> perulangan DALAM selesai SEMUA iterasinya.
+Total iterasi = iterasi_luar x iterasi_dalam
+Kompleksitas: O(m x n)
+
+STRATEGI:
+1. Tentukan tugas loop LUAR (baris, indeks utama)
+2. Tentukan tugas loop DALAM (kolom, detail per baris)
+3. Rancang luar dulu, lalu dalam, kemudian gabungkan.
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 -- Kotak Penuh]
+Cetak kotak bintang 4 baris x 5 kolom!
+
+JAWABAN:
+  for i = 1 to 4 do
+    for j = 1 to 5 do
+      print("*", end="")
+    print()
+Output: 4 baris, masing-masing berisi *****
+
+[SOAL 2 -- Kotak Berongga 4x5]
+JAWABAN:
+  for i = 1 to 4 do
+    for j = 1 to 5 do
+      if (i==1 or i==4 or j==1 or j==5) then print("*", end="")
+      else print(" ", end="")
+    print()
+
+Output:
+*****
+*   *
+*   *
+*****
+
+[SOAL 3 -- Segitiga Kiri Bawah (tinggi=5)]
+*
+**
+***
+****
+*****
+
+JAWABAN:
+  for i = 1 to 5 do
+    for j = 1 to i do
+      print("*", end="")
+    print()
+
+[SOAL 4 -- Segitiga Terbalik (tinggi=4)]
+****
+***
+**
+*
+
+JAWABAN:
+  for i = 4 to 1 step -1 do
+    for j = 1 to i do
+      print("*", end="")
+    print()
+
+[SOAL 5 -- Segitiga Rata Kanan (tinggi=4)]
+   *
+  **
+ ***
+****
+
+JAWABAN:
+  read(t)
+  for i = 1 to t do
+    for j = 1 to (t-i) do print(" ", end="")
+    for j = 1 to i do print("*", end="")
+    print()
+
+[SOAL 6 -- Berlian (diamond, n=3)]
+  *
+ ***
+*****
+ ***
+  *
+
+JAWABAN:
+  read(n)
+  // Atas
+  for i = 1 to n do
+    for j = 1 to (n-i) do print(" ", end="")
+    for j = 1 to (2*i-1) do print("*", end="")
+    print()
+  // Bawah
+  for i = n-1 to 1 step -1 do
+    for j = 1 to (n-i) do print(" ", end="")
+    for j = 1 to (2*i-1) do print("*", end="")
+    print()
+
+[SOAL 7 -- Tabel Perkalian 5x5]
+JAWABAN:
+  for i = 1 to 5 do
+    for j = 1 to 5 do
+      print(i*j, "\t", end="")
+    print()
+
+Output:
+1  2  3  4  5
+2  4  6  8  10
+3  6  9  12 15
+4  8  12 16 20
+5  10 15 20 25
+
+[SOAL 8 -- Mencari Pasangan dengan Jumlah Target]
+n=5, nilai=[2,7,4,1,3], target=5. Hitung pasangan (i<j) dengan nilai[i]+nilai[j]=target!
+
+JAWABAN:
+  count = 0
+  for i = 1 to n-1 do
+    for j = i+1 to n do
+      if (nilai[i] + nilai[j] == target) then
+        count = count + 1
+  print(count)
+
+Trace: (2,3)=5, (4,1)=5 -> count=2
+Kompleksitas: O(n^2)
+
+[SOAL 9 -- Bubble Sort]
+Urutkan arr=[5,3,8,1,4] secara menaik!
+
+JAWABAN:
+  for i = 1 to n-1 do
+    for j = 1 to n-i do
+      if (arr[j] > arr[j+1]) then swap(arr[j], arr[j+1])
+
+Trace:
+Pass 1: [3,5,8,1,4]->[3,5,1,8,4]->[3,5,1,4,8]
+Pass 2: [3,1,5,4,8]->[3,1,4,5,8]
+Pass 3: [1,3,4,5,8]
+Pass 4: [1,3,4,5,8] (tidak ada swap)
+Hasil: [1,3,4,5,8]
+Kompleksitas: O(n^2)
+
+[SOAL 10 -- Selection Sort]
+Urutkan arr=[64,25,12,22,11] dengan selection sort!
+
+JAWABAN:
+  for i = 1 to n-1 do
+    min_idx = i
+    for j = i+1 to n do
+      if (arr[j] < arr[min_idx]) then min_idx = j
+    swap(arr[i], arr[min_idx])
+
+Trace:
+i=1: min di posisi 5 (nilai 11) -> swap arr[1]=64 dengan arr[5]=11 -> [11,25,12,22,64]
+i=2: min di posisi 3 (nilai 12) -> swap arr[2]=25 dengan arr[3]=12 -> [11,12,25,22,64]
+i=3: min di posisi 4 (nilai 22) -> swap arr[3]=25 dengan arr[4]=22 -> [11,12,22,25,64]
+i=4: min di posisi 4 (nilai 25) -> tidak perlu swap -> [11,12,22,25,64]
+Hasil: [11,12,22,25,64]
+
+[SOAL 11 -- Hitung Total Iterasi]
+Berapa total operasi print("*") pada kode berikut?
+  for i = 1 to n do
+    for j = 1 to i do
+      print("*")
+
+JAWABAN:
+Total = 1 + 2 + 3 + ... + n = n(n+1)/2
+Untuk n=10: 10x11/2 = 55 kali
+Kompleksitas: O(n^2) -- walau total tepat n(n+1)/2, batasnya tetap O(n^2)
+
+[SOAL 12 -- Trace Nested: Hitung Nilai]
+  sum = 0
+  for i = 1 to 4 do
+    for j = i to 4 do
+      sum = sum + 1
+  print(sum)
+
+JAWABAN:
+i=1: j=1,2,3,4 -> 4 iterasi, sum=4
+i=2: j=2,3,4   -> 3 iterasi, sum=7
+i=3: j=3,4     -> 2 iterasi, sum=9
+i=4: j=4       -> 1 iterasi, sum=10
+Output: 10
+
+Insight: ini menghitung jumlah 4+3+2+1 = 4(4+1)/2 = 10 (deret segitiga n=4)
+
+================================================================
+END OF GROUND TRUTH SUBTOPIK -- NESTED LOOP
+================================================================

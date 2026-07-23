@@ -1,0 +1,21 @@
+=== JAWABAN TUTOR ===
+Mahasiswa, mari kita bahas tentang pseudocode untuk menentukan huruf mutu. Dalam materi referensi, kita telah membahas tentang kriteria mutu yang berbeda-beda, yaitu A, B, C, D, dan E. Untuk menentukan huruf mutu, kita perlu membandingkan nilai yang diperoleh dengan kriteria mutu yang telah ditentukan.
+
+Pertama, kita perlu memahami kriteria mutu yang telah ditentukan. Kriteria mutu tersebut adalah sebagai berikut:
+
+- A: nilai ≥ 80
+- B: nilai ≥ 70
+- C: nilai ≥ 55
+- D: nilai ≥ 40
+- E: nilai < 40
+
+Kita dapat membuat pseudocode untuk menentukan huruf mutu dengan menggunakan logika if-else. Berikut adalah contoh pseudocode lengkap:
+
+\\[\text{hurufMutu} = \begin{cases} \text{A} & \text{ jika } \text{nilai} \geq 80 \\ \text{B} & \text{ jika } 70 \leq \text{nilai} < 80 \\ \text{C} & \text{ jika } 55 \leq \text{nilai} < 70 \\ \text{D} & \text{ jika } 40 \leq \text{nilai} < 55 \\ \text{E} & \text{ jika } \text{nilai} < 40 \end{cases} \\]
+
+Dalam pseudocode di atas, kita menggunakan logika if-else untuk membandingkan nilai dengan kriteria mutu yang telah ditentukan. Jika nilai sama dengan atau lebih besar dari 80, maka huruf mutu adalah A. Jika nilai antara 70 dan 79, maka huruf mutu adalah B, dan seterusnya.
+
+Untuk memastikan kamu memahami konsep ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja pseudocode di atas dalam menentukan huruf mutu.
+
+=== FOLLOW-UP QUESTION ===
+Dalam sistem penilaian akademik, seorang dosen ingin menentukan huruf mutu mahasiswa berdasarkan nilai yang diperoleh. Jika nilai mahasiswa adalah 85, maka huruf mutu apa yang akan diberikan kepada mahasiswa tersebut?

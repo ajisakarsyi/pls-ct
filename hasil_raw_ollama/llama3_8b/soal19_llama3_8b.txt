@@ -1,0 +1,17 @@
+Here are the correct data types for each variable:
+
+a) Usia: Integer (since age is a whole number)
+
+b) IPK (3.75): Decimal (since it's a floating-point number with decimal places)
+
+c) Nama lengkap: String (since a full name is a sequence of characters, including letters and spaces)
+
+d) Status kelulusan: String (since the status can be either "lulus" or "tidak lulus", which are categorical values)
+
+e) Inisial nama: String (since initials are a short sequence of characters, usually consisting of just letters)
+
+f) Jumlah produk: Integer (since it's a whole number representing the quantity of products)
+
+g) Suhu badan: Decimal (since body temperature is typically measured in decimal units, such as Celsius or Fahrenheit)
+
+Note that these are general guidelines, and the specific data type may vary depending on the context and the requirements of your analysis.

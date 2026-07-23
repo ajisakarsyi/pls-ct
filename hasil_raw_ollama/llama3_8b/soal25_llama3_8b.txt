@@ -1,0 +1,39 @@
+Let's simulate the operation on an empty stack:
+
+Initially, the stack is empty.
+
+1. `push(3)` → Push 3 onto the stack:
+	* Stack: [3]
+2. `push(8)` → Push 8 onto the stack:
+	* Stack: [3, 8]
+3. `push(1)` → Push 1 onto the stack:
+	* Stack: [3, 8, 1]
+
+Now, let's perform some pops:
+
+4. `pop` → Pop the top element from the stack (which is 1):
+	* Stack: [3, 8]
+	* Output: 1
+5. `push(5)` → Push 5 onto the stack:
+	* Stack: [3, 8, 5]
+
+6. `pop` → Pop the top element from the stack (which is 5):
+	* Stack: [3, 8]
+	* Output: 5
+
+7. `pop` → Pop the top element from the stack (which is 8):
+	* Stack: [3]
+	* Output: 8
+
+8. `push(2)` → Push 2 onto the stack:
+	* Stack: [3, 2]
+
+9. `pop` → Pop the top element from the stack (which is 2):
+	* Stack: [3]
+	* Output: 2
+
+The final state of the stack is:
+
+[3]
+
+Note that there are still elements left on the stack.

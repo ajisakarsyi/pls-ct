@@ -1,0 +1,24 @@
+=== JAWABAN TUTOR ===
+Baiklah, mari kita jelaskan bagaimana Stack memvalidasi string kurung '{([])<>()}'.
+
+Pertama, kita harus memahami bahwa Stack adalah struktur data yang memungkinkan elemen ditambahkan ke atasnya (push) dan dihapus dari atasnya (pop). Dalam kasus validasi kurung, Stack digunakan untuk mengatur urutan kurung yang telah dibuka dan perlu ditutup.
+
+Kita akan menganalisis setiap langkah dengan menggunakan trace yang diberikan:
+
+1. { → push {, stack=[{] : Pada langkah ini, kita menambahkan kurung '{' ke atas Stack.
+2. ( → push (, stack=[{,(] : Pada langkah ini, kita menambahkan kurung '(' ke atas Stack.
+3. [ → push [, stack=[{,(,[] : Pada langkah ini, kita menambahkan kurung '[' ke atas Stack.
+4. ] → pop [, cocok dengan ], stack=[{,(] : Pada langkah ini, kita menghapus kurung '[' dari atas Stack karena sudah sesuai dengan kurung yang dibuka sebelumnya.
+5. ) → pop (, cocok dengan ), stack=[{] : Pada langkah ini, kita menghapus kurung '(' dari atas Stack karena sudah sesuai dengan kurung yang dibuka sebelumnya.
+6. < → push <, stack=[{,<] : Pada langkah ini, kita menambahkan kurung '<' ke atas Stack.
+7. > → pop <, cocok dengan >, stack=[{] : Pada langkah ini, kita menghapus kurung '<' dari atas Stack karena sudah sesuai dengan kurung yang dibuka sebelumnya.
+8. ( → push (, stack=[{,(] : Pada langkah ini, kita menambahkan kurung '(' ke atas Stack.
+9. ) → pop (, cocok dengan ), stack=[{] : Pada langkah ini, kita menghapus kurung '(' dari atas Stack karena sudah sesuai dengan kurung yang dibuka sebelumnya.
+10. } → pop {, cocok dengan }, stack=[] : Pada langkah ini, kita menghapus kurung '{' dari atas Stack karena sudah sesuai dengan kurung yang dibuka sebelumnya.
+
+Setelah semua langkah selesai, Stack akhir kosong dan semua kurung sudah sesuai. Ini berarti bahwa string '{([])<>()}' adalah valid.
+
+Untuk memastikan kamu memahami konsep Stack ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja Stack, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Dalam sebuah sistem keamanan komputer, kita ingin memvalidasi ekspresi regular yang mengandung kurung untuk memastikan bahwa ekspresi tersebut valid. Bagaimana cara kita menggunakan konsep Stack untuk memvalidasi ekspresi regular "{([a-z])}"?

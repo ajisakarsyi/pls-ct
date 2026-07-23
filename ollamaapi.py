@@ -22,12 +22,12 @@ import httpx # Digunakan untuk cek ketersediaan API cepat
 load_dotenv()
 
 # --- KONFIGURASI ---
-TEST_MODE = True  # SET KE TRUE UNTUK TESTING (MEMAKSA OLLAMA)
+TEST_MODE = False  # SET KE TRUE UNTUK TESTING (MEMAKSA OLLAMA)
 
 # ChatAnywhere Config
-CA_API_KEY  = os.getenv("OPENAI_API_KEY", "sk-8qopXoq0Gcn3YbFToEWt4nEOyo5rigUmXlFcWzitTQZGzROg")
-CA_API_BASE = "https://api.chatanywhere.tech/v1"
-CA_MODEL    = "gpt-3.5-turbo"
+CA_API_KEY  = ""
+CA_API_BASE = "https://openrouter.ai/api/v1"
+CA_MODEL    = "meta-llama/llama-3.1-8b-instruct"
 
 # Ollama Config
 OLLAMA_BASE  = "http://localhost:11434/v1"
@@ -181,15 +181,9 @@ global_materials_loaded                      = False
 # ============================================================
 class GPTEmbeddings:
     def embed_query(self, text: str) -> List[float]:
-        # Tentukan client mana yang dipakai untuk embedding
-        if is_chatanywhere_available():
-            active_client = client_ca
-            # Pastikan model embedding di ChatAnywhere/OpenAI tersedia
-            # Biasanya: "text-embedding-3-small" atau "text-embedding-ada-002"
-            active_model = "text-embedding-3-small" 
-        else:
-            active_client = client_ollama
-            active_model = EMBEDDING_MODEL_NAME
+        # Paksa menggunakan Ollama untuk embedding, tidak peduli mode chat yang aktif
+        active_client = client_ollama
+        active_model  = EMBEDDING_MODEL_NAME
 
         try:
             resp = active_client.embeddings.create(
@@ -199,8 +193,8 @@ class GPTEmbeddings:
             return resp.data[0].embedding
         except Exception as e:
             print(f"[Embedding Error] Gagal menggunakan {active_model}: {e}")
-            # Fallback dimensi (1536 untuk OpenAI, 1024 untuk mxbai-embed-large)
-            dim = 1536 if "text-embedding" in active_model else 1024
+            # Fallback dimensi (1024 untuk mxbai-embed-large)
+            dim = 1024
             return [0.0] * dim
 
 embeddings_model = GPTEmbeddings()
@@ -225,7 +219,7 @@ def _embed_file(path: str, fname: str) -> List[Dict]:
     if not text:
         return []
     out = []
-    for i, chunk in enumerate([text[j:j+800] for j in range(0, len(text), 800)]):
+    for i, chunk in enumerate([text[j:j+400] for j in range(0, len(text), 400)]):
         try:
             emb  = np.array(embeddings_model.embed_query(chunk), dtype="float32")
             norm = np.linalg.norm(emb)
@@ -281,7 +275,7 @@ def load_global_materials() -> None:
 # ============================================================
 # RAG RETRIEVAL
 # ============================================================
-def retrieve_relevant_chunks(query: str, code: str, k: int = 4) -> List[Dict]:
+def retrieve_relevant_chunks(query: str, code: str, k: int = 6) -> List[Dict]:
     code = code.upper()
     load_cognitive_materials(code)
     load_global_materials()
@@ -388,7 +382,7 @@ def query_gpt(prompt: str, retries: int = 2, delay: int = 1) -> str:
                     {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user",   "content": prompt},
                 ],
-                temperature=0.1,
+                temperature=0.7,
             )
             raw = resp.choices[0].message.content.strip()
             print(f"{tag} Response generated.")
@@ -414,13 +408,11 @@ def is_code_like(text: str) -> bool:
 
 
 # ============================================================
-# EVALUASI KETAT (dua langkah)
+# EVALUASI KETAT
 # ============================================================
 def strict_evaluate(answer: str, correct_answer: str, active_question: str,
                     context: str, history_txt: str, label: str,
                     cognitive_code: str) -> Tuple[bool, str]:
-    # Jika ada active_question (pertanyaan followup spesifik), evaluasi berdasarkan itu.
-    # Jika tidak ada, evaluasi berdasarkan kesesuaian dengan penjelasan tutor secara umum.
     if active_question and active_question.strip():
         evaluation_scope = f"""PERTANYAAN YANG SEDANG DIJAWAB:
 {active_question}
@@ -569,7 +561,7 @@ def chat_endpoint(req: ChatRequest):
     "bagaimana cara kerja [Bagian Spesifik], atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.'"
 )
 
-    # ── PENJELASAN TUTOR (singkat, maks 3 poin) ───────────────
+    # ── PENJELASAN Code
     if is_code_like(req.message):
         prompt = f"""Kamu adalah tutor Computational Thinking untuk mahasiswa universitas di Indonesia.
 Tipe kognitif mahasiswa: {label}

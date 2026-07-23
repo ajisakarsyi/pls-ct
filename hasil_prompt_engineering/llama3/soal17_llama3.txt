@@ -1,0 +1,23 @@
+=== JAWABAN TUTOR ===
+Baiklah, mari kita bahas konsep Algoritme Euclidean dan jawab pertanyaan studi kasus yang diberikan.
+
+Algoritme Euclidean adalah suatu metode untuk menemukan Faktor Persekutuan Besar (FPB) dari dua bilangan. Algoritme ini bekerja dengan cara melakukan pembagian bilangan besar dengan bilangan kecil, kemudian mengambil sisa pembagian sebagai bilangan baru, dan seterusnya sampai sisa pembagian menjadi 0.
+
+Dalam contoh yang telah kita bahas sebelumnya, kita telah menjalankan Algoritme Euclidean untuk menemukan FPB dari 56 dan 14. Kita dapat melihat bahwa FPB(56, 14) adalah 14.
+
+Sekarang, mari kita lihat contoh lain, yaitu FPB(77, 33). Kita dapat melihat bahwa FPB(77, 33) adalah 11.
+
+Dalam contoh lain, kita telah menjalankan Algoritme Euclidean untuk menemukan FPB dari 144 dan 89. Kita dapat melihat bahwa FPB(144, 89) adalah 1.
+
+Dengan demikian, kita dapat melihat bahwa Algoritme Euclidean dapat digunakan untuk menemukan FPB dari dua bilangan.
+
+Sekarang, mari kita jawab pertanyaan studi kasus yang diberikan. Pertanyaannya adalah: Bebek nomor berapa yang pertama kali tidak mendapat coklat?
+
+Dalam contoh yang diberikan, kita dapat melihat bahwa jumlah coklat yang terbagikan hingga bebek ke-n membentuk deret segitiga: 1, 3, 6, 10, 15, 21,..., 465 (bebek ke-30), 496 (bebek ke-31), 528 (bebek ke-32). Karena total coklat adalah 500, maka hingga bebek ke-31 total coklat yang terbagikan adalah 496, sehingga bebek ke-32 tidak mendapat coklat.
+
+Dengan demikian, bebek nomor yang pertama kali tidak mendapat coklat adalah bebek ke-32.
+
+Untuk memastikan kamu memahami konsep Algoritme Euclidean ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja Algoritme Euclidean, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Dengan total 500 coklat yang tersedia, Pak Dengklek ingin membagikan coklat kepada 32 bebek dengan cara yang sama seperti sebelumnya. Jika FPB dari 500 dan 32 adalah 4, maka bebek ke-n yang pertama kali tidak mendapat coklat adalah bebek ke berapa?

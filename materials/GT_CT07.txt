@@ -1,0 +1,83 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 7: Algoritme — Notasi Algoritme
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Review Konsep Algoritme dan Ciri-Cirinya]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Dalam kerangka berpikir komputasional, solusi dari suatu problem harus dapat dijalankan oleh agen pemroses informasi. Oleh karena itu, langkah-langkah solusi harus dituliskan secara eksplisit dan dapat dipahami oleh agen tersebut. Contoh sederhana dari konsep ini dalam kehidupan sehari-hari adalah panduan pengoperasian ponsel saat membeli perangkat baru, atau instruksi perakitan meja komputer yang disertakan saat pembelian.
+
+Algoritme secara formal didefinisikan sebagai instruksi atau langkah-langkah yang berstruktur untuk menyelesaikan suatu persoalan (problem). Sebuah algoritme yang baik harus memenuhi lima ciri utama, yaitu:
+
+1. Memiliki tujuan (goal) yang bersifat unik dan jelas.
+2. Tidak ambigu, artinya setiap tahap hanya memiliki satu makna yang pasti.
+3. Finiteness, yaitu memiliki batas jumlah langkah yang terhingga dan tidak berjalan selamanya.
+4. Feasibility, artinya sesuai dengan sumber daya yang tersedia dan dapat benar-benar dilaksanakan.
+5. Independen, yaitu tidak bergantung pada perangkat atau agen tertentu, sehingga dapat dijalankan oleh agen mana pun yang memenuhi syarat.
+
+
+----------------------------------------------------------------
+[MATERI 2: Notasi Penulisan Algoritme]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Algoritme dapat ditulis menggunakan beberapa pendekatan notasi yang berbeda. Dalam pertemuan ini, tiga jenis notasi diperkenalkan, yaitu narasi (kalimat biasa), pseudocode, dan flowchart.
+
+1. Narasi (Kalimat Biasa):
+Notasi naratif adalah penulisan algoritme menggunakan kalimat biasa dalam bahasa sehari-hari. Pendekatan ini paling mudah dipahami namun berpotensi menimbulkan ambiguitas karena tidak menggunakan aturan formal. Contoh penulisan algoritme menghitung luas segitiga dalam bentuk narasi adalah sebagai berikut: (a) Baca nilai tinggi; (b) Baca nilai panjang alas; (c) Hitung luas dengan cara mengalikan nilai alas dengan tinggi, lalu hasilnya dibagi dua.
+
+2. Pseudocode:
+Pseudocode adalah cara informal untuk menuliskan algoritme atau rancangan program komputer. Tujuan utama pseudocode adalah untuk mendapatkan ide secara cepat sekaligus memudahkan pembacaan algoritme tanpa harus mengikuti aturan grammar (sintaks) bahasa pemrograman yang ketat. Tidak ada aturan penulisan pseudocode yang baku secara universal, namun untuk mengurangi ambiguitas, dibuat konvensi-konvensi tertentu. Contoh penulisan pseudocode untuk menghitung luas segitiga adalah: Input berupa nilai tinggi dan alas; Output berupa nilai luas; Proses: baca tinggi dan alas, kemudian hitung luas = (alas × tinggi) / 2.
+
+Contoh lebih kompleks adalah pseudocode untuk Algoritme Euclidean (mencari FPB dari dua bilangan bulat positif a dan b). Input: dua bilangan bulat positif a dan b. Output: FPB (g) dari a dan b. Proses: jika a < b, tukarkan nilai a dan b; lakukan perulangan: hitung sisa bagi r = a mod b; jika r = 0, keluarkan b sebagai FPB; jika tidak, ganti a dengan b dan b dengan r, lalu ulangi proses. Dalam bentuk pseudocode: read(a,b); if (a<b) swap(a,b); while (true) { r = a % b; if (r==0) exit; a=b; b=r; }; print(b).
+
+3. Flowchart:
+Flowchart adalah representasi visual dari alur algoritme yang menggunakan simbol-simbol grafis standar untuk merepresentasikan berbagai jenis instruksi dan alur proses. Setiap simbol dalam flowchart memiliki makna tertentu, misalnya simbol oval untuk start/end, simbol jajar genjang untuk input/output, simbol persegi panjang untuk proses, dan simbol belah ketupat untuk kondisi atau percabangan. Contoh penerapan flowchart dalam kehidupan nyata adalah alur pendaftaran beasiswa Van Deventer Maas Indonesia (VDMI) di IPB, yang menggambarkan setiap tahapan proses pendaftaran secara visual dan terstruktur.
+
+
+----------------------------------------------------------------
+[MATERI 3: Pengujian dan Kompleksitas Algoritme]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Sebuah algoritme harus valid, artinya algoritme tersebut harus memberikan solusi yang benar dan tepat untuk persoalan yang ada. Untuk memastikan validitas tersebut, algoritme perlu diuji menggunakan sejumlah kasus uji (test cases). Setiap kasus uji merupakan pasangan input dan output yang valid dan sudah diketahui kebenarannya. Contoh kasus uji: Algoritme Euclidean dengan input 12 dan 20 seharusnya menghasilkan output 4; Algoritme Coklat Bebek dengan input 15 (jumlah coklat) seharusnya menghasilkan output 6 (nomor bebek pertama yang tidak mendapat coklat).
+
+Selain validitas, efisiensi algoritme juga perlu diperhatikan melalui konsep Kompleksitas Algoritme, yang merupakan ukuran efisiensi suatu algoritme berdasarkan dua dimensi utama:
+
+1. Kompleksitas Waktu (Time Complexity): mengukur jumlah operasi yang diperlukan seiring bertambahnya ukuran input. Semakin kecil pertambahan jumlah operasi ketika input bertambah, semakin efisien algoritme tersebut dari sisi waktu.
+
+2. Kompleksitas Ruang (Space Complexity): mengukur kebutuhan memori tambahan yang diperlukan untuk menjalankan algoritme.
+
+Standar pengukuran kompleksitas dalam ilmu komputer menggunakan notasi O() yang dibaca "big-O". Notasi ini menunjukkan bagaimana kinerja suatu algoritme berubah seiring dengan bertambahnya ukuran input n. Contoh notasi Big-O yang umum antara lain O(1) untuk kompleksitas konstan, O(n) untuk kompleksitas linier, dan O(n²) untuk kompleksitas kuadratik. Algoritme yang ideal adalah algoritme yang pertambahan jumlah operasi maupun kebutuhan ruangnya tidak bertambah signifikan ketika ukuran atau nilai data (input) yang diproses bertambah besar.
+
+
+----------------------------------------------------------------
+[MATERI 4: Latihan Penulisan Algoritme]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Pemahaman terhadap notasi algoritme diperkuat melalui beberapa latihan penyusunan algoritme dari persoalan konkret, sebagai berikut:
+
+1. Algoritme Coklat Bebek:
+Persoalan: Pak Dengklek memiliki banyak bebek yang diberi nomor mulai dari 1, 2, dan seterusnya. Bebek ke-n mendapatkan n buah coklat. Dengan total 500 coklat, tentukan nomor bebek pertama yang tidak mendapat coklat. Algoritme penyelesaiannya adalah: Input: banyaknya coklat (C). Output: nomor bebek pertama yang tidak mendapat coklat (b). Proses: (a) Hitung akar dari 2C, ambil bagian bilangan bulatnya, simpan sebagai n; (b) Hitung n(n+1), simpan sebagai a; (c) Jika a ≤ 2C, maka b = (n+1); jika tidak, maka b = n.
+
+2. Algoritme Jarak Angka:
+Persoalan: Diberikan 12 kartu bertuliskan angka: 9, 2, 6, 7, 10, 15, 4, 20, 12, 18, 1, 17. Tentukan berapa banyak pasangan kartu berbeda yang memiliki selisih angka sebesar 2. Algoritme penyelesaiannya adalah: Input: n bilangan (x1, x2, ..., xn) dan selisih angka yang dicari (d). Output: banyaknya pasangan bilangan dengan selisih sebesar d (p). Proses: (a) Urutkan n bilangan secara menaik menjadi m1, m2, ..., mn; (b) Inisialisasi p = 0; (c) Untuk setiap i dari 1 sampai n-1, ambil mi, kemudian cari bilangan dari m(i+1) sampai mn; jika selisih dengan mi bernilai d, tambahkan 1 ke p; (d) Catat p sebagai jumlah pasangan yang memenuhi syarat.
+
+3. Latihan Pesan Sandi (Dekripsi):
+Persoalan: Putri selalu mengirimkan pesan dalam bentuk sandi kepada suaminya menggunakan tiga langkah enkripsi secara berurutan: (a) membalik urutan huruf dalam pesan; (b) menggeser 2 huruf ke kiri dan meletakkan huruf yang tergeser di sebelah kanan; (c) mengganti setiap huruf menjadi huruf berikutnya dalam alfabet (huruf Z menjadi A). Contoh: kata "SAYANG" dienkripsi menjadi "BZBTHO". Mahasiswa diminta untuk menyusun algoritme dekripsi (pembalikan proses enkripsi) guna membaca pesan asli yang dikirimkan, yaitu "OPJTBUVQNPLMB."
+
+4. Latihan Permen Kepala Hong:
+Persoalan: Kepala Hong menggunakan mesin penghitung permen yang mendeteksi jumlah permen (genap/ganjil). Jika jumlah permen genap (lampu hijau), ia mengambil setengah dari permen yang ada. Jika jumlah permen ganjil (lampu merah), ia mengambil satu permen ke dalam kantong, kemudian mengambil setengah dari sisanya ke dalam tas. Proses ini diulang sampai mesin kosong (lampu mati). Dengan urutan nyala lampu yang tercatat adalah: merah, merah, merah, hijau, merah, hijau, merah, merah, mati, mahasiswa diminta menyusun algoritme yang dapat menentukan jumlah total permen yang dibeli Kepala Hong.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

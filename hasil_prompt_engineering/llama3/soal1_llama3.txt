@@ -1,0 +1,26 @@
+=== JAWABAN TUTOR ===
+Mahasiswa ingin membuat jadwal belajar mingguan yang efektif untuk 6 mata kuliah. Untuk itu, kita perlu mengidentifikasi penerapan keempat elemen AADP (Abstraction, Abstraction, Decomposition, dan Pattern Recognition) dalam konteks ini.
+
+Pertama, kita perlu melakukan **Abstraction**. Artinya, kita harus mengidentifikasi konsep dasar yang relevan dengan pembuatan jadwal belajar. Dalam konteks ini, konsep dasar yang relevan adalah pengelolaan waktu dan prioritas.
+
+Kedua, kita perlu melakukan **Abstraction** lagi. Artinya, kita harus mengidentifikasi konsep dasar yang lebih spesifik yang relevan dengan pembuatan jadwal belajar. Dalam konteks ini, konsep dasar yang relevan adalah pengelolaan waktu, prioritas, dan sumber daya.
+
+Ketiga, kita perlu melakukan **Decomposition**. Artinya, kita harus memecah proses pembuatan jadwal menjadi sub-tugas yang lebih kecil dan lebih mudah diatasi. Dalam konteks ini, sub-tugas yang relevan adalah:
+
+1. Daftar mata kuliah yang akan diambil
+2. Estimasi waktu per mata kuliah
+3. Identifikasi slot waktu kosong
+4. Penyusunan jadwal akhir
+
+Keempat, kita perlu melakukan **Pattern Recognition**. Artinya, kita harus mengenali pola atau kebiasaan yang relevan dengan pembuatan jadwal belajar. Dalam konteks ini, pola yang relevan adalah:
+
+1. Mengidentifikasi mata kuliah yang paling penting dan memprioritaskan waktu untuk itu
+2. Mengidentifikasi mata kuliah yang dapat diambil bersamaan
+3. Mengidentifikasi slot waktu kosong yang dapat digunakan untuk mata kuliah lain
+
+Dengan demikian, kita dapat membuat jadwal belajar mingguan yang efektif untuk 6 mata kuliah dengan menggunakan keempat elemen AADP.
+
+Untuk memastikan kamu memahami konsep AADP ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja Abstraction, Abstraction, Decomposition, dan Pattern Recognition dalam konteks pembuatan jadwal belajar, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Mahasiswa memiliki 6 mata kuliah yang harus diselesaikan dalam waktu 2 minggu. Ia telah membuat daftar mata kuliah dan estimasi waktu per mata kuliah. Bagaimana cara mahasiswa melakukan **Pattern Recognition** untuk menentukan prioritas mata kuliah yang harus diselesaikan terlebih dahulu?

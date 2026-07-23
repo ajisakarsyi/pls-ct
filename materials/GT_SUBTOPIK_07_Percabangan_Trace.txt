@@ -1,0 +1,239 @@
+================================================================
+GROUND TRUTH SUBTOPIK — KOM2102 COMPUTATIONAL THINKING
+Subtopik: Percabangan — Analisis Kasus dan Trace Kode
+================================================================
+
+KONSEP INTI:
+Percabangan = struktur kontrol yang memilih blok instruksi berdasarkan kondisi.
+Kondisi selalu bernilai True atau False.
+
+BENTUK PERCABANGAN:
+1. if-then          : satu kondisi, satu aksi jika True
+2. if-then-else     : dua pilihan (True/False)
+3. else-if sekuensial: banyak kondisi bertingkat
+4. nested (bersarang): if di dalam if
+
+TEKNIK TRACE:
+- Baca setiap kondisi satu per satu
+- Evaluasi kondisi dengan nilai variabel saat itu
+- Ikuti alur True/False
+- Catat nilai variabel yang berubah
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Trace Sederhana: Maks 2 Bilangan]
+Trace output untuk input a=15, b=8:
+  read(a, b)
+  if (a > b) then
+    print(a)
+  else
+    print(b)
+
+JAWABAN:
+Kondisi: a > b → 15 > 8 → True
+Eksekusi blok then: print(15)
+Output: 15
+
+[SOAL 2 — Trace: Selisih Non-Negatif]
+Trace untuk a=5, b=12:
+  read(a, b)
+  if (a > b) then
+    selisih = a - b
+  else
+    selisih = b - a
+  print(selisih)
+
+JAWABAN:
+Kondisi: a > b → 5 > 12 → False
+Eksekusi blok else: selisih = 12 - 5 = 7
+print(7)
+Output: 7
+
+[SOAL 3 — Trace Else-If: Huruf Mutu]
+Trace untuk nilai=73:
+  read(nilai)
+  if (nilai >= 80) then print("A")
+  else if (nilai >= 70) then print("B")
+  else if (nilai >= 55) then print("C")
+  else if (nilai >= 40) then print("D")
+  else print("E")
+
+JAWABAN:
+nilai=73
+Kondisi 1: 73 >= 80 → False
+Kondisi 2: 73 >= 70 → True → print("B")
+(kondisi selanjutnya tidak diperiksa)
+Output: B
+
+[SOAL 4 — Trace Nested: Maks 3 Bilangan]
+Trace untuk a=8, b=15, c=11:
+  read(a, b, c)
+  if (a >= b) then
+    if (a >= c) then print(a)
+    else print(c)
+  else
+    if (b >= c) then print(b)
+    else print(c)
+
+JAWABAN:
+a=8, b=15, c=11
+Kondisi luar: a >= b → 8 >= 15 → False → blok else
+Kondisi dalam (else): b >= c → 15 >= 11 → True → print(b)
+Output: 15
+
+[SOAL 5 — Trace Kompleks dengan Perubahan Variabel]
+Trace nilai x, y, z dan output akhir:
+  read(x, y, z)   // input: 6, 3, 9
+  if (x > y) then
+    x = x - y
+  if (z > x) then
+    z = z - x
+  else
+    z = x - z
+  if (x > z) then
+    print("x")
+  else if (z > y) then
+    print("z")
+  else
+    print("y")
+
+JAWABAN:
+Awal: x=6, y=3, z=9
+Kondisi 1: x > y → 6 > 3 → True → x = 6-3 = 3
+State: x=3, y=3, z=9
+
+Kondisi 2: z > x → 9 > 3 → True → z = 9-3 = 6
+State: x=3, y=3, z=6
+
+Kondisi 3: x > z → 3 > 6 → False
+Kondisi 4: z > y → 6 > 3 → True → print("z")
+Output: z
+
+[SOAL 6 — Menulis Percabangan: Tahun Kabisat]
+Tulis pseudocode untuk menentukan apakah tahun y adalah kabisat!
+Aturan: kabisat jika habis dibagi 400, ATAU habis dibagi 4 tapi tidak 100.
+
+JAWABAN:
+  read(y)
+  if (y mod 400 == 0) then
+    print("kabisat")
+  else if (y mod 100 == 0) then
+    print("bukan kabisat")
+  else if (y mod 4 == 0) then
+    print("kabisat")
+  else
+    print("bukan kabisat")
+
+Uji kasus:
+  y=2000: mod 400=0 → kabisat ✓
+  y=1900: mod 400≠0, mod 100=0 → bukan kabisat ✓
+  y=2024: mod 400≠0, mod 100≠0, mod 4=0 → kabisat ✓
+  y=2023: mod 400≠0, mod 100≠0, mod 4≠0 → bukan kabisat ✓
+
+[SOAL 7 — Pajak Penghasilan Progresif]
+Tulis pseudocode menghitung PPh, lalu hitung untuk penghasilan Rp 120 juta,
+tanggungan 2 orang!
+
+Lapisan I : 0–60jt = 5%
+Lapisan II : >60jt–250jt = 15%
+PTKP = 54jt + 4,5jt × tanggungan (max 4)
+
+JAWABAN:
+Pseudocode:
+  read(penghasilan, tanggungan)
+  if tanggungan > 4 then tanggungan = 4
+  PTKP = 54000000 + 4500000 * tanggungan
+  PKP = penghasilan - PTKP
+  if (PKP <= 0) then
+    pajak = 0
+  else if (PKP <= 60000000) then
+    pajak = PKP * 0.05
+  else if (PKP <= 250000000) then
+    pajak = 60000000*0.05 + (PKP-60000000)*0.15
+  // (lapisan III, IV, V dst...)
+  print(pajak)
+
+Hitung untuk penghasilan=120jt, tanggungan=2:
+  PTKP = 54jt + 4,5jt×2 = 54jt + 9jt = 63jt
+  PKP  = 120jt - 63jt = 57jt
+  PKP=57jt ≤ 60jt → Lapisan I: pajak = 57jt × 5% = Rp 2.850.000
+
+[SOAL 8 — Percabangan: Jenis Segitiga]
+Diberikan a=5, b=5, c=8. Tentukan:
+a) Apakah bisa membentuk segitiga?
+b) Jika ya, segitiga apa (sama sisi, sama kaki, sembarang)?
+c) Apa jenis sudutnya (lancip, siku-siku, tumpul)?
+
+JAWABAN:
+a) Cek syarat segitiga: a+b>c AND a+c>b AND b+c>a
+   5+5>8=10>8 ✓, 5+8>5=13>5 ✓, 5+8>5=13>5 ✓ → BISA membentuk segitiga
+
+b) Jenis:
+   a==b → True → sama kaki (a=b=5≠c=8)
+   Output: SAMA KAKI
+
+c) Jenis sudut berdasarkan teorema Pythagoras:
+   Sisi terpanjang: c=8 → c² = 64
+   a²+b² = 25+25 = 50
+   50 < 64 → a²+b² < c² → TUMPUL
+
+Pseudocode untuk bagian c:
+  maks_sisi = maks(a, b, c)  // = 8
+  jumlah_kuadrat = a*a + b*b + c*c - maks_sisi*maks_sisi
+  kuadrat_maks = maks_sisi * maks_sisi
+  if (jumlah_kuadrat == kuadrat_maks) then print("siku-siku")
+  else if (jumlah_kuadrat > kuadrat_maks) then print("lancip")
+  else print("tumpul")
+
+[SOAL 9 — Trace Bertingkat]
+Trace dan tentukan output untuk x=4, y=6, z=2:
+  if (x + y > 9) then
+    if (x * z == y) then
+      print("SAMA")
+    else if (x > z) then
+      print("X BESAR")
+    else
+      print("LAINNYA")
+  else
+    print("KECIL")
+
+JAWABAN:
+x=4, y=6, z=2
+Kondisi luar: x+y>9 → 4+6=10>9 → True → masuk blok if luar
+Kondisi dalam 1: x*z==y → 4*2=8==6 → False
+Kondisi dalam 2: x>z → 4>2 → True → print("X BESAR")
+Output: X BESAR
+
+[SOAL 10 — Desain Percabangan: Konverter Nilai]
+Rancang pseudocode untuk mengonversi nilai (0–100) ke:
+- Kategori: Sangat Baik (>=90), Baik (>=75), Cukup (>=60), Kurang (<60)
+- Lulus/Tidak Lulus (Lulus jika >=60)
+
+JAWABAN:
+  read(nilai)
+  if (nilai < 0 or nilai > 100) then
+    print("Nilai tidak valid")
+  else
+    // Kategori
+    if (nilai >= 90) then kategori = "Sangat Baik"
+    else if (nilai >= 75) then kategori = "Baik"
+    else if (nilai >= 60) then kategori = "Cukup"
+    else kategori = "Kurang"
+    
+    // Kelulusan
+    if (nilai >= 60) then status = "LULUS"
+    else status = "TIDAK LULUS"
+    
+    print(kategori, " - ", status)
+
+Contoh trace nilai=72:
+  Valid ✓
+  72 >= 90? No. 72 >= 75? No. 72 >= 60? Yes → kategori = "Cukup"
+  72 >= 60? Yes → status = "LULUS"
+  Output: "Cukup - LULUS"
+
+================================================================
+END OF GROUND TRUTH SUBTOPIK — PERCABANGAN DAN TRACE KODE
+================================================================

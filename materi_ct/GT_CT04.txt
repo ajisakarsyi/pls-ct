@@ -1,0 +1,63 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 4: Problem Solving — Abstraction
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Keterampilan Berpikir dan Pondasi Problem Solving]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Berpikir komputasional melatih seseorang untuk terampil dalam mencari solusi dari suatu persoalan. Kemampuan ini membutuhkan High Order Thinking Skill (HOTS) atau kemampuan berpikir tingkat tinggi, sebagaimana digambarkan dalam Taksonomi Bloom yang membedakan antara Low Order Thinking Skill (LOTS) dan High Order Thinking Skill (HOTS). Pondasi utama dari berpikir komputasional adalah Problem Solving, yaitu kemampuan menyelesaikan masalah secara sistematis dan terstruktur.
+
+Dalam problem solving, terdapat perbedaan mendasar antara gejala (symptom) dan masalah (problem) yang harus dipahami terlebih dahulu. Symptom atau gejala adalah perbedaan antara fakta yang terjadi dengan hasil yang diharapkan — yaitu apa yang tampak atau dirasakan. Sementara itu, Problem atau akar persoalan adalah sesuatu yang menyalah dan menyebabkan gejala tersebut muncul. Pertanyaan kunci dalam mengidentifikasi problem adalah "What went wrong with what?". Sebagai contoh, "aku pusing" adalah gejala, bukan masalah; masalah sebenarnya bisa berupa kurang tidur, belum sarapan, atau tekanan darah rendah. Output dari proses problem solving adalah solusi yang tepat sasaran.
+
+Proses problem solving terdiri dari tiga tahapan utama, yaitu:
+1. Defining the Problem: memastikan bahwa yang diselesaikan adalah masalah yang sesungguhnya (root cause), bukan sekadar gejalanya. Menentukan problem yang akan diselesaikan merupakan langkah yang sangat krusial.
+2. Problem Solving Processes: mencakup analisis kompleksitas problem, evaluasi, penetapan batasan, dan seleksi alternatif solusi yang tersedia.
+3. Solution: solusi yang dihasilkan harus bersifat efisien, efektif, optimal, dan valid.
+
+
+----------------------------------------------------------------
+[MATERI 2: Konsep Dasar Abstraksi]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Abstraksi (Abstraction) merupakan salah satu dari empat elemen inti berpikir komputasional. Abstraksi didefinisikan sebagai kemampuan untuk fokus pada hal-hal yang penting, mengidentifikasi dan memusatkan perhatian pada detail yang relevan, serta mengabaikan hal-hal yang tidak relevan dan hanya menjadi gangguan (distraction). Penting untuk dipahami bahwa abstraksi bukan berarti membuang bagian yang dianggap tidak penting, melainkan hanya memberikan prioritas paling rendah untuk diperhatikan pada bagian tersebut.
+
+Terdapat ungkapan yang relevan dalam memahami abstraksi: "losing sight of the forest for the trees," yang menggambarkan kondisi di mana seseorang terlalu terfokus pada detail kecil sehingga kehilangan gambaran besar dari persoalan yang dihadapi. Untuk menghindari hal ini, dalam memahami suatu persoalan dianjurkan untuk menggunakan prinsip "helicopter view," yaitu melihat persoalan secara komprehensif dan menyeluruh terlebih dahulu sebelum mendalami detailnya.
+
+Contoh nyata penerapan abstraksi dalam teknologi adalah Google Maps. Tampilan citra satelit pada Google Maps menampilkan semua detail geografis secara lengkap dan rinci, sementara tampilan default (peta standar) merupakan hasil abstraksi yang hanya menampilkan informasi yang relevan dan penting bagi pengguna, seperti nama jalan, bangunan utama, dan rute, dengan mengabaikan detail visual yang tidak diperlukan untuk navigasi.
+
+Abstraksi juga ditemukan di berbagai bidang kehidupan, antara lain:
+- Karya Ilmiah: pembuatan abstrak dari suatu skripsi, tesis, disertasi, atau artikel jurnal merupakan bentuk abstraksi yang merangkum inti dari keseluruhan karya ilmiah tersebut.
+- Statistika: proses menganalisis data untuk mendapatkan variabel kunci, menyajikan data melalui statistika deskriptif, dan mempresentasikan hasil survei merupakan bentuk abstraksi dari kumpulan data yang besar.
+- Sosial: merancang solusi untuk mengangkat masyarakat suatu daerah pesisir dari kemiskinan memerlukan abstraksi terhadap berbagai faktor kompleks yang melatarbelakangi persoalan tersebut.
+- Seni: menciptakan alat untuk mendeteksi ada atau tidaknya plagiarisme dari suatu lagu merupakan bentuk abstraksi yang mengidentifikasi elemen-elemen esensial dari sebuah karya musik.
+
+
+----------------------------------------------------------------
+[MATERI 3: Penerapan Abstraksi dalam Problem Solving Terstruktur]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Dalam penerapan abstraksi pada problem solving, setiap persoalan perlu dianalisis secara saksama dengan mengidentifikasi empat komponen utama, yaitu: (1) apa problemnya (root cause/akar masalah), (2) apa goal-nya (tujuan yang ingin dicapai), (3) apa batasannya (constraint yang membatasi ruang solusi), dan (4) apa datanya (informasi yang tersedia dan relevan). Keempat komponen ini menjadi kerangka abstraksi yang membantu dalam memfokuskan perhatian pada hal-hal esensial sebelum merancang solusi.
+
+Berikut adalah tiga contoh latihan penerapan abstraksi dalam problem solving:
+
+1. Latihan Berang-Berang dan Lift:
+Persoalan ini melibatkan dua lift di gedung BeaverHQ yang masing-masing hanya mampu membawa beban maksimum 30 kg. Terdapat sembilan berang-berang dengan berat berbeda (Berang A: 2 kg, B: 3 kg, C: 5 kg, D: 8 kg, E: 9 kg, F: 9 kg, G: 12 kg, H: 12 kg, I: 22 kg), dan tujuannya adalah memuat berang-berang sebanyak mungkin dalam satu kali perjalanan. Hasil abstraksi terhadap persoalan ini mengungkap bahwa total berat seluruh berang-berang adalah 82 kg, sementara kapasitas maksimum dua lift adalah 60 kg. Dengan demikian, pasti ada berang-berang yang tidak dapat terangkut, dan problem sebenarnya adalah memaksimalkan jumlah berang-berang yang terangkut dalam batasan kapasitas 30 kg per lift dan dua lift tersedia.
+
+2. Latihan Penyusup Museum:
+Di museum Darmaga terdapat sistem pengamanan cerdas yang mampu mendeteksi penyusup, yaitu orang yang berhasil masuk ke museum tidak melalui pintu masuk. Sistem merekam jumlah orang di setiap ruangan setiap kali ada perpindahan pengunjung. Abstraksi terhadap persoalan ini mencakup identifikasi bahwa: problem-nya adalah mendeteksi keberadaan penyusup; goal-nya adalah menemukan pada menit keberapa penyusup terdeteksi; batasannya adalah penyusup tidak lewat pintu masuk, pencatatan dilakukan segera setelah perpindahan, dan beberapa orang dapat berpindah secara bersamaan; sedangkan datanya adalah tabel rekaman jumlah orang di tiap ruangan beserta denah museum.
+
+3. Latihan Robot Candy:
+Robot Candy diprogram untuk mengumpulkan permen sebanyak mungkin yang tersebar di lantai berpetak, di mana setiap petak memiliki 0, 1, 2, atau 3 permen. Robot memulai perjalanan dari petak S (kiri bawah) dan harus mencapai petak F (kanan atas) dengan keterbatasan gerak: setiap perpindahan hanya dapat dilakukan ke petak di sebelah kanan atau di sebelah atas posisi saat ini. Abstraksi terhadap persoalan ini mengidentifikasi bahwa: problem-nya adalah menentukan jalur optimal; goal-nya adalah memaksimalkan jumlah permen yang dikumpulkan; batasannya adalah arah gerak hanya ke kanan atau ke atas; dan datanya adalah peta petak beserta jumlah permen di setiap petak.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

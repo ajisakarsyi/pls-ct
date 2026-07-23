@@ -1,0 +1,183 @@
+================================================================
+GROUND TRUTH DETAIL — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 1: Pendahuluan & Kontrak Perkuliahan
+================================================================
+
+----------------------------------------------------------------
+[MATERI: Computational Thinking — Definisi, Tujuan, dan Konteks]
+----------------------------------------------------------------
+
+PENJELASAN DETAIL:
+
+Computational Thinking (Berpikir Komputasional) adalah mata kuliah inti dengan kode KOM2102 yang
+ditawarkan di Semester 1 atau 2 di IPB University dengan beban studi 2 SKS (2-0). Mata kuliah ini
+bukan tentang mengajarkan mahasiswa cara berprogramkan seperti mahasiswa Ilmu Komputer, melainkan
+tentang membekali mereka dengan landasan berpikir untuk memanfaatkan teknologi komputer dalam
+menyelesaikan masalah di domain studi masing-masing.
+
+Dua definisi utama Computational Thinking:
+1. "Computational thinking is the thought processes involved in formulating problems and their
+   solutions so that the solutions are represented in a form that can be effectively carried out
+   by an information-processing agent." (J. Cuny, L. Snyder, dan J. M. Wing, 2020)
+2. Computational thinking adalah teknik pemecahan masalah yang meniru proses yang dilakukan
+   oleh pemrogram komputer ketika menulis program dan algoritme.
+
+Empat elemen inti Berpikir Komputasional (AADP):
+1. Abstraction (Abstraksi): fokus pada informasi penting dan mengabaikan detail yang tidak relevan
+   dalam konteks penyelesaian masalah.
+2. Algorithm (Algoritme): membangun langkah-langkah solusi yang terstruktur dan sistematis.
+3. Decomposition (Dekomposisi): memecah masalah besar menjadi submasalah yang lebih kecil
+   dan mudah dikelola.
+4. Pattern Recognition (Pengenalan Pola): mencari dan menemukan kesamaan atau pola baik
+   antar masalah yang berbeda maupun di dalam masalah yang sama.
+
+Konteks Era VUCA:
+Mata kuliah ini dirancang dalam konteks dunia yang berada di era VUCA:
+- Volatility    : tingkat perubahan yang sangat cepat
+- Uncertainty   : ketidakjelasan mengenai kondisi saat ini
+- Complexity    : banyak faktor pengambilan keputusan yang saling terkait
+- Ambiguity     : kurangnya kejelasan mengenai makna dari suatu peristiwa
+
+Relevansi: Computational thinking diakui secara luas sebagai kompetensi penting bagi setiap
+mahasiswa di abad ke-21, bukan hanya bagi mereka yang belajar ilmu komputer dan matematika.
+Learning outcome utama mata kuliah ini adalah peningkatan "digital and technological fluency"
+— kapasitas seseorang dalam memahami dan menggunakan teknologi digital untuk memecahkan masalah
+di berbagai bidang.
+
+Beban Belajar Per Minggu:
+- Tatap muka    : 50 menit × 2 = 100 menit
+- Tugas terstruktur : 60 menit × 2 = 120 menit
+- Belajar mandiri   : 60 menit × 2 = 120 menit
+- Total             : 340 menit ≈ 5 jam 40 menit per minggu
+
+Capaian Pembelajaran (5 kompetensi):
+1. Mampu menjelaskan konsep dasar CT: literasi digital, etika teknologi, dekomposisi, abstraksi,
+   pengenalan pola, dan algoritme.
+2. Mampu menerapkan prinsip CT dalam menganalisis dan merancang solusi masalah nyata.
+3. Mampu mengimplementasikan struktur kendali (percabangan, perulangan), fungsi, dan struktur
+   data sederhana (list/array, teks) dalam bentuk algoritmik.
+4. Mampu menjelaskan dan membandingkan algoritme pencarian dan pengurutan berdasarkan
+   karakteristik dan kompleksitasnya.
+5. Mampu merancang solusi melalui block programming dengan memperhatikan etika dan
+   keberlanjutan pembelajaran.
+
+Sistem Penilaian:
+- UTS                        : 35%
+- UAS                        : 35%
+- Kuis                       : 20%
+- Proyek / Aktivitas Partisipatif : 10%
+
+Konversi Huruf Mutu (aturan IPB University):
+- A  : NA ≥ 75
+- AB : 70 ≤ NA < 75
+- B  : 60 ≤ NA < 70
+- BC : 55 ≤ NA < 60
+- C  : 45 ≤ NA < 55
+- D  : 35 ≤ NA < 45 (dianjurkan mengulang)
+- E  : NA < 35 (wajib mengulang)
+
+Era Baru Komputasi — AI:
+Mata kuliah ini juga memperkenalkan era baru komputasi yang ditandai oleh perkembangan pesat AI.
+Paradigma kunci: "AI tidak akan menggantikan manusia, tetapi manusia yang menggunakan AI akan
+menggantikan manusia yang tidak menggunakan AI."
+
+----------------------------------------------------------------
+CONTOH SOAL DAN PEMBAHASAN
+----------------------------------------------------------------
+
+[SOAL 1 — Pemahaman Konsep AADP]
+Perhatikan permasalahan berikut: "Seorang mahasiswa ingin membuat jadwal belajar mingguan yang
+efektif untuk 6 mata kuliah." Identifikasi penerapan keempat elemen AADP dalam konteks ini!
+
+JAWABAN:
+- Decomposition    : Memecah proses pembuatan jadwal menjadi sub-tugas: daftar mata kuliah,
+                     estimasi waktu per mata kuliah, identifikasi slot waktu kosong, penyusunan
+                     jadwal akhir.
+- Abstraction      : Fokus hanya pada informasi penting: nama mata kuliah, jumlah SKS, jadwal
+                     kuliah tetap, dan preferensi waktu belajar. Mengabaikan detail seperti
+                     konten setiap mata kuliah.
+- Pattern Recognition: Mengenali pola bahwa mata kuliah dengan banyak hitungan perlu sesi belajar
+                       lebih sering; atau pola bahwa belajar di pagi hari lebih produktif.
+- Algorithm        : Menyusun langkah sistematis: (1) list semua MK, (2) tentukan prioritas,
+                     (3) bagi total jam belajar, (4) tempatkan di slot waktu, (5) verifikasi.
+
+[SOAL 2 — Identifikasi Era VUCA]
+Berikan satu contoh nyata dari masing-masing dimensi VUCA dalam konteks teknologi atau
+kehidupan digital saat ini!
+
+JAWABAN:
+- Volatility    : Model AI baru (GPT, Gemini, Claude) dirilis setiap beberapa bulan sekali,
+                  mengubah lanskap industri teknologi dengan sangat cepat.
+- Uncertainty   : Tidak ada kepastian apakah suatu pekerjaan akan tetap ada atau tergantikan
+                  oleh AI dalam 5 tahun ke depan.
+- Complexity    : Keputusan tentang kebijakan privasi data melibatkan aspek hukum, teknologi,
+                  bisnis, dan sosial yang saling terkait.
+- Ambiguity     : Informasi tentang dampak jangka panjang media sosial terhadap kesehatan mental
+                  masih kontradiktif dan sulit diinterpretasikan.
+
+[SOAL 3 — Hitung Beban Belajar]
+Mata kuliah KOM2102 memiliki beban 2 SKS (2-0). Jika satu semester terdiri dari 14 pertemuan,
+berapa total jam yang harus diinvestasikan mahasiswa untuk mata kuliah ini dalam satu semester?
+
+JAWABAN:
+- Per minggu: (50×2) + (60×2) + (60×2) = 100 + 120 + 120 = 340 menit = 5 jam 40 menit
+- Per semester (14 minggu): 340 × 14 = 4.760 menit ≈ 79 jam 20 menit
+
+[SOAL 4 — Penentuan Huruf Mutu]
+Seorang mahasiswa mendapatkan nilai sebagai berikut:
+- UTS  : 70
+- UAS  : 65
+- Kuis : 80
+- Proyek : 90
+Berapakah Nilai Akhir (NA) dan huruf mutu yang diperoleh mahasiswa tersebut?
+
+JAWABAN:
+NA = (70 × 35%) + (65 × 35%) + (80 × 20%) + (90 × 10%)
+   = 24,5 + 22,75 + 16 + 9
+   = 72,25
+Huruf Mutu: AB (karena 70 ≤ 72,25 < 75)
+
+[SOAL 5 — Konsep CT vs. Pemrograman Konvensional]
+Apa perbedaan utama antara "berpikir komputasional" dan "belajar pemrograman"? Mengapa
+mahasiswa non-Ilmu Komputer perlu belajar berpikir komputasional?
+
+JAWABAN:
+Berpikir komputasional adalah cara berpikir dan pendekatan terhadap masalah — kemampuan kognitif
+untuk memformulasikan masalah dan solusinya secara sistematis. Belajar pemrograman adalah
+keterampilan teknis untuk menuliskan instruksi dalam bahasa pemrograman tertentu.
+
+Mahasiswa non-Ilmu Komputer perlu berpikir komputasional karena:
+1. Setiap bidang kini menghadapi data dan masalah kompleks yang dapat diselesaikan dengan
+   bantuan teknologi.
+2. Kemampuan memformulasikan masalah secara sistematis berguna di semua disiplin ilmu.
+3. Era VUCA menuntut adaptasi cepat terhadap teknologi baru.
+4. "Digital and technological fluency" adalah kompetensi abad ke-21 yang lintas disiplin.
+
+[SOAL 6 — Identifikasi Komponen CT]
+Seorang peneliti ingin menganalisis pola penyebaran berita hoaks di media sosial. Jelaskan
+bagaimana ia dapat menerapkan keempat elemen AADP dalam penelitiannya!
+
+JAWABAN:
+- Decomposition    : Memecah penelitian menjadi: pengumpulan data, analisis konten berita,
+                     analisis jaringan penyebaran, identifikasi pola, dan visualisasi hasil.
+- Abstraction      : Fokus pada atribut kunci: waktu posting, jumlah share, akun penyebar,
+                     kategori konten. Mengabaikan detail seperti gaya bahasa atau desain grafis.
+- Pattern Recognition: Mencari pola: apakah hoaks lebih sering menyebar di jam tertentu?
+                       Apakah ada kesamaan karakteristik akun yang sering menyebarkan hoaks?
+- Algorithm        : Merancang langkah sistematis untuk mengklasifikasikan berita sebagai
+                     hoaks atau bukan, misalnya dengan verifikasi sumber, cek fakta, dll.
+
+[SOAL 7 — Pilihan Ganda]
+Yang BUKAN merupakan elemen inti dari Computational Thinking adalah...
+a) Dekomposisi
+b) Abstraksi
+c) Memoization
+d) Pengenalan Pola
+
+JAWABAN: c) Memoization
+(Memoization adalah teknik optimasi dalam pemrograman, bukan elemen inti CT. Empat elemen
+inti CT adalah Decomposition, Abstraction, Algorithm, dan Pattern Recognition — AADP.)
+
+================================================================
+END OF GROUND TRUTH DETAIL — PERTEMUAN 1
+================================================================

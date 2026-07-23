@@ -1,0 +1,41 @@
+Let's simulate the operation on an empty queue and determine the output for each dequeue:
+
+Initial state: Queue is empty
+
+1. Enqueue(A)
+Queue: A
+Output: None (no dequeue)
+
+2. Enqueue(B)
+Queue: A, B
+Output: None (no dequeue)
+
+3. Enqueue(C)
+Queue: A, B, C
+Output: None (no dequeue)
+
+4. Dequeue
+Queue: A, B, C (A is removed)
+Output: A
+
+5. Enqueue(D)
+Queue: A, B, C, D
+Output: None (no dequeue)
+
+6. Dequeue
+Queue: A, B, C (D is removed)
+Output: D
+
+7. Dequeue
+Queue: A, B, C (empty queue)
+Output: null or None (depending on the implementation)
+
+8. Enqueue(E)
+Queue: A, B, C, E
+Output: None (no dequeue)
+
+So, the output for each dequeue is:
+
+1. A
+2. D
+3. null or None

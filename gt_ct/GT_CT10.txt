@@ -1,0 +1,160 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 10: Struktur Kontrol — Percabangan
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Struktur Kontrol (Control Structure)]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Secara default, ketika sebuah algoritme dijalankan, urutan langkah yang dieksekusi adalah sesuai dengan urutan penulisannya, yaitu berjalan secara berurutan (sekuensial) dari langkah pertama hingga langkah terakhir. Namun pada kondisi tertentu, diperlukan mekanisme untuk mengubah urutan pengerjaan demi mencapai tujuan algoritme. Perubahan urutan pengerjaan ini dilakukan menggunakan struktur kontrol (control structure).
+
+Terdapat dua jenis struktur kontrol utama dalam sebuah algoritme:
+
+1. Percabangan (Conditionals): digunakan ketika algoritme perlu memilih untuk menjalankan salah satu di antara beberapa pilihan instruksi, bergantung pada nilai kebenaran dari suatu kondisi tertentu.
+
+2. Perulangan (Loop): digunakan ketika algoritme perlu mengulang pelaksanaan instruksi tertentu sampai suatu kondisi yang ditetapkan terpenuhi.
+
+Pertemuan ini berfokus pada pembahasan struktur kontrol percabangan secara mendalam.
+
+
+----------------------------------------------------------------
+[MATERI 2: Percabangan (Conditionals)]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Percabangan adalah struktur kontrol yang memungkinkan algoritme untuk mengambil keputusan dan menjalankan blok instruksi yang berbeda bergantung pada kondisi tertentu. Kondisi pada percabangan merupakan ekspresi yang bernilai benar (True) atau salah (False). Kondisi tersebut dapat berupa:
+- Hasil ekspresi operasi relasional, contoh: x >= 3.
+- Hasil ekspresi operasi logika, contoh: 1 < x AND x <= 5.
+
+Terdapat dua bentuk dasar percabangan yang digunakan dalam pseudocode:
+
+Bentuk 1 — Percabangan Satu Arah (if-then):
+Digunakan ketika hanya ada satu blok instruksi yang dijalankan jika kondisi bernilai benar. Jika kondisi bernilai salah, tidak ada instruksi yang dijalankan dan algoritme langsung melanjutkan ke baris berikutnya.
+Struktur:
+    if (kondisi) then
+        instruksi
+
+Contoh — Algoritme Berangkat ke Kampus (versi 1):
+    Shower
+    Breakfast
+    if (cloudy) then
+        Bring umbrella
+        Bring jacket
+    Go to Campus
+
+Bentuk 2 — Percabangan Dua Arah (if-then-else):
+Digunakan ketika terdapat dua kemungkinan blok instruksi yang akan dijalankan: satu blok dijalankan jika kondisi bernilai benar, dan blok lainnya dijalankan jika kondisi bernilai salah.
+Struktur:
+    if (kondisi) then
+        instruksi-1
+    else
+        instruksi-2
+
+Contoh — Algoritme Berangkat ke Kampus (versi 2):
+    Shower
+    Breakfast
+    if (temp > 20) then
+        Wear Shirt
+    else
+        Wear Sweater
+    Go to Campus
+
+
+----------------------------------------------------------------
+[MATERI 3: Percabangan Bersarang (Nested Conditionals)]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Kadangkala diperlukan sebuah percabangan di dalam percabangan yang sudah ada. Struktur seperti ini disebut sebagai percabangan bersarang (nested conditionals). Algoritme berjalan mengikuti alur percabangan biasa, namun terdapat lebih dari satu kondisi dan percabangan yang harus dievaluasi secara bertingkat.
+
+Terdapat dua bentuk percabangan bersarang yang umum digunakan:
+
+Bentuk 1 — Bersarang Biasa (nested if di dalam if):
+Kondisi kedua diperiksa hanya jika kondisi pertama bernilai benar.
+    if (kondisi-1) then
+        if (kondisi-2) then
+            instruksi-1
+        else
+            instruksi-2
+    else
+        instruksi-3
+
+Bentuk 2 — Bersarang Sekuensial (else-if):
+Kondisi diperiksa secara berurutan satu per satu hingga salah satu kondisi terpenuhi.
+    if (kondisi-1) then
+        instruksi-1
+    else if (kondisi-2) then
+        instruksi-2
+    else if (kondisi-3) then
+        instruksi-3
+    else ...
+
+
+----------------------------------------------------------------
+[MATERI 4: Contoh Kasus dan Latihan Penerapan Percabangan]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Penerapan struktur kontrol percabangan dipraktikkan melalui beberapa contoh kasus dan latihan sebagai berikut:
+
+1. Mencari Maksimum 2 Bilangan:
+Input: dua bilangan a dan b. Output: bilangan terbesar di antara a dan b.
+Pseudocode:
+    read(a, b)
+    if (a > b) then
+        print(a)
+    else
+        print(b)
+
+2. Mencari Selisih Dua Bilangan (selisih selalu bernilai non-negatif):
+Input: dua bilangan a dan b. Output: nilai selisih antara a dan b.
+Pseudocode:
+    read(a, b)
+    if (a > b) then
+        selisih = a - b
+    else
+        selisih = b - a
+    print(selisih)
+
+3. Mencari Maksimum 3 Bilangan:
+Input: tiga bilangan a, b, dan c. Output: bilangan terbesar di antara ketiganya. Kasus ini memerlukan percabangan bersarang karena melibatkan lebih dari dua kemungkinan kondisi.
+Pseudocode (bentuk else-if sekuensial):
+    read(a, b, c)
+    if (a >= b and a >= c) then
+        print(a)
+    else if (b >= c and b >= a)
+        print(b)
+    else print(c)
+
+4. Latihan Memeriksa Paritas (Ganjil atau Genap):
+Input: sebuah bilangan bulat a. Output: kata "genap" atau "ganjil" bergantung dari nilai a. Kunci penyelesaiannya adalah menggunakan operator modulo (mod) untuk memeriksa sisa bagi terhadap 2.
+Pseudocode:
+    read(a)
+    sisa = a mod 2
+    if (sisa == 0) then
+        print("genap")
+    else
+        print("ganjil")
+
+5. Latihan Menghitung Huruf Mutu:
+Input: nilai akhir mahasiswa. Output: huruf mutu yang sesuai (A, B, C, D, atau E). Kasus ini memerlukan percabangan bersarang sekuensial (else-if) karena terdapat lima kemungkinan rentang nilai. Ketentuan huruf mutu adalah: A untuk nilai ≥ 80; B untuk nilai ≥ 70; C untuk nilai ≥ 55; D untuk nilai ≥ 40; dan E untuk nilai di bawah 40.
+
+6. Latihan Memeriksa Monotonisitas:
+Input: tiga bilangan a, b, dan c. Output: pesan "monoton naik" jika a < b < c, "monoton turun" jika a > b > c, atau "tidak monoton" untuk kondisi lainnya. Kasus ini memerlukan penggunaan operator logika AND untuk menggabungkan dua kondisi relasional dalam satu ekspresi percabangan.
+
+7. Latihan Memeriksa Sisi Segitiga:
+Input: tiga bilangan a, b, dan c sebagai panjang sisi. Output: pesan "bisa" atau "tidak bisa" bergantung apakah ketiga bilangan tersebut dapat membentuk sisi-sisi segitiga yang valid. Syarat segitiga yang valid adalah jumlah panjang dua sisi mana pun selalu harus lebih besar dari sisi ketiga, sehingga diperlukan pemeriksaan tiga kondisi secara bersamaan menggunakan operator logika AND.
+
+8. Latihan Menghitung Pajak Penghasilan (PPh):
+Input: total penghasilan dan jumlah tanggungan. Output: nilai pajak yang harus dibayarkan. Perhitungan pajak mengikuti sistem tarif progresif berlapis sebagai berikut: Lapisan I (0–60 juta) dikenakan tarif 5%; Lapisan II (di atas 60 juta hingga 250 juta) dikenakan tarif 15%; Lapisan III (di atas 250 juta hingga 500 juta) dikenakan tarif 25%; Lapisan IV (di atas 500 juta hingga 5 miliar) dikenakan tarif 30%; dan Lapisan V (di atas 5 miliar) dikenakan tarif 35%. Penghasilan Tidak Kena Pajak (PTKP) adalah sebesar 54 juta ditambah 4,5 juta untuk setiap tanggungan, dengan maksimal 4 tanggungan. Kasus ini merupakan contoh paling kompleks dari percabangan bersarang sekuensial yang melibatkan perhitungan bertahap pada setiap lapisan penghasilan kena pajak.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

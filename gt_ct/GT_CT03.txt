@@ -1,0 +1,61 @@
+================================================================
+GROUND TRUTH — KOM2102 COMPUTATIONAL THINKING
+Pertemuan 3: Problem Solving — Dekomposisi
+Sumber: Slide Perkuliahan, Tim Pengajar Berpikir Komputasional, IPB University
+================================================================
+
+----------------------------------------------------------------
+[MATERI 1: Konsep Dasar Dekomposisi]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Dalam penyelesaian masalah, salah satu tantangan terbesar adalah menghadapi masalah yang besar dan kompleks. Masalah yang besar pada dasarnya lebih sulit untuk diselesaikan secara langsung. Strategi yang efektif adalah dengan membagi masalah besar tersebut menjadi bagian-bagian yang lebih kecil, kemudian menyelesaikannya satu per satu. Pendekatan inilah yang dikenal sebagai dekomposisi.
+
+Dekomposisi (Decomposition) didefinisikan sebagai proses memecah suatu masalah menjadi bagian-bagian yang lebih kecil dan lebih mudah dikelola (the process of breaking down a problem into smaller manageable parts). Dekomposisi membantu dalam menyelesaikan masalah-masalah kompleks dan mengelola proyek-proyek besar secara lebih terstruktur dan sistematis. Kata kunci dari konsep dekomposisi adalah: BREAKING BIG PROBLEMS INTO SMALLER AND EASIER TO MANAGE PROBLEMS.
+
+Prinsip dekomposisi mengikuti pola hierarkis, di mana sebuah masalah besar (misalnya Masalah A) dipecah menjadi sub-masalah yang lebih kecil (misalnya A1 dan A2). Setiap sub-masalah diselesaikan secara terpisah menghasilkan solusi parsial (Solusi A1 dan Solusi A2), dan ketika seluruh sub-masalah telah terselesaikan, masalah utama pun terpecahkan secara keseluruhan.
+
+
+----------------------------------------------------------------
+[MATERI 2: Contoh Penerapan Dekomposisi dalam Kehidupan Sehari-hari]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Konsep dekomposisi dapat dijumpai dalam berbagai konteks kehidupan sehari-hari maupun dalam dunia teknologi. Berikut adalah sejumlah contoh penerapannya:
+
+1. Menghitung Luas Bangun Datar Tidak Beraturan: Ketika dihadapkan pada bangun datar yang tidak beraturan dan sulit dihitung luasnya secara langsung, pendekatan dekomposisi diterapkan dengan cara memecah bangun tersebut menjadi beberapa bentuk geometri sederhana yang dikenal, seperti persegi dan segitiga. Luas masing-masing bagian dihitung secara terpisah, kemudian hasilnya dijumlahkan untuk memperoleh luas total bangun datar tersebut.
+
+2. Membuat Sarapan: Kegiatan membuat sarapan yang tampak sederhana sebenarnya merupakan kumpulan dari beberapa sub-tugas yang lebih kecil, seperti menyiapkan bahan, memasak, dan menghidangkan. Setiap sub-tugas diselesaikan secara terpisah hingga keseluruhan proses selesai.
+
+3. Menghabiskan Semangka: Untuk menghabiskan sebuah semangka yang besar, cara yang paling efektif adalah memotongnya menjadi bagian-bagian yang lebih kecil, kemudian membagikan setiap potongan kepada orang lain untuk dimakan. Ketika seluruh potongan habis, masalah (menghabiskan semangka) pun terselesaikan. Ilustrasi ini secara langsung menggambarkan pola dekomposisi: masalah besar dipecah menjadi unit-unit kecil yang masing-masing diselesaikan secara mandiri.
+
+4. Merakit Mobil: Proses pembuatan mobil sangat rumit dan tidak dapat dilakukan oleh satu entitas tunggal secara efisien. Oleh karena itu, digunakan konsep jalur perakitan (assembly line), di mana pekerja atau robot dengan fungsi spesifik mengerjakan satu bagian tertentu. Pendekatan ini jauh lebih efektif dibandingkan membuat satu robot yang harus melakukan semua hal terkait perakitan mobil sendirian. Konsep ini merepresentasikan dekomposisi tugas kompleks menjadi fungsi-fungsi yang lebih kecil dan terspesialisasi.
+
+5. Kamera 360 Derajat (Insta360): Sebuah kamera 360 derajat bekerja dengan menggunakan dua lensa atau lebih untuk menangkap pandangan 360 derajat dari semua sisi di sekitarnya. Setiap lensa menangkap lebih dari 180 derajat (separuh dari 360 derajat), kemudian hasil tangkapan dari masing-masing lensa digabungkan (stitching) pada area yang saling tumpang tindih untuk menghasilkan foto atau video 360 derajat yang mulus dan berkualitas tinggi. Ini merupakan contoh dekomposisi dalam konteks teknologi, di mana masalah menangkap gambar penuh 360 derajat dipecah menjadi tugas-tugas lebih kecil yang dikerjakan oleh masing-masing lensa.
+
+
+----------------------------------------------------------------
+[MATERI 3: Penerapan Dekomposisi dalam Problem Solving Terstruktur]
+----------------------------------------------------------------
+
+Ground Truth:
+
+Dekomposisi juga diterapkan dalam konteks problem solving yang lebih formal dan terstruktur. Dalam menyelesaikan sebuah masalah algoritmik atau komputasional, langkah pertama yang krusial adalah mengidentifikasi goal atau tujuan utama dari masalah tersebut, kemudian menentukan bagaimana masalah itu dapat didekomposisi menjadi sub-masalah yang lebih kecil.
+
+Sebagai contoh latihan, pada masalah menentukan pasangan bilangan bulat (ai, bi) di mana nilai ai habis dibagi oleh bi atau sebaliknya, proses dekomposisi dimulai dari mengidentifikasi goal (menghitung berapa banyak pasangan yang memenuhi syarat), kemudian memecah proses penyelesaiannya menjadi langkah-langkah lebih kecil yang dapat diselesaikan satu per satu.
+
+Contoh lain penerapan dekomposisi dalam problem solving mencakup:
+
+1. Akar Persamaan Kuadrat: Masalah mencari akar persamaan kuadrat dapat didekomposisi menjadi sub-masalah seperti mengidentifikasi koefisien, menghitung nilai diskriminan, kemudian menentukan jenis dan nilai akar berdasarkan nilai diskriminan yang diperoleh.
+
+2. Kompresi Gambar Biner: Sebuah gambar 4x4 atau 8x8 piksel hitam-putih dapat direpresentasikan dalam digit biner ("1" untuk piksel putih dan "0" untuk piksel hitam). Metode kompresi diterapkan dengan cara mendekomposisi grid gambar menjadi sub-grid yang lebih kecil secara rekursif. Aturan kompresi adalah: jika seluruh digit dalam grid adalah 0, hasilnya "0"; jika seluruh digit adalah 1, hasilnya "1"; jika tidak, grid dibagi menjadi empat bagian dan metode kompresi diterapkan pada setiap sub-grid dari kiri atas searah jarum jam, dengan hasil yang diapit oleh tanda kurung. Proses ini adalah contoh nyata dari dekomposisi rekursif dalam pengolahan data.
+
+3. Penjadwalan Penggunaan Komputer Lab: Masalah menentukan jumlah minimum komputer yang dibutuhkan agar sepuluh siswa dapat bekerja sesuai jadwal merupakan contoh dekomposisi masalah penjadwalan. Masalah ini didekomposisi dengan cara menganalisis slot waktu per jam, mengidentifikasi siapa yang membutuhkan komputer pada jam yang sama, dan menentukan jumlah komputer berdasarkan penggunaan simultan tertinggi yang terjadi.
+
+4. Mencari Bilangan Terbesar: Dari sekumpulan besar bilangan yang tersebar acak, masalah mencari bilangan terbesar dapat didekomposisi, misalnya dengan membagi kumpulan bilangan menjadi beberapa kelompok yang lebih kecil, mencari bilangan terbesar di setiap kelompok, kemudian membandingkan hasil dari masing-masing kelompok untuk menentukan bilangan terbesar secara keseluruhan.
+
+================================================================
+END OF GROUND TRUTH DOCUMENT
+================================================================

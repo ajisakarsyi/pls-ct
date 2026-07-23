@@ -1,0 +1,42 @@
+=== JAWABAN TUTOR ===
+Baiklah, mari kita bahas tentang simulasi operasi pada stack kosong. Dalam materi referensi, kita telah membahas tentang operasi push dan pop pada stack. Operasi push digunakan untuk menambahkan data ke dalam stack, sedangkan operasi pop digunakan untuk mengeluarkan data dari stack.
+
+Pertama-tama, kita akan melakukan operasi push pada stack kosong. Kita akan menambahkan data 3, 8, dan 1 ke dalam stack. Setelah itu, kita akan melakukan operasi pop untuk mengeluarkan data dari stack.
+
+\\[\text{Stack} = \emptyset \\]
+\\[\text{Stack} = \text{push}(3) = \{3\} \\]
+\\[\text{Stack} = \text{push}(8) = \{3, 8\} \\]
+\\[\text{Stack} = \text{push}(1) = \{3, 8, 1\} \\]
+
+Sekarang, kita akan melakukan operasi pop untuk mengeluarkan data dari stack. Kita akan mengeluarkan data 1, 8, dan 3 dari stack.
+
+\\[\text{Stack} = \text{pop} = \{3, 8\} \\]
+\\[\text{Stack} = \text{pop} = \{3\} \\]
+\\[\text{Stack} = \text{pop} = \emptyset \\]
+
+Setelah itu, kita akan melakukan operasi push lagi untuk menambahkan data 5 ke dalam stack.
+
+\\[\text{Stack} = \text{push}(5) = \{5\} \\]
+
+Sekarang, kita akan melakukan operasi pop lagi untuk mengeluarkan data dari stack. Kita akan mengeluarkan data 5 dari stack.
+
+\\[\text{Stack} = \text{pop} = \emptyset \\]
+
+Setelah itu, kita akan melakukan operasi pop lagi untuk mengeluarkan data dari stack. Kita akan mengeluarkan data kosong dari stack.
+
+\\[\text{Stack} = \text{pop} = \emptyset \\]
+
+Terakhir, kita akan melakukan operasi push lagi untuk menambahkan data 2 ke dalam stack.
+
+\\[\text{Stack} = \text{push}(2) = \{2\} \\]
+
+Sekarang, kita akan melakukan operasi pop lagi untuk mengeluarkan data dari stack. Kita akan mengeluarkan data 2 dari stack.
+
+\\[\text{Stack} = \text{pop} = \emptyset \\]
+
+Jadi, urutan output pop dari operasi tersebut adalah: 1, 8, 3, 5, 2.
+
+Untuk memastikan kamu memahami konsep ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja operasi push dan pop pada stack, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Apabila kita memiliki stack kosong dan melakukan operasi push(4) → push(2) → push(9) → pop → push(1) → pop → pop → pop, maka urutan output pop apa yang akan terjadi?

@@ -1,0 +1,20 @@
+A classic problem of optimization!
+
+Let's break it down step by step:
+
+1. We have 2 lifts, each with a capacity of 30 kg.
+2. The weights of the berangs are: A: 2, B: 3, C: 5, D: 8, E: 9, F: 9, G: 12, H: 12, I: 22 kg.
+
+To maximize the number of berangs that can be lifted, we need to optimize the allocation of weights across the two lifts. We'll use a simple greedy algorithm:
+
+1. Sort the berangs by weight in descending order: I (22), G-H (12), E-F (9), D (8), C (5), B (3), A (2)
+2. Assign the heaviest berangs to the first lift, up to its capacity of 30 kg. This means we can fit: I (22), G-H (24) = 46 kg
+3. The remaining weight on the first lift is: 30 - 46 = -16 kg (impossible, so we'll stop here)
+4. Assign the next heaviest berangs to the second lift, up to its capacity of 30 kg. This means we can fit: E-F (9), C (5) = 14 kg
+5. The remaining weight on the second lift is: 30 - 14 = 16 kg
+
+Now, let's summarize our optimal composition:
+
+**Lift 1:** I (22), G-H (12)
+
+**Lift 2:** E-F (9), C (5), D (8)

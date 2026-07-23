@@ -1,0 +1,17 @@
+=== JAWABAN TUTOR ===
+Mahasiswa, mari kita analisis pilihan jawaban yang ada. Dalam konteks algoritme, kita perlu memahami INPUT, PROSES, dan OUTPUT yang sistematis untuk mencapai hasil tertentu.
+
+Pilihan jawaban a) "Langkah-langkah GPS" sebenarnya merupakan contoh algoritme yang baik, karena GPS (Global Positioning System) menggunakan serangkaian langkah-langkah sistematis untuk menentukan lokasi dan arah.
+
+Pilihan jawaban b) "Pelajari matematika dengan baik" tidak dapat dianggap sebagai algoritme yang baik, karena ini lebih merupakan saran atau rekomendasi untuk belajar matematika, bukan langkah-langkah sistematis untuk mencapai hasil tertentu.
+
+Pilihan jawaban c) "Resep masakan" juga merupakan contoh algoritme yang baik, karena resep masakan menggunakan serangkaian langkah-langkah sistematis untuk membuat masakan yang lezat.
+
+Pilihan jawaban d) "Lakukan hal yang diperlukan untuk sukses" tidak dapat dianggap sebagai algoritme yang baik, karena ini lebih merupakan saran atau rekomendasi untuk mencapai kesuksesan, bukan langkah-langkah sistematis untuk mencapai hasil tertentu.
+
+Dalam kesimpulan, pilihan jawaban yang BUKAN algoritme yang baik adalah b) "Pelajari matematika dengan baik" dan d) "Lakukan hal yang diperlukan untuk sukses".
+
+Untuk memastikan kamu memahami konsep algoritme ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja algoritme dalam membuat resep masakan, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Saya sedang merancang resep masakan baru dan ingin membuatnya lebih efisien. Bagaimana cara saya dapat mengoptimalkan langkah-langkah resep tersebut agar lebih sistematis dan mudah diikuti?

@@ -1,0 +1,30 @@
+Here are the pseudocodes for the two problems:
+
+a) Mencetak 10 bilangan genap pertama (using a for loop):
+
+```
+FOR i = 0 TO 9
+    e <- 2 * i
+    PRINT e
+NEXT
+```
+
+b) Menghitung jumlah digit dari bilangan bulat positif n (using a while loop):
+
+```
+n <- input("Enter a positive integer: ")
+total_digits <- 0
+
+WHILE n > 0
+    total_digits <- total_digits + 1
+    n <- n DIV 10
+END WHILE
+
+PRINT "The number of digits is:", total_digits
+```
+
+Note:
+
+* In the first pseudocode, `e` is assigned the value of `2 * i`, which will be an even integer.
+* In the second pseudocode, the while loop continues as long as `n` is greater than 0. Inside the loop, the `total_digits` variable is incremented by 1 for each iteration, and `n` is divided by 10 to move to the next digit. The loop ends when `n` becomes 0.
+* In both pseudocodes, I used simple arithmetic operations and assignment statements.

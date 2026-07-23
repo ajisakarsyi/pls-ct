@@ -1,0 +1,25 @@
+=== JAWABAN TUTOR ===
+Dalam materi sebelumnya, kita telah membahas tentang tipe data Boolean, Char, Integer, dan Float. Sekarang, mari kita lihat bagaimana cara kerja tipe data tersebut dalam menyimpan informasi.
+
+Tipe data Boolean digunakan untuk menyimpan informasi yang hanya memiliki dua kemungkinan, yaitu benar atau salah. Contohnya, kita dapat menggunakan tipe data Boolean untuk menyimpan informasi tentang apakah seseorang telah mendaftar atau belum. Jika seseorang telah mendaftar, maka nilai Boolean akan menjadi True, jika belum maka nilai Boolean akan menjadi False.
+
+\\[\text{Boolean} = \begin{cases} \text{True} &amp; \text{ jika benar} \\ \text{False} &amp; \text{ jika salah} \end{cases} \\]
+
+Tipe data Char digunakan untuk menyimpan informasi yang hanya terdiri dari satu huruf, seperti inisial nama mahasiswa. Contohnya, kita dapat menggunakan tipe data Char untuk menyimpan informasi tentang inisial nama mahasiswa, seperti 'M' atau 'A'.
+
+\\[\text{Char} = \text{huruf tunggal} \\]
+
+Tipe data Integer digunakan untuk menyimpan informasi yang diwakili oleh bilangan bulat, seperti jumlah produk dalam keranjang belanja. Contohnya, kita dapat menggunakan tipe data Integer untuk menyimpan informasi tentang jumlah produk yang dibeli, seperti 5 atau 10.
+
+\\[\text{Integer} = \text{bilangan bulat} \\]
+
+Tipe data Float digunakan untuk menyimpan informasi yang diwakili oleh bilangan desimal, seperti suhu badan dalam derajat Celcius. Contohnya, kita dapat menggunakan tipe data Float untuk menyimpan informasi tentang suhu badan, seperti 37,5 atau 38,2.
+
+\\[\text{Float} = \text{bilangan desimal} \\]
+
+Dengan demikian, kita dapat mengetahui tipe data yang tepat untuk menyimpan informasi yang berbeda-beda. Untuk memastikan kamu memahami konsep tipe data ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja tipe data tersebut dalam menyimpan informasi.
+
+Untuk memastikan kamu memahami konsep tipe data ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja tipe data tersebut dalam menyimpan informasi.
+
+=== FOLLOW-UP QUESTION ===
+Diberikan nilai awal a = 5, b = 10, dan c = 15. Kemudian dilakukan serangkaian operasi assignment secara berurutan: a = a + b menghasilkan a = 15; b = c - a menghasilkan b = 0; c = c * 2 menghasilkan c = 30; a = c - b menghasilkan a = 30; b = (a + c?

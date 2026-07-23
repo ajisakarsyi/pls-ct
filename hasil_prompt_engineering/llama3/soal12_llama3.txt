@@ -1,0 +1,17 @@
+=== JAWABAN TUTOR ===
+Mahasiswa, mari kita bahas isu etika yang muncul dari kasus mobil otonom yang mengalami kecelakaan dan mengakibatkan korban jiwa.
+
+Pertama, kita perlu memahami bahwa isu etika yang muncul adalah tanggung jawab. Siapa yang bertanggung jawab atas kecelakaan tersebut? Apakah produsen mobil, pengembang sistem, atau pengemudi? Kita perlu menganalisis peran masing-masing pihak dan menentukan siapa yang harus bertanggung jawab.
+
+Kedua, kita perlu mempertimbangkan kepercayaan. Apakah pengguna mobil otonom percaya pada sistem yang digunakan? Apakah sistem tersebut telah diuji dan terbukti aman? Kita perlu memahami bahwa kepercayaan adalah aspek penting dalam penggunaan teknologi otonom.
+
+Ketiga, kita perlu memikirkan pengawasan. Apakah ada pengawasan yang efektif atas sistem mobil otonom? Apakah ada sistem yang dapat mendeteksi dan mencegah kecelakaan? Kita perlu memahami bahwa pengawasan adalah aspek penting dalam menjaga keselamatan pengguna.
+
+Terakhir, kita perlu mempertimbangkan dilema pemrograman. Apakah sistem mobil otonom telah diprogram untuk menghadapi situasi darurat? Apakah sistem tersebut dapat membuat keputusan yang tepat dalam situasi yang tidak terduga? Kita perlu memahami bahwa dilema pemrograman adalah aspek penting dalam pengembangan sistem teknologi otonom.
+
+Dalam konteks Indonesia, kita perlu memahami bahwa penggunaan teknologi otonom harus diatur dengan baik untuk menjaga keselamatan pengguna. Kita perlu memahami bahwa tanggung jawab, kepercayaan, pengawasan, dan dilema pemrograman adalah aspek penting dalam penggunaan teknologi otonom.
+
+Untuk memastikan kamu memahami konsep isu etika dalam penggunaan teknologi otonom, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja sistem pengawasan dalam menjaga keselamatan pengguna, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Sebuah mobil otonom yang dikembangkan oleh perusahaan A dan dipasarkan oleh perusahaan B mengalami kecelakaan yang mengakibatkan korban jiwa. Produsen mobil mengklaim bahwa kecelakaan tersebut disebabkan oleh kesalahan pengguna, sedangkan pengembang sistem mengklaim bahwa sistem mereka telah diuji dan terbukti aman. Siapa yang harus bertanggung jawab atas kecelakaan tersebut?

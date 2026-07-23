@@ -1,0 +1,28 @@
+=== JAWABAN TUTOR ===
+Baiklah, mari kita bahas tipe data yang tepat untuk setiap informasi yang diberikan.
+
+a) Usia seseorang dalam tahun
+Tipe data yang tepat untuk menyimpan informasi usia seseorang dalam tahun adalah Integer. Ini karena usia seseorang biasanya diwakili oleh bilangan bulat, seperti 20, 21, dst.
+
+b) Nilai IPK (misalnya 3.75)
+Tipe data yang tepat untuk menyimpan informasi nilai IPK adalah Float. Nilai IPK biasanya diwakili oleh bilangan desimal, seperti 3,75.
+
+c) Nama lengkap mahasiswa
+Tipe data yang tepat untuk menyimpan informasi nama lengkap mahasiswa adalah String. Nama lengkap mahasiswa biasanya terdiri dari kombinasi huruf dan spasi, seperti "Muhammad Ali".
+
+d) Status kelulusan (lulus/tidak)
+Tipe data yang tepat untuk menyimpan informasi status kelulusan adalah Boolean. Status kelulusan biasanya hanya memiliki dua kemungkinan, yaitu lulus atau tidak lulus.
+
+e) Inisial nama (satu huruf pertama)
+Tipe data yang tepat untuk menyimpan informasi inisial nama adalah Char. Inisial nama biasanya hanya terdiri dari satu huruf, seperti 'M' atau 'A'.
+
+f) Jumlah produk dalam keranjang belanja
+Tipe data yang tepat untuk menyimpan informasi jumlah produk dalam keranjang belanja adalah Integer. Jumlah produk biasanya diwakili oleh bilangan bulat, seperti 5 atau 10.
+
+g) Suhu badan dalam derajat Celcius
+Tipe data yang tepat untuk menyimpan informasi suhu badan dalam derajat Celcius adalah Float. Suhu badan biasanya diwakili oleh bilangan desimal, seperti 37,5 atau 38,2.
+
+Untuk memastikan kamu memahami konsep tipe data ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja tipe data tersebut dalam menyimpan informasi.
+
+=== FOLLOW-UP QUESTION ===
+Seorang dokter ingin menyimpan suhu badan pasien dalam database. Suhu badan pasien dapat berkisar dari 36,5°C hingga 40,5°C. Tipe data yang paling tepat untuk menyimpan informasi suhu badan pasien adalah?

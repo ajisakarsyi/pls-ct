@@ -1,0 +1,25 @@
+=== JAWABAN TUTOR ===
+Baiklah, mari kita mulai dengan menganalisis masalah yang diberikan. Kita memiliki 2 lift dengan kapasitas masing-masing 30 kg, dan kita ingin memaksimalkan jumlah berang-berang yang terangkut. Berang-berang memiliki berat sebagai berikut: A:2, B:3, C:5, D:8, E:9, F:9, G:12, H:12, I:22 kg.
+
+Pertama, kita perlu melakukan **Dekomposisi** untuk memahami komponen-komponen yang terkait dengan masalah ini. Kita dapat melihat bahwa ada beberapa faktor yang mempengaruhi jumlah berang-berang yang terangkut, seperti berat berang-berang, kapasitas lift, dan strategi pengangkutan.
+
+\\[\text{Dekomposisi} = \frac{\text{Faktor}}{\text{Komponen}} \\]
+
+Kita dapat melihat bahwa faktor-faktor seperti berat berang-berang dan kapasitas lift memiliki komponen-komponen yang saling terkait, seperti berat berang-berang dan jenis lift.
+
+Selanjutnya, kita perlu melakukan **Analisis** untuk memahami hubungan antara faktor-faktor tersebut. Kita dapat melihat bahwa berat berang-berang yang lebih berat akan membutuhkan lift yang lebih kuat untuk diangkut. Oleh karena itu, kita perlu memilih strategi pengangkutan yang tepat untuk memaksimalkan jumlah berang-berang yang terangkut.
+
+\\[\text{Analisis} = \frac{\text{Faktor}}{\text{Hubungan}} \\]
+
+Kita dapat melihat bahwa hubungan antara berat berang-berang dan jenis lift sangat penting dalam menentukan strategi pengangkutan yang tepat.
+
+Akhirnya, kita perlu melakukan **Penyelesaian** untuk menemukan solusi yang optimal. Kita dapat melihat bahwa strategi pengangkutan yang tepat adalah dengan memilih lift yang kuat untuk berang-berang yang lebih berat, dan memilih lift yang lebih ringan untuk berang-berang yang lebih ringan.
+
+\\[\text{Penyelesaian} = \frac{\text{Masalah}}{\text{Strategi}} \\]
+
+Kita dapat melihat bahwa strategi pengangkutan yang tepat dapat membantu memaksimalkan jumlah berang-berang yang terangkut.
+
+Untuk memastikan kamu memahami konsep ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja dekomposisi, analisis, dan penyelesaian dalam menganalisis masalah ini, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Apakah strategi pengangkutan berang-berang yang paling optimal jika lift kedua rusak dan hanya dapat menampung berat maksimal 20 kg?

@@ -1,0 +1,16 @@
+=== JAWABAN TUTOR ===
+Untuk menemukan jalur terpendek dari A ke E pada graph berbobot yang diberikan, kita perlu menggunakan konsep Graph dan algoritma Dijkstra. Berikut adalah langkah-langkahnya:
+
+\\[\text{Jalur terpendek} = \text{A} \rightarrow \text{B} \rightarrow \text{E} \text{ atau } \text{A} \rightarrow \text{B} \rightarrow \text{D} \rightarrow \text{E} \\]
+
+Pertama, kita perlu mengidentifikasi semua kemungkinan jalur dari A ke E. Kemudian, kita perlu menghitung bobot total untuk setiap jalur tersebut.
+
+\\[\text{A} \rightarrow \text{B} \rightarrow \text{E} : 4 + 7 = 11 \\]
+\\[\text{A} \rightarrow \text{B} \rightarrow \text{D} \rightarrow \text{E} : 4 + 5 + 2 = 11 \\]
+
+Dari hasil perhitungan, kita dapat melihat bahwa ada dua jalur terpendek dari A ke E, yaitu A->B->E dan A->B->D->E, dengan total bobot masing-masing 11.
+
+Untuk memastikan kamu memahami konsep Graph dan algoritma Dijkstra ini, coba jelaskan dengan bahasamu sendiri bagaimana cara kerja algoritma Dijkstra, atau jawab pertanyaan studi kasus yang akan saya berikan di bawah ini.
+
+=== FOLLOW-UP QUESTION ===
+Sebuah perusahaan ingin membangun jaringan distribusi barang dari gudang pusat ke beberapa cabang di kota. Jaringan ini dapat diwakili sebagai graph berbobot, di mana setiap node mewakili cabang dan bobot mewakili biaya transportasi. Jika biaya transportasi dari gudang pusat ke cabang A adalah 4, dari gudang pusat ke cabang B adalah 2, dan seterusnya, maka jalur terpendek dari gudang pusat ke cabang E adalah?
