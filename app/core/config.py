@@ -101,7 +101,11 @@ class Settings:
     max_history_chars: int = field(default_factory=lambda: _env_int("MAX_HISTORY_CHARS", 1200))
 
     # ── Server ────────────────────────────────────────────────────────────
-    host:      str  = field(default_factory=lambda: _env_str("HOST", "0.0.0.0"))
+    # Default "localhost" — bisa dibuka langsung di browser dan membuat log
+    # bawaan uvicorn ("Uvicorn running on http://...") langsung jelas tanpa
+    # perlu diterjemahkan. Untuk mengizinkan akses dari perangkat lain di
+    # jaringan yang sama (mis. demo dari HP), set env HOST=0.0.0.0 manual.
+    host:      str  = field(default_factory=lambda: _env_str("HOST", "localhost"))
     port:      int  = field(default_factory=lambda: _env_int("PORT", 8000))
     reload:    bool = field(default_factory=lambda: _env_bool("RELOAD", True))
     log_level: str  = field(default_factory=lambda: _env_str("LOG_LEVEL", "info"))

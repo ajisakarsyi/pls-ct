@@ -143,10 +143,15 @@ def create_app() -> FastAPI:
              "nonaktif (set LOGICT_VERBOSE=1)")
         V.note("Semua aktivitas latar (chunking, embedding, retrieval, "
                "perhitungan metrik, prompt) dicetak di terminal ini.")
-        logger.info("  Tutoring UI    → http://%s:%s/", settings.host, settings.port)
-        logger.info("  Asah Otak      → http://%s:%s/asah-otak", settings.host, settings.port)
-        logger.info("  Admin panel    → http://%s:%s/admin/questions", settings.host, settings.port)
-        logger.info("  API docs       → http://%s:%s/docs", settings.host, settings.port)
+        # Server tetap bind ke settings.host (default "0.0.0.0" agar dapat
+        # diakses dari interface mana pun), tetapi "0.0.0.0" bukan alamat
+        # yang bisa dibuka langsung di browser — tampilkan "localhost" di
+        # sini supaya pengguna baru tidak bingung harus mengetik apa.
+        display_host = "localhost" if settings.host in ("0.0.0.0", "") else settings.host
+        logger.info("  Tutoring UI    → http://%s:%s/", display_host, settings.port)
+        logger.info("  Asah Otak      → http://%s:%s/asah-otak", display_host, settings.port)
+        logger.info("  Admin panel    → http://%s:%s/admin/questions", display_host, settings.port)
+        logger.info("  API docs       → http://%s:%s/docs", display_host, settings.port)
 
     return app
 
